@@ -1,4 +1,4 @@
-export function dispatchedUserInfo (userInfo) {
+export const dispatchedUserInfo = (userInfo) => {
     if(userInfo !== undefined && userInfo !== null){   
       return {
             type: "FETCH_USER_FULFILLED",
