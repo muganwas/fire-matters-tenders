@@ -1,62 +1,71 @@
-var webpack = require("webpack");
-var path = require("path");
-var Dotenv = require('dotenv-webpack');
+const webpack = require('webpack');
+const HtmlWebPackPlugin = require("html-webpack-plugin");
+const path = require('path');
 
-var DIST_DIR = path.resolve(__dirname, "dist");
-var SRC_DIR = path.resolve(__dirname, "src");
+module.exports = {
+  // set this to your entry point
+  entry: "./src/index.js",
 
-var config = {
-	entry : SRC_DIR + '/app/index.js', 
-	output : {
-		path: DIST_DIR+'/app',
-		filename: 'bundle.js', 
-		publicPath: '/app'
-	},
-	module: {
-		loaders : [
-			{
-				test: /\.js/,
-				include: SRC_DIR,
-				//exclude: /(node_modules)/,
-				loader: "babel-loader",
-				query: {
-					presets: ["react", "es2015", "stage-2"]
-				}
-			},
-			{
-				test: /\.css/,
-				//include: SRC_DIR,
-				//include: /(node_modules)/,
-				loader: "style-loader!css-loader"
-			}, 
-			{
-		        test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
-		        // include: SRC_DIR,
-		        loader: 'url-loader'
-		    },
-		    {
-			  test: /\.html/,
-			  include: SRC_DIR,
-			  loader: 'html-loader'
-			}
-		]
-	},
-	plugins: [
-		new webpack.ProvidePlugin({
-			$: 'jquery',
-			jQuery: 'jquery',
-			"window.jQuery": "jquery", 
-			moment: 'moment'
-		}),
-		new Dotenv({
-			path: './.env',
-			// safe: true, load '.env.example' to verify the '.env' variables are all set. Can also be a string to a different file.
-			systemvars: true
-		})
-	],
-	node: {
-		fs: 'empty'
-	}
+  // change this to your output path
+  output: {
+    path: path.resolve(__dirname, "dist"),
+    filename: "js/[name].js"
+  },
+
+  // create a map file for debugging
+  devtool: 'source-map',
+
+  // configure the loaders
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader"
+        }
+      },
+      {
+        test: /\.html$/,
+        use: [
+          {
+            loader: "html-loader"
+          }
+        ]
+      }
+    ],
+    loaders: [
+      {
+        test: /.jsx?$/,
+        exclude: /node_modules/,
+        query: {
+          presets: ['env', 'react', 'react-app', 'stage-3'],
+          plugins: ['react-html-attrs', 'transform-class-properties', 'transform-decorators-legacy'],
+          compact: false
+        }
+      }
+    ]
+  },
+  plugins: [
+    new HtmlWebPackPlugin({
+      template: "./public/index.html",
+      filename: "./index.html"
+    })
+  ],
+  devServer: {
+    contentBase: "./dist"
+  },
+  ///////////  uncomment this for production ////////////////
+  // plugins: [
+  //   new webpack.optimize.UglifyJsPlugin({
+  //     compress: {
+  //       warnings: false
+  //     }
+  //   }),
+  //   new webpack.DefinePlugin({
+  //     'process.env': {'NODE_ENV': JSON.stringify('production')}
+  //   })
+  // ],////////////////////////////////////////////////////////
+
+  watch: true // change this to true to keep webpack running
 };
-
-module.exports = config;
