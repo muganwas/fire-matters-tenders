@@ -7,7 +7,7 @@ const month = today.getMonth();
 const hour = today.getHours();
 const minutes = today.getMinutes();
 const config = {
-  apiKey: process.env.API_KEY,
+  apiKey: "AIzaSyDjQJOScdSQ5CAV-YNuf-vzxgh4GOvRlwc",
   authDomain: "firematters-cbaf0.firebaseapp.com",
   databaseURL: "https://firematters-cbaf0.firebaseio.com",
   projectId: "firematters-cbaf0",

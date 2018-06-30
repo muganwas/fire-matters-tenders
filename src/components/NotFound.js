@@ -1,12 +1,23 @@
 import React, { Component } from 'react';
-import '../App.css';
+import Header from './HeaderMain';
+import { connect } from 'react-redux';
+import '../css/App.css';
 
+@connect((store)=>{
+    return {
+        user: store.user,
+        search: store.search
+    }
+})
 export default class NotFound extends Component {
 
     render(){
         return(
-            <div className="not-found">
-                <span>Page not found</span>
+            <div className="main">
+                <Header />
+                <div className="not-found">
+                    <span>Page not found</span>
+                </div>
             </div>
         )
     }

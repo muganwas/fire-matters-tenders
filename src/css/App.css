@@ -1,0 +1,172 @@
+html{
+  font-family: "Roboto", Roboto;
+}
+.hidden{
+  display: none;
+}
+.main{
+  box-sizing: border-box;
+  position: relative;
+  width: 99vw;
+}
+.App {
+  text-align: center;
+}
+input{
+  padding: 0 3px;
+}
+.App-logo {
+  display: inline-block;
+  width: 150px;
+  height: auto;
+}
+.search{
+  position: relative;
+  overflow: auto;
+  float: right;
+  padding:5px;
+  margin-top: 20px;
+  background: #bbbbbb;
+  border:thin solid #979797;
+  border-radius: 3px;
+}
+.search input{
+  float: left;
+  border: 0;
+  background: #bbbbbb;
+  color: #000;
+  height: 25px;
+  width: 220px;
+}
+.search .material-icons{
+  float: right;
+  color: #fff;
+}
+.App-header {
+  margin: 0 60px;
+  height: 150px;
+  padding: 0 20px;
+}
+.App-header::after{
+  content: " ";
+  clear: both;
+}
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+.not-found{
+  margin: 20px;
+  border: thin solid rgb(191, 191, 191);
+  padding: 5px;
+  text-align: center;
+}
+.toast{
+  color: #08aadb;
+  display: block;
+  padding: 2px;
+}
+.Main-Menu{
+  box-sizing: border-box;
+  position: absolute;
+  width: 101%;
+  left: -10px;
+  padding: 15px 90px 15px 90px;
+  background: #e1e1e1;
+  margin-top: 30px;
+}
+.signup-login{
+  float: right;
+}
+.Main-Menu a {
+  text-decoration: none;
+  padding: 0 6px;
+  color: #212121;
+  cursor: pointer;
+}
+.Main-Menu a:hover {
+  border-bottom: 2px solid #ef2c13;
+}
+.nav-button{
+  text-align: left;
+}
+.simple-button{
+  margin: 2px 10px;
+}
+.call-to-action{
+  background-image: url('../images/call_to_action.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 101%;
+  margin-left: -9px;
+  height: 400px;
+  overflow: hidden;
+}
+.call-to-action #title-text{
+  display: block;
+  color: #000000;
+  font-weight: bold;
+  font-size: 35px;
+  width: 40%;
+  margin: 50px 90px;
+}
+.call-to-action #get-started{
+  display: block;
+  color: #000000;
+  font-weight: bold;
+  font-size: 35px;
+  width: 50%;
+  margin: 50px 90px;
+}
+#get-started input{
+  background: #fff;
+  width: 300px;
+  font-size: 17px;
+  color: #212121;
+  border: none;
+  padding: 5px;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+#get-started #go{
+  font-size: 17px;
+  padding: 5px;
+  cursor: pointer;
+  background: #ef2c13;
+  color: #212121;
+  border: none;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+.data-header{
+  box-sizing: border-box;
+  display: flex;
+  background: #212121;
+  color: #fff;
+  width: 100%;
+  padding: 5px;
+}
+.data-header span{
+  width: 20%;
+  text-align: center;
+}
+.data-row{
+  font-weight: thin;
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 2px;
+  box-shadow:  rgba(0,0,0,0.2) 0px 2px 3px, inset rgba(0,0,0,0.2) 0px -1px 2px;
+}
+.data-row span{
+  width: 20%;
+  text-align: center;
+}
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
