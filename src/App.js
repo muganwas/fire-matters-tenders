@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { dispatchedUserInfo } from './extras/dispatchers';
 import Header from './components/HeaderMain';
 import CallToAction from './components/CallToAction';
+import LandingInfo from './components/LandingInfo';
 //import Image from 'react-image';
 //import firebase from 'firebase';
 //import helperFunctions from './extras/helperFunctions';
@@ -32,8 +33,13 @@ class App extends React.Component {
     render(){
         return(
             <div className="main">
-                <Header />
-                <CallToAction />
+                <div className="top">
+                    <Header />
+                    <CallToAction />
+                </div>
+                <div className="mid">
+                    <LandingInfo />
+                </div>
             </div>
         )
     }
