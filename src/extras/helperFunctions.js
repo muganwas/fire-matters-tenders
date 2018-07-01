@@ -1,11 +1,11 @@
 import firebase from 'firebase';
 
-const today = new Date();
-const year = today.getFullYear();
-const date = today.getDate();
-const month = today.getMonth();
-const hour = today.getHours();
-const minutes = today.getMinutes();
+export const today = new Date();
+export const year = today.getFullYear();
+export const date = today.getDate();
+export const month = today.getMonth();
+export const hour = today.getHours();
+export const minutes = today.getMinutes();
 const config = {
   apiKey: "AIzaSyDjQJOScdSQ5CAV-YNuf-vzxgh4GOvRlwc",
   authDomain: "firematters-cbaf0.firebaseapp.com",

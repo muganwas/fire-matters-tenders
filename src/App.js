@@ -4,6 +4,7 @@ import { dispatchedUserInfo } from './extras/dispatchers';
 import Header from './components/HeaderMain';
 import CallToAction from './components/CallToAction';
 import LandingInfo from './components/LandingInfo';
+import Footer from './components/Footer';
 //import Image from 'react-image';
 //import firebase from 'firebase';
 //import helperFunctions from './extras/helperFunctions';
@@ -25,7 +26,7 @@ class App extends React.Component {
                 this.props.dispatch(dispatchedUserInfo(user));
             }
         }else{
-            user['Loggedin'] = false;
+            user['loggedin'] = false;
             this.props.dispatch(dispatchedUserInfo(user));
         }
     }
@@ -39,6 +40,9 @@ class App extends React.Component {
                 </div>
                 <div className="mid">
                     <LandingInfo />
+                </div>
+                <div className="bottom">
+                    <Footer />
                 </div>
             </div>
         )
