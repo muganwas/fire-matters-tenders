@@ -240,6 +240,7 @@ input{
   height: 350px;
 }
 .sect-1-2[dir="rtl"] .material-icons{
+  float: left;
   -moz-transform: scaleX(-1);
   -o-transform: scaleX(-1);
   -webkit-transform: scaleX(-1);
