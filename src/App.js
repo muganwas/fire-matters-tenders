@@ -12,7 +12,8 @@ import Footer from './components/Footer';
 @connect((store)=>{
     return {
         user: store.user,
-        search: store.search
+        search: store.search,
+        genInfo: store.genInfo
     }
 })
 class App extends React.Component {
