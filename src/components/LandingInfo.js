@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import Image from 'react-image';
 //import { dispatchedSearchInfo } from '../extras/dispatchers';
 import '../css/App.css';
 
@@ -30,7 +31,8 @@ export default class LandingSummary extends Component {
                     </div>
                 </div>
                 <div className="section-full">
-                <h2>How It Works</h2>
+                {/*Original
+                    <h2>How It Works</h2>
                     <div className="how-it-works">
                         <div className="sect-1-3">
                             <i class="material-icons">search</i>
@@ -48,6 +50,48 @@ export default class LandingSummary extends Component {
                             <span className="dit">hire service provider</span>
                         </div>
                     </div>
+                */}
+                    <h2>Services</h2>
+                    <div className="how-it-works">
+                        <div className="sect-1-2 left">
+                        <span class='sect-header'>Documents</span>
+                            <span className="service" id="tenders">
+                                <Image className="pic" src={require('../images/Tenders.png')}/>
+                                <span>Tenders</span>
+                            </span>
+                            <span className="service" id="evac-diagrams">
+                                <Image className="pic" src={require('../images/EvacuationDiagrams.png')}/>
+                                <span>Evacuation Diagrams</span>
+                            </span>
+                            <span className="service" id="practices-guide">
+                                <Image className="pic" src={require('../images/GoodPracticeGuides.png')}/>
+                                <span>Good Practice Guide</span>
+                            </span>
+                            <span className="service" id="special-needs">
+                                <Image className="pic" src={require('../images/SpecialNeeds.png')}/>
+                                <span>Special Needs Persons <br/>Guide</span>
+                            </span>
+                        </div>
+                        <div className="sect-1-2 right">
+                        <span class='sect-header'>Market Place</span>
+                            <span className="service" id="quotations">
+                                <Image className="pic" src={require('../images/quotations.png')}/>
+                                <span>Quotations</span>
+                            </span>
+                            <span className="service" id="portables">
+                                <Image className="pic" src={require('../images/Portables.png')}/>
+                                <span>Portables</span>
+                            </span>
+                            <span className="service" id="maintenance">
+                                <Image className="pic" src={require('../images/Maintenance.png')}/>
+                                <span>FSI-Maintenance</span>
+                            </span>
+                            <span className="service" id="evac-training">
+                                <Image className="pic" src={require('../images/EvacTraining.png')}/>
+                                <span>Evacuation <br/>Training</span>
+                            </span>
+                        </div>
+                    </div>
                 </div>
                 <div className="section-full dark">
                     <div className="sect-1-2" dir="rtl">
@@ -61,19 +105,23 @@ export default class LandingSummary extends Component {
                     <div className="sect-1-2 best-sps"></div>
                 </div>                
                 <div className="section-full">
-                <h2>Our Other Services</h2>
+                <h2>Fire Matters Online Services</h2>
                     <div className="other-services">
-                        <div className="sect-1-3">
-                            <Link to={`//www.firematters.com.au`} target="_blank"><i class="material-icons">whatshot</i></Link>
-                            <span>fire safety advisor</span>
+                        <div className="sect-1-4">
+                            <Link to={`//www.firematters.com.au`} target="_blank"><Image className="pic" src={require('../images/Compliance.png')}/></Link>
+                            <span>FM Compliance</span>
                         </div>
-                        <div className="sect-1-3">
-                            <Link to={`//www.firematters.com.au`} target="_blank"><i class="material-icons">directions_run</i></Link>
-                            <span>evacuation training</span>
+                        <div className="sect-1-4">
+                            <Link to={`//www.firematters.com.au`} target="_blank"><Image className="pic" src={require('../images/Learning.png')}/></Link>
+                            <span>FM Learning</span>
                         </div>
-                        <div className="sect-1-3">
-                            <Link to={`//www.firematters.com.au`} target="_blank"><i class="material-icons">school</i></Link>
-                            <span>third party certification</span>
+                        <div className="sect-1-4">
+                            <Link to={`//www.firematters.com.au`} target="_blank"><Image className="pic" src={require('../images/Diagrams.png')}/></Link>
+                            <span>FM Diagrams</span>
+                        </div>
+                        <div className="sect-1-4">
+                            <Link to={`//www.firematters.com.au`} target="_blank"><Image className="pic" src={require('../images/Reports.png')}/></Link>
+                            <span>FM Reports</span>
                         </div>
                     </div>
                 </div>
