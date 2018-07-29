@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Switch} from 'react-router-dom';
 import {Provider} from "react-redux";
 import App from './App';
 import NotFound from './components/NotFound';
+import Login from './components/Login/Login';
 import store from './store';
 
 let mPoint = document.getElementById('root');
@@ -13,6 +14,14 @@ let mainComponent = ()=>{
 	return(
 		<Provider store={store}>
 			<App/>
+		</Provider>
+	)
+}
+
+let loginComponent = ()=>{
+	return(
+		<Provider store={store}>
+			<Login/>
 		</Provider>
 	)
 }
@@ -31,6 +40,7 @@ let Root = ()=>{
 			<div className="main">
 				<Switch>
 					<Route exact path="/" component={ mainComponent } />
+					<Route exact path="/login" component={ loginComponent } />
 					<Route component={ notFound } />
 				</Switch>
 			</div>

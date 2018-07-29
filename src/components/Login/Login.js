@@ -1,11 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { dispatchedUserInfo } from './extras/dispatchers';
-import Header from './components/HeaderMain';
-import CallToAction from './components/CallToAction';
-import LandingInfo from './components/LandingInfo';
-import Footer from './components/Footer';
-import './css/App.css';
+import { dispatchedUserInfo } from '../../extras/dispatchers';
+import Header from '../HeaderMain';
+import LoginForm from './LoginForm';
+import Footer from '../Footer';
 //import Image from 'react-image';
 //import firebase from 'firebase';
 //import helperFunctions from './extras/helperFunctions';
@@ -17,7 +15,7 @@ import './css/App.css';
         genInfo: store.genInfo
     }
 })
-class App extends React.Component {
+class Login extends React.Component {
     constructor(props) {
         super(props);
         let user = JSON.parse(localStorage.getItem('user')) || {};
@@ -38,10 +36,9 @@ class App extends React.Component {
             <div className="main">
                 <div className="top">
                     <Header />
-                    <CallToAction />
                 </div>
                 <div className="mid">
-                    <LandingInfo />
+                    <LoginForm />
                 </div>
                 <div className="bottom">
                     <Footer />
@@ -51,4 +48,4 @@ class App extends React.Component {
     }
 }
 
-export default App;
+export default Login;

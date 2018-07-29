@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import Image from 'react-image';
 import { Link } from 'react-router-dom';
 import { dispatchedSearchInfo, dispatchedGenInfo } from '../extras/dispatchers';
-import '../css/App.css';
 
 @connect((store)=>{
     return {
@@ -62,7 +61,7 @@ export default class HeaderMain extends Component {
     NotLoggedInOptions =
                 <div className="signup-login">
                     <Link className="signup" onClick={ this.toggleMenu } to={`/`}>Sign up</Link><span className="div">&#124;</span>
-                    <Link onClick={ this.toggleMenu } to={`/`}>Login</Link>
+                    <Link onClick={ this.toggleMenu } to={`/login`}>Login</Link>
                 </div>;
     render(){
         return(
