@@ -10,12 +10,19 @@ import TextField from '@material-ui/core/TextField';
     }
 })
 class PasswordField extends React.Component {
+    componentWillMount(){
+        
+    }
+
+    componentWillReceiveProps(nextProps){
+        this.props = {...nextProps};
+    }
     handleText=(e)=>{
         let fieldValue = e.target.value;
-        let currLoginInfo = {...this.props.user.info.logins};
+        let currUserInfo = {...this.props.user.info};
         let label = this.props.id;
-        currLoginInfo[label] = fieldValue;
-        this.props.dispatch(dispatchedUserInfo({logins:currLoginInfo}));
+        currUserInfo[label] = fieldValue;
+        this.props.dispatch(dispatchedUserInfo(currUserInfo));
     }
     
     render(){

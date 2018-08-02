@@ -1,0 +1,7 @@
+.alt_links{
+    position: relative;
+    overflow: auto;
+    float: right;
+    padding:5px;
+    margin-top: 20px;
+}

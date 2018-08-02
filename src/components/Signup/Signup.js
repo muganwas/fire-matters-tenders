@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { dispatchedUserInfo } from '../../extras/dispatchers';
 import HeaderAlt from '../HeaderAlt/HeaderAlt';
-import LoginForm from './LoginForm';
+import SignupForm from './SignupForm';
 import Footer from '../Footer';
 //import Image from 'react-image';
 //import firebase from 'firebase';
@@ -15,7 +15,7 @@ import Footer from '../Footer';
         genInfo: store.genInfo
     }
 })
-class Login extends React.Component {
+class Signup extends React.Component {
     constructor(props) {
         super(props);
         let user = JSON.parse(localStorage.getItem('user')) || {};
@@ -35,10 +35,10 @@ class Login extends React.Component {
         return(
             <div className="main">
                 <div className="top">
-                    <HeaderAlt loc="login" />
+                    <HeaderAlt loc="signup" />
                 </div>
                 <div className="form mid">
-                    <LoginForm />
+                    <SignupForm />
                 </div>
                 <div className="bottom">
                     <Footer />
@@ -48,4 +48,4 @@ class Login extends React.Component {
     }
 }
 
-export default Login;
+export default Signup;

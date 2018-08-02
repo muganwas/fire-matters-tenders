@@ -6,6 +6,7 @@ import {Provider} from "react-redux";
 import App from './App';
 import NotFound from './components/NotFound';
 import Login from './components/Login/Login';
+import Signup from './components/Signup/Signup';
 import store from './store';
 
 let mPoint = document.getElementById('root');
@@ -26,6 +27,14 @@ let loginComponent = ()=>{
 	)
 }
 
+let signupComponent = ()=>{
+	return(
+		<Provider store={store}>
+			<Signup/>
+		</Provider>
+	)
+}
+
 let notFound = ()=>{
 	return(
 		<Provider store={store}>
@@ -41,6 +50,7 @@ let Root = ()=>{
 				<Switch>
 					<Route exact path="/" component={ mainComponent } />
 					<Route exact path="/login" component={ loginComponent } />
+					<Route exact path="/signup" component={ signupComponent } />
 					<Route component={ notFound } />
 				</Switch>
 			</div>

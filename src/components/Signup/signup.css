@@ -1,3 +1,12 @@
+.form.signup{
+    width: 380px;
+    box-sizing: border-box;
+    margin: 40px auto;
+    background: white;
+    padding: 5px 10px 5px 35px;
+    border: thin solid #c0c0c0;
+    border-radius: 5px;
+}
 .left{
     float: left;
 }
@@ -9,7 +18,7 @@
     border-radius: 3px;
     padding: 3px;
 }
-.login-button{
+.signup-button{
     width: 309px;
 }
 .hanad{
@@ -18,15 +27,6 @@
 .white{
     color: white;
     background: white;
-}
-.login{
-    width: 380px;
-    background: white;
-    box-sizing: border-box;
-    margin: 40px auto;
-    padding: 5px 10px 5px 15px;
-    border: thin solid #c0c0c0;
-    border-radius: 5px;
 }
 .inputRow{
     position: relative;
@@ -38,7 +38,7 @@
     clear: both;
     content: " ";
 }
-.login .avatar{
+.signup .avatar{
     box-sizing: border-box;
     display: block;
     margin: auto;

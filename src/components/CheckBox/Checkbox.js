@@ -1,8 +1,8 @@
 import React from 'react';
-import './textfield.css';
+import './checkbox.css';
 import { connect } from 'react-redux';
 import { dispatchedUserInfo } from '../../extras/dispatchers';
-import TextField from '@material-ui/core/TextField';
+import Checkbox from '@material-ui/core/Checkbox';
 
 @connect((store)=>{
     return {
@@ -12,6 +12,9 @@ import TextField from '@material-ui/core/TextField';
 class Textfield extends React.Component {
     constructor(props){
         super(props)
+        this.state={
+            checked: false
+        }
     }
 
     componentWillMount(){
@@ -21,30 +24,24 @@ class Textfield extends React.Component {
     componentWillReceiveProps(nextProps){
         this.props = {...nextProps};
     }
-    handleText=(e)=>{
-        let fieldValue = e.target.value;
+    handleChange=(e)=>{
+        let fieldValue = !this.state.checked;
         let currUserInfo = {...this.props.user.info};
         let label = this.props.id;
         currUserInfo[label] = fieldValue;
         this.props.dispatch(dispatchedUserInfo(currUserInfo));
+        this.setState({checked:!this.state.checked});
     }
 
     render(){
         return(
-            <TextField
-                id={this.props.id}
-                className={this.props.fieldClass}
-                InputProps={{
-                    disableUnderline: true,
-                    classes: {
-                        root: this.props.fieldClass,
-                    },
-                }}
-                onChange={this.handleText}
-                placeholder={this.props.placeholder}
-                type={this.props.type}
+            <Checkbox
+                id = {this.props.id}
+                checked={this.state.checked}
+                onChange={this.handleChange}
+                value={(this.state.checked).toString()}
             >
-            </TextField>
+            </Checkbox>
         )
     }
 }

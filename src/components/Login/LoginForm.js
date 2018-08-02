@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import './login.css';
 import PasswordField from '../PasswordField/PasswordField';
 import Textfield from './../TextField/Textfield';
-import Avatar from '@material-ui/core/Avatar';
+import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 
 @connect((store)=>{
@@ -25,9 +25,10 @@ class LoginForm extends React.Component {
     render(){
         return(
             <div className="login">
-            <Avatar className="avatar" >
+            <span className="form-header">Log in</span>
+            {/*<Avatar className="avatar" >
                 <i className="material-icons">face</i>
-            </Avatar>
+            </Avatar>*/}
             <div className="inputRow">
                 <i className="material-icons left">perm_identity</i>
                 <Textfield id="username" placeholder="John Doe" fieldClass="textfield" />
@@ -39,8 +40,12 @@ class LoginForm extends React.Component {
             <div className="inputRow">
                 <i className="material-icons left white">lock_open</i>
                 <Button onClick={this.login} variant="outlined" className="login-button" >
-                    LogIn
-                </Button>
+                    Log In
+                </Button>                
+            </div>
+            <div className="inputRow">
+                <i className="material-icons left white">lock_open</i>
+                <span>Forgot Password?</span>  <Link to={`/login`} >Reset Password</Link>
             </div>
             </div>
         )
