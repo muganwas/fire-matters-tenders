@@ -31,7 +31,7 @@ export default class LandingSummary extends Component {
                     </div>
                 </div>
                 <div className="section-full">
-                {/*Original
+                
                     <h2>How It Works</h2>
                     <div className="how-it-works">
                         <div className="sect-1-3">
@@ -50,7 +50,7 @@ export default class LandingSummary extends Component {
                             <span className="dit">hire service provider</span>
                         </div>
                     </div>
-                */}
+                {/*Joshua's version
                     <h2>Services</h2>
                     <div className="how-it-works">
                         <div className="sect-1-2 left">
@@ -91,7 +91,7 @@ export default class LandingSummary extends Component {
                                 <span>Evacuation <br/>Training</span>
                             </span>
                         </div>
-                    </div>
+                    </div>*/}
                 </div>
                 <div className="section-full dark">
                     <div className="sect-1-2" dir="rtl">
@@ -125,6 +125,7 @@ export default class LandingSummary extends Component {
                         </div>
                     </div>
                 </div>
+                <br/>
             </div>
         )
     }
