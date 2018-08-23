@@ -118,6 +118,9 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "engines": {
+    "node": "8.11"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://gitlab.com/mdembele/git-webapp-distributor.git"
