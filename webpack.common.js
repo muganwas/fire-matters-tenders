@@ -80,6 +80,6 @@ module.exports = {
     output : {
 		path: DIST_DIR + '/app',
 		filename: 'bundle.js', 
-		publicPath: './'
+		publicPath: '/'
 	},
 };
