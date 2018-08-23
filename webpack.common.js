@@ -4,8 +4,8 @@ const webpack = require('webpack');
 var Dotenv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-var DIST_DIR = path.resolve(__dirname, "./public");
-var SRC_DIR = path.resolve(__dirname, "./src");
+var DIST_DIR = path.resolve(__dirname, "public");
+var SRC_DIR = path.resolve(__dirname, "src");
 
 module.exports = {   
     entry: SRC_DIR + '/app/index.js'
