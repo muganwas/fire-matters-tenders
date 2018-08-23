@@ -4,11 +4,9 @@
   "description": "Fire matters documents application",
   "main": "index.js",
   "scripts": {
-    "start-alt": "webpack-dev-server --open --config webpack.dev.js",
+    "dev": "webpack-dev-server --open --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
     "start": "node server.js",
-    "heroku-postbuild": "webpack -p",
-    "build-alt": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom"
   },
   "author": "Steven Muganwa",
