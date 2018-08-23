@@ -21,7 +21,7 @@ export default class LandingSummary extends Component {
                 <div className="section about">
                     <i class="material-icons md-36">assignment</i>
                     <div className="text-main">
-                        <h2>About Fire-Matters Documents</h2>
+                        <h2>About Fire-Matters Marketplace</h2>
                         <p>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                         Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
@@ -105,23 +105,27 @@ export default class LandingSummary extends Component {
                     <div className="sect-1-2 best-sps"></div>
                 </div>                
                 <div className="section-full">
-                <h2>Fire Matters Online Services</h2>
+                <h2>Fire Matters Marketplace Categories</h2>
                     <div className="other-services">
                         <div className="sect-1-4">
-                            <Link to={`//www.firematters.com.au`} target="_blank"><Image className="pic" src={require('../images/Compliance.png')}/></Link>
-                            <span>FM Compliance</span>
+                            <Link to={`//www.firematters.com.au`} target="_blank"><i class="material-icons">restore</i></Link>
+                            <span>Maintenance</span>
+                            <span className="desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
                         </div>
                         <div className="sect-1-4">
-                            <Link to={`//www.firematters.com.au`} target="_blank"><Image className="pic" src={require('../images/Learning.png')}/></Link>
-                            <span>FM Learning</span>
+                            <Link to={`//www.firematters.com.au`} target="_blank"><i class="material-icons">healing</i></Link>
+                            <span>Repair</span>
+                            <span className="desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
                         </div>
                         <div className="sect-1-4">
-                            <Link to={`//www.firematters.com.au`} target="_blank"><Image className="pic" src={require('../images/Diagrams.png')}/></Link>
-                            <span>FM Diagrams</span>
+                            <Link to={`//www.firematters.com.au`} target="_blank"><i class="material-icons">local_shipping</i></Link>
+                            <span>Supply</span>
+                            <span className="desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
                         </div>
                         <div className="sect-1-4">
-                            <Link to={`//www.firematters.com.au`} target="_blank"><Image className="pic" src={require('../images/Reports.png')}/></Link>
-                            <span>FM Reports</span>
+                            <Link to={`//www.firematters.com.au`} target="_blank"><i class="material-icons">directions_run</i></Link>
+                            <span>Evacuation Training</span>
+                            <span className="desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
                         </div>
                     </div>
                 </div>

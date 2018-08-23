@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import './headerAlt.css';
 import Image from 'react-image';
 import { Link } from 'react-router-dom';
-import { dispatchedSearchInfo, dispatchedGenInfo } from '../../extras/dispatchers';
+import { dispatchedSearchInfo, dispatchedGenInfo } from '../extras/dispatchers';
 
 @connect((store)=>{
     return {
@@ -12,7 +11,7 @@ import { dispatchedSearchInfo, dispatchedGenInfo } from '../../extras/dispatcher
         genInfo: store.genInfo
     }
 })
-export default class HeaderAlt extends Component {
+export default class HeaderMain extends Component {
     constructor(props){
         super(props)
     }
@@ -64,13 +63,20 @@ export default class HeaderAlt extends Component {
                     <Link className="signup" onClick={ this.toggleMenu } to={`/signup`}>Sign up</Link><span className="div">&#124;</span>
                     <Link onClick={ this.toggleMenu } to={`/login`}>Login</Link>
                 </div>;
-    loginLink =<div> <span>Already have an account?</span>  <Link to={`/login`} >Login</Link></div>;
-    signupLink = <div> <span>New to FireMatters?</span>  <Link to={`/signup`} >Sign Up</Link></div>;
     render(){
         return(
             <div className="App-header">
-                <Link to={`/`}><Image className="App-logo" src={require('../../images/logo.png')} /></Link>
-                <div className="alt_links">{this.props.loc==="login"?this.signupLink :this.loginLink }</div>
+                <Image className="App-logo" src={require('../images/logo-alt.jpg')} />
+                <div className="search"><input placeholder="search" type="text" onChange={this.search} /><i className="material-icons">search</i></div>
+                <i class="material-icons menu-icon" onClick={ this.toggleMenu }>menu</i>
+                <div className={ this.props.genInfo['info']['menu'] }>
+                    <Link onClick={ this.toggleMenu } to={`/`}>Home</Link>
+                    <Link onClick={ this.toggleMenu } to={`/`}>Tenders</Link>
+                    <Link onClick={ this.toggleMenu } to={`/`}>Service Providers</Link>
+                    <Link onClick={ this.toggleMenu } to={`/`}>About</Link>
+                    <Link onClick={ this.toggleMenu } to={`/`}>Contact</Link>
+                    { this.props.user['info']['loggedin']?this.loggeInOptions:this.NotLoggedInOptions }                    
+                </div>
             </div>
         )
     }

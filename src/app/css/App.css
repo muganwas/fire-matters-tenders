@@ -353,6 +353,10 @@ input{
   color: #ef2c13;
   cursor: pointer;
 }
+.other-services .desc{
+  font-size: 14px;
+  text-transform: none;
+}
 .landing-info .how-it-works .material-icons{
   font-size: 36px!important;
   border-bottom: thin solid #c4c4c4;
