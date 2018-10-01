@@ -1,5 +1,5 @@
 import React from 'react';
-import './checkbox.css';
+import './tickBox.css';
 import { connect } from 'react-redux';
 import { dispatchedUserInfo } from 'extras/dispatchers';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -9,7 +9,7 @@ import Checkbox from '@material-ui/core/Checkbox';
         user: store.user
     }
 })
-class CheckBox extends React.Component {
+class TickBox extends React.Component {
     constructor(props){
         super(props)
         this.state={
@@ -46,4 +46,4 @@ class CheckBox extends React.Component {
     }
 }
 
-export default CheckBox;
+export default TickBox;
