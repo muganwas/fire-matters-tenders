@@ -2,14 +2,14 @@ import React from 'react';
 import './textfield.css';
 import { connect } from 'react-redux';
 import { dispatchedUserInfo } from 'extras/dispatchers';
-import TextField from '@material-ui/core/TextField';
+import Textfield from '@material-ui/core/TextField';
 
 @connect((store)=>{
     return {
         user: store.user
     }
 })
-class Textfield extends React.Component {
+class TextField extends React.Component {
     constructor(props){
         super(props)
     }
@@ -31,7 +31,7 @@ class Textfield extends React.Component {
 
     render(){
         return(
-            <TextField
+            <Textfield
                 id={this.props.id}
                 className={this.props.fieldClass}
                 InputProps={{
@@ -44,9 +44,9 @@ class Textfield extends React.Component {
                 placeholder={this.props.placeholder}
                 type={this.props.type}
             >
-            </TextField>
+            </Textfield>
         )
     }
 }
 
-export default Textfield;
+export default TextField;
