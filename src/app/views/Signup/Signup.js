@@ -1,14 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { dispatchedUserInfo } from './extras/dispatchers';
-import Header from './components/HeaderMain';
-import CallToAction from './components/CallToAction';
-import LandingInfo from './components/LandingInfo';
-import Footer from './components/Footer';
-import './css/App.css';
+import { dispatchedUserInfo } from 'extras/dispatchers';
+import HeaderAlt from 'components/HeaderAlt/HeaderAlt';
+import SignupForm from 'forms/SignupForm/SignupForm';
+import Footer from 'components/Footer/Footer';
 //import Image from 'react-image';
 //import firebase from 'firebase';
-//import helperFunctions from './extras/helperFunctions';
+//import helperFunctions from 'extras/helperFunctions';
 
 @connect((store)=>{
     return {
@@ -17,7 +15,7 @@ import './css/App.css';
         genInfo: store.genInfo
     }
 })
-class App extends React.Component {
+class Signup extends React.Component {
     constructor(props) {
         super(props);
         let user = JSON.parse(localStorage.getItem('user')) || {};
@@ -25,11 +23,11 @@ class App extends React.Component {
             let token = user.token;
             if(token !== null){
                 user['loggedin'] = true;
-                this.props.dispatch(dispatchedUserInfo(user));
+                this.props.dispatch(dispatchedUserInfo({status: user}));
             }
         }else{
             user['loggedin'] = false;
-            this.props.dispatch(dispatchedUserInfo(user));
+            this.props.dispatch(dispatchedUserInfo({status: user}));
         }
     }
     
@@ -37,11 +35,10 @@ class App extends React.Component {
         return(
             <div className="main">
                 <div className="top">
-                    <Header />
-                    <CallToAction />
+                    <HeaderAlt loc="signup" />
                 </div>
-                <div className="mid">
-                    <LandingInfo />
+                <div className="form mid">
+                    <SignupForm />
                 </div>
                 <div className="bottom">
                     <Footer />
@@ -51,4 +48,4 @@ class App extends React.Component {
     }
 }
 
-export default App;
+export default Signup;

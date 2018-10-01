@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Image from 'react-image';
 import { Link } from 'react-router-dom';
-import { dispatchedSearchInfo, dispatchedGenInfo } from '../extras/dispatchers';
+import { dispatchedSearchInfo, dispatchedGenInfo } from 'extras/dispatchers';
 
 @connect((store)=>{
     return {
@@ -66,7 +66,7 @@ export default class HeaderMain extends Component {
     render(){
         return(
             <div className="App-header">
-                <Image className="App-logo" src={require('../images/logo-alt.jpg')} />
+                <Image className="App-logo" src={require('images/logo.jpg')} />
                 <div className="search"><input placeholder="search" type="text" onChange={this.search} /><i className="material-icons">search</i></div>
                 <i class="material-icons menu-icon" onClick={ this.toggleMenu }>menu</i>
                 <div className={ this.props.genInfo['info']['menu'] }>

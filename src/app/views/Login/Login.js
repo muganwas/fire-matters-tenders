@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { dispatchedUserInfo } from '../../extras/dispatchers';
-import HeaderAlt from '../HeaderAlt/HeaderAlt';
-import LoginForm from './LoginForm';
-import Footer from '../Footer';
+import { dispatchedUserInfo } from 'extras/dispatchers';
+import HeaderAlt from 'components/HeaderAlt/HeaderAlt';
+import LoginForm from 'forms/LoginForm/LoginForm';
+import Footer from 'components/Footer/Footer';
 //import Image from 'react-image';
 //import firebase from 'firebase';
-//import helperFunctions from './extras/helperFunctions';
+//import helperFunctions from 'extras/helperFunctions';
 
 @connect((store)=>{
     return {
