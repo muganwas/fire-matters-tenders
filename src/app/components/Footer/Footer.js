@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { SocialIcon } from 'react-social-icons';
-//import { dispatchedSearchInfo } from '../extras/dispatchers';
-import { year } from '../extras/helperFunctions';
-import '../css/App.css';
+//import { dispatchedSearchInfo } from 'extras/dispatchers';
+import { year } from 'extras/helperFunctions';
+import 'css/App.css';
 
 @connect((store)=>{
     return {
@@ -27,10 +27,10 @@ export default class Footer extends Component {
                     <Link to={`/`}>Contact</Link>
                 </div>
                 <div className="social-icons">
-                    <SocialIcon url="http://facebook.com/" style={{ height: 35, width: 35, margin: 5 }} color="#fff"/>
-                    <SocialIcon url="http://twitter.com/" style={{ height: 35, width: 35, margin: 5  }} color="#fff"/>
-                    <SocialIcon url="http://linkedin.com/" style={{ height: 35, width: 35, margin: 5  }} color="#fff"/>
-                    <SocialIcon url="http://google.com/" style={{ height: 35, width: 35, margin: 5  }} color="#fff"/>
+                    <SocialIcon url="https://facebook.com/" style={{ height: 35, width: 35, margin: 5 }} color="#fff"/>
+                    <SocialIcon url="https://twitter.com/" style={{ height: 35, width: 35, margin: 5  }} color="#fff"/>
+                    <SocialIcon url="https://linkedin.com/" style={{ height: 35, width: 35, margin: 5  }} color="#fff"/>
+                    <SocialIcon url="https://google.com/" style={{ height: 35, width: 35, margin: 5  }} color="#fff"/>
                 </div>
                 <div className="misc">
                     <span className="footer-phone"><i className="material-icons">phone</i><a href="tel:(07) 3071 9088">(07) 3071 9088</a></span>

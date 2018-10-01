@@ -1,12 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { dispatchedUserInfo } from '../../extras/dispatchers';
-import HeaderAlt from '../HeaderAlt/HeaderAlt';
-import SignupForm from './SignupForm';
-import Footer from '../Footer';
+import { dispatchedUserInfo } from 'extras/dispatchers';
+import  { CallToAction, LandingInfo, Footer, HeaderMain } from 'components';
+import 'css/App.css';
 //import Image from 'react-image';
 //import firebase from 'firebase';
-//import helperFunctions from './extras/helperFunctions';
+//import helperFunctions from 'extras/helperFunctions';
 
 @connect((store)=>{
     return {
@@ -15,7 +14,7 @@ import Footer from '../Footer';
         genInfo: store.genInfo
     }
 })
-class Signup extends React.Component {
+class App extends React.Component {
     constructor(props) {
         super(props);
         let user = JSON.parse(localStorage.getItem('user')) || {};
@@ -23,11 +22,11 @@ class Signup extends React.Component {
             let token = user.token;
             if(token !== null){
                 user['loggedin'] = true;
-                this.props.dispatch(dispatchedUserInfo({status: user}));
+                this.props.dispatch(dispatchedUserInfo(user));
             }
         }else{
             user['loggedin'] = false;
-            this.props.dispatch(dispatchedUserInfo({status: user}));
+            this.props.dispatch(dispatchedUserInfo(user));
         }
     }
     
@@ -35,10 +34,11 @@ class Signup extends React.Component {
         return(
             <div className="main">
                 <div className="top">
-                    <HeaderAlt loc="signup" />
+                    <HeaderMain />
+                    <CallToAction />
                 </div>
-                <div className="form mid">
-                    <SignupForm />
+                <div className="mid">
+                    <LandingInfo />
                 </div>
                 <div className="bottom">
                     <Footer />
@@ -48,4 +48,4 @@ class Signup extends React.Component {
     }
 }
 
-export default Signup;
+export default App;

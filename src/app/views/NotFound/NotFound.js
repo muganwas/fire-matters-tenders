@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import Header from './HeaderMain';
+import Header from 'components/HeaderMain/HeaderMain';
 import { connect } from 'react-redux';
-import '../css/App.css';
+import 'css/App.css';
 
 @connect((store)=>{
     return {

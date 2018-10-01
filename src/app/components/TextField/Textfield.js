@@ -1,7 +1,7 @@
 import React from 'react';
 import './textfield.css';
 import { connect } from 'react-redux';
-import { dispatchedUserInfo } from '../../extras/dispatchers';
+import { dispatchedUserInfo } from 'extras/dispatchers';
 import TextField from '@material-ui/core/TextField';
 
 @connect((store)=>{

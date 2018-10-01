@@ -61,7 +61,10 @@ module.exports = {
 	resolve: {
 		alias: {
 			app: path.resolve(__dirname, 'src/app'),
-			Extras: path.resolve(__dirname, 'src/app/extras'),
+			css: path.resolve(__dirname, 'src/app/css'),
+			images: path.resolve(__dirname, 'src/app/images'),
+			forms: path.resolve(__dirname, 'src/app/forms'),
+			extras: path.resolve(__dirname, 'src/app/extras'),
 			components: path.resolve(__dirname, 'src/app/components'),
 			views: path.resolve(__dirname, 'src/app/views'),
 			actions: path.resolve(__dirname, 'src/app/actions'),

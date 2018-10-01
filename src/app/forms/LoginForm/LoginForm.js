@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import './login.css';
-import PasswordField from '../PasswordField/PasswordField';
-import Textfield from './../TextField/Textfield';
+import './loginForm.css';
+import PasswordField from 'components/PasswordField/PasswordField';
+import Textfield from 'components/TextField/Textfield';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 

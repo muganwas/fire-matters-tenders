@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Image from 'react-image';
-//import { dispatchedSearchInfo } from '../extras/dispatchers';
-import '../css/App.css';
+//import { dispatchedSearchInfo } from 'extras/dispatchers';
+import 'css/App.css';
 
 @connect((store)=>{
     return {
@@ -107,22 +107,17 @@ export default class LandingSummary extends Component {
                 <div className="section-full">
                 <h2>Fire Matters Marketplace Categories</h2>
                     <div className="other-services">
-                        <div className="sect-1-4">
+                        <div className="sect-1-3">
                             <Link to={`//www.firematters.com.au`} target="_blank"><i class="material-icons">restore</i></Link>
                             <span>Maintenance</span>
                             <span className="desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
                         </div>
-                        <div className="sect-1-4">
+                        <div className="sect-1-3">
                             <Link to={`//www.firematters.com.au`} target="_blank"><i class="material-icons">healing</i></Link>
                             <span>Repair</span>
                             <span className="desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
                         </div>
-                        <div className="sect-1-4">
-                            <Link to={`//www.firematters.com.au`} target="_blank"><i class="material-icons">local_shipping</i></Link>
-                            <span>Supply</span>
-                            <span className="desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
-                        </div>
-                        <div className="sect-1-4">
+                        <div className="sect-1-3">
                             <Link to={`//www.firematters.com.au`} target="_blank"><i class="material-icons">directions_run</i></Link>
                             <span>Evacuation Training</span>
                             <span className="desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>

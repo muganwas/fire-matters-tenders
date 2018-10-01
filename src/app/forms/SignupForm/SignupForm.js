@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import './signup.css';
-import PasswordField from '../PasswordField/PasswordField';
-import Textfield from '../TextField/Textfield';
-import Checkbox from '../CheckBox/Checkbox'
+import './signupForm.css';
+import PasswordField from 'components/PasswordField/PasswordField';
+import Textfield from 'components/TextField/Textfield';
+import Checkbox from 'components/CheckBox/Checkbox'
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import './headerAlt.css';
 import Image from 'react-image';
 import { Link } from 'react-router-dom';
-import { dispatchedSearchInfo, dispatchedGenInfo } from '../../extras/dispatchers';
+import { dispatchedSearchInfo, dispatchedGenInfo } from 'extras/dispatchers';
 
 @connect((store)=>{
     return {
@@ -69,7 +69,7 @@ export default class HeaderAlt extends Component {
     render(){
         return(
             <div className="App-header">
-                <Link to={`/`}><Image className="App-logo" src={require('../../images/logo-alt.jpg')} /></Link>
+                <Link to={`/`}><Image className="App-logo" src={require('images/logo.jpg')} /></Link>
                 <div className="alt_links">{this.props.loc==="login"?this.signupLink :this.loginLink }</div>
             </div>
         )
