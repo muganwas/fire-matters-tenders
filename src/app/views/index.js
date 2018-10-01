@@ -1,4 +1,4 @@
-export { default as Login } from './Login/Login';
-export { default as Signup } from './Signup/Signup';
-export { default as NotFound} from './NotFound/NotFound';
-export { default as LandingPage } from './LandingPage/LandingPage';
+export { default as Login } from 'views/Login/Login';
+export { default as Signup } from 'views/Signup/Signup';
+export { default as NotFound} from 'views/NotFound/NotFound';
+export { default as LandingPage } from 'views/LandingPage/LandingPage';
