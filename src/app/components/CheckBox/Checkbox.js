@@ -1,7 +1,7 @@
 import React from 'react';
 import './checkbox.css';
 import { connect } from 'react-redux';
-import { dispatchedUserInfo } from '../../extras/dispatchers';
+import { dispatchedUserInfo } from 'extras/dispatchers';
 import Checkbox from '@material-ui/core/Checkbox';
 
 @connect((store)=>{
@@ -9,7 +9,7 @@ import Checkbox from '@material-ui/core/Checkbox';
         user: store.user
     }
 })
-class Textfield extends React.Component {
+class CheckBox extends React.Component {
     constructor(props){
         super(props)
         this.state={
@@ -46,4 +46,4 @@ class Textfield extends React.Component {
     }
 }
 
-export default Textfield;
+export default CheckBox;

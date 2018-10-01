@@ -1,8 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import './loginForm.css';
-import PasswordField from 'components/PasswordField/PasswordField';
-import Textfield from 'components/TextField/Textfield';
+import { PasswordField, TextField } from 'components';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 
@@ -31,7 +30,7 @@ class LoginForm extends React.Component {
             </Avatar>*/}
             <div className="inputRow">
                 <i className="material-icons left">perm_identity</i>
-                <Textfield id="username" placeholder="John Doe" fieldClass="textfield" />
+                <TextField id="username" placeholder="John Doe" fieldClass="textfield" />
             </div>
             <div className="inputRow">
                 <i className="material-icons left">lock_open</i>
