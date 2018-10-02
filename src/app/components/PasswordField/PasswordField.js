@@ -3,6 +3,8 @@ import './passwordField.css';
 import { connect } from 'react-redux';
 import { dispatchedUserInfo } from 'extras/dispatchers';
 import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Lock from '@material-ui/icons/Lock';
 
 @connect((store)=>{
     return {
@@ -17,6 +19,7 @@ class PasswordField extends React.Component {
     componentWillReceiveProps(nextProps){
         this.props = {...nextProps};
     }
+    
     handleText=(e)=>{
         let fieldValue = e.target.value;
         let currUserInfo = {...this.props.user.info};
@@ -35,6 +38,7 @@ class PasswordField extends React.Component {
                         classes: {
                             root: this.props.fieldClass,
                         },
+                        startAdornment: (<InputAdornment className="gray" position="start">{<Lock />}</InputAdornment>)
                     }}
                     placeholder={this.props.placeholder}
                     onChange={this.handleText}

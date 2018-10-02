@@ -5,3 +5,31 @@
     padding:5px;
     margin-top: 20px;
 }
+.dash{
+    position: absolute;
+    display: block;
+    margin: 50px 0;
+    padding: 30px 0;
+    color: #fff;
+    background-color: #F79A50;
+    left: 0;
+    width: 100%;
+}
+#header{
+    box-sizing: border-box;
+    display: block;
+    padding: 0 0 20px;
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+}
+#sub{
+    box-sizing: border-box;
+    display: block;
+    text-align: center;
+}
+.App-header-alt {
+    margin: 0 60px;
+    min-height: 200px;
+    padding: 0 20px;
+}

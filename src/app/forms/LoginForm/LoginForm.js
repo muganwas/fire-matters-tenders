@@ -5,6 +5,11 @@ import { PasswordField, TextSpace } from 'components';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 
+const logginbutton = {
+    color: "#fff",
+    backgroundColor: "#ED2431"
+}
+
 @connect((store)=>{
     return {
         user: store.user,
@@ -23,27 +28,19 @@ class LoginForm extends React.Component {
     
     render(){
         return(
-            <div className="login">
-            <span className="form-header">Log in</span>
-            {/*<Avatar className="avatar" >
-                <i className="material-icons">face</i>
-            </Avatar>*/}
+            <div className="form login">
             <div className="inputRow">
-                <i className="material-icons left">perm_identity</i>
-                <TextSpace id="username" placeholder="John Doe" fieldClass="textfield" />
+                <TextSpace id="username" adornment="person" placeholder="John Doe" fieldClass="textfield" />
             </div>
             <div className="inputRow">
-                <i className="material-icons left">lock_open</i>
                 <PasswordField id="password" placeholder="Password" fieldClass="textfield" />
             </div>
             <div className="inputRow">
-                <i className="material-icons left white">lock_open</i>
-                <Button onClick={this.login} variant="outlined" className="login-button" >
+                <Button onClick={this.login} variant="outlined" style={ logginbutton } className="login-button" >
                     Log In
                 </Button>                
             </div>
             <div className="inputRow">
-                <i className="material-icons left white">lock_open</i>
                 <span>Forgot Password?</span>  <Link to={`/login`} >Reset Password</Link>
             </div>
             </div>

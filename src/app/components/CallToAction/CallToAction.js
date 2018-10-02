@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 //import { dispatchedSearchInfo } from 'extras/dispatchers';
-import 'css/App.css';
+import './callToAction.css';
 
 @connect((store)=>{
     return {
@@ -25,7 +25,7 @@ export default class HeaderMain extends Component {
             <div className="call-to-action">
                 <span id="title-text">Get it done, get a quote and protect your self and your property.</span>
                 <span id="get-started">
-                    <input type="text" placeholder="Are you a property owner or occupier?" onChange={ this.initSubscription } />
+                    <input id="start" type="text" placeholder="What is your location?" onChange={ this.initSubscription } />
                     <button id="go" onClick={ this.getStarted }>Get Started</button>
                 </span>
             </div>

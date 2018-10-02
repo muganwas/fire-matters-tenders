@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 import { dispatchedUserInfo } from 'extras/dispatchers';
 import Checkbox from '@material-ui/core/Checkbox';
 
+const orange = {
+    color: "#F79A50"
+}
 @connect((store)=>{
     return {
         user: store.user
@@ -37,6 +40,7 @@ class TickBox extends React.Component {
         return(
             <Checkbox
                 id = {this.props.id}
+                style={ orange }
                 checked={this.state.checked}
                 onChange={this.handleChange}
                 value={(this.state.checked).toString()}
