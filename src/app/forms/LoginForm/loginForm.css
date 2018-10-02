@@ -19,18 +19,19 @@
     color: white;
     background: white;
 }
-.login{
+.form.login{
     width: 380px;
     background: white;
-    box-sizing: border-box;
+    text-align: center;
     margin: 40px auto;
-    padding: 5px 10px 5px 15px;
-    border: thin solid #c0c0c0;
+    padding: 40px 80px;
+    border: thin solid #F79A50;
     border-radius: 5px;
 }
 .inputRow{
     position: relative;
-    display: block;
+    display: inline-block;
+    text-align: left;
     width: 100%;
     margin: 10px 0;
 }

@@ -4,6 +4,7 @@ import { dispatchedUserInfo } from 'extras/dispatchers';
 import HeaderAlt from 'components/HeaderAlt/HeaderAlt';
 import SignupForm from 'forms/SignupForm/SignupForm';
 import Footer from 'components/Footer/Footer';
+import './signup.css';
 //import Image from 'react-image';
 //import firebase from 'firebase';
 //import helperFunctions from 'extras/helperFunctions';

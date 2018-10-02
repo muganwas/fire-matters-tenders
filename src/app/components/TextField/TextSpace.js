@@ -3,6 +3,12 @@ import './textSpace.css';
 import { connect } from 'react-redux';
 import { dispatchedUserInfo } from 'extras/dispatchers';
 import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import Email from '@material-ui/icons/Email';
+import Work from '@material-ui/icons/Work';
+import Phone from '@material-ui/icons/Phone';
+
 
 @connect((store)=>{
     return {
@@ -21,6 +27,20 @@ class TextSpace extends React.Component {
     componentWillReceiveProps(nextProps){
         this.props = {...nextProps};
     }
+
+    adornment = ()=>{
+        let adornment = "0_0";
+        if(this.props.adornment ==="person")
+            adornment = <AccountCircle />;
+        else if(this.props.adornment === "email")
+            adornment = <Email />
+        else if(this.props.adornment === "company")
+            adornment = <Work />
+        else if(this.props.adornment === "phone")
+            adornment = <Phone />
+        return adornment;
+    }
+
     handleText=(e)=>{
         let fieldValue = e.target.value;
         let currUserInfo = {...this.props.user.info};
@@ -39,6 +59,7 @@ class TextSpace extends React.Component {
                     classes: {
                         root: this.props.fieldClass,
                     },
+                    startAdornment: (<InputAdornment className="gray" position="start">{this.adornment()}</InputAdornment>)
                 }}
                 onChange={this.handleText}
                 placeholder={this.props.placeholder}

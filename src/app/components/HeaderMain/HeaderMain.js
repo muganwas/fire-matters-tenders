@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Image from 'react-image';
 import { Link } from 'react-router-dom';
 import { dispatchedSearchInfo, dispatchedGenInfo } from 'extras/dispatchers';
+import './headerMain.css';
 
 @connect((store)=>{
     return {
