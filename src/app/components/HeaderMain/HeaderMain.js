@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Image from 'react-image';
+import { SocialIcon } from 'react-social-icons';
 import { Link } from 'react-router-dom';
 import { dispatchedSearchInfo, dispatchedGenInfo } from 'extras/dispatchers';
 import './headerMain.css';
@@ -55,6 +56,14 @@ export default class HeaderMain extends Component {
         this.props.dispatch(dispatchedGenInfo(info));
     }
 
+    socialIcons = 
+                <div className="social-icons">
+                    <SocialIcon url="https://facebook.com/" style={{ height: 25, width: 25, margin: 5 }} color="#475992"/>
+                    <SocialIcon url="https://twitter.com/" style={{ height: 25, width: 25, margin: 5  }} color="#75A8E9"/>
+                    <SocialIcon url="https://linkedin.com/" style={{ height: 25, width: 25, margin: 5  }} color="#0077B5"/>
+                    <SocialIcon url="https://google.com/" style={{ height: 25, width: 25, margin: 5  }} color="#dd4b39"/>
+                </div>;
+
     loggeInOptions = 
                 <div className="signup-login">
                     <Link to={`/`}>Logout</Link>
@@ -72,11 +81,14 @@ export default class HeaderMain extends Component {
                 <i class="material-icons menu-icon" onClick={ this.toggleMenu }>menu</i>
                 <div className={ this.props.genInfo['info']['menu'] }>
                     <Link onClick={ this.toggleMenu } to={`/`}>Home</Link>
-                    <Link onClick={ this.toggleMenu } to={`/`}>Tenders</Link>
+                    <Link onClick={ this.toggleMenu } to={`/tenders`}>Tenders</Link>
                     <Link onClick={ this.toggleMenu } to={`/`}>Service Providers</Link>
                     <Link onClick={ this.toggleMenu } to={`/`}>About</Link>
                     <Link onClick={ this.toggleMenu } to={`/`}>Contact</Link>
-                    { this.props.user['info']['loggedin']?this.loggeInOptions:this.NotLoggedInOptions }                    
+                <div className="login-social right">
+                    { this.socialIcons }
+                    { this.props.user['info']['loggedin']?this.loggeInOptions:this.NotLoggedInOptions }
+                </div>                   
                 </div>
             </div>
         )

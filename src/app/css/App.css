@@ -4,6 +4,9 @@ html{
   background: #fff;
   color: rgb(40, 40, 40);
 }
+.right{
+  float: right;
+}
 .hidden{
   display: none;
 }
@@ -90,7 +93,7 @@ input{
   font-size: 24px;
 }
 .signup-login{
-  float: right;
+  position: relative;
 }
 .Main-Menu a {
   text-decoration: none;

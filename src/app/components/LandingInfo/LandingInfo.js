@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import Image from 'react-image';
+//import Image from 'react-image';
 //import { dispatchedSearchInfo } from 'extras/dispatchers';
-import 'css/App.css';
 
 @connect((store)=>{
     return {

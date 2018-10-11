@@ -3,3 +3,19 @@
     min-height: 150px;
     padding: 0 20px;
 }
+.App-header .social-icons{
+    position: absolute;
+    text-align: right;
+    width: 20%;
+    top: 7px;
+    right: 250px;
+}
+.social-icons a:hover{
+    text-decoration: none;
+    border: none;
+}
+@media only screen and (max-width: 836px){
+    .App-header .social-icons{
+        display: none;
+    }
+}
