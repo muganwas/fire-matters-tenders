@@ -6,3 +6,4 @@ export { default as HeaderMain } from 'components/HeaderMain/HeaderMain';
 export { default as LandingInfo } from 'components/LandingInfo/LandingInfo';
 export { default as PasswordField } from 'components/PasswordField/PasswordField';
 export { default as TextSpace } from 'components/TextField/TextSpace';
+export { default as TendersList } from 'components/TendersList/TendersList';

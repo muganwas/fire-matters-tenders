@@ -1,6 +1,13 @@
 {
+    "compileOnSave": true,
     "compilerOptions": {
         "experimentalDecorators": true,
-        "allowJs": true
-    }
+        "allowJs": true,
+        "outDir": "./public",
+        "allowUnreachableCode": false,
+        "outFile": "./public/app/bundle.js"
+    },
+    "exclude": [
+        "./public/"
+    ]
 }
