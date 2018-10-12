@@ -4,6 +4,9 @@ html{
   background: #fff;
   color: rgb(40, 40, 40);
 }
+.gray{
+  color: #969696;
+}
 .right{
   float: right;
 }
@@ -36,7 +39,7 @@ input{
   margin-top: 20px;
   background: #bbbbbb;
   border:thin solid #979797;
-  border-radius: 2px;
+  border-radius: 5px;
 }
 .search input{
   float: left;
