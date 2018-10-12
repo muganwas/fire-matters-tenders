@@ -81,7 +81,7 @@ export default class HeaderMain extends Component {
                 <i class="material-icons menu-icon" onClick={ this.toggleMenu }>menu</i>
                 <div className={ this.props.genInfo['info']['menu'] }>
                     <Link onClick={ this.toggleMenu } to={`/`}>Home</Link>
-                    <Link onClick={ this.toggleMenu } to={`/tenders`}>Tenders</Link>
+                    <Link onClick={ this.toggleMenu } to={`/listings`}>Listings</Link>
                     <Link onClick={ this.toggleMenu } to={`/`}>Service Providers</Link>
                     <Link onClick={ this.toggleMenu } to={`/`}>About</Link>
                     <Link onClick={ this.toggleMenu } to={`/`}>Contact</Link>
