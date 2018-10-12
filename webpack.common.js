@@ -28,7 +28,11 @@ module.exports = {
 			{
 				test: /\.css/,
 				use: ['style-loader', 'css-loader']
-			}, 
+			},
+			{
+				test: /\.svg$/,
+				use: ['svg-inline-loader']
+			},
 			{
 		        test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
 		        // include: SRC_DIR,

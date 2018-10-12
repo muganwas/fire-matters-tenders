@@ -4,6 +4,9 @@ html{
   background: #fff;
   color: rgb(40, 40, 40);
 }
+.yellow{
+  color: #F79A50;
+}
 .gray{
   color: #969696;
 }
@@ -399,6 +402,26 @@ input{
   padding: 5px;
   margin-bottom: 2px;
   box-shadow:  rgba(0,0,0,0.2) 0px 2px 3px, inset rgba(0,0,0,0.2) 0px -1px 2px;
+}
+.more{
+  box-sizing: border-box;
+  display: block;
+  font-size: 12px;
+  border: thin solid #bbbbbb;
+  box-shadow: 1px 1px 1px #dfdfdf;
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  padding: 2px;
+  cursor: pointer;
+}
+.more:hover{
+  box-shadow: 2px 2px 3px #d07a7a;
+  -webkit-transition: all 0.2s ease-in;
+  -moz-transition: all 0.2s ease-in;
+  -ms-transition: all 0.2s ease-in;
+  -o-transition: all 0.2s ease-in;
+  transition: all 0.2s ease-in;
 }
 .data-row span{
   width: 20%;
