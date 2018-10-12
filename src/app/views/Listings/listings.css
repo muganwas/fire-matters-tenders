@@ -2,12 +2,7 @@
     box-sizing: border-box;
     margin: 20px 78px;
     display: block;
-    width: 100%;
 }
-.listing{
-    display: block;
-}
-.listing span{
-    display: inline-block;
-    width: 20%;
+@media only screen and (max-width: 1100px){
+
 }
