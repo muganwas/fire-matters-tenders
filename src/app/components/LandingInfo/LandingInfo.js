@@ -1,16 +1,7 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-//import Image from 'react-image';
-//import { dispatchedSearchInfo } from 'extras/dispatchers';
 
-@connect((store)=>{
-    return {
-        search: store.search,
-        user: store.user
-    }
-})
-export default class LandingSummary extends Component {
+class LandingInfo extends Component {
     constructor(props){
         super(props)
     }
@@ -49,48 +40,6 @@ export default class LandingSummary extends Component {
                             <span className="dit">hire service provider</span>
                         </div>
                     </div>
-                {/*Joshua's version
-                    <h2>Services</h2>
-                    <div className="how-it-works">
-                        <div className="sect-1-2 left">
-                        <span class='sect-header'>Documents</span>
-                            <span className="service" id="tenders">
-                                <Image className="pic" src={require('../images/Tenders.png')}/>
-                                <span>Tenders</span>
-                            </span>
-                            <span className="service" id="evac-diagrams">
-                                <Image className="pic" src={require('../images/EvacuationDiagrams.png')}/>
-                                <span>Evacuation Diagrams</span>
-                            </span>
-                            <span className="service" id="practices-guide">
-                                <Image className="pic" src={require('../images/GoodPracticeGuides.png')}/>
-                                <span>Good Practice Guide</span>
-                            </span>
-                            <span className="service" id="special-needs">
-                                <Image className="pic" src={require('../images/SpecialNeeds.png')}/>
-                                <span>Special Needs Persons <br/>Guide</span>
-                            </span>
-                        </div>
-                        <div className="sect-1-2 right">
-                        <span class='sect-header'>Market Place</span>
-                            <span className="service" id="quotations">
-                                <Image className="pic" src={require('../images/quotations.png')}/>
-                                <span>Quotations</span>
-                            </span>
-                            <span className="service" id="portables">
-                                <Image className="pic" src={require('../images/Portables.png')}/>
-                                <span>Portables</span>
-                            </span>
-                            <span className="service" id="maintenance">
-                                <Image className="pic" src={require('../images/Maintenance.png')}/>
-                                <span>FSI-Maintenance</span>
-                            </span>
-                            <span className="service" id="evac-training">
-                                <Image className="pic" src={require('../images/EvacTraining.png')}/>
-                                <span>Evacuation <br/>Training</span>
-                            </span>
-                        </div>
-                    </div>*/}
                 </div>
                 <div className="section-full dark">
                     <div className="sect-1-2" dir="rtl">
@@ -128,3 +77,5 @@ export default class LandingSummary extends Component {
         )
     }
 }
+
+export default LandingInfo

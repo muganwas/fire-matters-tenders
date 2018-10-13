@@ -1,22 +1,84 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { PropTypes } from 'prop-types';
+import './moreHoriz.css';
+import { dispatchedGenInfo } from 'extras/dispatchers';
 
 @connect((store)=>{
     return {
         user: store.user,
-        search: store.search,
         genInfo: store.genInfo
     }
 })
-export default class MoreHoriz extends React.Component {
+class MoreHoriz extends React.Component {
     constructor(props){
         super(props)
     }
+
+    componentWillReceiveProps(nextProps){
+        this.props = {...nextProps};
+    }
+    
+
+    toggleMenu = ()=>{
+        let genInfo = { ...this.props.genInfo.info }
+        if(this.props.className === "hidden"){
+            genInfo.listings[this.props.id].className = "dropDownMenu";
+            Object.keys(genInfo.listings).map((key)=>{
+                if(key !== this.props.id)
+                    genInfo.listings[key].className = "hidden";
+            })
+            this.props.dispatch(dispatchedGenInfo(genInfo));           
+        }else{
+            genInfo.listings[this.props.id].className = "hidden";
+            this.props.dispatch(dispatchedGenInfo(genInfo));
+        }             
+    }
+
+    detailedElement = (key)=>{
+        let element = this.props.element;
+        return(
+            <div key={key}>
+                <span>{ element[key] }</span>
+            </div>
+        )
+    }
+
+    options = (key)=>{
+        let options = this.props.options;
+        return(
+            <div key={key}>{ options[key] }</div>
+        )
+    }
+
     render(){
         return(
-            <div className="more">
-                <i class="material-icons yellow">more_horiz</i>
+            <div id={ this.props.id }>
+                <div onClick={ this.toggleMenu } className="more">
+                    <i class="material-icons yellow">more_horiz</i>
+                </div>
+                <div className={ this.props.className }>
+                    { Object.keys(this.props.options).map(this.options) }
+                </div>
             </div>
         )
     }
 }
+
+MoreHoriz.defaultProps = {
+    user: {},
+    genInfo: {},
+    className: null,
+    options: null
+}
+
+MoreHoriz.propTypes = {
+    user: PropTypes.object.isRequired,
+    genInfo: PropTypes.object.isRequired,
+    options: PropTypes.object.isRequired,
+    element: PropTypes.object,
+    id: PropTypes.string,
+    className: PropTypes.string.isRequired
+}
+
+export default MoreHoriz;

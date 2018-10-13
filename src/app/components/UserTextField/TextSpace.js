@@ -1,7 +1,10 @@
 import React from 'react';
-import './textSpace.css';
 import { connect } from 'react-redux';
+import { PropTypes } from 'prop-types';
+
+import './textSpace.css';
 import { dispatchedUserInfo } from 'extras/dispatchers';
+
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -20,16 +23,12 @@ class TextSpace extends React.Component {
         super(props)
     }
 
-    componentWillMount(){
-
-    }
-
     componentWillReceiveProps(nextProps){
         this.props = {...nextProps};
     }
 
     adornment = ()=>{
-        let adornment = "0_0";
+        let adornment;
         if(this.props.adornment ==="person")
             adornment = <AccountCircle />;
         else if(this.props.adornment === "email")
@@ -68,6 +67,21 @@ class TextSpace extends React.Component {
             </TextField>
         )
     }
+}
+
+TextSpace.defaultProps = {
+    user: {},
+    adornment: "0_0",
+    type: "text"
+}
+
+TextSpace.propTypes = {
+    user: PropTypes.object.isRequired,
+    adornment: PropTypes.string,
+    id: PropTypes.string.isRequired,
+    fieldClass: PropTypes.string.isRequired,
+    placeholder: PropTypes.string,
+    type: PropTypes.string.isRequired
 }
 
 export default TextSpace;

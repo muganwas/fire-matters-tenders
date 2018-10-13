@@ -10,6 +10,7 @@
     height:0.8px;
     background:black;
     background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 550, from(rgb(164, 164, 164)), to(#F1F1F2));
+    z-index: 1;
 }
 .list-row{
     padding: 5px 0 0;

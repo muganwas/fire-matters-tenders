@@ -1,15 +1,19 @@
 import React from 'react';
-import './textField.css';
 import { connect } from 'react-redux';
+
+import './textField.css';
+import { PropTypes } from 'prop-types';
+
 import { dispatchedTextFieldInfo } from 'extras/dispatchers';
 import TextField from '@material-ui/core/TextField';
+
 
 @connect((store)=>{
     return {
         user: store.user
     }
 })
-export default class Textfield extends React.Component {
+class Textfield extends React.Component {
     constructor(props){
         super(props)
     }
@@ -45,3 +49,18 @@ export default class Textfield extends React.Component {
         )
     }
 }
+
+Textfield.defaultProps = {
+    user: {},
+    type: "text"
+}
+
+Textfield.propTypes = {
+    user: PropTypes.object.isRequired,
+    id: PropTypes.string.isRequired,
+    fieldClass: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    placeholder: PropTypes.string,
+}
+
+export default Textfield;
