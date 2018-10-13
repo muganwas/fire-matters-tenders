@@ -5,6 +5,7 @@ import { dispatchedUserInfo } from 'extras/dispatchers';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Lock from '@material-ui/icons/Lock';
+import { PropTypes } from 'prop-types';
 
 @connect((store)=>{
     return {
@@ -48,6 +49,19 @@ class PasswordField extends React.Component {
             </div>
         )
     }
+}
+
+PasswordField.defaultProps = {
+    user: {},
+    type: "text"
+}
+
+PasswordField.propTypes = {
+    user: PropTypes.object.isRequired,
+    id: PropTypes.string.isRequired,
+    fieldClass: PropTypes.string.isRequired,
+    placeholder: PropTypes.string,
+    type: PropTypes.string.isRequired
 }
 
 export default PasswordField;

@@ -5,6 +5,7 @@ import { SocialIcon } from 'react-social-icons';
 import { Link } from 'react-router-dom';
 import { dispatchedSearchInfo, dispatchedGenInfo } from 'extras/dispatchers';
 import './headerMain.css';
+import { PropTypes } from 'prop-types';
 
 @connect((store)=>{
     return {
@@ -13,7 +14,7 @@ import './headerMain.css';
         genInfo: store.genInfo
     }
 })
-export default class HeaderMain extends Component {
+class HeaderMain extends Component {
     constructor(props){
         super(props)
     }
@@ -94,3 +95,17 @@ export default class HeaderMain extends Component {
         )
     }
 }
+
+HeaderMain.defaultProps = {
+    search: {},
+    user: {},
+    genInfo: {}
+}
+
+HeaderMain.propTypes = {
+    search: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
+    genInfo: PropTypes.object.isRequired
+}
+
+export default HeaderMain;

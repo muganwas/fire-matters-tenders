@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 //import { Link } from 'react-router-dom';
 //import { dispatchedSearchInfo } from 'extras/dispatchers';
 import './callToAction.css';
+import { PropTypes } from 'prop-types';
 
 @connect((store)=>{
     return {
@@ -10,16 +11,11 @@ import './callToAction.css';
         user: store.user
     }
 })
-export default class HeaderMain extends Component {
+class HeaderMain extends Component {
     constructor(props){
         super(props)
     }
-    getStarted = ()=>{
 
-    }
-    initSubscription = ()=>{
-
-    }
     render(){
         return(
             <div className="call-to-action">
@@ -32,3 +28,15 @@ export default class HeaderMain extends Component {
         )
     }
 }
+
+HeaderMain.defaultProps = {
+    user: {},
+    search: {}
+}
+
+HeaderMain.propTypes = {
+    user: PropTypes.object.isRequired,
+    search: PropTypes.object.isRequired 
+}
+
+export default HeaderMain;

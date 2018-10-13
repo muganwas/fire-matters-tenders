@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { dispatchedSecondarySearchInfo } from 'extras/dispatchers';
 import './secondarySearch.css';
 import { DropDown, Textfield } from 'components';
+import { PropTypes } from 'prop-types';
 
 @connect((store)=>{
     return {
@@ -14,7 +15,7 @@ import { DropDown, Textfield } from 'components';
         user: store.user
     }
 })
-export default class SecondarySearch extends Component {
+class SecondarySearch extends Component {
     constructor(props){
         super(props)
     }
@@ -38,3 +39,20 @@ export default class SecondarySearch extends Component {
         )
     }
 }
+
+SecondarySearch.defaultProps = {
+    search: {},
+    secondarySearch: {},
+    textFields: {},
+    user: {}
+}
+
+SecondarySearch.propTypes = {
+    user: PropTypes.object.isRequired,
+    search: PropTypes.object.isRequired,
+    textFields: PropTypes.object.isRequired,
+    secondarySearch: PropTypes.object.isRequired,
+    categories: PropTypes.object.isRequired
+}
+
+export default SecondarySearch;

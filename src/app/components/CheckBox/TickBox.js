@@ -3,6 +3,7 @@ import './tickBox.css';
 import { connect } from 'react-redux';
 import { dispatchedUserInfo } from 'extras/dispatchers';
 import Checkbox from '@material-ui/core/Checkbox';
+import { PropTypes } from 'prop-types';
 
 const orange = {
     color: "#F79A50"
@@ -20,13 +21,10 @@ class TickBox extends React.Component {
         }
     }
 
-    componentWillMount(){
-
-    }
-
     componentWillReceiveProps(nextProps){
         this.props = {...nextProps};
     }
+    
     handleChange=(e)=>{
         let fieldValue = !this.state.checked;
         let currUserInfo = {...this.props.user.info};
@@ -48,6 +46,15 @@ class TickBox extends React.Component {
             </Checkbox>
         )
     }
+}
+
+TickBox.defaultProps = {
+    user: {},
+}
+
+TickBox.PropTypes = {
+    user: PropTypes.object.isRequired,
+    id: PropTypes.string.isRequired
 }
 
 export default TickBox;

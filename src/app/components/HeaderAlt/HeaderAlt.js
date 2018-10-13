@@ -4,6 +4,7 @@ import './headerAlt.css';
 import Image from 'react-image';
 import { Link } from 'react-router-dom';
 //import { dispatchedSearchInfo, dispatchedGenInfo } from 'extras/dispatchers';
+import { PropTypes } from 'prop-types';
 
 @connect((store)=>{
     return {
@@ -12,7 +13,7 @@ import { Link } from 'react-router-dom';
         genInfo: store.genInfo
     }
 })
-export default class HeaderAlt extends Component {
+class HeaderAlt extends Component {
     constructor(props){
         super(props)
         this.state={}
@@ -51,3 +52,17 @@ export default class HeaderAlt extends Component {
         )
     }
 }
+
+HeaderAlt.defaultProps = {
+    search: {},
+    user: {},
+    genInfo: {}
+}
+
+HeaderAlt.propTypes = {
+    search: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
+    genInfo: PropTypes.object.isRequired
+}
+
+export default HeaderAlt;

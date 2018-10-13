@@ -30,7 +30,7 @@ class LoginForm extends React.Component {
         return(
             <div className="form login">
             <div className="inputRow">
-                <TextSpace id="username" adornment="person" placeholder="John Doe" fieldClass="textfield" />
+                <TextSpace id="username" type="text" adornment="person" placeholder="John Doe" fieldClass="textfield" />
             </div>
             <div className="inputRow">
                 <PasswordField id="password" placeholder="Password" fieldClass="textfield" />
