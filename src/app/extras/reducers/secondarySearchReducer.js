@@ -1,6 +1,6 @@
 const defaultState = {
     info: {
-      searchCategory: "all"
+      searchCategory: "All"
     },
     fetching: false,
     fetched: false,

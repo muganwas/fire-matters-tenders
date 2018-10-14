@@ -11,33 +11,20 @@
     clear: both;
     content: ""
 }
-.select select{
-    border: none;
-    display: inline-block;
-    width: 175px;
-    height: 25px;
-    padding: 0 3px;
-    appearance: none;
-    -webkit-appearance: none;
-    background: transparent;
-    cursor: pointer;
-}
 .select{
     width: 150px;
     background: url('~images/down_arrow.png') no-repeat 135px rgba(255,255,255, 0);
     background-size: 20px 10px;
     overflow: hidden;
-    padding: 4px 8px;
+    padding: 6px 8px;
     border-right: thin solid #fff;
+    cursor: pointer;
 }
 .search-icon{
     float:right;
     color: #fff;
     margin: 3px 2px;
     cursor: pointer;
-}
-.select option{
-    padding: 0 5px;
 }
 .left{
     float: left;

@@ -30,9 +30,10 @@ class SecondarySearch extends Component {
         this.props.dispatch(dispatchedSecondarySearchInfo(info));
     }
     render(){
+        let selected = this.props.secondarySearch.info.searchCategory;
         return(
             <div className="search-main">
-                <DropDown className="select left" options={ this.props.categories } getCategory={ this.getCategory } />
+                <DropDown className="select left" options={ this.props.categories } selected={ selected } getCategory={ this.getCategory } />
                 <Textfield id="listingSearch" fieldClass="search-field" placeholder="Find listings" type="text" />
                 <i className="material-icons search-icon">search</i>        
             </div>
