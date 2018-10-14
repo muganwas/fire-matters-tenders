@@ -5,12 +5,16 @@ import { PropTypes } from 'prop-types';
 
 @connect((store)=>{
     return {
-        user: store.user
+        user: store.user,
+        secondarySearch: store.secondarySearch,
     }
 })
 class DropDown extends React.Component {
     constructor(props){
         super(props)
+        this.state = {
+            dropDownClass: "hidden options-list"
+        }
     }
 
     componentWillReceiveProps(nextProps){
@@ -19,17 +23,34 @@ class DropDown extends React.Component {
 
     mapOptions = (key)=>{
         let options = this.props.options;
-        return(   
-            <option key={key} value={key}>{options[key]}</option>   
-        )
+        if(options[key] === this.props.selected)
+            return;
+        else{
+            return(   
+                <option className="option" key={key} value={key}>{options[key]}</option>   
+            )
+        }
+    }
+
+    toggleDisplayDropDown = ()=>{
+        if(this.state.dropDownClass === "hidden options-list"){
+            this.setState({
+                dropDownClass: "options-list"
+            });
+        }else{
+            this.setState({
+                dropDownClass: "hidden options-list"
+            });
+        }
     }
 
     render(){
         return(
             <div className={ this.props.className }>
-                <select onChange={ this.props.getCategory }>
+                <span onClick = { this.toggleDisplayDropDown } className="options-selected">{ this.props.selected }</span>
+                <div className={ this.state.dropDownClass }>
                     { Object.keys(this.props.options).map(this.mapOptions) }
-                </select>
+                </div>
             </div>
         )
     }
@@ -38,11 +59,13 @@ class DropDown extends React.Component {
 DropDown.defaultProps = {
     user: {},
     options: {},
+    secondarySearch: {}
 }
 
 DropDown.propTypes = {
     user: PropTypes.object.isRequired,
-    options: PropTypes.object.isRequired
+    options: PropTypes.object.isRequired,
+    secondarySearch: PropTypes.object.isRequired
 }
 
 export default DropDown;
