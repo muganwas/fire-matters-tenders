@@ -19,18 +19,18 @@ class MoreHoriz extends React.Component {
         this.props = {...nextProps};
     }
     
-
     toggleMenu = ()=>{
-        let genInfo = { ...this.props.genInfo.info }
+        let genInfo = { ...this.props.genInfo.info },
+        listName = this.props.listName;
         if(this.props.className === "hidden"){
-            genInfo.listings[this.props.id].className = "dropDownMenu";
-            Object.keys(genInfo.listings).map((key)=>{
+            genInfo[listName][this.props.id].moreMenuClassName = "dropDownMenu";
+            Object.keys(genInfo[listName]).map((key)=>{
                 if(key !== this.props.id)
-                    genInfo.listings[key].className = "hidden";
+                    genInfo[listName][key].moreMenuClassName = "hidden";
             })
             this.props.dispatch(dispatchedGenInfo(genInfo));           
         }else{
-            genInfo.listings[this.props.id].className = "hidden";
+            genInfo[listName][this.props.id].moreMenuClassName = "hidden";
             this.props.dispatch(dispatchedGenInfo(genInfo));
         }             
     }

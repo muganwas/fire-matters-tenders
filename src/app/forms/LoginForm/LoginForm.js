@@ -21,10 +21,6 @@ class LoginForm extends React.Component {
     constructor(props) {
         super(props);
     }
-
-    login = ()=>{
-        
-    }
     
     render(){
         return(
@@ -33,7 +29,7 @@ class LoginForm extends React.Component {
                 <TextSpace id="username" type="text" adornment="person" placeholder="John Doe" fieldClass="textfield" />
             </div>
             <div className="inputRow">
-                <PasswordField id="password" placeholder="Password" fieldClass="textfield" />
+                <TextSpace id = "password" type="password" adornment="lock" placeholder="Password" fieldClass="textfield" />
             </div>
             <div className="inputRow">
                 <Button onClick={this.login} variant="outlined" style={ logginbutton } className="login-button" >

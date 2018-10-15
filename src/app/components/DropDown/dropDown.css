@@ -9,16 +9,16 @@
     position: absolute;
     margin: 8px 0 0 -9px;
     padding:1px;
-    width: 170px;
+    min-width: 170px;
     border-radius: 5px;
     background-color: #F1F1F2;
     border: thin solid #979797;
     box-shadow: 2px 2px 5px #979797;
-    -webkit-transition: all 0.2s ease-in;
-    -moz-transition: all 0.2s ease-in;
-    -ms-transition: all 0.2s ease-in;
-    -o-transition: all 0.2s ease-in;
-    transition: all 0.2s ease-in;
+    -webkit-transition: all 0.2s ease-out;
+    -moz-transition: all 0.2s ease-out;
+    -ms-transition: all 0.2s ease-out;
+    -o-transition: all 0.2s ease-out;
+    transition: all 0.2s ease-out;
 }
 .option{
     box-sizing: border-box;

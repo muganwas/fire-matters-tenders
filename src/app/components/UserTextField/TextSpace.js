@@ -11,6 +11,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import Email from '@material-ui/icons/Email';
 import Work from '@material-ui/icons/Work';
 import Phone from '@material-ui/icons/Phone';
+import Lock from '@material-ui/icons/Lock';
 
 
 @connect((store)=>{
@@ -37,6 +38,8 @@ class TextSpace extends React.Component {
             adornment = <Work />
         else if(this.props.adornment === "phone")
             adornment = <Phone />
+        else if(this.props.adornment === "lock")
+            adornment = <Lock />
         return adornment;
     }
 

@@ -23,7 +23,7 @@ export default class Footer extends Component {
                 <div className="footer-links">
                     <Link to={`/`}>Home</Link>
                     <Link to={`/listings`}>Listings</Link>
-                    <Link to={`/`}>Service Providers</Link>
+                    <Link to={`/service-providers`}>Service Providers</Link>
                     <Link to={`/`}>About</Link>
                     <Link to={`/`}>Contact</Link>
                 </div>
