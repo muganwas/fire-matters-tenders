@@ -5,9 +5,6 @@ import './listFilter.css';
 import { PropTypes } from 'prop-types';
 import { TickBox } from 'components';
 
-const baseUrl = process.env.BACK_END_URL,
-usersEndPoint = process.env.USERS_END_POINT + "?userType=service provider";
-
 @connect((store)=>{
     return {
         user: store.user,
