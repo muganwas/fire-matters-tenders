@@ -35,7 +35,7 @@ class ServiceProviders extends React.Component {
                 <div className="mid listings">
                     <SecondarySearch categories={ statesAustralia } placeholder="Find service providers" />
                     <ListedServiceProviders />
-                    <ListFilter tickDispatcher={ dispatchedGenInfo } title="Categories" />
+                    <ListFilter tickDispatcher={ dispatchedGenInfo } title="Categories Filter" />
                     <div className="clear"></div>
                 </div>
                 <div className="bottom">

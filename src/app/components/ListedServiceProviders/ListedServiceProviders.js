@@ -70,7 +70,7 @@ class ListedServiceProviders extends Component {
                 <div className="list-row header">
                     <span className="twenty">Company Name</span>
                     <span className="thirty">Area of Operation</span>
-                    <span className="thirty">Categories of Service</span>
+                    <span className="thirty">Categories</span>
                     <span className="twenty"></span>
                     <div className="bottom-border"></div>
                 </div>
