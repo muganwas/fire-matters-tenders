@@ -34,7 +34,7 @@ class SecondarySearch extends Component {
         return(
             <div className="search-main">
                 <DropDown className="select left" options={ this.props.categories } selected={ selected } getCategory={ this.getCategory } />
-                <Textfield id="listingSearch" fieldClass="search-field" placeholder="Find listings" type="text" />
+                <Textfield id="listingSearch" fieldClass="search-field" placeholder={ this.props.placeholder } type="text" />
                 <i className="material-icons search-icon">search</i>        
             </div>
         )

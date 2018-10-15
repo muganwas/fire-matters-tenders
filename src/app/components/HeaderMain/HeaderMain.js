@@ -83,7 +83,7 @@ class HeaderMain extends Component {
                 <div className={ this.props.genInfo['info']['menu'] }>
                     <Link onClick={ this.toggleMenu } to={`/`}>Home</Link>
                     <Link onClick={ this.toggleMenu } to={`/listings`}>Listings</Link>
-                    <Link onClick={ this.toggleMenu } to={`/`}>Service Providers</Link>
+                    <Link onClick={ this.toggleMenu } to={`/service-providers`}>Service Providers</Link>
                     <Link onClick={ this.toggleMenu } to={`/`}>About</Link>
                     <Link onClick={ this.toggleMenu } to={`/`}>Contact</Link>
                 <div className="login-social right">

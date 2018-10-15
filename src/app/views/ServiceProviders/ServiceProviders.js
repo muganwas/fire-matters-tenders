@@ -1,13 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import './listings.css';
-import  { Footer, HeaderMain, SecondarySearch, ListedJobs } from 'components';
+import './serviceProviders.css';
+import  { Footer, HeaderMain, SecondarySearch, ListedServiceProviders, ListFilter } from 'components';
 //import Image from 'react-image';
 //import firebase from 'firebase';
 //import helperFunctions from 'extras/helperFunctions';
 
-import { listingCategories } from 'extras/config';
+import { statesAustralia } from 'extras/config';
 import { PropTypes } from 'prop-types';
+import { dispatchedGenInfo } from 'extras/dispatchers';
 
 @connect((store)=>{
     return {
@@ -16,7 +17,7 @@ import { PropTypes } from 'prop-types';
         genInfo: store.genInfo
     }
 })
-class Listings extends React.Component {
+class ServiceProviders extends React.Component {
     constructor(props){
         super(props)
     }
@@ -25,7 +26,6 @@ class Listings extends React.Component {
         this.props = {...nextProps};
     }
 
-    
     render(){
         return(
             <div className="main">
@@ -33,8 +33,9 @@ class Listings extends React.Component {
                     <HeaderMain />
                 </div>
                 <div className="mid listings">
-                    <SecondarySearch categories={ listingCategories } placeholder="Find listings" />
-                    <ListedJobs />
+                    <SecondarySearch categories={ statesAustralia } placeholder="Find service providers" />
+                    <ListedServiceProviders />
+                    <ListFilter tickDispatcher={ dispatchedGenInfo } title="Categories" />
                     <div className="clear"></div>
                 </div>
                 <div className="bottom">
@@ -45,16 +46,17 @@ class Listings extends React.Component {
     }
 }
 
-Listings.defaultProps = {
+ServiceProviders.defaultProps = {
     user: {},
     search: {},
     genInfo: {}
 }
 
-Listings.propTypes = {
+ServiceProviders.propTypes = {
     user: PropTypes.object.isRequired,
     search: PropTypes.object.isRequired,
     genInfo: PropTypes.object.isRequired
 }
 
-export default Listings;
+export default ServiceProviders;
+

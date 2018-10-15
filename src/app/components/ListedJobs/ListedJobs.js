@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-//import { Link } from 'react-router-dom';
-//import Image from 'react-image';
 import  { Loader, FmButton, MoreHoriz } from 'components';
 import axios from 'axios';
 import { dispatchedGenInfo } from 'extras/dispatchers';
@@ -9,7 +7,7 @@ import './listedJobs.css';
 import { PropTypes } from 'prop-types';
 
 const baseUrl = process.env.BACK_END_URL,
-listingsEndPoing = process.env.LISTING_END_POINT;
+listingsEndPoint = process.env.LISTING_END_POINT;
 
 @connect((store)=>{
     return {
@@ -35,11 +33,12 @@ class ListedJobs extends Component {
 
     fetchListings = ()=>{
         let genInfo = {...this.props.genInfo.info };
-        axios.get(baseUrl + listingsEndPoing).then((response)=>{
+        axios.get(baseUrl + listingsEndPoint).then((response)=>{
             //console.log(response.data);
             let listings = genInfo.listings = {...response.data};
+            /**Set the more dropdown menu class to hidden for every row*/
             Object.keys(listings).map((key)=>{
-                genInfo.listings[key].className = "hidden";
+                genInfo.listings[key].moreMenuClassName = "hidden";
             })
             this.props.dispatch(dispatchedGenInfo(genInfo));
         }).catch(err=>{
@@ -56,15 +55,16 @@ class ListedJobs extends Component {
                 <div className="thirty">{ listings[key].serviceRequired }, { listings[key].equipment }</div>
                 <div className="twenty">{ listings[key].closingDate}</div>
                 <div className="twenty"><FmButton variant="contained" color="primary" text="Submit Tender" /></div>
-                <div className="ten"><MoreHoriz className={ listings[key].className } id={ key } element={ listings[key] } options={ options } /></div>
+                <div className="ten"><MoreHoriz className={ listings[key].moreMenuClassName } id={ key } listName = "listings" element={ listings[key] } options={ options } /></div>
                 <div className="bottom-border"></div>
             </div>
         )
     }
 
     render(){
+        let listings = this.props.genInfo.info.listings;
         return(
-            <div className="list">
+            <div className="list left hanad">
                 <div className="list-row header">
                     <span className="twenty">Location</span>
                     <span className="thirty">Description</span>
@@ -73,7 +73,7 @@ class ListedJobs extends Component {
                     <span className="ten"></span>
                     <div className="bottom-border"></div>
                 </div>
-                { this.props.genInfo.info.listings?Object.keys(this.props.genInfo.info.listings).map(this.displayListings):<div className="loader"><Loader /></div> }
+                { listings?Object.keys(listings).map(this.displayListings):<div className="loader"><Loader /></div> }
             </div>
         )
     }

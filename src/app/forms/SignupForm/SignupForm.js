@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import './signupForm.css';
-import { PasswordField, TickBox, TextSpace } from 'components';
+import { TickBox, TextSpace } from 'components';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
+import { dispatchedUserInfo } from 'extras/dispatchers';
 
 const signupbutton = {
     color: "#fff",
@@ -42,13 +43,13 @@ class SignupForm extends React.Component {
                 <TextSpace id="email_address" adornment="email" type="email" placeholder="example@email.com" fieldClass="textfield" />
             </div> 
             <div className="inputRow">
-                <PasswordField id="password" adornment="password" type="password" placeholder="Password" fieldClass="textfield" />
+                <TextSpace id = "password" type="password" adornment="lock" placeholder="Password" fieldClass="textfield" />
             </div>
             <div className="inputRow">
-                <PasswordField id="password_confirm" adornment="password" type="password" placeholder="Confirm Password" fieldClass="textfield" />
+                <TextSpace id = "password_confirm" type="password" adornment="lock" placeholder="Confirm password" fieldClass="textfield" />
             </div>
             <div className="inputRow">
-                <TickBox id="terms_and_conditions" /><span>I accept the <Link to={`/`}>Terms and Conditions</Link></span>
+                <TickBox dispatcher = { dispatchedUserInfo } placement={ this.props.user.info } id="terms_and_conditions" /><span>I accept the <Link to={`/`}>Terms and Conditions</Link></span>
             </div>
             <div className="inputRow">
                 <Button onClick={this.signUp} variant="outlined" style={ signupbutton } className="signup-button" >

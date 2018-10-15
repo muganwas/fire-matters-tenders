@@ -1,0 +1,18 @@
+.list-filter{
+    font-size: 13px;
+    box-sizing: border-box;
+    background-color: #F1F1F2;
+    border-radius: 5px;
+    padding: 40px 50px;
+}
+.list-filter .row{
+    display: block;
+}
+.list-filter .header{
+    display: inline-block;
+    padding: 0 20px 5px 0;
+    margin: 0 0 5px 0;
+    color: black;
+    font-size: 16px;
+    border-bottom: 2px solid #F79A50;
+}
