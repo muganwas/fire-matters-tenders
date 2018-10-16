@@ -4,8 +4,7 @@ import { Link } from 'react-router-dom';
 import { SocialIcon } from 'react-social-icons';
 //import { dispatchedSearchInfo } from 'extras/dispatchers';
 import { year } from 'extras/helperFunctions';
-import 'css/App.css';
-import { PropTypes } from 'prop-types';
+import './footer.css';
 
 @connect((store)=>{
     return {
@@ -25,7 +24,7 @@ export default class Footer extends Component {
                     <Link to={`/listings`}>Listings</Link>
                     <Link to={`/service-providers`}>Service Providers</Link>
                     <Link to={`/`}>About</Link>
-                    <Link to={`/`}>Contact</Link>
+                    <Link to={`/contact`}>Contact</Link>
                 </div>
                 <div className="social-icons">
                     <SocialIcon url="https://facebook.com/" style={{ height: 35, width: 35, margin: 5 }} color="#fff"/>

@@ -36,7 +36,7 @@ class Signup extends React.Component {
         return(
             <div className="main">
                 <div className="top">
-                    <HeaderAlt loc="signup" />
+                    <HeaderAlt loc="signup" header="Sign up" sub="Login and connect with leading service providers in Australia" />
                 </div>
                 <div className="form mid">
                     <SignupForm />

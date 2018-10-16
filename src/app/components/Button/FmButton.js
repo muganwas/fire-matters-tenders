@@ -31,8 +31,15 @@ const FmButton = (props)=>{
   )
 }
 
+FmButton.defaultProps = {
+  color: "primary"
+}
+
 FmButton.propTypes = {
     classes: PropTypes.object.isRequired,
+    color: PropTypes.string,
+    text: PropTypes.string.isRequired,
+    variant: PropTypes.string
 }
 
 export default withStyles(styles)(FmButton);

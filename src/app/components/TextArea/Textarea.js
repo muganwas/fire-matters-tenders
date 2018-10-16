@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import './textField.css';
+import './textArea.css';
 import { PropTypes } from 'prop-types';
 
 import { dispatchedTextFieldInfo } from 'extras/dispatchers';
@@ -14,7 +14,7 @@ import TextField from '@material-ui/core/TextField';
         textFields: store.textFields.info
     }
 })
-class Textfield extends React.Component {
+class Textarea extends React.Component {
     constructor(props){
         super(props)
     }
@@ -42,26 +42,30 @@ class Textfield extends React.Component {
                         root: this.props.fieldClass,
                     },
                 }}
+                multiline
+                rows={ this.props.rows }
                 onChange={this.handleText}
                 placeholder={this.props.placeholder}
-                type={this.props.type}
+                type="text"
             >
             </TextField>
         )
     }
 }
 
-Textfield.defaultProps = {
+Textarea.defaultProps = {
     user: {},
-    type: "text"
+    type: "text",
+    rows: 4,
 }
 
-Textfield.propTypes = {
+Textarea.propTypes = {
     user: PropTypes.object.isRequired,
     id: PropTypes.string.isRequired,
     fieldClass: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     placeholder: PropTypes.string,
+    rows: PropTypes.number.isRequired
 }
 
-export default Textfield;
+export default Textarea;
