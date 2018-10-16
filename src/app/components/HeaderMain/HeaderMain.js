@@ -85,7 +85,7 @@ class HeaderMain extends Component {
                     <Link onClick={ this.toggleMenu } to={`/listings`}>Listings</Link>
                     <Link onClick={ this.toggleMenu } to={`/service-providers`}>Service Providers</Link>
                     <Link onClick={ this.toggleMenu } to={`/`}>About</Link>
-                    <Link onClick={ this.toggleMenu } to={`/`}>Contact</Link>
+                    <Link onClick={ this.toggleMenu } to={`/contact`}>Contact</Link>
                 <div className="login-social right">
                     { this.socialIcons }
                     { this.props.user['info']['loggedin']?this.loggeInOptions:this.NotLoggedInOptions }

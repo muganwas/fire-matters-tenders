@@ -34,7 +34,7 @@ class Login extends React.Component {
         return(
             <div className="main">
                 <div className="top">
-                    <HeaderAlt loc="login" />
+                    <HeaderAlt loc="login" header="Login" sub="Login and connect with leading service providers in Australia" />
                 </div>
                 <div className="form mid">
                     <LoginForm />

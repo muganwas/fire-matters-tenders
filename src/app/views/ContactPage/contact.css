@@ -1,0 +1,36 @@
+.absolute-150{
+    display: block;
+    padding-top: 150px;
+}
+.map{
+    height: 430px;
+}
+.side-margin-90{
+    margin: 0 90px;
+}
+.side-margin-10precent{
+    margin: 0 10%;
+}
+.addresses{
+    box-sizing: border-box;
+    padding: 40px 50px;
+    background-color: #F1F1F2;
+    border-radius: 5px;
+    width: 30%;
+}
+.addresses .header{
+    color: #494949;
+}
+.addresses .address-dets{
+    padding: 7px 0;
+}
+.addresses .address-dets .text{
+    display: inline-block;
+    padding: 0 5px;
+}
+.addresses .address-dets span{
+    margin: 3px 0;
+}
+.addresses span{
+    display: block;
+}

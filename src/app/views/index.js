@@ -1,6 +1,7 @@
-export { default as Login } from 'views/Login/Login';
-export { default as Signup } from 'views/Signup/Signup';
-export { default as NotFound} from 'views/NotFound/NotFound';
+export { default as Login } from 'views/LoginPage/Login';
+export { default as Signup } from 'views/SignupPage/Signup';
+export { default as NotFound} from 'views/NotFoundPage/NotFound';
 export { default as LandingPage } from 'views/LandingPage/LandingPage';
-export { default as Listings } from 'views/Listings/Listings';
-export { default as ServiceProviders } from 'views/ServiceProviders/ServiceProviders';
+export { default as Listings } from 'views/ListingsPage/Listings';
+export { default as ContactPage } from 'views/ContactPage/Contact';
+export { default as ServiceProviders } from 'views/ServiceProvidersPage/ServiceProviders';

@@ -1,0 +1,23 @@
+.dash{
+    position: absolute;
+    display: block;
+    padding: 30px 0;
+    color: #fff;
+    background-color: #F79A50;
+    left: 0;
+    margin: 0 0 0 -9px;
+    width: 102%;
+}
+#header{
+    box-sizing: border-box;
+    display: block;
+    padding: 0 0 20px;
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+}
+#sub{
+    box-sizing: border-box;
+    display: block;
+    text-align: center;
+}

@@ -3,7 +3,7 @@ import ReactDom	from 'react-dom';
 import registerServiceWorker from  "./registerServiceWorker";
 import { BrowserRouter, Route, Switch} from 'react-router-dom';
 import { Provider } from "react-redux";
-import { LandingPage, Listings, NotFound, Login, Signup, ServiceProviders } from 'views';
+import { LandingPage, Listings, NotFound, Login, Signup, ServiceProviders, ContactPage } from 'views';
 import store from './store';
 import 'css/App.css';
 
@@ -13,6 +13,14 @@ let LandingPageComponent = ()=>{
 	return(
 		<Provider store={store}>
 			<LandingPage />
+		</Provider>
+	)
+}
+
+let ContactComponent = ()=>{
+	return(
+		<Provider store={store}>
+			<ContactPage />
 		</Provider>
 	)
 }
@@ -65,6 +73,7 @@ let Root = ()=>{
 					<Route exact path="/" component={ LandingPageComponent } />
 					<Route exact path="/listings" component={ ListingComponent } />
 					<Route exact path="/service-providers" component={ ServiceProvidersComponent } />
+					<Route exact path="/contact" component={ ContactComponent } />
 					<Route exact path="/login" component={ loginComponent } />
 					<Route exact path="/signup" component={ signupComponent } />
 					<Route component={ notFound } />

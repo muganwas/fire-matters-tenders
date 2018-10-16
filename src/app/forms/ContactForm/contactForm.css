@@ -1,0 +1,12 @@
+.contactForm .inputRow{
+    box-sizing: border-box;
+    position: relative;
+    display: inline-block;
+    margin: 0 22px 5px 0;
+}
+.contactForm .inputRow:nth-child(3){
+    margin: 0 0 5px 0;
+}
+.contactForm .athird{
+    width: 32.2%;
+}
