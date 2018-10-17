@@ -40,7 +40,13 @@ class TextSpace extends React.Component {
             adornment = <Phone />
         else if(this.props.adornment === "lock")
             adornment = <Lock />
+        else if(this.props.adornment === "none")
+            adornment = ""
         return adornment;
+    }
+
+    componentWillReceiveProps(nextProps){
+        this.props = {...nextProps}
     }
 
     handleText=(e)=>{
@@ -48,14 +54,15 @@ class TextSpace extends React.Component {
         let currUserInfo = {...this.props.user.info};
         let label = this.props.id;
         currUserInfo[label] = fieldValue;
-        this.props.dispatch(dispatchedUserInfo(currUserInfo));
+        if(fieldValue)
+            this.props.dispatch(dispatchedUserInfo(currUserInfo));
     }
 
     render(){
         return(
             <TextField
                 id={this.props.id}
-                className={this.props.fieldClass}
+                className={ this.props.fieldClass }
                 InputProps={{
                     disableUnderline: true,
                     classes: {
@@ -63,6 +70,8 @@ class TextSpace extends React.Component {
                     },
                     startAdornment: (<InputAdornment className="gray" position="start">{this.adornment()}</InputAdornment>)
                 }}
+                name = {this.props.fieldClass}
+                onBlur = { this.props.onBlur }
                 onChange={this.handleText}
                 placeholder={this.props.placeholder}
                 type={this.props.type}

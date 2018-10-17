@@ -105,15 +105,7 @@ input{
   display: block;
   padding: 2px;
 }
-.Main-Menu{
-  box-sizing: border-box;
-  position: absolute;
-  width: 102%;
-  left: -9px;
-  padding: 15px 90px 15px 90px;
-  background: #e1e1e1;
-  margin-top: 30px;
-}
+
 .form.mid{
   width: 100vw;
   margin-left: -10px;
@@ -124,26 +116,6 @@ input{
   display: block;
   margin: 10px auto;
   font-size: 24px;
-}
-.signup-login{
-  position: relative;
-}
-.Main-Menu a {
-  text-decoration: none;
-  padding: 0;
-  margin: 0 6px;
-  color: #212121;
-  cursor: pointer;
-}
-.Main-Menu a:hover {
-  transition: 0.3s;
-  border-bottom: 2px solid #ED2431;
-}
-.Mobile-Menu, .menu-icon{
-  display: none;
-}
-.nav-button{
-  text-align: left;
 }
 .simple-button{
   margin: 2px 10px;
@@ -413,60 +385,13 @@ input{
 
 }
 @media only screen and (max-width: 680px){
-  .Main-Menu{
-    display: none;
-  }
-  .Mobile-Menu{
-    position: absolute;
-    width: 100%;
-    top: 35px;
-    left:0;
-    padding: 0 50px 50px;
-    background: rgba(0, 0, 0, 0.755)
-  }
-  .signup-login{
-    float:none;
-  }
   .div{
     display: none;
-  }
-  .Mobile-Menu a, .signup-login a{
-    display: block;
-    padding: 10px 2px;
-    text-decoration: none;
-    color: rgb(255, 255, 255);
-  }
-  .Mobile-Menu a:hover, .signup-login a:hover{
-    color: #ED2431;
-  }
-  .menu-icon{
-    position: absolute; 
-    display: block;
-    top: 10px;
-    left: 10px;
-    font-size: 26px;
-    cursor: pointer;
-  }
-  div.search{
-    box-sizing: border-box;
-    display: block;
-    float:none;
-  }
-  .search input{
-    box-sizing: border-box;
-    min-width: 80%;
   }
 }
 @media only screen and (max-width: 625px){
 
 }
 @media only screen and (max-width: 590px){
-  .search input{
-    float: left;
-    border: 0;
-    background: #bbbbbb;
-    color: #000;
-    height: 25px;
-    width: 150px;
-  }
+
 }

@@ -21,8 +21,10 @@ a {
     border-radius: 3px;
     padding: 3px;
 }
-.signup-button{
+.signupButton{
+    display: inline-block;
     width: 309px;
+    margin: auto;
 }
 .hanad{
     width: 100%;
@@ -50,4 +52,17 @@ a {
     padding: 7px;
     color: #000000;
     background: none;
+}
+.error{
+    border: thin solid #ED2431;
+    background-color: #ffbbbf;
+}
+.tmcError{
+    box-sizing: border-box;
+    padding: 5px;
+    display: inline-block;
+    font-size: 13px;
+    width: 300px;
+    background: #ffbbbf;
+    color: #ED2431;
 }

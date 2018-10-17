@@ -31,11 +31,11 @@ class Contact extends React.Component {
                     <HeaderMain />
                     <YelloDash header = "Contact Us" sub = "Use the information below to reach us" />
                     {/**since the yellodash is absolutely positioned space needs to be created */}
-                    <span className="absolute-150"></span>
+                    <span className="absolute-150"/>
                 </div>
-                <div className="mid side-margin-90">
+                <div className="mid contact side-margin-90">
                     <div className="map left">
-                        <FiremattersMap lat={ -27.4449377 } lng={ 153.169647 } width={ "60%" } height= { window.innerWidth > 600?400:300 } zoom={ 14 } />
+                        <FiremattersMap lat={ -27.4449377 } lng={ 153.169647 } width={ window.innerWidth > 600?"60%":"100%" } height= { window.innerWidth > 600?400:300 } zoom={ 14 } />
                     </div>
                     <div className="addresses right">
                         <span className="header">Fire Matters HQ</span>
@@ -77,7 +77,7 @@ class Contact extends React.Component {
                             </span>
                         </span>
                     </div>
-                    <div className="clear"></div>
+                    <div className="clear"/>
                     <ContactForm />
                 </div>
                 <div className="bottom">

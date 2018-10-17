@@ -71,6 +71,7 @@ let Root = ()=>{
 			<div className="main">
 				<Switch>
 					<Route exact path="/" component={ LandingPageComponent } />
+					<Route exact path="/home" component={ LandingPageComponent } />
 					<Route exact path="/listings" component={ ListingComponent } />
 					<Route exact path="/service-providers" component={ ServiceProvidersComponent } />
 					<Route exact path="/contact" component={ ContactComponent } />
