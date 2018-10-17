@@ -1,6 +1,7 @@
 const defaultState = {
     info: {
-      menu: "Main-Menu"
+      menu: "Main-Menu",
+      signupFormLevel: 1
     },
     fetching: false,
     fetched: false,

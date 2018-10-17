@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Image from 'react-image';
 import { SocialIcon } from 'react-social-icons';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { dispatchedSearchInfo, dispatchedGenInfo } from 'extras/dispatchers';
 import './headerMain.css';
 import { PropTypes } from 'prop-types';
@@ -21,6 +21,7 @@ class HeaderMain extends Component {
     componentDidMount = ()=>{
         window.addEventListener("resize", this.updateDimensions);
         this.updateDimensions();
+        
     }
     componentWillUnmount = () => {
       window.removeEventListener("resize", this.updateDimensions);
@@ -28,7 +29,7 @@ class HeaderMain extends Component {
     
     updateDimensions = ()=>{
         let winWidth = window.innerWidth;
-        let info = {};
+        let info = {...this.props.genInfo.info};
         if(winWidth >= 680){
             info['menu'] = "Main-Menu";
         }else{
@@ -39,19 +40,23 @@ class HeaderMain extends Component {
 
     search = (event)=>{
         let searchTerm = event.target.value;
-        let searchInfo = {};
+        let searchInfo = { ...this.props.searchInfo.info };
         searchInfo['searchTerm'] = searchTerm;
         this.props.dispatch(dispatchedSearchInfo(searchInfo));
     }
 
-    toggleMenu = ()=>{
-        let info = {};
+    toggleMenu = (e)=>{
+        let clicked = e.target.id;
+        console.log(clicked)
+        let info = {...this.props.genInfo.info};
         let currClassName = this.props.genInfo['info']['menu'];
+        let activePage = this.props.genInfo.info.activePage;
         if(currClassName === "Mobile-Menu"){
             info['menu'] = "Mobile-Menu shown";
         }else if(currClassName === "Mobile-Menu shown"){
             info['menu'] = "Mobile-Menu";
         }else{
+            info.active
             info['menu'] = currClassName;
         }
         this.props.dispatch(dispatchedGenInfo(info));
@@ -67,13 +72,17 @@ class HeaderMain extends Component {
 
     loggeInOptions = 
                 <div className="signup-login">
-                    <Link to={`/`}>Logout</Link>
+                    <NavLink to={`/`}>Logout</NavLink>
                 </div>;
     NotLoggedInOptions =
                 <div className="signup-login">
-                    <Link className="signup" onClick={ this.toggleMenu } to={`/signup`}>Sign up</Link><span className="div">&#124;</span>
-                    <Link onClick={ this.toggleMenu } to={`/login`}>Login</Link>
+                    <NavLink className="signup" onClick={ this.toggleMenu } to={`/signup`}>Sign up</NavLink><span className="div">&#124;</span>
+                    <NavLink onClick={ this.toggleMenu } to={`/login`}>Login</NavLink>
                 </div>;
+    toggleActive = (link)=>{
+        console.log(link);
+        return false;       
+    }
     render(){
         return(
             <div className="App-header">
@@ -81,11 +90,11 @@ class HeaderMain extends Component {
                 <div className="search"><input placeholder="search" type="text" onChange={this.search} /><i className="material-icons">search</i></div>
                 <i class="material-icons menu-icon" onClick={ this.toggleMenu }>menu</i>
                 <div className={ this.props.genInfo['info']['menu'] }>
-                    <Link onClick={ this.toggleMenu } to={`/`}>Home</Link>
-                    <Link onClick={ this.toggleMenu } to={`/listings`}>Listings</Link>
-                    <Link onClick={ this.toggleMenu } to={`/service-providers`}>Service Providers</Link>
-                    <Link onClick={ this.toggleMenu } to={`/`}>About</Link>
-                    <Link onClick={ this.toggleMenu } to={`/contact`}>Contact</Link>
+                    <NavLink activeClassName="active" id="home" onClick={ this.toggleMenu } to={`/home`}>Home</NavLink>
+                    <NavLink activeClassName="active" id="listings" onClick={ this.toggleMenu } to={`/listings`}>Listings</NavLink>
+                    <NavLink activeClassName="active" id="service-providers" onClick={ this.toggleMenu } to={`/service-providers`}>Service Providers</NavLink>
+                    <NavLink activeClassName="active" id="about" onClick={ this.toggleMenu } to={`/about`}>About</NavLink>
+                    <NavLink activeClassName="active" id="contact" onClick={ this.toggleMenu } to={`/contact`}>Contact</NavLink>
                 <div className="login-social right">
                     { this.socialIcons }
                     { this.props.user['info']['loggedin']?this.loggeInOptions:this.NotLoggedInOptions }

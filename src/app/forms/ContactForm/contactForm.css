@@ -7,6 +7,10 @@
 .contactForm .inputRow:nth-child(3){
     margin: 0 0 5px 0;
 }
+.contactForm input, .contactForm textarea, .contactForm button{
+    font-weight: 100;
+    padding: 10px;
+}
 .contactForm .athird{
     width: 32.2%;
 }

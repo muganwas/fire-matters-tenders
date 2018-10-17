@@ -20,10 +20,10 @@ export default class Footer extends Component {
         return(
             <div className="footer">
                 <div className="footer-links">
-                    <Link to={`/`}>Home</Link>
+                    <Link to={`/home`}>Home</Link>
                     <Link to={`/listings`}>Listings</Link>
                     <Link to={`/service-providers`}>Service Providers</Link>
-                    <Link to={`/`}>About</Link>
+                    <Link to={`/about`}>About</Link>
                     <Link to={`/contact`}>Contact</Link>
                 </div>
                 <div className="social-icons">
