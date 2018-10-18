@@ -2,6 +2,7 @@
     padding: 5px;
 }
 .options-selected{
+    color: #000;
     display: block;
 }
 .options-list{
@@ -19,6 +20,7 @@
     -ms-transition: all 0.2s ease-out;
     -o-transition: all 0.2s ease-out;
     transition: all 0.2s ease-out;
+    z-index: 10000;
 }
 .option{
     box-sizing: border-box;
@@ -35,3 +37,4 @@
     -o-transition: all 0.2s ease-in;
     transition: all 0.2s ease-in;
 }
+

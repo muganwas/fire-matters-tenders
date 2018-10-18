@@ -1,6 +1,6 @@
 .search-main{
     display: block;
-    width: 450px;
+    width: 550px;
     border:thin solid #979797;
     border-radius: 5px;
     background: #bbbbbb;
@@ -11,26 +11,24 @@
     clear: both;
     content: ""
 }
-.select{
-    width: 150px;
-    background: url('~images/down_arrow.png') no-repeat 135px rgba(255,255,255, 0);
-    background-size: 20px 10px;
-    overflow: hidden;
-    padding: 6px 8px;
-    border-right: thin solid #fff;
-    cursor: pointer;
-}
+
 .search-icon{
     float:right;
     color: #fff;
     margin: 3px 2px;
     cursor: pointer;
 }
-.left{
-    float: left;
-}
 .search-field{
     width: 250px;
     margin: 0 4px;
     display: inline-block;
+}
+.select{
+    width: 150px;
+    background: url('~images/down_arrow.png') no-repeat right rgba(255,255,255, 0);
+    background-size: 30px 10px;
+    overflow: hidden;
+    padding: 6px 20px 6px 8px;
+    border-right: thin solid #fff;
+    cursor: pointer;
 }

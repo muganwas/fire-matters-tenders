@@ -9,7 +9,8 @@ var SRC_DIR = path.resolve(__dirname, "./src");
 
 module.exports = {   
     entry: SRC_DIR + '/app/index.js'
-    ,
+	,
+	cache: true,
     module: {
 		rules : [
 			{

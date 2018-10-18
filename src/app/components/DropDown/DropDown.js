@@ -6,7 +6,6 @@ import { PropTypes } from 'prop-types';
 @connect((store)=>{
     return {
         user: store.user,
-        secondarySearch: store.secondarySearch,
     }
 })
 class DropDown extends React.Component {
@@ -21,13 +20,23 @@ class DropDown extends React.Component {
         this.props = {...nextProps};
     }
 
+    afterSelect = (e)=>{
+        this.props.onChange(e).then(()=>{
+            this.toggleDisplayDropDown();
+        }).
+        catch(error=>{
+            console.log(error);
+            throw error;
+        });
+    }
+
     mapOptions = (key)=>{
         let options = this.props.options;
         if(options[key] === this.props.selected)
             return;
         else{
             return(   
-                <option className="option" key={key} value={key}>{options[key]}</option>   
+                <span onClick={ this.afterSelect } className="option" id={ key } key={ key } value={key}>{options[key]}</span>   
             )
         }
     }
@@ -46,9 +55,9 @@ class DropDown extends React.Component {
 
     render(){
         return(
-            <div className={ this.props.className }>
+            <div style={{width:this.props.selectWidth}} className={ this.props.className }>
                 <span onClick = { this.toggleDisplayDropDown } className="options-selected">{ this.props.selected }</span>
-                <div className={ this.state.dropDownClass }>
+                <div style={{width:this.props.width}} className={ this.state.dropDownClass }>
                     { Object.keys(this.props.options).map(this.mapOptions) }
                 </div>
             </div>
@@ -59,13 +68,19 @@ class DropDown extends React.Component {
 DropDown.defaultProps = {
     user: {},
     options: {},
-    secondarySearch: {}
+    onChange: null,
+    width: null,
+    selectWidth: null,
+    selected: "All"
 }
 
 DropDown.propTypes = {
     user: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
-    secondarySearch: PropTypes.object.isRequired
+    onChange: PropTypes.func,
+    selectWidth: PropTypes.string,
+    width: PropTypes.string,
+    selected: PropTypes.string.isRequired
 }
 
 export default DropDown;

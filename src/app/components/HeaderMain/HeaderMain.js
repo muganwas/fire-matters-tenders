@@ -45,18 +45,14 @@ class HeaderMain extends Component {
         this.props.dispatch(dispatchedSearchInfo(searchInfo));
     }
 
-    toggleMenu = (e)=>{
-        let clicked = e.target.id;
-        console.log(clicked)
+    toggleMenu = ()=>{
         let info = {...this.props.genInfo.info};
         let currClassName = this.props.genInfo['info']['menu'];
-        let activePage = this.props.genInfo.info.activePage;
         if(currClassName === "Mobile-Menu"){
             info['menu'] = "Mobile-Menu shown";
         }else if(currClassName === "Mobile-Menu shown"){
             info['menu'] = "Mobile-Menu";
         }else{
-            info.active
             info['menu'] = currClassName;
         }
         this.props.dispatch(dispatchedGenInfo(info));

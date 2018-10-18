@@ -19,17 +19,6 @@ import './signup.css';
 class Signup extends React.Component {
     constructor(props) {
         super(props);
-        let user = JSON.parse(localStorage.getItem('user')) || {};
-        if(Object.keys(user).length !== 0){
-            let token = user.token;
-            if(token !== null){
-                user['loggedin'] = true;
-                this.props.dispatch(dispatchedUserInfo({status: user}));
-            }
-        }else{
-            user['loggedin'] = false;
-            this.props.dispatch(dispatchedUserInfo({status: user}));
-        }
     }
     
     render(){

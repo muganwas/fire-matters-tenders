@@ -30,7 +30,6 @@ class ListedServiceProviders extends Component {
     fetchServiceProviders = ()=>{
         let genInfo = {...this.props.genInfo.info };
         axios.get(baseUrl + usersEndPoint).then((response)=>{
-            //console.log(response.data);
             let serviceProviders = genInfo.serviceProviders = {...response.data};
             Object.keys(serviceProviders).map((key)=>{
                 genInfo.serviceProviders[key].moreMenuClassName = "hidden";

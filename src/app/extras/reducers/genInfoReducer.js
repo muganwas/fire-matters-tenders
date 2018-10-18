@@ -1,7 +1,14 @@
 const defaultState = {
     info: {
       menu: "Main-Menu",
-      signupFormLevel: 1
+      signupFormLevel: 1,
+      textfieldClass: "textfield",
+      errors: {
+        tmcError: undefined,
+        phoneNumberError: undefined,
+        emailFormatError: undefined,
+        passwordMatchError: undefined,
+      }
     },
     fetching: false,
     fetched: false,

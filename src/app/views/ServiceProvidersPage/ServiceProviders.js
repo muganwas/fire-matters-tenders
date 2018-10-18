@@ -33,7 +33,7 @@ class ServiceProviders extends React.Component {
                     <HeaderMain />
                 </div>
                 <div className="mid listings">
-                    <SecondarySearch categories={ statesAustralia } placeholder="Find service providers" />
+                    <SecondarySearch selectWidth="200px" dropDownWidth="230px" categoryTitle="searchCategoryServiceProviders" categories={ statesAustralia } placeholder="Find service providers" />
                     <ListedServiceProviders />
                     <ListFilter tickDispatcher={ dispatchedGenInfo } title="Categories Filter" />
                     <div className="clear"></div>
