@@ -109,7 +109,8 @@ TextSpace.propTypes = {
     id: PropTypes.string.isRequired,
     fieldClass: PropTypes.string.isRequired,
     placeholder: PropTypes.string,
-    type: PropTypes.string.isRequired
+    type: PropTypes.string.isRequired,
+    onBlur: PropTypes.func
 }
 
 export default TextSpace;

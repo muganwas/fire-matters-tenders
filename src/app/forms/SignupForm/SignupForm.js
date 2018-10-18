@@ -26,31 +26,47 @@ class SignupForm extends React.Component {
         super(props);
     }
 
-    toAddress = ()=>{
-        let info = {...this.props.genInfo.info},
-        userInfo = this.props.user.info,
-        fullName = userInfo.fullName,
-        companyName = userInfo.companyName,
-        phoneNumber = userInfo.phoneNumber,
-        emailAddress = userInfo.emailAddress,
-        password = userInfo.password,
-        passwordConfirm = userInfo.passwordConfirm,
-        termsAndConditions = userInfo.termsAndConditions;
-        if(fullName && companyName && phoneNumber && emailAddress && password && passwordConfirm && termsAndConditions ){
-            info.signupFormLevel = 2;            
-        }else{
-            let fields = { fullName: "fullName", companyName: "companyName", phoneNumber: "phoneNumber", emailAddress: "emailAddress", password: "password", passwordConfirm: "passwordConfirm"};
+    inputValidate = ()=>{
+        return new Promise((resolve, reject)=>{
+            let event = new MouseEvent('blur');
+            let fields = { fullName, companyName, phoneNumber, emailAddress, password, passwordConfirm };
             Object.keys(fields).map(key=>{
-                let event = new MouseEvent('blur');
                 let name = document.getElementById(key);
-                name.dispatchEvent(event);
+                setTimeout(()=>{
+                    name.dispatchEvent(event);
+                }, 5); 
             });
-            if(!termsAndConditions)
-                info.errors.tmcError = "You have to agree with the TC to continue"; 
-            else
-                info.errors.tmcError = null;
-        }
-        this.props.dispatch(dispatchedGenInfo(info));
+            resolve("all checked");
+        })
+    }
+
+    toAddress = ()=>{
+        this.inputValidate().then(()=>{
+            let info = {...this.props.genInfo.info},
+            userInfo = this.props.user.info,
+            fullName = userInfo.fullName,
+            companyName = userInfo.companyName,
+            phoneNumber = userInfo.phoneNumber,
+            emailAddress = userInfo.emailAddress,
+            password = userInfo.password,
+            passwordConfirm = userInfo.passwordConfirm,
+            termsAndConditions = userInfo.termsAndConditions;
+
+            if(fullName && companyName && phoneNumber && emailAddress && password && passwordConfirm && termsAndConditions ){
+                info.signupFormLevel = 2; 
+                //what to do after all the information is provided          
+            }else{
+                if(!termsAndConditions)
+                    info.errors.tmcError = "You have to agree with the TC to continue"; 
+                else
+                    info.errors.tmcError = null;
+            }
+            this.props.dispatch(dispatchedGenInfo(info));
+        }).
+        catch(error=>{
+            console.log(error);
+            throw error;
+        });
     }
 
     setError = (e)=>{
@@ -72,7 +88,7 @@ class SignupForm extends React.Component {
                 info.errors.passwordMatchError = null;
             info[label] = null;
             if(emailAddress && !emailAddress.match(emailregex))
-                info.errors.emailFormatError = "You entered a wrong email Address";
+                info.errors.emailFormatError = "Wrong email format";
             else if(emailAddress && emailAddress.match(emailregex))
                 info.errors.emailFormatError = null;
         }
@@ -116,57 +132,56 @@ class SignupForm extends React.Component {
         
         return(
             <div className="form signup">
-            { level === 1?
-            <div>
-                <div className="inputRow">
-                    <TextSpace onBlur={ this.setError } id="fullName" adornment="person" type="text" placeholder="Full Name" fieldClass={ genInfo.fullNameClass || genInfo.textfieldClass } />
+             { level === 1?
+                 <div>
+                    <div className="inputRow">
+                        <TextSpace onBlur={ this.setError } id="fullName" adornment="person" type="text" placeholder="Full Name" fieldClass={ genInfo.fullNameClass || genInfo.textfieldClass } />
+                    </div>
+                    <div className="inputRow">
+                        <TextSpace onBlur={ this.setError } id="companyName" adornment="company" type="text" placeholder="Company Name" fieldClass = { genInfo.companyNameClass || genInfo.textfieldClass } />
+                    </div>
+                    <div className="inputRow">
+                        <TextSpace onBlur={ this.setError } id="phoneNumber" adornment="phone" type="number" placeholder="Phone Number" fieldClass={ genInfo.phoneNumberClass || genInfo.textfieldClass } />
+                        { phoneNumberError?<span className="error-feedback">{ phoneNumberError }</span>:null }
+                    </div>
+                    <div className="inputRow">
+                        <TextSpace onBlur={ this.setError } id="emailAddress" adornment="email" type="email" placeholder="example@email.com" fieldClass={ genInfo.emailAddressClass || genInfo.textfieldClass } />
+                        { emailFormatError?<span className="error-feedback">{ emailFormatError }</span>:null }
+                    </div> 
+                    <div className="inputRow">
+                        <TextSpace onBlur={ this.setError } id = "password" type="password" adornment="lock" placeholder="Password" fieldClass={ genInfo.passwordClass || genInfo.textfieldClass } />
+                    </div>
+                    <div className="inputRow">
+                        <TextSpace onBlur={ this.setError } id = "passwordConfirm" type="password" adornment="lock" placeholder="Confirm password" fieldClass={ genInfo.passwordConfirmClass || genInfo.textfieldClass } />
+                        { passwordMatchError?<span className="error-feedback">{ passwordMatchError }</span>:null }
+                    </div>
+                    <div className="inputRow">
+                        <TickBox dispatcher = { dispatchedUserInfo } placement={ userInfo } id="termsAndConditions" /><span>I accept the <Link to={`/`}>Terms and Conditions</Link></span>
+                        { tmcError?<span className="error-feedback">{ tmcError }</span>:null }
+                    </div>
+                    <div className="inputRow">
+                        <Button onClick={ this.toAddress } variant="outlined" style={ signupbutton } className="signupButton" >
+                            Proceed
+                        </Button>
+                    </div>
                 </div>
-                <div className="inputRow">
-                    <TextSpace onBlur={ this.setError } id="companyName" adornment="company" type="text" placeholder="Company Name" fieldClass = { genInfo.companyNameClass || genInfo.textfieldClass } />
-                </div>
-                <div className="inputRow">
-                    <TextSpace onBlur={ this.setError } id="phoneNumber" adornment="phone" type="number" placeholder="Phone Number" fieldClass={ genInfo.phoneNumberClass || genInfo.textfieldClass } />
-                    { phoneNumberError?<span className="error-feedback">{ phoneNumberError }</span>:null }
-                </div>
-                <div className="inputRow">
-                    <TextSpace onBlur={ this.setError } id="emailAddress" adornment="email" type="email" placeholder="example@email.com" fieldClass={ genInfo.emailAddressClass || genInfo.textfieldClass } />
-                    { emailFormatError?<span className="error-feedback">{ emailFormatError }</span>:null }
-                </div> 
-                <div className="inputRow">
-                    <TextSpace onBlur={ this.setError } id = "password" type="password" adornment="lock" placeholder="Password" fieldClass={ genInfo.passwordClass || genInfo.textfieldClass } />
-                </div>
-                <div className="inputRow">
-                    <TextSpace onBlur={ this.setError } id = "passwordConfirm" type="password" adornment="lock" placeholder="Confirm password" fieldClass={ genInfo.passwordConfirmClass || genInfo.textfieldClass } />
-                    { passwordMatchError?<span className="error-feedback">{ passwordMatchError }</span>:null }
-                </div>
-                <div className="inputRow">
-                    <TickBox dispatcher = { dispatchedUserInfo } placement={ userInfo } id="termsAndConditions" /><span>I accept the <Link to={`/`}>Terms and Conditions</Link></span>
-                    { tmcError?<span className="error-feedback">{ tmcError }</span>:null }
-                </div>
-                <div className="inputRow">
-                    <Button onClick={this.toAddress} variant="outlined" style={ signupbutton } className="signupButton" >
-                        Proceed
-                    </Button>
-                </div>
-            </div>
-            :level===2?
-            <div>
-                <div className="inputRow">
-                    <DropDown className="select" width="300px" options={ statesAustralia } selected={ selected } onChange={ this.setstate } />
-                </div>
-                <div className="inputRow">
-                    <TextSpace onBlur={ this.setError } id="city" adornment="place" type="text" placeholder="City" fieldClass={ genInfo.cityClass || genInfo.textfieldClass } />
-                </div>
-                <div className="inputRow">
-                    <TextSpace onBlur={ this.setError } id="physicalAddress" adornment="home" type="text" placeholder="Physical Address" fieldClass={ genInfo.physicalAddressClass || genInfo.textfieldClass } />
-                </div> 
-                <div className="inputRow">
-                    <Button onClick={this.signup} variant="outlined" style={ signupbutton } className="signupButton" >
-                        Sign Up
-                    </Button>
-                </div>
-            </div>:()=>window.URL.replace(window.origin)
-            }
+                 :level===2?
+                <div>
+                    <div className="inputRow">
+                        <DropDown className="select" width="300px" options={ statesAustralia } selected={ selected } onChange={ this.setstate } />
+                    </div>
+                    <div className="inputRow">
+                        <TextSpace onBlur={ this.setError } id="city" adornment="place" type="text" placeholder="City" fieldClass={ genInfo.cityClass || genInfo.textfieldClass } />
+                    </div>
+                    <div className="inputRow">
+                        <TextSpace onBlur={ this.setError } id="physicalAddress" adornment="home" type="text" placeholder="Physical Address" fieldClass={ genInfo.physicalAddressClass || genInfo.textfieldClass } />
+                    </div> 
+                    <div className="inputRow">
+                        <Button onClick={this.signup} variant="outlined" style={ signupbutton } className="signupButton" >
+                            Sign Up
+                        </Button>
+                    </div>
+                </div>:null }
             </div>
         )
     }
