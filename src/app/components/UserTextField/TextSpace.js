@@ -8,10 +8,7 @@ import { dispatchedUserInfo } from 'extras/dispatchers';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import Email from '@material-ui/icons/Email';
-import Work from '@material-ui/icons/Work';
-import Phone from '@material-ui/icons/Phone';
-import Lock from '@material-ui/icons/Lock';
+import { Email, Work, Phone, Lock, Map, Place, Home } from '@material-ui/icons';
 
 
 @connect((store)=>{
@@ -30,18 +27,37 @@ class TextSpace extends React.Component {
 
     adornment = ()=>{
         let adornment;
-        if(this.props.adornment ==="person")
-            adornment = <AccountCircle />;
-        else if(this.props.adornment === "email")
-            adornment = <Email />
-        else if(this.props.adornment === "company")
-            adornment = <Work />
-        else if(this.props.adornment === "phone")
-            adornment = <Phone />
-        else if(this.props.adornment === "lock")
-            adornment = <Lock />
-        else if(this.props.adornment === "none")
-            adornment = ""
+        switch(this.props.adornment){
+            case "person":
+                adornment = <AccountCircle />;
+                break;
+            case "company":
+                adornment = <Work />;
+                break;
+            case "email":
+                adornment = <Email />;
+                break;
+            case "phone":
+                adornment = <Phone />;
+                break;
+            case "lock":
+                adornment = <Lock />;
+                break;
+            case "map":
+                adornment = <Map />;
+                break;
+            case "place":
+                adornment = <Place />;
+                break;
+            case "home":
+                adornment = <Home />;
+                break;
+            case "none":
+                adornment = "";
+                break;
+            default:
+                adornment = "0_0";          
+        }
         return adornment;
     }
 

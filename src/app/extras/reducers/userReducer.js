@@ -1,5 +1,7 @@
 const defaultState = {
-    info: {},
+    info: {
+      state: "Select State"
+    },
     fetching: false,
     fetched: false,
     error: null

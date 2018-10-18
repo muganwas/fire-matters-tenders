@@ -14,6 +14,7 @@ a {
     float: left;
 }
 .textfield{
+    box-sizing: border-box;
     position: relative;
     margin: auto;
     width: 300px;
@@ -22,9 +23,11 @@ a {
     padding: 3px;
 }
 .signupButton{
+    box-sizing: border-box;
     display: inline-block;
-    width: 309px;
+    width: 300px;
     margin: auto;
+    padding: 8px;
 }
 .hanad{
     width: 100%;
@@ -57,7 +60,7 @@ a {
     border: thin solid #ED2431;
     background-color: #ffbbbf;
 }
-.tmcError{
+.error-feedback{
     box-sizing: border-box;
     padding: 5px;
     display: inline-block;
@@ -65,4 +68,17 @@ a {
     width: 300px;
     background: #ffbbbf;
     color: #ED2431;
+}
+.inputRow .select{
+    box-sizing: border-box;
+    display: inline-block;
+    text-align: left;
+    width: 300px;
+    background: url('~images/down_arrow.png') no-repeat 270px rgba(189, 189, 189, 0.6);
+    background-size: 20px 10px;
+    overflow: hidden;
+    padding: 6px 10px;
+    border: thin solid #afafaf;
+    border-radius: 3px;
+    cursor: pointer;
 }
