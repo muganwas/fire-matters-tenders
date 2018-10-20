@@ -1,6 +1,6 @@
 .form.signup{
     width: 380px;
-    margin: 40px auto;
+    margin: 50px auto;
     text-align: center;
     background: white;
     padding: 40px 80px;
@@ -58,7 +58,10 @@ a {
 }
 .error{
     border: thin solid #ED2431;
-    background-color: #ffbbbf;
+    background-color: #ffbbbf!important;
+}
+.error::placeholder{
+    color: #bababa!important;
 }
 .error-feedback{
     box-sizing: border-box;
@@ -66,7 +69,7 @@ a {
     display: inline-block;
     font-size: 13px;
     width: 300px;
-    background: #ffbbbf;
+    background-color: #ffbbbf;
     color: #ED2431;
 }
 .inputRow .select{
@@ -74,11 +77,43 @@ a {
     display: inline-block;
     text-align: left;
     width: 300px;
-    background: url('~images/down_arrow.png') no-repeat right rgba(189, 189, 189, 0.6);
+    background: url('~images/down_arrow.png') no-repeat right rgba(225, 225, 225, 0.6);
     background-size: 30px 10px;
     overflow: hidden;
     padding: 6px 10px;
     border: thin solid #afafaf;
     border-radius: 3px;
     cursor: pointer;
+}
+.pre-signup{
+    position: relative; 
+}
+.pre-signup div{
+    box-sizing: border-box;
+    padding: 20px 0;
+    display: inline-block;
+    width: 50%;
+    cursor: pointer;
+}
+.pre-signup #service-provider{
+    color: #fff;
+    background-color: #ED2431;
+    box-shadow: -2px 0 2px rgb(172, 138, 109);
+}
+.pre-signup #service-provider:hover{
+    box-shadow: -2px 1px 3px rgb(172, 138, 109);
+}
+.pre-signup #service-provider:active{
+    box-shadow: -2px 0 2px rgb(172, 138, 109);
+}
+.pre-signup #owner-occupier{
+    color: #fff;
+    background-color: #F79A50;
+    box-shadow: 2px 0 2px rgb(196, 152, 155);
+}
+.pre-signup #owner-occupier:hover{
+    box-shadow: 2px 1px 4px rgb(196, 152, 155);
+}
+.pre-signup #owner-occupier:active{
+    box-shadow: 2px 0 2px rgb(196, 152, 155);
 }

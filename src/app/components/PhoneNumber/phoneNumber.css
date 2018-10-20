@@ -1,0 +1,19 @@
+.textfield{
+    box-sizing: border-box;
+    position: relative;
+    margin: auto;
+    width: 300px;
+    border: thin solid #afafaf;
+    border-radius: 3px;
+    padding: 3px;
+}
+
+#phoneNumber{
+    font-size: 15px;
+    background: url('~images/icons/phone.png') no-repeat 5px rgba(225, 225, 225, 0);
+    background-size: 23px 23px;
+    padding: 10px 20px 10px 34px;
+}
+#phoneNumber::placeholder{
+    color: #bababa;
+}
