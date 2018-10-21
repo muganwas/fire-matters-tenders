@@ -8,12 +8,19 @@
     padding: 3px;
 }
 
-#phoneNumber{
-    font-size: 15px;
+#phoneNumber {
     background: url('~images/icons/phone.png') no-repeat 5px rgba(225, 225, 225, 0);
+}
+
+#mobileNumber {
+    background: url('~images/icons/mobile.png') no-repeat 5px rgba(225, 225, 225, 0);
+}
+
+#phoneNumber, #mobileNumber{
+    font-size: 15px;
     background-size: 23px 23px;
     padding: 10px 20px 10px 34px;
 }
-#phoneNumber::placeholder{
+#phoneNumber::placeholder, #mobileNumber::placeholder{
     color: #bababa;
 }

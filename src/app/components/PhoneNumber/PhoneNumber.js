@@ -5,9 +5,6 @@ import { PropTypes } from 'prop-types';
 import './phoneNumber.css';
 import { dispatchedUserInfo } from 'extras/dispatchers';
 import MaskedInput from 'react-text-mask';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import { Phone } from '@material-ui/icons';
-
 
 @connect((store)=>{
     return {
@@ -28,12 +25,14 @@ class PhoneNumber extends React.Component {
     }
 
     handleText=(e)=>{
-        let fieldValue = e.target.value;
-        let currUserInfo = {...this.props.user.info};
-        let label = this.props.id;
+        let fieldValue = e.target.value,
+        toBeStored = sessionStorage.getItem('signup')?JSON.parse(sessionStorage.getItem('signup')): {},
+        currUserInfo = {...this.props.user.info},
+        label = this.props.id;
         currUserInfo[label] = fieldValue;
-        if(fieldValue)
-            this.props.dispatch(dispatchedUserInfo(currUserInfo));
+        toBeStored[label] = fieldValue;
+        sessionStorage.setItem('signup', JSON.stringify(toBeStored));
+        this.props.dispatch(dispatchedUserInfo(currUserInfo));
     }
 
     render(){
@@ -43,9 +42,10 @@ class PhoneNumber extends React.Component {
                 className={ this.props.fieldClass }
                 name = {this.props.fieldClass}
                 onBlur = { this.props.onBlur }
+                value={ this.props.value }
                 onChange={this.handleText}
                 placeholder={this.props.placeholder}
-                mask={['(', 0, /[0-9]/,')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+                mask={this.props.mask}
                 placeholderChar={'\u2000'}
             />
         )
@@ -55,7 +55,8 @@ class PhoneNumber extends React.Component {
 PhoneNumber.defaultProps = {
     user: {},
     adornment: "0_0",
-    type: "text"
+    type: "text",
+    value: null
 }
 
 PhoneNumber.propTypes = {
@@ -65,7 +66,9 @@ PhoneNumber.propTypes = {
     fieldClass: PropTypes.string.isRequired,
     placeholder: PropTypes.string,
     type: PropTypes.string.isRequired,
-    onBlur: PropTypes.func
+    onBlur: PropTypes.func,
+    mask: PropTypes.array.isRequired,
+    value: PropTypes.string
 }
 
 export default PhoneNumber;

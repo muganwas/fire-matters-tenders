@@ -70,8 +70,7 @@ DropDown.defaultProps = {
     options: {},
     onChange: null,
     width: null,
-    selectWidth: null,
-    selected: "All"
+    selectWidth: null
 }
 
 DropDown.propTypes = {
@@ -80,7 +79,7 @@ DropDown.propTypes = {
     onChange: PropTypes.func,
     selectWidth: PropTypes.string,
     width: PropTypes.string,
-    selected: PropTypes.string.isRequired
+    selected: PropTypes.string,
 }
 
 export default DropDown;
