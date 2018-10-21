@@ -8,6 +8,9 @@ const defaultState = {
         phoneNumberError: undefined,
         emailFormatError: undefined,
         passwordMatchError: undefined,
+      },
+      messages: {
+        postSubmitMessageClass: "postSubmitMessage"
       }
     },
     fetching: false,

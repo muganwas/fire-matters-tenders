@@ -1,11 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import './signupForm.css';
+import axios from 'axios';
+import PropTypes from 'prop-types';
 import { dispatchedUserInfo, dispatchedGenInfo } from 'extras/dispatchers';
 import { statesAustralia} from 'extras/config';
 import { emailregex } from 'extras/helperFunctions';
-import auth from 'firebase/auth';
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
 import { PreSignup, BasicInformation, AddressInformation } from './SignupViews';
+import './signupForm.css';
+
+
+const auth = firebase.auth(),
+baseUrl = process.env.BACK_END_URL,
+usersEndPoint = process.env.USERS_END_POINT;
 
 const signupbutton = {
     color: "#fff",
@@ -24,6 +32,28 @@ class SignupForm extends React.Component {
         super(props);
     }
 
+    componentWillMount(){
+        if(sessionStorage.getItem('signup')){
+            let storedUser = JSON.parse(sessionStorage.getItem('signup')),
+            info = {...this.props.user.info};
+            info.userType = storedUser.userType,
+            info.fullName = storedUser.fullName,
+            info.companyName = storedUser.companyName,
+            info.phoneNumber = storedUser.phoneNumber,
+            info.mobileNumber = storedUser.mobileNumber,
+            info.emailAddress = storedUser.emailAddress,
+            info.password = storedUser.password,
+            info.state = storedUser.state,
+            info.city = storedUser.city,
+            info.physicalAddress = storedUser.physicalAddress;
+            this.props.dispatch(dispatchedUserInfo(info));
+        }  
+    }
+
+    componentWillReceiveProps(nextProps){
+        this.props = {...nextProps};
+    }
+
     inputValidate = ()=>{
         return new Promise((resolve, reject)=>{
             let event = new MouseEvent('blur');
@@ -35,16 +65,7 @@ class SignupForm extends React.Component {
                 }, 5); 
             });
             resolve("all checked");
-        })
-    }
-
-    phoneNumberInputMask = props=>{
-        const { value } = props;
-        return <InputMask 
-                    value = { value }
-                    mask="(+223)9 99 99 99 99"
-                    maskChar=" " 
-                />
+        });
     }
 
     nextView = (e)=>{
@@ -66,6 +87,7 @@ class SignupForm extends React.Component {
         this.inputValidate().then(()=>{
             let info = {...this.props.genInfo.info},
             userInfo = this.props.user.info,
+            errors = info.errors,
             fullName = userInfo.fullName,
             companyName = userInfo.companyName,
             phoneNumber = userInfo.phoneNumber,
@@ -75,8 +97,14 @@ class SignupForm extends React.Component {
             termsAndConditions = userInfo.termsAndConditions;
 
             if(fullName && companyName && phoneNumber && emailAddress && password && passwordConfirm && termsAndConditions ){
-                info.signupFormLevel = info.signupFormLevel + 1;
-                //what to do after all the information is provided          
+                //what to do after all the information is provided
+                let alert;
+                Object.keys(errors).map(key=>{
+                    if(errors[key] !== null)
+                        alert = errors[key];
+                });
+                if( alert === null || alert === undefined)
+                    info.signupFormLevel = 3;      
             }else{
                 if(!termsAndConditions)
                     info.errors.tmcError = "You have to agree with the TC to continue"; 
@@ -93,50 +121,100 @@ class SignupForm extends React.Component {
 
     setError = (e)=>{
         let info = {...this.props.genInfo.info},
-        value = e.target.value,
+        value = (e.target.value).trim(),
         fieldClass = e.target.name,
         id = e.target.id,
         newClass = fieldClass + " error",
         label = id + "Class";
-        if(!value){
+        if(!value && (id !== "mobileNumber")){
                 info[label] = newClass        
         }else{
-            let password = this.props.user.info.password,
-            passwordConfirm = this.props.user.info.passwordConfirm,
-            emailAddress = this.props.user.info.emailAddress;
-            if(id === "passwordConfirm" && (password !== passwordConfirm))
-                info.errors.passwordMatchError = "Your passwords don't match";              
-            else if(id === "passwordConfirm" && (password === passwordConfirm))
-                info.errors.passwordMatchError = null;
-            info[label] = null;
-            if(emailAddress && !emailAddress.match(emailregex))
-                info.errors.emailFormatError = "Wrong email format";
-            else if(emailAddress && emailAddress.match(emailregex))
-                info.errors.emailFormatError = null;
+            if(id === "phoneNumber" || id === "mobileNumber"){
+                let leng = (value.trim()).length;
+                switch(leng === 14 || leng < 1){
+                    case true:
+                        switch(id){
+                            case "phoneNumber":
+                                info.errors.phoneNumberError = null;
+                                info[label] = null;
+                            break;
+                            case "mobileNumber":
+                                info.errors.mobileNumberError = null;
+                            break;
+                        }
+                    break;
+                    case false:
+                        switch(id){
+                            case "phoneNumber":
+                                info.errors.phoneNumberError = "Your phone number is too short";
+                                info[label] = null;
+                            break;
+                            case "mobileNumber":
+                                info.errors.mobileNumberError = "Your mobile number is too short";
+                            break;
+                        }
+                    break;
+                }
+            }else{
+                let password = this.props.user.info.password,
+                passwordConfirm = this.props.user.info.passwordConfirm,
+                emailAddress = this.props.user.info.emailAddress;
+                if(id === "passwordConfirm" && (password !== passwordConfirm))
+                    info.errors.passwordMatchError = "Your passwords don't match";              
+                else if(id === "passwordConfirm" && (password === passwordConfirm))
+                    info.errors.passwordMatchError = null;
+                info[label] = null;
+                if(emailAddress && !emailAddress.match(emailregex))
+                    info.errors.emailFormatError = "Wrong email format";
+                else if(emailAddress && emailAddress.match(emailregex))
+                    info.errors.emailFormatError = null;
+            }
         }
         this.props.dispatch(dispatchedGenInfo(info));
     }
 
     signUp = ()=>{
         let info = {...this.props.user.info},
-        email = info.emailAddress,
+        genInfo = {...this.props.genInfo.info},
+        createUser = baseUrl + usersEndPoint,
+        userType = info.userType,
+        fullName = info.fullName,
+        companyName = info.companyName,
+        phoneNumber = (info.phoneNumber).replace("(", "").replace(")", "").replace( new RegExp(" ", "g"), "").replace("-", ""),
+        mobileNumber = (info.mobileNumber).replace("(", "").replace(")", "").replace( new RegExp(" ", "g"), "").replace("-", ""),
+        emailAddress = info.emailAddress,
+        state = info.state,
+        city = info.city,
+        physicalAddress = info.physicalAddress,
         password = info.password;
-        auth.createUserWithEmailAndPassword(email, password).
-        then(()=>{
-            
-        }).
-        catch(err=>{
-            console.log(err);
-            throw err;
-        })
-        
+        axios.post(createUser, { userType, fullName, companyName, phoneNumber, mobileNumber, emailAddress, state, city, physicalAddress, password }).
+        then(res=>{
+            let message = res.data.message;
+            if(message){
+                genInfo.messages.postSubmitMessage = message;
+            }else{
+                genInfo.messages.postSubmitMessage = null;
+                auth.createUserWithEmailAndPassword(emailAddress, password).
+                then((res)=>{
+                    console.log(res);          
+                }).
+                catch(err=>{
+                    console.log(err);
+                    throw err;
+                });
+            }
+            this.props.dispatch(dispatchedGenInfo(genInfo));
+        });        
     }
 
     setstate = (e)=>{
         return new Promise((resolve, reject)=>{
             let state = e.target.id,
+            toBeStored = sessionStorage.getItem('signup')?JSON.parse(sessionStorage.getItem('signup')): {},
             userInfo = {...this.props.user.info};
             userInfo.state = statesAustralia[state];
+            toBeStored.state = statesAustralia[state];
+            sessionStorage.setItem('signup', JSON.stringify(toBeStored));
             this.props.dispatch(dispatchedUserInfo(userInfo));
             resolve("state set");
         });      
@@ -148,9 +226,12 @@ class SignupForm extends React.Component {
         level = genInfo.signupFormLevel,
         passwordMatchError = genInfo.errors.passwordMatchError,
         phoneNumberError = genInfo.errors.phoneNumberError,
+        mobileNumberError = genInfo.errors.mobileNumberError,
         emailFormatError = genInfo.errors.emailFormatError,
         tmcError = genInfo.errors.tmcError,
-        selected = userInfo.state;
+        selected = userInfo.state,
+        postSubmitMessage = genInfo.messages.postSubmitMessage,
+        messageClass = genInfo.messages.postSubmitMessageClass;
         
         return(
             <div className="form signup">
@@ -163,6 +244,7 @@ class SignupForm extends React.Component {
                     setError={ this.setError }
                     genInfo={ genInfo }
                     phoneNumberError={ phoneNumberError }
+                    mobileNumberError={ mobileNumberError }
                     emailFormatError={ emailFormatError }
                     passwordMatchError={ passwordMatchError }
                     tmcError={ tmcError }
@@ -171,9 +253,12 @@ class SignupForm extends React.Component {
                  />:
                  level===3?
                 <AddressInformation
+                    messageClass = { messageClass }
+                    postSubmitMessage={ postSubmitMessage }
                     statesAustralia={ statesAustralia }
                     setError={ this.setError }
                     genInfo={ genInfo }
+                    userInfo={ userInfo }
                     selected = { selected }
                     setstate = { this.setstate }
                     signup = { this.signUp }
@@ -182,6 +267,18 @@ class SignupForm extends React.Component {
             </div>
         )
     }
+}
+
+SignupForm.defaultProps = {
+    user: {},
+    search: {},
+    genInfo: {}
+}
+
+SignupForm.propTypes = {
+    user: PropTypes.object.isRequired,
+    search: PropTypes.object.isRequired,
+    genInfo: PropTypes.object.isRequired
 }
 
 export default SignupForm;

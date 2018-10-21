@@ -66,12 +66,14 @@ class TextSpace extends React.Component {
     }
 
     handleText=(e)=>{
-        let fieldValue = e.target.value;
-        let currUserInfo = {...this.props.user.info};
-        let label = this.props.id;
+        let fieldValue = e.target.value,
+        toBeStored = sessionStorage.getItem('signup')?JSON.parse(sessionStorage.getItem('signup')): {},
+        currUserInfo = {...this.props.user.info},
+        label = this.props.id;
         currUserInfo[label] = fieldValue;
-        if(fieldValue)
-            this.props.dispatch(dispatchedUserInfo(currUserInfo));
+        toBeStored[label] = fieldValue;
+        sessionStorage.setItem('signup', JSON.stringify(toBeStored));
+        this.props.dispatch(dispatchedUserInfo(currUserInfo));
     }
 
     render(){
@@ -86,11 +88,12 @@ class TextSpace extends React.Component {
                     },
                     startAdornment: (<InputAdornment className="gray" position="start">{this.adornment()}</InputAdornment>)
                 }}
+                value = { this.props.value }
                 name = {this.props.fieldClass}
                 onBlur = { this.props.onBlur }
-                onChange={this.handleText}
-                placeholder={this.props.placeholder}
-                type={this.props.type}
+                onChange = {this.handleText}
+                placeholder = {this.props.placeholder}
+                type = {this.props.type}
             >
             </TextField>
         )
@@ -100,7 +103,8 @@ class TextSpace extends React.Component {
 TextSpace.defaultProps = {
     user: {},
     adornment: "0_0",
-    type: "text"
+    type: "text",
+    value: ""
 }
 
 TextSpace.propTypes = {
@@ -110,7 +114,8 @@ TextSpace.propTypes = {
     fieldClass: PropTypes.string.isRequired,
     placeholder: PropTypes.string,
     type: PropTypes.string.isRequired,
-    onBlur: PropTypes.func
+    onBlur: PropTypes.func,
+    value: PropTypes.string
 }
 
 export default TextSpace;

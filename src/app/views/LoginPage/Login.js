@@ -1,11 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { dispatchedUserInfo } from 'extras/dispatchers';
 import { HeaderAlt, Footer } from 'components';
 import { LoginForm } from 'forms';
-//import Image from 'react-image';
-//import firebase from 'firebase';
-//import helperFunctions from 'extras/helperFunctions';
+import './login.css'
 
 @connect((store)=>{
     return {
@@ -34,6 +33,18 @@ class Login extends React.Component {
             </div>
         )
     }
+}
+
+Login.defaultProps = {
+    user: {},
+    search: {},
+    genInfo: {}
+}
+
+Login.propTypes = {
+    user: PropTypes.object.isRequired,
+    search: PropTypes.object.isRequired,
+    genInfo: PropTypes.object.isRequired
 }
 
 export default Login;

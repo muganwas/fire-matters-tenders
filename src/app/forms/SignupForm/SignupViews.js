@@ -3,6 +3,8 @@ import { TickBox, TextSpace, DropDown, PhoneNumber } from 'components';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import { dispatchedUserInfo } from 'extras/dispatchers';
+import { Info } from '@material-ui/icons';
+import PropTypes from 'prop-types';
 
 export const PreSignup = props=>{
     const { nextView } = props;
@@ -14,33 +16,45 @@ export const PreSignup = props=>{
     )
 }
 
+PreSignup.defaultProps = {
+    nextView: null
+}
+
+PreSignup.propTypes = {
+    nextView: PropTypes.func.isRequired
+}
+
 export const BasicInformation = props=>{
-    const { setError, genInfo, phoneNumberError, emailFormatError, passwordMatchError, tmcError, toAddress, signupbutton, userInfo, phoneNumberInputMask } = props;
+    const { setError, genInfo, phoneNumberError, emailFormatError, passwordMatchError, tmcError, toAddress, signupbutton, userInfo, mobileNumberError } = props;
     return(
         <div className = "basic-information">
             <div className="inputRow">
-                <TextSpace onBlur={ setError } id="fullName" adornment="person" type="text" placeholder="Full Name" fieldClass={ genInfo.fullNameClass || genInfo.textfieldClass } />
+                <TextSpace onBlur={ setError } id="fullName" value={ userInfo.fullName } adornment="person" type="text" placeholder="Full Name" fieldClass={ genInfo.fullNameClass || genInfo.textfieldClass } />
             </div>
             <div className="inputRow">
-                <TextSpace onBlur={ setError } id="companyName" adornment="company" type="text" placeholder="Company Name" fieldClass = { genInfo.companyNameClass || genInfo.textfieldClass } />
+                <TextSpace onBlur={ setError } id="companyName" value={ userInfo.companyName} adornment="company" type="text" placeholder="Company Name" fieldClass = { genInfo.companyNameClass || genInfo.textfieldClass } />
             </div>
             <div className="inputRow">
-                <PhoneNumber onBlur={ setError } id="phoneNumber" adornment="phone" placeholder="Phone Number" fieldClass={ genInfo.phoneNumberClass || genInfo.textfieldClass } />
+                <PhoneNumber onBlur={ setError } id="phoneNumber" value={ userInfo.phoneNumber } mask= {['(', [0], /\d/,')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]} placeholder="Phone Number" fieldClass={ genInfo.phoneNumberClass || genInfo.textfieldClass } />
                 { phoneNumberError?<span className="error-feedback">{ phoneNumberError }</span>:null }
             </div>
             <div className="inputRow">
-                <TextSpace onBlur={ setError } id="emailAddress" adornment="email" type="email" placeholder="example@email.com" fieldClass={ genInfo.emailAddressClass || genInfo.textfieldClass } />
+                <PhoneNumber onBlur={ setError } id="mobileNumber" value={ userInfo.mobileNumber } mask={['(', [0], /\d/, /\d/, /\d/,')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/,]} placeholder="Mobile Number" fieldClass={ genInfo.mobileNumberClass || genInfo.textfieldClass } />
+                { mobileNumberError?<span className="error-feedback">{ mobileNumberError }</span>:null }
+            </div>
+            <div className="inputRow">
+                <TextSpace onBlur={ setError } id="emailAddress" value={ userInfo.emailAddress } adornment="email" type="email" placeholder="example@email.com" fieldClass={ genInfo.emailAddressClass || genInfo.textfieldClass } />
                 { emailFormatError?<span className="error-feedback">{ emailFormatError }</span>:null }
             </div> 
             <div className="inputRow">
-                <TextSpace onBlur={ setError } id = "password" type="password" adornment="lock" placeholder="Password" fieldClass={ genInfo.passwordClass || genInfo.textfieldClass } />
+                <TextSpace onBlur={ setError } id = "password" value={ userInfo.password } type="password" adornment="lock" placeholder="Password" fieldClass={ genInfo.passwordClass || genInfo.textfieldClass } />
             </div>
             <div className="inputRow">
-                <TextSpace onBlur={ setError } id = "passwordConfirm" type="password" adornment="lock" placeholder="Confirm password" fieldClass={ genInfo.passwordConfirmClass || genInfo.textfieldClass } />
+                <TextSpace onBlur={ setError } id = "passwordConfirm" value={ userInfo.passwordConfirm } type="password" adornment="lock" placeholder="Confirm password" fieldClass={ genInfo.passwordConfirmClass || genInfo.textfieldClass } />
                 { passwordMatchError?<span className="error-feedback">{ passwordMatchError }</span>:null }
             </div>
             <div className="inputRow">
-                <TickBox dispatcher = { dispatchedUserInfo } placement={ userInfo } id="termsAndConditions" /><span>I accept the <Link to={`/`}>Terms and Conditions</Link></span>
+                <TickBox dispatcher = { dispatchedUserInfo } value={ userInfo.termsAndConditions} placement={ userInfo } id="termsAndConditions" /><span>I accept the <Link to={`/`}>Terms and Conditions</Link></span>
                 { tmcError?<span className="error-feedback">{ tmcError }</span>:null }
             </div>
             <div className="inputRow">
@@ -52,18 +66,37 @@ export const BasicInformation = props=>{
     ) 
 }
 
+BasicInformation.defaultProps = {
+    genInfo: {},
+    userInfo: {}
+}
+
+BasicInformation.propTypes = {
+    setError: PropTypes.func,
+    genInfo: PropTypes.object.isRequired,
+    phoneNumberError: PropTypes.string,
+    emailFormatError: PropTypes.string,
+    passwordMatchError: PropTypes.string,
+    tmcError: PropTypes.string,
+    toAddress: PropTypes.func.isRequired,
+    signupbutton: PropTypes.object,
+    userInfo: PropTypes.object,
+    mobileNumberError: PropTypes.string
+}
+
 export const AddressInformation = props=>{
-    const { statesAustralia, selected, setstate, setError, signup, genInfo, signupbutton, } = props;
+    const { statesAustralia, selected, setstate, setError, signup, genInfo, userInfo, signupbutton, postSubmitMessage } = props;
     return(
         <div>
+            { postSubmitMessage?<span className="postSubmitMessage"> <Info className="icon" /> { postSubmitMessage } </span>: null }
             <div className="inputRow">
-                <DropDown className="select" width="300px" options={ statesAustralia } selected={ selected } onChange={ setstate } />
+                <DropDown onBlur={ setError } id="state" className="select" width="300px" options={ statesAustralia } selected={ selected } onChange={ setstate } />
             </div>
             <div className="inputRow">
-                <TextSpace onBlur={ setError } id="city" adornment="place" type="text" placeholder="City" fieldClass={ genInfo.cityClass || genInfo.textfieldClass } />
+                <TextSpace onBlur={ setError } id="city" value={ userInfo.city} adornment="place" type="text" placeholder="City" fieldClass={ genInfo.cityClass || genInfo.textfieldClass } />
             </div>
             <div className="inputRow">
-                <TextSpace onBlur={ setError } id="physicalAddress" adornment="home" type="text" placeholder="Physical Address" fieldClass={ genInfo.physicalAddressClass || genInfo.textfieldClass } />
+                <TextSpace onBlur={ setError } id="physicalAddress" value={ userInfo.physicalAddress } adornment="home" type="text" placeholder="Physical Address" fieldClass={ genInfo.physicalAddressClass || genInfo.textfieldClass } />
             </div> 
             <div className="inputRow">
                 <Button onClick={ signup } variant="outlined" style={ signupbutton } className="signupButton" >
@@ -72,4 +105,25 @@ export const AddressInformation = props=>{
             </div>
         </div>
     )
+}
+
+AddressInformation.defaultProps = {
+    statesAustralia: {},
+    setstate: null,
+    setError: null,
+    signup: null,
+    genInfo: {},
+    signupbutton: {},
+    postSubmitMessage: null
+}
+
+AddressInformation.propTypes = {
+    statesAustralia: PropTypes.object.isRequired, 
+    selected: PropTypes.string, 
+    setstate: PropTypes.func.isRequired, 
+    setError: PropTypes.func.isRequired, 
+    signup: PropTypes.func.isRequired, 
+    genInfo: PropTypes.object.isRequired,
+    signupbutton: PropTypes.object.isRequired,
+    postSubmitMessage: PropTypes.string
 }

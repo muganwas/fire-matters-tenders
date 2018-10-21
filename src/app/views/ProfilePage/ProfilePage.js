@@ -1,11 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { dispatchedUserInfo } from 'extras/dispatchers';
-import HeaderAlt from 'components/HeaderAlt/HeaderAlt';
-import SignupForm from 'forms/SignupForm/SignupForm';
-import Footer from 'components/Footer/Footer';
-import './signup.css';
 import PropTypes from 'prop-types';
+import { dispatchedUserInfo } from 'extras/dispatchers';
+import { HeaderMain, Footer } from 'components';
 
 @connect((store)=>{
     return {
@@ -14,7 +11,7 @@ import PropTypes from 'prop-types';
         genInfo: store.genInfo
     }
 })
-class Signup extends React.Component {
+class ProfilePage extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -23,10 +20,9 @@ class Signup extends React.Component {
         return(
             <div className="main">
                 <div className="top">
-                    <HeaderAlt loc="signup" header="Sign up" sub="Login and connect with leading service providers in Australia" />
+                    <HeaderMain />
                 </div>
-                <div className="form mid">
-                    <SignupForm />
+                <div className="mid">
                 </div>
                 <div className="bottom">
                     <Footer />
@@ -36,16 +32,16 @@ class Signup extends React.Component {
     }
 }
 
-Signup.defaultProps = {
+ProfilePage.defaultProps = {
     user: {},
     search: {},
     genInfo: {}
 }
 
-Signup.propTypes = {
+ProfilePage.propTypes = {
     user: PropTypes.object.isRequired,
     search: PropTypes.object.isRequired,
     genInfo: PropTypes.object.isRequired
 }
 
-export default Signup;
+export default ProfilePage;

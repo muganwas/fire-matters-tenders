@@ -109,11 +109,25 @@ a {
 .pre-signup #owner-occupier{
     color: #fff;
     background-color: #F79A50;
-    box-shadow: 2px 0 2px rgb(196, 152, 155);
+    box-shadow: 2px 0 2px #c4989b;
 }
 .pre-signup #owner-occupier:hover{
-    box-shadow: 2px 1px 4px rgb(196, 152, 155);
+    box-shadow: 2px 1px 4px #c4989b;
 }
 .pre-signup #owner-occupier:active{
-    box-shadow: 2px 0 2px rgb(196, 152, 155);
+    box-shadow: 2px 0 2px #c4989b;
+}
+.postSubmitMessage{
+    box-sizing: border-box;
+    margin: 5px 0;
+    padding: 10px;
+    color: #ED2431;
+    width: 300px;
+    -webkit-transition: all 0.4 ease-in;
+    -moz-transition: all 0.4 ease-in;
+    transition: all 0.4 ease-in;
+    border-radius: 3px;
+}
+.postSubmitMessage .icon {
+    color: #ED2431;
 }
