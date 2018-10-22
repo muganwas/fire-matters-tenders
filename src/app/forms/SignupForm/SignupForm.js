@@ -23,6 +23,7 @@ const signupbutton = {
 @connect((store)=>{
     return {
         user: store.user,
+        userInfo: store.user.info,
         search: store.search,
         genInfo: store.genInfo
     }
@@ -36,17 +37,17 @@ class SignupForm extends React.Component {
         if(sessionStorage.getItem('signup')){
             let storedUser = JSON.parse(sessionStorage.getItem('signup')),
             info = {...this.props.user.info};
-            info.userType = storedUser.userType,
-            info.fullName = storedUser.fullName,
-            info.companyName = storedUser.companyName,
-            info.phoneNumber = storedUser.phoneNumber,
-            info.mobileNumber = storedUser.mobileNumber,
-            info.emailAddress = storedUser.emailAddress,
-            info.password = storedUser.password,
-            info.state = storedUser.state,
-            info.city = storedUser.city,
-            info.physicalAddress = storedUser.physicalAddress;
-            info.termsAndConditions = storedUser.termsAndConditions;
+            info.userType = info.signupInfo.userType = storedUser.userType,
+            info.fullName = info.signupInfo.fullName = storedUser.fullName,
+            info.companyName = info.signupInfo.companyName = storedUser.companyName,
+            info.phoneNumber = info.signupInfo.phoneNumber = storedUser.phoneNumber,
+            info.mobileNumber = info.signupInfo.mobileNumber = storedUser.mobileNumber,
+            info.emailAddress = info.signupInfo.emailAddress = storedUser.emailAddress,
+            info.password = info.signupInfo.password = storedUser.password,
+            info.state = info.signupInfo.state = storedUser.state,
+            info.city = info.signupInfo.city = storedUser.city,
+            info.physicalAddress = info.signupInfo.physicalAddress = storedUser.physicalAddress;
+            info.termsAndConditions = info.signupInfo.termsAndConditions = storedUser.termsAndConditions;
             this.props.dispatch(dispatchedUserInfo(info));
         }  
     }
@@ -74,11 +75,13 @@ class SignupForm extends React.Component {
             let id = e.target.id,
             info = {...this.props.genInfo.info},
             userInfo = {...this.props.user.info},
+            toBeStored = sessionStorage.getItem('signup')?JSON.parse(sessionStorage.getItem('signup')): {},
             level = info.signupFormLevel,
             second = info.signUpProgressBar.twoClass,
             newLevel = level+1;
             info.signupFormLevel = newLevel;
-            userInfo.userType = id;
+            userInfo.signupInfo.userType = toBeStored.userType = id;
+            sessionStorage.setItem("signup", JSON.stringify(toBeStored));
             info.signUpProgressBar.twoClass = second + " current";
             this.props.dispatch(dispatchedUserInfo(userInfo));
             this.props.dispatch(dispatchedGenInfo(info));
@@ -89,7 +92,7 @@ class SignupForm extends React.Component {
     toAddress = ()=>{
         this.inputValidate().then(()=>{
             let info = {...this.props.genInfo.info},
-            userInfo = this.props.user.info,
+            userInfo = this.props.user.info.signupInfo,
             errors = info.errors,
             fullName = userInfo.fullName,
             companyName = userInfo.companyName,
@@ -99,27 +102,22 @@ class SignupForm extends React.Component {
             passwordConfirm = userInfo.passwordConfirm,
             termsAndConditions = userInfo.termsAndConditions,
             third = info.signUpProgressBar.threeClass;
-            info.signUpProgressBar.threeClass = third + " current";
-            
-            if(password.length >= 6){
-                info.errors.passwordError = null;
-                if(fullName && companyName && phoneNumber && emailAddress && password && passwordConfirm && termsAndConditions ){
-                    //what to do after all the information is provided
-                    let alert;
-                    Object.keys(errors).map(key=>{
-                        if(errors[key] !== null)
-                            alert = errors[key];
-                    });
-                    if( alert === null || alert === undefined)
-                        info.signupFormLevel = 3;      
-                }else{
-                    if(!termsAndConditions)
-                        info.errors.tmcError = "You have to agree with the TC to continue"; 
-                    else
-                        info.errors.tmcError = null;
-                }
+            if(fullName && companyName && phoneNumber && emailAddress && password && passwordConfirm && termsAndConditions ){   
+                //what to do after all the information is provided
+                let alert;
+                Object.keys(errors).map(key=>{
+                    if(errors[key] !== "")
+                        alert = errors[key];
+                });
+                if( alert === "" || alert === undefined ){
+                    info.signupFormLevel = 3;
+                    info.signUpProgressBar.threeClass = third + " current"; 
+                }   
             }else{
-                info.errors.passwordError = "Your password should be 6 characters or more"
+                if(!termsAndConditions)
+                    info.errors.tmcError = "You have to agree with the TC to continue"; 
+                else
+                    info.errors.tmcError = undefined;
             }
             this.props.dispatch(dispatchedGenInfo(info));
         }).
@@ -128,10 +126,13 @@ class SignupForm extends React.Component {
             throw error;
         });
     }
-
+    /**should have been name errorCheck */
     setError = (e)=>{
         let info = {...this.props.genInfo.info},
+        toBeStored = sessionStorage.getItem('signup')?JSON.parse(sessionStorage.getItem('signup')): {},
+        userInfo = {...this.props.userInfo},
         value = (e.target.value).trim(),
+        leng = value.length,
         fieldClass = e.target.name,
         id = e.target.id,
         newClass = fieldClass + " error",
@@ -140,16 +141,21 @@ class SignupForm extends React.Component {
                 info[label] = newClass        
         }else{
             if(id === "phoneNumber" || id === "mobileNumber"){
-                let leng = (value.trim()).length;
                 switch(leng === 14 || leng < 1){
                     case true:
                         switch(id){
                             case "phoneNumber":
-                                info.errors.phoneNumberError = null;
-                                info[label] = null;
+                                info.errors.phoneNumberError = "";
+                                info[label] = "";
+                                toBeStored[id] = value;
+                                sessionStorage.setItem('signup', JSON.stringify(toBeStored));
+                                leng === 14?userInfo.signupInfo[id] = value: "";
                             break;
                             case "mobileNumber":
-                                info.errors.mobileNumberError = null;
+                                info.errors.mobileNumberError = "";
+                                toBeStored[id] = value;
+                                sessionStorage.setItem('signup', JSON.stringify(toBeStored));
+                                leng === 14?userInfo.signupInfo[id] = value: "";
                             break;
                         }
                     break;
@@ -157,45 +163,73 @@ class SignupForm extends React.Component {
                         switch(id){
                             case "phoneNumber":
                                 info.errors.phoneNumberError = "Your phone number is too short";
-                                info[label] = null;
+                                userInfo.signupInfo[id] = "";
+                                toBeStored[id] = "";
+                                sessionStorage.setItem('signup', JSON.stringify(toBeStored));
+                                info[label] = "";
                             break;
                             case "mobileNumber":
                                 info.errors.mobileNumberError = "Your mobile number is too short";
+                                toBeStored[id] = "";
+                                sessionStorage.setItem('signup', JSON.stringify(toBeStored));
+                                userInfo.signupInfo[id] = "";
                             break;
                         }
                     break;
                 }
             }else{
-                if(id === "password"){
-                    let leng = value.length;
+                if(id === "password" || id === "passwordConfirm"){
+                    console.log(id)
                     if(leng >= 6){
-                        info.errors.passwordError = null;
                         let password = this.props.user.info.password,
                         passwordConfirm = this.props.user.info.passwordConfirm;
-                        if(id === "passwordConfirm" && (password !== passwordConfirm))
-                            info.errors.passwordMatchError = "Your passwords don't match";              
-                        else if(id === "passwordConfirm" && (password === passwordConfirm))
-                            info.errors.passwordMatchError = null;
-                        info[label] = null;
+                        if((id === "passwordConfirm" && password && (password !== passwordConfirm)) || (id === "password" && passwordConfirm && (password !== passwordConfirm))){
+                            info.errors.passwordError = "";
+                            info.errors.passwordMatchError = "Your passwords don't match";
+                            id === "passwordConfirm"?toBeStored[id] = userInfo.signupInfo[id] = "":toBeStored[id] = userInfo.signupInfo[id] = value;
+                            sessionStorage.setItem('signup', JSON.stringify(toBeStored));
+                        }          
+                        else{
+                            info.errors.passwordMatchError = "";
+                            info.errors.passwordError = "";
+                            toBeStored[id] = userInfo.signupInfo[id] = value;
+                            sessionStorage.setItem('signup', JSON.stringify(toBeStored));
+                        }
+                        info[label] = "";
                     }else{
-                        info.errors.passwordError = "Your password should be 6 characters or more.";
-                        info[label] = null;
+                        id === "password"?info.errors.passwordError = "Your password should be 6 characters or more.":"";
+                        id === "passwordConfirm"?info.errors.passwordMatchError = "There is a problem with your password":"";
+                        toBeStored[id] = "";
+                        sessionStorage.setItem('signup', JSON.stringify(toBeStored));
+                        userInfo.signupInfo[id] = info[label] = "";
                     }
                 }else{
                     let emailAddress = this.props.user.info.emailAddress;
-                    info[label] = null;
-                    if(emailAddress && !emailAddress.match(emailregex))
+                    info[label] = "";
+                    if(emailAddress && !emailAddress.match(emailregex)){
                         info.errors.emailFormatError = "Wrong email format";
-                    else if(emailAddress && emailAddress.match(emailregex))
-                        info.errors.emailFormatError = null;
+                        toBeStored[id] ="";
+                        sessionStorage.setItem('signup', JSON.stringify(toBeStored));
+                        userInfo.signupInfo[id] = "";
+                    }else if(emailAddress && emailAddress.match(emailregex)){
+                        info.errors.emailFormatError = "";
+                        toBeStored[id] = value;
+                        sessionStorage.setItem('signup', JSON.stringify(toBeStored));
+                        userInfo.signupInfo[id] = value;
+                    }else{
+                        toBeStored[id] = value;
+                        sessionStorage.setItem('signup', JSON.stringify(toBeStored));
+                        userInfo.signupInfo[id] = value;
+                    }
                 }
             }
         }
+        this.props.dispatch(dispatchedUserInfo(userInfo));
         this.props.dispatch(dispatchedGenInfo(info));
     }
 
     signUp = ()=>{
-        let info = {...this.props.user.info},
+        let info = {...this.props.user.info.signupInfo},
         genInfo = {...this.props.genInfo.info},
         createUser = baseUrl + usersEndPoint,
         userType = info.userType,
@@ -203,7 +237,7 @@ class SignupForm extends React.Component {
         fullName = info.fullName,
         companyName = info.companyName,
         phoneNumber = (info.phoneNumber).replace("(", "").replace(")", "").replace( new RegExp(" ", "g"), "").replace("-", ""),
-        mobileNumber = mobileNumber?(info.mobileNumber).replace("(", "").replace(")", "").replace( new RegExp(" ", "g"), "").replace("-", ""):null,
+        mobileNumber = mobileNumber?(info.mobileNumber).replace("(", "").replace(")", "").replace( new RegExp(" ", "g"), "").replace("-", ""):undefined,
         emailAddress = info.emailAddress,
         state = info.state,
         city = info.city,
@@ -217,7 +251,7 @@ class SignupForm extends React.Component {
                 genInfo.messages.postSubmitMessage = message;
                 genInfo.messages.messageClass = "postSubmitError";
             }else{
-                genInfo.messages.postSubmitMessage = null;
+                genInfo.messages.postSubmitMessage = undefined;
                 auth.createUserWithEmailAndPassword(emailAddress, password).
                 then((res)=>{
                     if(res.additionalUserInfo.isNewUser){
@@ -327,7 +361,7 @@ class SignupForm extends React.Component {
                             setstate = { this.setstate }
                             signup = { this.signUp }
                             signupbutton={ signupbutton }
-                        />:null }
+                        />:undefined }
                 </div>
             </div> 
         )

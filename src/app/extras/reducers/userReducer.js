@@ -1,6 +1,8 @@
 const defaultState = {
     info: {
-      state: "Select State"
+      state: "Select State",
+      login: {},
+      signupInfo: {}
     },
     fetching: false,
     fetched: false,

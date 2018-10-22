@@ -36,7 +36,7 @@ class TickBox extends React.Component {
         dispatcher = this.props.dispatcher,
         currUserInfo = {...this.props.placement },
         label = this.props.id;
-        currUserInfo[label] = fieldValue;
+        currUserInfo[label] = currUserInfo.signupInfo[label] = fieldValue;
         storedUser[label] = fieldValue;
         sessionStorage.setItem('signup', JSON.stringify(storedUser));
         this.props.dispatch(dispatcher(currUserInfo));
