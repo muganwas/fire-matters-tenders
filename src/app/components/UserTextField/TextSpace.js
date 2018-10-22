@@ -67,12 +67,9 @@ class TextSpace extends React.Component {
 
     handleText=(e)=>{
         let fieldValue = e.target.value,
-        toBeStored = sessionStorage.getItem('signup')?JSON.parse(sessionStorage.getItem('signup')): {},
         currUserInfo = {...this.props.user.info},
         label = this.props.id;
         currUserInfo[label] = fieldValue;
-        toBeStored[label] = fieldValue;
-        sessionStorage.setItem('signup', JSON.stringify(toBeStored));
         this.props.dispatch(dispatchedUserInfo(currUserInfo));
     }
 
