@@ -2,18 +2,19 @@ import React from 'react';
 import './dropDown.css';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
+import { dispatchedGenInfo } from 'extras/dispatchers';
 
 @connect((store)=>{
     return {
         user: store.user,
+        genInfo: store.genInfo.info,
+        dropDown: store.genInfo.info.dropDown,
+        dropDownClass: store.genInfo.info.dropDown.dropDownClass
     }
 })
 class DropDown extends React.Component {
     constructor(props){
         super(props)
-        this.state = {
-            dropDownClass: "hidden options-list"
-        }
     }
 
     componentWillReceiveProps(nextProps){
@@ -42,22 +43,19 @@ class DropDown extends React.Component {
     }
 
     toggleDisplayDropDown = ()=>{
-        if(this.state.dropDownClass === "hidden options-list"){
-            this.setState({
-                dropDownClass: "options-list"
-            });
-        }else{
-            this.setState({
-                dropDownClass: "hidden options-list"
-            });
-        }
+        let genInfo = {...this.props.genInfo};
+        if(this.props.dropDownClass === "hidden options-list")
+            genInfo.dropDown.dropDownClass = "options-list"; 
+        else
+            genInfo.dropDown.dropDownClass = "hidden options-list";
+        this.props.dispatch(dispatchedGenInfo(genInfo));
     }
 
     render(){
         return(
             <div style={{width:this.props.selectWidth}} className={ this.props.className }>
-                <span onClick = { this.toggleDisplayDropDown } className="options-selected">{ this.props.selected }</span>
-                <div style={{width:this.props.width}} className={ this.state.dropDownClass }>
+                <span onClick = { this.toggleDisplayDropDown } className="options-selected">{ this.props.selected || this.props.init }</span>
+                <div style={{width:this.props.width}} className={ this.props.dropDownClass }>
                     { Object.keys(this.props.options).map(this.mapOptions) }
                 </div>
             </div>
@@ -80,6 +78,7 @@ DropDown.propTypes = {
     selectWidth: PropTypes.string,
     width: PropTypes.string,
     selected: PropTypes.string,
+    init: PropTypes.string
 }
 
 export default DropDown;

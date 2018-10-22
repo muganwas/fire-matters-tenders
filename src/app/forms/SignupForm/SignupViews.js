@@ -25,7 +25,7 @@ PreSignup.propTypes = {
 }
 
 export const BasicInformation = props=>{
-    const { setError, genInfo, phoneNumberError, emailFormatError, passwordMatchError, tmcError, toAddress, signupbutton, userInfo, mobileNumberError } = props;
+    const { setError, genInfo, phoneNumberError, emailFormatError, passwordError, passwordMatchError, tmcError, toAddress, signupbutton, userInfo, mobileNumberError } = props;
     return(
         <div className = "basic-information">
             <div className="inputRow">
@@ -48,6 +48,7 @@ export const BasicInformation = props=>{
             </div> 
             <div className="inputRow">
                 <TextSpace onBlur={ setError } id = "password" value={ userInfo.password } type="password" adornment="lock" placeholder="Password" fieldClass={ genInfo.passwordClass || genInfo.textfieldClass } />
+                { passwordError?<span className="error-feedback">{ passwordError }</span>:null }
             </div>
             <div className="inputRow">
                 <TextSpace onBlur={ setError } id = "passwordConfirm" value={ userInfo.passwordConfirm } type="password" adornment="lock" placeholder="Confirm password" fieldClass={ genInfo.passwordConfirmClass || genInfo.textfieldClass } />
@@ -85,12 +86,12 @@ BasicInformation.propTypes = {
 }
 
 export const AddressInformation = props=>{
-    const { statesAustralia, selected, setstate, setError, signup, genInfo, userInfo, signupbutton, postSubmitMessage } = props;
+    const { statesAustralia, selected, setstate, setError, signup, genInfo, userInfo, signupbutton, postSubmitMessage, messageClass } = props;
     return(
         <div>
-            { postSubmitMessage?<span className="postSubmitMessage"> <Info className="icon" /> { postSubmitMessage } </span>: null }
+            { postSubmitMessage?<span className={ messageClass }> <Info className="icon" /> { postSubmitMessage } </span>: null }
             <div className="inputRow">
-                <DropDown onBlur={ setError } id="state" className="select" width="300px" options={ statesAustralia } selected={ selected } onChange={ setstate } />
+                <DropDown onBlur={ setError } id="state" className="select" init="Select state" width="300px" options={ statesAustralia } selected={ selected } onChange={ setstate } />
             </div>
             <div className="inputRow">
                 <TextSpace onBlur={ setError } id="city" value={ userInfo.city} adornment="place" type="text" placeholder="City" fieldClass={ genInfo.cityClass || genInfo.textfieldClass } />
