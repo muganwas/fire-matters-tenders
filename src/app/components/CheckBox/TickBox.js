@@ -31,11 +31,14 @@ class TickBox extends React.Component {
     }
     
     handleChange=()=>{
-        let fieldValue = !this.state.checked;
-        let dispatcher = this.props.dispatcher;
-        let currUserInfo = {...this.props.placement };
-        let label = this.props.id;
+        let fieldValue = !this.state.checked,
+        storedUser = sessionStorage.getItem('signup')?JSON.parse(sessionStorage.getItem('signup')):{},
+        dispatcher = this.props.dispatcher,
+        currUserInfo = {...this.props.placement },
+        label = this.props.id;
         currUserInfo[label] = fieldValue;
+        storedUser[label] = fieldValue;
+        sessionStorage.setItem('signup', JSON.stringify(storedUser));
         this.props.dispatch(dispatcher(currUserInfo));
         this.setState({checked:!this.state.checked});
     }
@@ -47,7 +50,7 @@ class TickBox extends React.Component {
                 id = {this.props.id}
                 color = "default"
                 className={classes.tick}
-                checked={this.state.checked}
+                checked={ this.props.value || this.state.checked}
                 onChange={this.handleChange}
                 value={(this.state.checked).toString()}
             >

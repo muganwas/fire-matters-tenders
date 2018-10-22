@@ -117,10 +117,11 @@ a {
 .pre-signup #owner-occupier:active{
     box-shadow: 2px 0 2px #c4989b;
 }
-.postSubmitMessage{
+.postSubmitError{
+    display: inline-block;
     box-sizing: border-box;
     margin: 5px 0;
-    padding: 10px;
+    padding: 5px;
     color: #ED2431;
     width: 300px;
     -webkit-transition: all 0.4 ease-in;
@@ -128,6 +129,74 @@ a {
     transition: all 0.4 ease-in;
     border-radius: 3px;
 }
+
+.postSubmitMessage{
+    display: inline-block;
+    box-sizing: border-box;
+    margin: 5px 0;
+    padding: 5px;
+    color: #4e714c;
+    width: 300px;
+    -webkit-transition: all 0.4 ease-in;
+    -moz-transition: all 0.4 ease-in;
+    transition: all 0.4 ease-in;
+    border-radius: 3px;
+}
+
 .postSubmitMessage .icon {
+    color: #4e714c;
+}
+
+.postSubmitError .icon {
     color: #ED2431;
+}
+
+.signup-progress{
+    box-sizing: border-box;
+    position: relative;
+    display: block;
+    width:40%;
+    margin: 10px auto;
+}
+
+.middle-line{
+    box-sizing: border-box;
+    display: inline-block;
+    height: 2px;
+    margin-bottom: 5px;
+    background-color: #F79A50;
+    width: 44.5%;
+}
+
+.signup-progress .one, .signup-progress .two, .signup-progress .three{
+    box-sizing: border-box;
+    display: inline-block;
+    width: 20px;
+    text-align: center;
+    height: 20px;
+    border-radius: 50%;
+    border: thin solid #F79A50;
+    cursor: pointer;
+}
+
+.current{
+    background-color: #F79A50;
+    color: #fff;
+}
+@media only screen and (max-width: 1350px){
+    .middle-line{
+        width: 43%;
+    }
+}
+
+@media only screen and (max-width: 1080px){
+    .middle-line{
+        width: 42%;
+    }
+}
+
+@media only screen and (max-width: 950px){
+    .middle-line{
+        width: 40%;
+    }
 }

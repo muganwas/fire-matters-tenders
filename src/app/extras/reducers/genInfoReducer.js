@@ -10,7 +10,15 @@ const defaultState = {
         passwordMatchError: undefined,
       },
       messages: {
-        postSubmitMessageClass: "postSubmitMessage"
+        messageClass: "postSubmitMessage"
+      },
+      signUpProgressBar: {
+        oneClass: "one current",
+        twoClass: "two",
+        threeClass: "three"
+      },
+      dropDown:{
+        dropDownClass: "hidden options-list"
       }
     },
     fetching: false,

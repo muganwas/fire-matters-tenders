@@ -46,6 +46,7 @@ class SignupForm extends React.Component {
             info.state = storedUser.state,
             info.city = storedUser.city,
             info.physicalAddress = storedUser.physicalAddress;
+            info.termsAndConditions = storedUser.termsAndConditions;
             this.props.dispatch(dispatchedUserInfo(info));
         }  
     }
@@ -67,16 +68,18 @@ class SignupForm extends React.Component {
             resolve("all checked");
         });
     }
-
+    /** navigate from userType to the next level of the form( basic information ) */
     nextView = (e)=>{
         return new Promise((resolve, reject)=>{
-            let id = e.target.id;
-            let info = {...this.props.genInfo.info},
+            let id = e.target.id,
+            info = {...this.props.genInfo.info},
             userInfo = {...this.props.user.info},
-            level = info.signupFormLevel;
-            let newLevel = level+1;
+            level = info.signupFormLevel,
+            second = info.signUpProgressBar.twoClass,
+            newLevel = level+1;
             info.signupFormLevel = newLevel;
             userInfo.userType = id;
+            info.signUpProgressBar.twoClass = second + " current";
             this.props.dispatch(dispatchedUserInfo(userInfo));
             this.props.dispatch(dispatchedGenInfo(info));
             resolve("pre-signup props set");
@@ -92,24 +95,31 @@ class SignupForm extends React.Component {
             companyName = userInfo.companyName,
             phoneNumber = userInfo.phoneNumber,
             emailAddress = userInfo.emailAddress,
-            password = userInfo.password,
+            password = (userInfo.password).trim(),
             passwordConfirm = userInfo.passwordConfirm,
-            termsAndConditions = userInfo.termsAndConditions;
-
-            if(fullName && companyName && phoneNumber && emailAddress && password && passwordConfirm && termsAndConditions ){
-                //what to do after all the information is provided
-                let alert;
-                Object.keys(errors).map(key=>{
-                    if(errors[key] !== null)
-                        alert = errors[key];
-                });
-                if( alert === null || alert === undefined)
-                    info.signupFormLevel = 3;      
+            termsAndConditions = userInfo.termsAndConditions,
+            third = info.signUpProgressBar.threeClass;
+            info.signUpProgressBar.threeClass = third + " current";
+            
+            if(password.length >= 6){
+                info.errors.passwordError = null;
+                if(fullName && companyName && phoneNumber && emailAddress && password && passwordConfirm && termsAndConditions ){
+                    //what to do after all the information is provided
+                    let alert;
+                    Object.keys(errors).map(key=>{
+                        if(errors[key] !== null)
+                            alert = errors[key];
+                    });
+                    if( alert === null || alert === undefined)
+                        info.signupFormLevel = 3;      
+                }else{
+                    if(!termsAndConditions)
+                        info.errors.tmcError = "You have to agree with the TC to continue"; 
+                    else
+                        info.errors.tmcError = null;
+                }
             }else{
-                if(!termsAndConditions)
-                    info.errors.tmcError = "You have to agree with the TC to continue"; 
-                else
-                    info.errors.tmcError = null;
+                info.errors.passwordError = "Your password should be 6 characters or more"
             }
             this.props.dispatch(dispatchedGenInfo(info));
         }).
@@ -156,18 +166,29 @@ class SignupForm extends React.Component {
                     break;
                 }
             }else{
-                let password = this.props.user.info.password,
-                passwordConfirm = this.props.user.info.passwordConfirm,
-                emailAddress = this.props.user.info.emailAddress;
-                if(id === "passwordConfirm" && (password !== passwordConfirm))
-                    info.errors.passwordMatchError = "Your passwords don't match";              
-                else if(id === "passwordConfirm" && (password === passwordConfirm))
-                    info.errors.passwordMatchError = null;
-                info[label] = null;
-                if(emailAddress && !emailAddress.match(emailregex))
-                    info.errors.emailFormatError = "Wrong email format";
-                else if(emailAddress && emailAddress.match(emailregex))
-                    info.errors.emailFormatError = null;
+                if(id === "password"){
+                    let leng = value.length;
+                    if(leng >= 6){
+                        info.errors.passwordError = null;
+                        let password = this.props.user.info.password,
+                        passwordConfirm = this.props.user.info.passwordConfirm;
+                        if(id === "passwordConfirm" && (password !== passwordConfirm))
+                            info.errors.passwordMatchError = "Your passwords don't match";              
+                        else if(id === "passwordConfirm" && (password === passwordConfirm))
+                            info.errors.passwordMatchError = null;
+                        info[label] = null;
+                    }else{
+                        info.errors.passwordError = "Your password should be 6 characters or more.";
+                        info[label] = null;
+                    }
+                }else{
+                    let emailAddress = this.props.user.info.emailAddress;
+                    info[label] = null;
+                    if(emailAddress && !emailAddress.match(emailregex))
+                        info.errors.emailFormatError = "Wrong email format";
+                    else if(emailAddress && emailAddress.match(emailregex))
+                        info.errors.emailFormatError = null;
+                }
             }
         }
         this.props.dispatch(dispatchedGenInfo(info));
@@ -178,29 +199,54 @@ class SignupForm extends React.Component {
         genInfo = {...this.props.genInfo.info},
         createUser = baseUrl + usersEndPoint,
         userType = info.userType,
+        message,
         fullName = info.fullName,
         companyName = info.companyName,
         phoneNumber = (info.phoneNumber).replace("(", "").replace(")", "").replace( new RegExp(" ", "g"), "").replace("-", ""),
-        mobileNumber = (info.mobileNumber).replace("(", "").replace(")", "").replace( new RegExp(" ", "g"), "").replace("-", ""),
+        mobileNumber = mobileNumber?(info.mobileNumber).replace("(", "").replace(")", "").replace( new RegExp(" ", "g"), "").replace("-", ""):null,
         emailAddress = info.emailAddress,
         state = info.state,
         city = info.city,
         physicalAddress = info.physicalAddress,
         password = info.password;
+
         axios.post(createUser, { userType, fullName, companyName, phoneNumber, mobileNumber, emailAddress, state, city, physicalAddress, password }).
         then(res=>{
-            let message = res.data.message;
+            message = res.data.message;
             if(message){
                 genInfo.messages.postSubmitMessage = message;
+                genInfo.messages.messageClass = "postSubmitError";
             }else{
                 genInfo.messages.postSubmitMessage = null;
                 auth.createUserWithEmailAndPassword(emailAddress, password).
                 then((res)=>{
-                    console.log(res);          
+                    if(res.additionalUserInfo.isNewUser){
+
+                        auth.currentUser.sendEmailVerification().then(res=>{
+                            sessionStorage.removeItem('signup');
+                            genInfo.messages.postSubmitMessage = "You signed up successfully, check your " + emailAddress + " inbox for a confirmation email.";
+                            genInfo.messages.messageClass = "postSubmitMessage";
+                            this.props.dispatch(dispatchedGenInfo(genInfo));
+                        }).
+                        catch(err=>{
+                            message = err.message;
+                            genInfo.messages.postSubmitMessage = message;
+                            genInfo.messages.messageClass = "postSubmitError";
+                            this.props.dispatch(dispatchedGenInfo(genInfo));
+                        }); 
+
+                    }else{
+                        message = "Something went wrong, please try again";
+                        genInfo.messages.postSubmitMessage = message;
+                        genInfo.messages.messageClass = "postSubmitError";
+                    }         
                 }).
                 catch(err=>{
-                    console.log(err);
-                    throw err;
+                    console.log(err)
+                    message = err.message;
+                    genInfo.messages.postSubmitMessage = message;
+                    genInfo.messages.messageClass = "postSubmitError";
+                    this.props.dispatch(dispatchedGenInfo(genInfo));
                 });
             }
             this.props.dispatch(dispatchedGenInfo(genInfo));
@@ -219,6 +265,17 @@ class SignupForm extends React.Component {
             resolve("state set");
         });      
     }
+    /** signup progress bar, click to navigate to level */
+    goTo = (e)=>{
+        let id = e.target.id,
+        currentClassName = e.target.className,
+        genInfo = {...this.props.genInfo.info},
+        currentLevel = genInfo.signupFormLevel;
+        if(currentLevel > id || currentClassName.includes("current")){
+            genInfo.signupFormLevel = Number (id);
+        }
+        this.props.dispatch(dispatchedGenInfo(genInfo));
+    }
     
     render(){
         let genInfo = {...this.props.genInfo.info},
@@ -226,45 +283,53 @@ class SignupForm extends React.Component {
         level = genInfo.signupFormLevel,
         passwordMatchError = genInfo.errors.passwordMatchError,
         phoneNumberError = genInfo.errors.phoneNumberError,
+        passwordError = genInfo.errors.passwordError,
         mobileNumberError = genInfo.errors.mobileNumberError,
         emailFormatError = genInfo.errors.emailFormatError,
         tmcError = genInfo.errors.tmcError,
         selected = userInfo.state,
         postSubmitMessage = genInfo.messages.postSubmitMessage,
-        messageClass = genInfo.messages.postSubmitMessageClass;
+        messageClass = genInfo.messages.messageClass,
+        first = genInfo.signUpProgressBar.oneClass,
+        second = genInfo.signUpProgressBar.twoClass,
+        third = genInfo.signUpProgressBar.threeClass;
         
         return(
-            <div className="form signup">
-             { 
-                level === 1?
-                <PreSignup nextView={ this.nextView } />:
-                level === 2?
-                <BasicInformation
-                    userInfo={ userInfo }
-                    setError={ this.setError }
-                    genInfo={ genInfo }
-                    phoneNumberError={ phoneNumberError }
-                    mobileNumberError={ mobileNumberError }
-                    emailFormatError={ emailFormatError }
-                    passwordMatchError={ passwordMatchError }
-                    tmcError={ tmcError }
-                    toAddress={ this.toAddress }
-                    signupbutton={ signupbutton }
-                 />:
-                 level===3?
-                <AddressInformation
-                    messageClass = { messageClass }
-                    postSubmitMessage={ postSubmitMessage }
-                    statesAustralia={ statesAustralia }
-                    setError={ this.setError }
-                    genInfo={ genInfo }
-                    userInfo={ userInfo }
-                    selected = { selected }
-                    setstate = { this.setstate }
-                    signup = { this.signUp }
-                    signupbutton={ signupbutton }
-                />:null }
-            </div>
+            <div>
+                <div className="signup-progress"><span onClick={ this.goTo } id={ 1 } className={ first }>1</span><span className="middle-line"></span><span onClick={ this.goTo } id={ 2 } className={ second }>2</span><span className="middle-line"></span><span onClick={ this.goTo } id={ 3 } className={ third }>3</span></div>
+                <div className="form signup">
+                    { 
+                        level === 1?
+                        <PreSignup nextView={ this.nextView } />:
+                        level === 2?
+                        <BasicInformation
+                            userInfo={ userInfo }
+                            setError={ this.setError }
+                            genInfo={ genInfo }
+                            phoneNumberError={ phoneNumberError }
+                            mobileNumberError={ mobileNumberError }
+                            emailFormatError={ emailFormatError }
+                            passwordMatchError={ passwordMatchError }
+                            passwordError = { passwordError }
+                            tmcError={ tmcError }
+                            toAddress={ this.toAddress }
+                            signupbutton={ signupbutton }
+                        />:
+                        level===3?
+                        <AddressInformation
+                            messageClass = { messageClass }
+                            postSubmitMessage={ postSubmitMessage }
+                            statesAustralia={ statesAustralia }
+                            setError={ this.setError }
+                            genInfo={ genInfo }
+                            userInfo={ userInfo }
+                            selected = { selected }
+                            setstate = { this.setstate }
+                            signup = { this.signUp }
+                            signupbutton={ signupbutton }
+                        />:null }
+                </div>
+            </div> 
         )
     }
 }
