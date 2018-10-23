@@ -1,7 +1,9 @@
 const defaultState = {
     info: {
       state: "Select State",
-      login: {},
+      loginInfo: {
+        messageClass: "postSubmitMessage"
+      },
       signupInfo: {}
     },
     fetching: false,
