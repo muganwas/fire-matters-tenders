@@ -2,9 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import './listings.css';
 import  { Footer, HeaderMain, SecondarySearch, ListedJobs } from 'components';
-//import Image from 'react-image';
-//import firebase from 'firebase';
-//import helperFunctions from 'extras/helperFunctions';
 
 import { listingCategories } from 'extras/config';
 import { PropTypes } from 'prop-types';
