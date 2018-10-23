@@ -32,6 +32,9 @@ class UserPage extends React.Component {
         axios.post(tokenCheckURL, {token}).
         then(res=>{
             if(!res.data.uid){
+                let info = {...this.props.genInfo.info};
+                info.alternatingNavigation.home = "/home";
+                this.props.dispatch(dispatchedGenInfo(info));
                 sessionStorage.removeItem('loginSession');
                 this.props.history.push('/login');
             }      
