@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { dispatchedUserInfo } from 'extras/dispatchers';
+import { withRouter } from 'react-router-dom';
 import { HeaderAlt, Footer } from 'components';
 import { LoginForm } from 'forms';
 import './login.css'
@@ -25,7 +25,7 @@ class Login extends React.Component {
                     <HeaderAlt loc="login" header="Login" sub="Login and connect with leading service providers in Australia" />
                 </div>
                 <div className="form mid">
-                    <LoginForm />
+                    <LoginForm history={ this.props.history } />
                 </div>
                 <div className="bottom">
                     <Footer />
@@ -47,4 +47,4 @@ Login.propTypes = {
     genInfo: PropTypes.object.isRequired
 }
 
-export default Login;
+export default withRouter(Login);
