@@ -179,7 +179,6 @@ class SignupForm extends React.Component {
                 }
             }else{
                 if(id === "password" || id === "passwordConfirm"){
-                    console.log(id)
                     if(leng >= 6){
                         let password = this.props.user.info.password,
                         passwordConfirm = this.props.user.info.passwordConfirm;

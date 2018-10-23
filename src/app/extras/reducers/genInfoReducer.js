@@ -10,6 +10,9 @@ const defaultState = {
         passwordMatchError: undefined,
         usernameError: undefined
       },
+      alternatingNavigation: {
+        home: "/home"
+      },
       messages: {
         messageClass: "postSubmitMessage"
       },

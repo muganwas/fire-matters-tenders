@@ -39,7 +39,7 @@ class SecondarySearch extends Component {
         let selected = this.props.secondarySearch.info[this.props.categoryTitle];
         return(
             <div className="search-main">
-                <DropDown selectWidth={ this.props.selectWidth } width={ this.props.dropDownWidth } className="select left" options={ this.props.categories } selected={ selected } onChange={ this.getCategory } />
+                <DropDown init={ this.props.init } selectWidth={ this.props.selectWidth } width={ this.props.dropDownWidth } className="select left" options={ this.props.categories } selected={ selected } onChange={ this.getCategory } />
                 <Textfield id="listingSearch" fieldClass="search-field" placeholder={ this.props.placeholder } type="text" />
                 <i className="material-icons search-icon">search</i>        
             </div>
@@ -54,7 +54,8 @@ SecondarySearch.defaultProps = {
     user: {},
     categoryTitle: null,
     dropDownWidth: null,
-    selectWidth: null
+    selectWidth: null,
+    init: "All"
 }
 
 SecondarySearch.propTypes = {
@@ -65,7 +66,8 @@ SecondarySearch.propTypes = {
     categories: PropTypes.object.isRequired,
     categoryTitle: PropTypes.string.isRequired,
     dropDownWidth: PropTypes.string,
-    selectWidth: PropTypes.string
+    selectWidth: PropTypes.string,
+    init: PropTypes.string
 }
 
 export default SecondarySearch;

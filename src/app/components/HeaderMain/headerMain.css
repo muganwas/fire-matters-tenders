@@ -1,6 +1,7 @@
 .App-header {
+    box-sizing: border-box;
     margin: 0 60px;
-    min-height: 150px;
+    min-height: 155px;
     padding: 0 20px;
 }
 .App-header .social-icons{
@@ -11,8 +12,8 @@
     right: 250px;
 }
 .social-icons a:hover{
-    text-decoration: none;
-    border: none;
+    text-decoration: none!important;
+    border: none!important;
 }
 .Main-Menu{
     box-sizing: border-box;
@@ -47,6 +48,25 @@
     transition: 0.3s;
     border-bottom: 2px solid rgb(182, 24, 35);
 }
+.logout{
+  display: inline-block;
+  cursor: pointer;
+  font-size: 14px;
+  background-color: #F79A50;
+  border-radius: 3px;
+  padding: 3px 8px;
+}
+.logout .icon{
+  float: left;
+  height: 16px;
+  width: 16px;
+  padding: 0;
+}
+.btn-text{
+  float: left;
+  margin: 0;
+  padding: 0;
+}
 @media only screen and (max-width: 836px){
     .App-header .social-icons{
         display: none;
@@ -67,6 +87,7 @@
   }
   .signup-login{
     float:none;
+    cursor: pointer;
   }
   .Mobile-Menu a, .signup-login a{
     display: block;

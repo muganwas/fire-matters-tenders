@@ -72,7 +72,7 @@ class LoginForm extends React.Component {
                         active = data.active;
                         if(active){
                             auth.currentUser.getIdToken().then(token=>{
-                                let loginSession = { token, emailAddress };
+                                let loginSession = { userId, token, emailAddress };
                                 userInfo.loginInfo.userDetails = data;
                                 this.props.dispatch(dispatchedUserInfo(userInfo));
                                 sessionStorage.setItem("loginSession", JSON.stringify(loginSession));

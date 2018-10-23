@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Image from 'react-image';
 import { SocialIcon } from 'react-social-icons';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import { dispatchedSearchInfo, dispatchedGenInfo } from 'extras/dispatchers';
+import { Lock } from '@material-ui/icons';
 import './headerMain.css';
 import { PropTypes } from 'prop-types';
 
@@ -11,20 +12,36 @@ import { PropTypes } from 'prop-types';
     return {
         search: store.search,
         user: store.user,
-        genInfo: store.genInfo
+        genInfo: store.genInfo,
+        navigation: store.genInfo.info.alternatingNavigation
     }
 })
 class HeaderMain extends Component {
     constructor(props){
         super(props)
     }
+    
     componentDidMount = ()=>{
         window.addEventListener("resize", this.updateDimensions);
-        this.updateDimensions();
-        
+        this.updateDimensions();  
     }
-    componentWillUnmount = () => {
-      window.removeEventListener("resize", this.updateDimensions);
+
+    componentWillUnmount = () => {  
+        window.removeEventListener("resize", this.updateDimensions);        
+    }
+
+    componentWillMount(){
+        let genInfo = {...this.props.genInfo.info};
+        if(sessionStorage.getItem('loginSession')){
+            let loginSession = JSON.parse(sessionStorage.getItem('loginSession')),
+            userId = loginSession.userId;
+            genInfo.alternatingNavigation.home = '/userPage:'+ userId;
+        }   
+        this.props.dispatch(dispatchedGenInfo(genInfo));
+    }
+
+    componentWillReceiveProps(nextProps){
+        this.props = {...nextProps};
     }
     
     updateDimensions = ()=>{
@@ -58,6 +75,11 @@ class HeaderMain extends Component {
         this.props.dispatch(dispatchedGenInfo(info));
     }
 
+    logOut = ()=>{
+        sessionStorage.removeItem('loginSession');
+        this.props.history.push('/login');
+    }
+
     socialIcons = 
                 <div className="social-icons">
                     <SocialIcon url="https://facebook.com/" style={{ height: 25, width: 25, margin: 5 }} color="#475992"/>
@@ -67,8 +89,11 @@ class HeaderMain extends Component {
                 </div>;
 
     loggeInOptions = 
-                <div className="signup-login">
-                    <NavLink to={`/`}>Logout</NavLink>
+                <div className="signup-login"> 
+                    <span className="logout" onClick={ this.logOut } to={`/login`}>
+                        <Lock className="icon" />
+                        <span id="btn-text">Log out</span>
+                    </span>
                 </div>;
     NotLoggedInOptions =
                 <div className="signup-login">
@@ -80,20 +105,21 @@ class HeaderMain extends Component {
         return false;       
     }
     render(){
+        let home = this.props.navigation.home;
         return(
             <div className="App-header">
                 <Image className="App-logo" src={require('images/logo.jpg')} />
                 <div className="search"><input placeholder="search" type="text" onChange={this.search} /><i className="material-icons">search</i></div>
                 <i class="material-icons menu-icon" onClick={ this.toggleMenu }>menu</i>
                 <div className={ this.props.genInfo['info']['menu'] }>
-                    <NavLink activeClassName="active" id="home" onClick={ this.toggleMenu } to={`/home`}>Home</NavLink>
+                    <NavLink activeClassName="active" id="home" onClick={ this.toggleMenu } to={ home }>Home</NavLink>
                     <NavLink activeClassName="active" id="listings" onClick={ this.toggleMenu } to={`/listings`}>Listings</NavLink>
                     <NavLink activeClassName="active" id="service-providers" onClick={ this.toggleMenu } to={`/service-providers`}>Service Providers</NavLink>
                     <NavLink activeClassName="active" id="about" onClick={ this.toggleMenu } to={`/about`}>About</NavLink>
                     <NavLink activeClassName="active" id="contact" onClick={ this.toggleMenu } to={`/contact`}>Contact</NavLink>
                 <div className="login-social right">
                     { this.socialIcons }
-                    { this.props.user['info']['loggedin']?this.loggeInOptions:this.NotLoggedInOptions }
+                    { sessionStorage.getItem('loginSession')?this.loggeInOptions:this.NotLoggedInOptions }
                 </div>                   
                 </div>
             </div>
@@ -113,4 +139,4 @@ HeaderMain.propTypes = {
     genInfo: PropTypes.object.isRequired
 }
 
-export default HeaderMain;
+export default withRouter(HeaderMain);

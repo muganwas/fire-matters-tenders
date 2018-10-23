@@ -5,7 +5,8 @@
         "allowJs": true,
         "outDir": "./public",
         "allowUnreachableCode": false,
-        "outFile": "./public/app/bundle.js"
+        "outFile": "./public/app/bundle.js",
+        "sourceMap": true,
     },
     "exclude": [
         "./public/"

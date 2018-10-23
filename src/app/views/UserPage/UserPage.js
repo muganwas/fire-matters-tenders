@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 //import { dispatchedUserInfo } from 'extras/dispatchers';
 import { HeaderMain, Footer } from 'components';
+import './userPage.css';
 
 const baseUrl = process.env.BACK_END_URL,
 usersEndPoint = process.env.USERS_END_POINT,
@@ -23,9 +24,11 @@ class UserPage extends React.Component {
     }
 
     componentWillMount(){
-        let sessionInfo = JSON.parse(sessionStorage.getItem('loginSession')),
+        let sessionInfo = sessionStorage.getItem('loginSession')?JSON.parse(sessionStorage.getItem('loginSession')): {},
         token = sessionInfo.token,
         tokenCheckURL = baseUrl + tokenVerificationEndPoint;
+        if(!token)
+            this.props.history.push('/login');
         axios.post(tokenCheckURL, {token}).
         then(res=>{
             if(!res.data.uid){
@@ -41,7 +44,7 @@ class UserPage extends React.Component {
                 <div className="top">
                     <HeaderMain />
                 </div>
-                <div className="mid">
+                <div className="user-page mid">
                     userPage
                 </div>
                 <div className="bottom">
