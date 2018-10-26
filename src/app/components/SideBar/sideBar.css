@@ -4,8 +4,13 @@
     padding: 50px 0 50px;
     width: 300px;
     min-height: 400px;
-    background-color: #ed2431;
     text-align: center;
+}
+.side-bar.oo{
+    background-color: #ed2431;
+}
+.side-bar.sp{
+    background-color: #f79a50;
 }
 .left-menu{
     box-sizing: border-box;
@@ -20,12 +25,20 @@
     text-align: left;
 }
 .left-menu.oo span{
-    background-color: rgba(247, 154, 80, 1);
+    background-color: #f79a50;
     color: #fff;
 }
 .left-menu.oo .selected{
     background-color: #fff;
-    color: rgba(247, 154, 80, 1);
+    color: #f79a50;
+}
+.left-menu.sp span{
+    background-color: #ed2431;
+    color: #fff;
+}
+.left-menu.sp .selected{
+    background-color: #fff;
+    color: #ed2431
 }
 #greeting, #email-address{
     display: block;

@@ -30,9 +30,11 @@ class SideBar extends React.Component {
         if(userType === "owner-occupier"){
             genInfo.defaultProps.sideBarOptions = ownerOccupierOptions;
             genInfo.defaultProps.leftMenuClass = "left-menu oo";
+            genInfo.defaultProps.sideBarClass = "side-bar oo";
         }else{
             genInfo.defaultProps.sideBarOptions = serviceProviderOptions;
             genInfo.defaultProps.leftMenuClass = "left-menu sp";
+            genInfo.defaultProps.sideBarClass = "side-bar sp";
         }
         this.props.dispatch(dispatchedGenInfo(genInfo));
         
@@ -79,9 +81,10 @@ class SideBar extends React.Component {
     render(){
         let userName = (JSON.parse(sessionStorage.getItem('loginSession'))).fullName,
         sideBarOptions = this.props.genInfo.defaultProps.sideBarOptions,
+        sideBarClass = this.props.genInfo.defaultProps.sideBarClass,
         leftMenuClass = this.props.genInfo.defaultProps.leftMenuClass;
         return(
-            <div className="side-bar">
+            <div className={ sideBarClass }>
                 <ProfileImage />
                 <span id="greeting">Hi, { userName }</span>
                 <div id="left-menu" className={ leftMenuClass }>
