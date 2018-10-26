@@ -35,7 +35,7 @@ class Contact extends React.Component {
                 </div>
                 <div className="mid contact side-margin-90">
                     <div className="map left">
-                        <FiremattersMap lat={ -27.4449377 } lng={ 153.169647 } width={ window.innerWidth > 600?"60%":"100%" } height= { window.innerWidth > 600?400:300 } zoom={ 14 } />
+                        <FiremattersMap lat={ -27.4449377 } lng={ 153.169647 } width={ window.innerWidth > 600?"60%":"100%" } height= { window.innerWidth > 600?"400px":"300px" } zoom={ 14 } />
                     </div>
                     <div className="addresses right">
                         <span className="header">Fire Matters HQ</span>
@@ -80,7 +80,7 @@ class Contact extends React.Component {
                     <div className="clear"/>
                     <ContactForm />
                 </div>
-                <div className="bottom">
+                <div className="bottom-alt-alt">
                     <Footer />
                 </div>
             </div>

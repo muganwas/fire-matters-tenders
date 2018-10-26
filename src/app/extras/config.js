@@ -27,3 +27,30 @@ export const statesAustralia = {
     JBT: "Jervis Bay Territory",
     NT: "Norther Territory"
 }
+
+export const ownerOccupierOptions = {
+    Profile: "Profile",
+    Tenders: "Tenders",
+    Contracts: "Contracts",
+    ServiceProviders: "Service Providers",
+    Messages: "Messages",
+    Sites: "Sites"
+}
+
+export const serviceProviderOptions = {
+    Profile: "Profile",
+    Tenders: "Tenders",
+    Contracts: "Contracts",
+    Subcontractors: "Sub-Contractors",
+    Messages: "Messages"
+}
+
+export const menuIconTitles = {
+    Profile: "assignment_ind",
+    Tenders: "list_alt",
+    Contracts: "work",
+    ServiceProviders: "build",
+    Messages: "forum",
+    Subcontractors: "group",
+    Sites: "domain"
+}

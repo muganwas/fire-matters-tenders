@@ -5,14 +5,11 @@ import PropTypes from 'prop-types';
 import { dispatchedUserInfo, dispatchedGenInfo } from 'extras/dispatchers';
 import { statesAustralia} from 'extras/config';
 import { emailregex } from 'extras/helperFunctions';
-import * as firebase from 'firebase/app';
-import 'firebase/auth';
 import { PreSignup, BasicInformation, AddressInformation } from './SignupViews';
 import './signupForm.css';
 
 
-const auth = firebase.auth(),
-baseUrl = process.env.BACK_END_URL,
+const baseUrl = process.env.BACK_END_URL,
 usersEndPoint = process.env.USERS_END_POINT;
 
 const signupbutton = {

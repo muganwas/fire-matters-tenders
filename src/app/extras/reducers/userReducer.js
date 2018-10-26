@@ -4,6 +4,12 @@ const defaultState = {
       loginInfo: {
         messageClass: "postSubmitMessage"
       },
+      avatarProps: {
+        feedback: undefined,
+        levelId: "nkkt",
+        picState: "roundPic",
+        avatarURL: undefined
+      },
       signupInfo: {}
     },
     fetching: false,

@@ -1,0 +1,49 @@
+.avContainer{
+    display: inline-block;
+    box-sizing: border-box;
+    position: relative;
+    width: 80px;
+    min-height: 60px;
+}
+#level {
+    position: absolute;
+    background: #fff;
+    color: #3b5998;
+    display: block;
+    left: 0;
+    font-size: 13px;
+    padding: 5px;
+    font-weight: bold;
+    z-index: 1000;
+    -webkit-transition: all 0.2s ease-in;
+    -moz-transition: all 0.2s ease-in;
+    -ms-transition: all 0.2s ease-in;
+    -o-transition: all 0.2s ease-in;
+    transition: all 0.2s ease-in;
+  }
+  .roundPic {
+    width: 70px;
+    max-height: 70px;
+    min-height: 60px;
+    border: thin solid rgba(247, 154, 80, 1);
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+  }
+  #welcome{
+    font-size: 13px;
+    font-weight: bold;
+    float: left;
+    margin: 14% 0;
+  }
+  .avator{
+    width: 30px;
+    padding: 10px;
+    cursor: pointer;
+    float: left;
+  }
+  #avator{
+    position: relative;
+    width: 100%;
+    height: auto;
+  }

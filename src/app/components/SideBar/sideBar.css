@@ -1,0 +1,39 @@
+.side-bar{
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 50px 0 50px;
+    width: 300px;
+    min-height: 400px;
+    background-color: #ed2431;
+    text-align: center;
+}
+.left-menu{
+    box-sizing: border-box;
+    margin: 40px 0 0 0;
+}
+.left-menu span, .left-menu.oo span, .left-menu.sp span{
+    box-sizing: border-box;
+    display: block;
+    cursor: pointer;
+    margin-bottom: 1px;
+    padding: 10px 0 10px 30%;
+    text-align: left;
+}
+.left-menu.oo span{
+    background-color: rgba(247, 154, 80, 1);
+    color: #fff;
+}
+.left-menu.oo .selected{
+    background-color: #fff;
+    color: rgba(247, 154, 80, 1);
+}
+#greeting, #email-address{
+    display: block;
+    margin: 0 0 0 5px;
+    font-size: 14px;
+    text-align: center;
+    color: #fff;
+}
+.item{
+    margin: 0 0 0 10px;
+}

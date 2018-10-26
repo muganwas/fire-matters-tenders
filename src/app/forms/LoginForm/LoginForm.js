@@ -6,14 +6,20 @@ import Button from '@material-ui/core/Button';
 import { dispatchedUserInfo, dispatchedGenInfo } from 'extras/dispatchers';
 import { Info } from '@material-ui/icons';
 import PropTypes from 'prop-types';
+import Rebase from 're-base';
 import axios from 'axios';
 import './loginForm.css';
 import 'extras/config';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/database';
+import 'firebase/storage';
 import { emailregex } from 'extras/helperFunctions';
 
 const auth = firebase.auth(),
+usersRef = firebase.database().ref('users'),
+storageRef = firebase.storage().ref(),
+base = Rebase.createClass(firebase.database()),
 baseUrl = process.env.BACK_END_URL,
 usersEndPoint = process.env.USERS_END_POINT,
 userUpdateEndPoint = process.env.USER_UPDATE_END_POINT;
@@ -37,16 +43,46 @@ class LoginForm extends React.Component {
     constructor(props) {
         super(props);
     }
-    
-    componentWillMount(){
-        let storedLogin = sessionStorage.getItem('login')?JSON.parse(sessionStorage.getItem('login')): {},
-        userInfo = {...this.props.userInfo};
-        userInfo.login = storedLogin;
-        this.props.dispatch(dispatchedUserInfo(userInfo));
-    }
 
     componentWillReceiveProps(nextProps){
         this.props = {...nextProps}
+    }
+
+    getAvatar = (userId)=>{
+        let userInfo = this.props.user.info;
+        let avatarURL = "kap";
+        return new Promise((resolve, reject)=>{
+            base.fetch(`users/${ userId }`, {
+                context: this,
+                asArray: true,
+                then(data){
+                    let len = data.length;
+                    if( len !== 0){
+                        /**Deal with avatar */
+                        let fl = data[0][0];
+                        let avURL = data[0];
+                        //easiest way I could figure out to check for an upload avatar url
+                        if(fl === "h"){
+                            avatarURL = userInfo.avatarProps.avatarURL = avURL;
+                            this.props.dispatch(dispatchedUserInfo(userInfo));
+                            resolve({avatarURL});
+                        }else{
+                            storageRef.child('general/avatar.png').getDownloadURL().then((data)=>{
+                                avatarURL = userInfo.avatarProps.avatarURL = data;
+                                this.props.dispatch(dispatchedUserInfo(userInfo));
+                                resolve({avatarURL});
+                            });
+                        }
+                    }else{
+                        storageRef.child('general/avatar.png').getDownloadURL().then((data)=>{
+                            avatarURL = userInfo.avatarProps.avatarURL = data;
+                            this.props.dispatch(dispatchedUserInfo(userInfo));
+                            resolve({avatarURL});
+                        }); 
+                    }
+                }
+            });
+        });
     }
 
     login = ()=>{
@@ -64,6 +100,8 @@ class LoginForm extends React.Component {
                 then(res=>{
                     let userObj = res.data[0],
                     userId = userObj.id,
+                    fullName = userObj.fullName,
+                    userType = userObj.userType,
                     sectTitle = "active",
                     updateData = true;
                     axios.post(userUpdateURL, { userId, sectTitle, updateData }).
@@ -72,12 +110,21 @@ class LoginForm extends React.Component {
                         active = data.active;
                         if(active){
                             auth.currentUser.getIdToken().then(token=>{
-                                let loginSession = { userId, token, emailAddress };
-                                userInfo.loginInfo.userDetails = data;
-                                this.props.dispatch(dispatchedUserInfo(userInfo));
-                                sessionStorage.setItem("loginSession", JSON.stringify(loginSession));
-                                //navigate to loggedin page
-                                this.props.history.push("/userPage:" + userId);
+                                this.getAvatar(userId).then(data=>{
+                                    let loginSession = { userId, avatarURL:data.avatarURL, userType, fullName, token, emailAddress };
+                                    userInfo.loginInfo.userDetails = data;
+                                    this.props.dispatch(dispatchedUserInfo(userInfo));
+                                    sessionStorage.setItem("loginSession", JSON.stringify(loginSession));
+                                    //navigate to loggedin page
+                                    this.props.history.push("/userPage:" + userId);
+                                }).
+                                catch(error=>{
+                                    console.log(error);
+                                    userInfo.loginInfo.messageClass = "postSubmitError"
+                                    userInfo.loginInfo.feedback = "Something went wrong while connecting to server.";
+                                    this.props.dispatch(dispatchedUserInfo(userInfo));
+                                })
+                                
                             }).
                             catch(error=>{
                                 console.log(error.message);
@@ -87,7 +134,7 @@ class LoginForm extends React.Component {
                             });
                         }else{
                             userInfo.loginInfo.messageClass = "postSubmitError"
-                            userInfo.loginInfo.feedback = "Something went wrong, try agian later.";
+                            userInfo.loginInfo.feedback = "Your account is not activated yet.";
                             this.props.dispatch(dispatchedUserInfo(userInfo));
                         }
                     }).
