@@ -5,7 +5,8 @@ const defaultState = {
       textfieldClass: "textfield",
       defaultProps:{
         sideBarOptions: undefined,
-        leftMenuClass: "left-menu"
+        leftMenuClass: "left-menu",
+        SideBarClass: "side-bar"
       },
       errors: {
         tmcError: undefined,

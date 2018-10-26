@@ -151,6 +151,10 @@ class LoginForm extends React.Component {
                     userInfo.loginInfo.feedback = "Something went wrong, try agian later.";
                     this.props.dispatch(dispatchedUserInfo(userInfo));
                 })
+            }else{
+                userInfo.loginInfo.messageClass = "postSubmitError"
+                userInfo.loginInfo.feedback = "Your account is not verified yet.";
+                this.props.dispatch(dispatchedUserInfo(userInfo));
             }
         }).
         catch(error=>{

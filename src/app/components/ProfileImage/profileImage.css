@@ -25,7 +25,7 @@
     width: 70px;
     max-height: 70px;
     min-height: 60px;
-    border: thin solid rgba(247, 154, 80, 1);
+    border: thin solid #fff;
     position: relative;
     overflow: hidden;
     border-radius: 50%;
