@@ -1,10 +1,16 @@
 .App-header {
     box-sizing: border-box;
     margin: 0 60px;
+    min-height: 150px;
+    padding: 0 20px;
+}
+.App-header-loggedin{
+    box-sizing: border-box;
+    margin: 0 60px;
     min-height: 155px;
     padding: 0 20px;
 }
-.App-header .social-icons{
+.App-header .social-icons, .App-header-loggedin .social-icons{
     position: absolute;
     text-align: right;
     width: 20%;

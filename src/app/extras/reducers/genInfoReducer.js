@@ -3,6 +3,10 @@ const defaultState = {
       menu: "Main-Menu",
       signupFormLevel: 1,
       textfieldClass: "textfield",
+      defaultProps:{
+        sideBarOptions: undefined,
+        leftMenuClass: "left-menu"
+      },
       errors: {
         tmcError: undefined,
         phoneNumberError: undefined,
@@ -11,10 +15,11 @@ const defaultState = {
         usernameError: undefined
       },
       alternatingNavigation: {
-        home: "/home"
+        home: "/home",
+        headerClass: "App-header"
       },
       messages: {
-        messageClass: "postSubmitMessage"
+        messageClass: "postSubmitMessage",
       },
       signUpProgressBar: {
         oneClass: "one current",

@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-//import { dispatchedUserInfo } from 'extras/dispatchers';
-import { HeaderMain, Footer } from 'components';
+import { dispatchedGenInfo } from 'extras/dispatchers';
+import { HeaderMain, Footer, SideBar } from 'components';
 import './userPage.css';
 
 const baseUrl = process.env.BACK_END_URL,
@@ -24,6 +24,7 @@ class UserPage extends React.Component {
     }
 
     componentWillMount(){
+        let info = {...this.props.genInfo.info};
         let sessionInfo = sessionStorage.getItem('loginSession')?JSON.parse(sessionStorage.getItem('loginSession')): {},
         token = sessionInfo.token,
         tokenCheckURL = baseUrl + tokenVerificationEndPoint;
@@ -32,12 +33,22 @@ class UserPage extends React.Component {
         axios.post(tokenCheckURL, {token}).
         then(res=>{
             if(!res.data.uid){
-                let info = {...this.props.genInfo.info};
                 info.alternatingNavigation.home = "/home";
+                info.alternatingNavigation.headerClass = "App-header";
                 this.props.dispatch(dispatchedGenInfo(info));
                 sessionStorage.removeItem('loginSession');
                 this.props.history.push('/login');
-            }      
+            }
+            info.alternatingNavigation.headerClass = "App-header-loggedin";
+            this.props.dispatch(dispatchedGenInfo(info));    
+        }).
+        catch(error=>{
+            console.log(error);
+            info.alternatingNavigation.home = "/home";
+            info.alternatingNavigation.headerClass = "App-header";
+            this.props.dispatch(dispatchedGenInfo(info));
+            sessionStorage.removeItem('loginSession');
+            this.props.history.push('/login');
         });
     }
     
@@ -48,9 +59,9 @@ class UserPage extends React.Component {
                     <HeaderMain />
                 </div>
                 <div className="user-page mid">
-                    userPage
+                    <SideBar />
                 </div>
-                <div className="bottom">
+                <div className="bottom-alt">
                     <Footer />
                 </div>
             </div>

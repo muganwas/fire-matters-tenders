@@ -18,3 +18,5 @@ export { default as MoreHoriz } from 'components/MoreHoriz/MoreHoriz';
 export { default as YelloDash } from 'components/YelloDash/YelloDash';
 export { default as FiremattersMap } from 'components/FiremattersMap/FiremattersMap';
 export { default as PhoneNumber } from 'components/PhoneNumber/PhoneNumber';
+export { default as ProfileImage } from 'components/ProfileImage/ProfileImage';
+export { default as SideBar } from 'components/SideBar/SideBar';

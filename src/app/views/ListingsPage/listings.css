@@ -1,4 +1,5 @@
 .mid.listings{
+    min-height: 300px;
     box-sizing: border-box;
     margin: 20px 78px;
     display: block;

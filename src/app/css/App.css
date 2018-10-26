@@ -48,7 +48,17 @@ html{
 .bottom{
   position: relative;
   padding: 0;
-  margin-top: 250px;
+  margin-top: 200px;
+}
+.bottom-alt{
+  position: relative;
+  padding: 0;
+  margin-top: 165px;
+}
+.bottom-alt-alt{
+  position: relative;
+  padding: 0;
+  margin-top: 255px;
 }
 .App {
   text-align: center;

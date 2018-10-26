@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Image from 'react-image';
+import * as firebase from 'firebase/app';
+import 'firebase/database';
+import 'firebase/storage';
 import { SocialIcon } from 'react-social-icons';
 import { NavLink, withRouter } from 'react-router-dom';
 import { dispatchedSearchInfo, dispatchedGenInfo } from 'extras/dispatchers';
@@ -38,6 +41,11 @@ class HeaderMain extends Component {
             genInfo.alternatingNavigation.home = '/userPage:'+ userId;
         }   
         this.props.dispatch(dispatchedGenInfo(genInfo));
+        //retrieve default avatar
+        let avatarURL = genInfo.defaultProps.avatarURL;
+        if(!avatarURL){
+            
+        }
     }
 
     componentWillReceiveProps(nextProps){
@@ -78,6 +86,7 @@ class HeaderMain extends Component {
     logOut = ()=>{
         let info = {...this.props.genInfo.info};
         info.alternatingNavigation.home = "/home";
+        info.alternatingNavigation.headerClass = "App-header";
         this.props.dispatch(dispatchedGenInfo(info));
         sessionStorage.removeItem('loginSession');
         this.props.history.push('/login');
@@ -93,7 +102,7 @@ class HeaderMain extends Component {
 
     loggeInOptions = 
                 <div className="signup-login"> 
-                    <span className="logout" onClick={ this.logOut } to={`/login`}>
+                    <span className="logout" onClick={ this.logOut }>
                         <Lock className="icon" />
                         <span id="btn-text">Log out</span>
                     </span>
@@ -110,7 +119,7 @@ class HeaderMain extends Component {
     render(){
         let home = this.props.navigation.home;
         return(
-            <div className="App-header">
+            <div className={ this.props.navigation.headerClass }>
                 <Image className="App-logo" src={require('images/logo.jpg')} />
                 <div className="search"><input placeholder="search" type="text" onChange={this.search} /><i className="material-icons">search</i></div>
                 <i class="material-icons menu-icon" onClick={ this.toggleMenu }>menu</i>
