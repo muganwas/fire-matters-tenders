@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { dispatchedGenInfo } from 'extras/dispatchers';
 import './profileTab.css'
 import { DropDown, Textfield, PhoneNumber } from 'components';
-import { ownerOccupierProfileTabs, serviceProviderOptions, userTypes, statesAustralia } from 'extras/config';
+import { ownerOccupierProfileTabs, serviceProviderProfileTabs, userTypes, statesAustralia } from 'extras/config';
 
 @connect((store)=>{
     return {
@@ -24,7 +24,7 @@ class ProfilePage extends React.Component {
         if(userType === "owner-occupier")
             genInfo.sideBar.profilePage.tabs = ownerOccupierProfileTabs;
         else
-            genInfo.sideBar.profilePage.tabs = serviceProviderOptions;
+            genInfo.sideBar.profilePage.tabs = serviceProviderProfileTabs;
         this.props.dispatch(dispatchedGenInfo(genInfo));
     }
     componentWillReceiveProps(nextProps){
