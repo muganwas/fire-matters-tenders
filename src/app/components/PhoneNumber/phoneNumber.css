@@ -9,11 +9,11 @@
 }
 
 #phoneNumber {
-    background: url('~images/icons/phone.png') no-repeat 5px rgba(225, 225, 225, 0);
+    background: url('~images/icons/phone.png') no-repeat left rgba(225, 225, 225, 0);
 }
 
 #mobileNumber {
-    background: url('~images/icons/mobile.png') no-repeat 5px rgba(225, 225, 225, 0);
+    background: url('~images/icons/mobile.png') no-repeat left rgba(225, 225, 225, 0);
 }
 
 #phoneNumber, #mobileNumber{

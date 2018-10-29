@@ -22,6 +22,11 @@
     transition: all 0.2s ease-in;
   }
   .roundPic {
+    background-image: url('~images/image-icon.png');
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: center 10px;
+    background-size: 50px;
     width: 70px;
     max-height: 70px;
     min-height: 60px;
@@ -45,5 +50,5 @@
   #avator{
     position: relative;
     width: 100%;
-    height: auto;
+    height: 100%;
   }

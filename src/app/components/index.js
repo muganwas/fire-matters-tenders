@@ -20,3 +20,4 @@ export { default as FiremattersMap } from 'components/FiremattersMap/Firematters
 export { default as PhoneNumber } from 'components/PhoneNumber/PhoneNumber';
 export { default as ProfileImage } from 'components/ProfileImage/ProfileImage';
 export { default as SideBar } from 'components/SideBar/SideBar';
+export { default as ProfileTab } from 'components/ProfileTab/ProfileTab';

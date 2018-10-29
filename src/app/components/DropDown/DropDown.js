@@ -17,6 +17,14 @@ class DropDown extends React.Component {
         super(props)
     }
 
+    componentWillMount(){
+        let id = this.props.id,
+        newClassLabel = id + "dropDownClass",
+        genInfo = {...this.props.genInfo};
+        genInfo.dropDown[newClassLabel] = "hidden options-list";
+        this.props.dispatch(dispatchedGenInfo(genInfo));
+    }
+
     componentWillReceiveProps(nextProps){
         this.props = {...nextProps};
     }
@@ -43,20 +51,27 @@ class DropDown extends React.Component {
     }
 
     toggleDisplayDropDown = ()=>{
-        let genInfo = {...this.props.genInfo};
-        if(this.props.dropDownClass === "hidden options-list")
-            genInfo.dropDown.dropDownClass = "options-list"; 
+        let id = this.props.id,
+        newClassLabel = id + "dropDownClass",
+        genInfo = {...this.props.genInfo};
+        if(genInfo.dropDown[newClassLabel] === "hidden options-list")
+            genInfo.dropDown[newClassLabel] = "options-list"; 
         else
-            genInfo.dropDown.dropDownClass = "hidden options-list";
+            genInfo.dropDown[newClassLabel] = "hidden options-list";
         this.props.dispatch(dispatchedGenInfo(genInfo));
     }
 
     render(){
+        let id = this.props.id,
+        newClassLabel = id + "dropDownClass";
         return(
-            <div style={{width:this.props.selectWidth}} className={ this.props.className }>
-                <span onClick = { this.toggleDisplayDropDown } className="options-selected">{ this.props.selected || this.props.init }</span>
-                <div style={{width:this.props.width}} className={ this.props.dropDownClass }>
-                    { Object.keys(this.props.options).map(this.mapOptions) }
+            <div>
+                { this.props.label?<span className="label">{ this.props.label }</span>: null }
+                <div style={{width:this.props.selectWidth}} className={ this.props.className }>
+                    <span id={ this.props.id } onClick = { this.toggleDisplayDropDown } className="options-selected">{ this.props.selected || this.props.init }</span>
+                    <div style={{width:this.props.width}} className={ this.props.genInfo.dropDown[newClassLabel] }>
+                        { Object.keys(this.props.options).map(this.mapOptions) }
+                    </div>
                 </div>
             </div>
         )
@@ -68,7 +83,8 @@ DropDown.defaultProps = {
     options: {},
     onChange: null,
     width: null,
-    selectWidth: null
+    selectWidth: null,
+    label: null
 }
 
 DropDown.propTypes = {
@@ -78,7 +94,8 @@ DropDown.propTypes = {
     selectWidth: PropTypes.string,
     width: PropTypes.string,
     selected: PropTypes.string,
-    init: PropTypes.string
+    init: PropTypes.string,
+    label: PropTypes.string
 }
 
 export default DropDown;

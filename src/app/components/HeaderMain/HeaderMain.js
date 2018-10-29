@@ -41,11 +41,6 @@ class HeaderMain extends Component {
             genInfo.alternatingNavigation.home = '/userPage:'+ userId;
         }   
         this.props.dispatch(dispatchedGenInfo(genInfo));
-        //retrieve default avatar
-        let avatarURL = genInfo.defaultProps.avatarURL;
-        if(!avatarURL){
-            
-        }
     }
 
     componentWillReceiveProps(nextProps){

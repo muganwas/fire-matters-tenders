@@ -54,3 +54,22 @@ export const menuIconTitles = {
     Subcontractors: "group",
     Sites: "domain"
 }
+
+export const userTypes = {
+    ownerOccupier: "Owner/Occupier",
+    serviceProvider: "Service provider"
+}
+
+export const ownerOccupierProfileTabs = {
+    personnel: "Personnel",
+    company: "Company"
+}
+
+export const serviceProviderProfileTabs = {
+    personnel: "Personnel",
+    company: "Company",
+    insurance: "Insurance",
+    licencse: "License",
+    ratesScedule: "Rates Schedule",
+    subContractors: "Sub-contractors"
+}

@@ -6,7 +6,13 @@ const defaultState = {
       defaultProps:{
         sideBarOptions: undefined,
         leftMenuClass: "left-menu",
-        SideBarClass: "side-bar"
+        SideBarClass: "side-bar",
+        currentTab: "ProfileTab"
+      },
+      sideBar:{
+        profilePage:{
+          tabs: {}
+        }
       },
       errors: {
         tmcError: undefined,
