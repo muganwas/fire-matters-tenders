@@ -69,7 +69,7 @@ class SideBar extends React.Component {
     menuItems = (key)=>{
         let sideBarOptions = this.props.genInfo.defaultProps.sideBarOptions;
         return(
-            <span name="menuItems" id={ key } onClick={ this.select } key={ key }>
+            <span name="menuItems" className = { key==="Profile"?"selected":""} id={ key } onClick={ this.select } key={ key }>
                 <div name={ key} onClick={ this.clickParent }>
                     <i name={ key } onClick={ this.clickParent } className="material-icons left">{ menuIconTitles[key]}</i>
                     <div name={ key } onClick={ this.clickParent } className="item left">{ sideBarOptions[key] }</div>

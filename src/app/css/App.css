@@ -28,6 +28,12 @@ html{
 .athird{
   width:33%
 }
+.twenty{
+  width:20%;
+}
+.eighty{
+  width: 80%;
+}
 .hidden{
   display: none;
   -webkit-transition: all 0.2s ease-in;

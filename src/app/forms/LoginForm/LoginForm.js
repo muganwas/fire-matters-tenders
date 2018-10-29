@@ -102,6 +102,11 @@ class LoginForm extends React.Component {
                     userId = userObj.id,
                     fullName = userObj.fullName,
                     userType = userObj.userType,
+                    phoneNumber = userObj.phoneNumber,
+                    mobileNubmer = userObj.mobileNumber,
+                    website = userObj.website,
+                    state = userObj.state,
+                    city = userObj.city,
                     sectTitle = "active",
                     updateData = true;
                     axios.post(userUpdateURL, { userId, sectTitle, updateData }).
@@ -111,7 +116,7 @@ class LoginForm extends React.Component {
                         if(active){
                             auth.currentUser.getIdToken().then(token=>{
                                 this.getAvatar(userId).then(data=>{
-                                    let loginSession = { userId, avatarURL:data.avatarURL, userType, fullName, token, emailAddress };
+                                    let loginSession = { userId, avatarURL:data.avatarURL, userType, fullName, phoneNumber, mobileNubmer, website, state, city,  emailAddress, token };
                                     userInfo.loginInfo.userDetails = data;
                                     this.props.dispatch(dispatchedUserInfo(userInfo));
                                     sessionStorage.setItem("loginSession", JSON.stringify(loginSession));

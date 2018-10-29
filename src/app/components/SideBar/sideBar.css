@@ -1,8 +1,6 @@
 .side-bar{
-    display: inline-block;
-    box-sizing: border-box;
+    display: block;
     padding: 50px 0 50px;
-    width: 300px;
     min-height: 400px;
     text-align: center;
 }
@@ -21,7 +19,7 @@
     display: block;
     cursor: pointer;
     margin-bottom: 1px;
-    padding: 10px 0 10px 30%;
+    padding: 10px 0 10px 25%;
     text-align: left;
 }
 .left-menu.oo span{

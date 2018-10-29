@@ -33,27 +33,35 @@ class Textfield extends React.Component {
 
     render(){
         return(
-            <TextField
-                id={this.props.id}
-                className={this.props.fieldClass}
-                InputProps={{
-                    disableUnderline: true,
-                    classes: {
-                        root: this.props.fieldClass,
-                    },
-                }}
-                onChange={this.handleText}
-                placeholder={this.props.placeholder}
-                type={this.props.type}
-            >
-            </TextField>
+            <div>
+                { this.props.label?<span className="label">{ this.props.label }</span>: null }
+                <div className={this.props.fieldClass}>
+                    <TextField
+                        id={this.props.id}
+                        style={{width: "100%"}}
+                        InputProps={{
+                            disableUnderline: true,
+                            classes: {
+                                root: this.props.root,
+                            },
+                        }}
+                        value={this.props.value}
+                        onChange={this.handleText}
+                        placeholder={this.props.placeholder}
+                        type={this.props.type}
+                    >
+                    </TextField>
+                </div>
+            </div>
         )
     }
 }
 
 Textfield.defaultProps = {
     user: {},
-    type: "text"
+    type: "text",
+    value: "",
+    label: null
 }
 
 Textfield.propTypes = {
@@ -62,6 +70,8 @@ Textfield.propTypes = {
     fieldClass: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     placeholder: PropTypes.string,
+    value: PropTypes.string,
+    label: PropTypes.string
 }
 
 export default Textfield;

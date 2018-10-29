@@ -159,7 +159,7 @@ class ProfileImage extends React.Component {
                     <form method="POST" encType="multipart/form-data">
                         <input className="hidden" type="file" id="hs" name="avator" onChange={ this.uploadAv } ></input>
                         <div className={ avatarProps.picState }>
-                            <img id="avator" alt="Your Avatar" title="click to change Avatar" src = { this.state.avatarURL } onClick={ this.clickUploadAv }/>
+                            <img id="avator" alt="" title="click to change Avatar" src = { this.state.avatarURL } onClick={ this.clickUploadAv }/>
                         </div>
                     </form>
                 </div>

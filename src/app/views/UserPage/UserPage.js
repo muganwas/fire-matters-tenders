@@ -4,18 +4,30 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { dispatchedGenInfo } from 'extras/dispatchers';
-import { HeaderMain, Footer, SideBar } from 'components';
+import { HeaderMain, Footer, SideBar, ProfileTab } from 'components';
 import './userPage.css';
 
 const baseUrl = process.env.BACK_END_URL,
 usersEndPoint = process.env.USERS_END_POINT,
 tokenVerificationEndPoint = process.env.TOKEN_VERIFICATION_END_POINT;
 
+function CurrentTab(props){
+    let currentTab = props.currentTab;
+    switch(currentTab){
+        case "profileTab":
+            return<ProfileTab />;
+        break;
+        default:
+            return<ProfileTab />;
+    }
+}
+
 @connect((store)=>{
     return {
         user: store.user,
         search: store.search,
-        genInfo: store.genInfo
+        genInfo: store.genInfo.info,
+        currentTab: store.genInfo.info.defaultProps.currentTab
     }
 })
 class UserPage extends React.Component {
@@ -24,7 +36,7 @@ class UserPage extends React.Component {
     }
 
     componentWillMount(){
-        let info = {...this.props.genInfo.info};
+        let info = {...this.props.genInfo};
         let sessionInfo = sessionStorage.getItem('loginSession')?JSON.parse(sessionStorage.getItem('loginSession')): {},
         token = sessionInfo.token,
         tokenCheckURL = baseUrl + tokenVerificationEndPoint;
@@ -59,7 +71,9 @@ class UserPage extends React.Component {
                     <HeaderMain />
                 </div>
                 <div className="user-page mid">
-                    <SideBar />
+                    <div className="twenty left"><SideBar /></div>
+                    <div className="eighty left"><CurrentTab props = { this.props } /></div>
+                    <div className="clear"></div>
                 </div>
                 <div className="bottom-alt">
                     <Footer />

@@ -37,17 +37,26 @@ class PhoneNumber extends React.Component {
 
     render(){
         return(
-            <MaskedInput
-                id={this.props.id}
-                className={ this.props.fieldClass }
-                name = {this.props.fieldClass}
-                onBlur = { this.props.onBlur }
-                value={ this.props.value }
-                onChange={this.handleText}
-                placeholder={this.props.placeholder}
-                mask={this.props.mask}
-                placeholderChar={'\u2000'}
-            />
+            <div>
+                { this.props.label?<span className="label">{ this.props.label }</span>: null }
+                <div className={ this.props.fieldClass }>
+                    <MaskedInput
+                        id={this.props.id}
+                        style={{
+                                width: "90%",
+                                border: "none",
+                                boxShadow: "none"
+                            }}
+                        name = {this.props.fieldClass}
+                        onBlur = { this.props.onBlur }
+                        value={ this.props.value }
+                        onChange={this.handleText}
+                        placeholder={this.props.placeholder}
+                        mask={this.props.mask}
+                        placeholderChar={'\u2000'}
+                    />
+                </div>
+            </div>
         )
     }
 }
@@ -56,7 +65,8 @@ PhoneNumber.defaultProps = {
     user: {},
     adornment: "0_0",
     type: "text",
-    value: null
+    value: "",
+    label: null,
 }
 
 PhoneNumber.propTypes = {
@@ -68,7 +78,8 @@ PhoneNumber.propTypes = {
     type: PropTypes.string.isRequired,
     onBlur: PropTypes.func,
     mask: PropTypes.array.isRequired,
-    value: PropTypes.string
+    value: PropTypes.string,
+    label: PropTypes.string
 }
 
 export default PhoneNumber;
