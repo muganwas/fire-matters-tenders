@@ -1,7 +1,11 @@
 .side-bar{
     display: block;
+    position: absolute;
     padding: 50px 0 50px;
-    min-height: 400px;
+    width: 250px;
+    height: 700px;
+    left: 90px;
+    z-index: 0;
     text-align: center;
 }
 .side-bar.oo{

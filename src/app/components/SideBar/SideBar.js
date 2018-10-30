@@ -8,10 +8,6 @@ import { dispatchedGenInfo } from 'extras/dispatchers';
 import './sideBar.css';
 import { ownerOccupierOptions, serviceProviderOptions, menuIconTitles } from 'extras/config';
 
-const baseUrl = process.env.BACK_END_URL,
-usersEndPoint = process.env.USERS_END_POINT,
-tokenVerificationEndPoint = process.env.TOKEN_VERIFICATION_END_POINT;
-
 @connect((store)=>{
     return {
         userInfo: store.user.info,

@@ -4,6 +4,7 @@ const defaultState = {
       loginInfo: {
         messageClass: "postSubmitMessage"
       },
+      profileInfo: {},
       avatarProps: {
         feedback: undefined,
         levelId: "nkkt",
