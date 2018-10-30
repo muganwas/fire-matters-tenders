@@ -17,7 +17,6 @@ import 'firebase/storage';
 import { emailregex } from 'extras/helperFunctions';
 
 const auth = firebase.auth(),
-usersRef = firebase.database().ref('users'),
 storageRef = firebase.storage().ref(),
 base = Rebase.createClass(firebase.database()),
 baseUrl = process.env.BACK_END_URL,

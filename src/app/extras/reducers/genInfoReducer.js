@@ -6,10 +6,11 @@ const defaultState = {
       defaultProps:{
         sideBarOptions: undefined,
         leftMenuClass: "left-menu",
-        SideBarClass: "side-bar",
-        currentTab: "ProfileTab"
+        SideBarClass: "side-bar"
       },
       sideBar:{
+        currentTab: "ProfileTab",
+        currentHorizontalTab: "personnel",
         profilePage:{
           tabs: {}
         }
