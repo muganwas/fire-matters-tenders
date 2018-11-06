@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { dispatchedGenInfo } from 'extras/dispatchers';
 import './profileTab.css'
-import { PersonnelTab, CompanyTab, InsuranceTab } from 'components';
+import { PersonnelTab, CompanyTab, InsuranceTab, LicenseTab } from 'components';
 import { ownerOccupierProfileTabs, serviceProviderProfileTabs } from 'extras/config';
 
 
@@ -45,7 +45,8 @@ class ProfilePage extends React.Component {
                 <CompanyTab />:
                 currentTab==="insurance"?
                 <InsuranceTab />
-                :null}
+                :currentTab==="license"?
+                <LicenseTab />:null}
             </div>
         )
     }

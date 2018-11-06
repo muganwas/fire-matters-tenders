@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Textfield, ChckBox, Loader, DropDown } from 'components';
+import { Textfield, ChckBox, Loader } from 'components';
 import axios from 'axios';
 import * as firebase from 'firebase/app';
 import 'extras/config';
 import 'firebase/storage';
 import 'firebase/database';
-import './insuranceTab.css'
+import './licenseTab.css'
 import { dispatchedUserInfo } from 'extras/dispatchers';
 
 const baseURL = process.env.BACK_END_URL,
@@ -20,11 +20,11 @@ userUpdateEndPoint = process.env.USER_UPDATE_END_POINT;
     return {
         user: store.user.info,
         userInfo: store.user.info.profileInfo,
-        insurance: store.user.info.profileInfo.insurance,
+        licenses: store.user.info.profileInfo.licenses,
         currentHorizontalTab: store.genInfo.info.sideBar.currenthorizontalTab,
     }
 })
-class InsuranceTab extends React.Component{
+class LicenseTab extends React.Component{
     constructor(props){
         super(props)
     }
@@ -36,14 +36,14 @@ class InsuranceTab extends React.Component{
     componentWillMount(){
         let emailAddress = (JSON.parse(sessionStorage.getItem('profileInfo'))).emailAddress,
         userInfoURL = baseURL + userEndPoint + "?emailAddress=" + emailAddress,
-        insurance = (JSON.parse(sessionStorage.getItem('profileInfo'))).insurance;
+        licenses = (JSON.parse(sessionStorage.getItem('profileInfo'))).licenses;
         axios.get(userInfoURL).then(res=>{
             if(res){
-                let newInsurance = res.data[0].insurance,
+                let newLicense = res.data[0].licenses,
                 userInfo = {...this.props.user};
-                userInfo.profileInfo.insurance = newInsurance;
-                if(JSON.stringify(insurance) !== JSON.stringify(newInsurance)){
-                    this.props.dispatch(dispatchedUserInfo(newInsurance));
+                userInfo.profileInfo.licenses = newLicense;
+                if(JSON.stringify(licenses) !== JSON.stringify(newLicense)){
+                    this.props.dispatch(dispatchedUserInfo(newLicense));
                 }
             }     
         }).
@@ -53,8 +53,8 @@ class InsuranceTab extends React.Component{
     }
 
     upload=()=>{
-        let sectTitle = "insurance";
-        let updateData = {...this.props.insurance};
+        let sectTitle = "licenses";
+        let updateData = {...this.props.licenses};
         return new Promise((resolve, reject)=>{
             let userId = this.props.userInfo.id,
             updateInfoUrl = baseURL + userUpdateEndPoint,
@@ -65,7 +65,7 @@ class InsuranceTab extends React.Component{
             }).
             catch(err=>{
                 reject(err);
-            });
+            })
         });
     };
 
@@ -78,7 +78,7 @@ class InsuranceTab extends React.Component{
             key = nameArr[0],
             name = nameArr[1],
             value = e.target.value;
-            userInfo.profileInfo.insurance[key][name] = value;
+            userInfo.profileInfo.licenses[key][name] = value;
             if(userInfo)                     
                 resolve(userInfo);
             else
@@ -88,15 +88,15 @@ class InsuranceTab extends React.Component{
 
     toggleDisplay = (e)=>{
         let userInfo = {...this.props.user};
-        let insurance = userInfo.profileInfo.insurance;
+        let licenses = userInfo.profileInfo.licenses;
         let insurancePolicy = e.target.id;
-        if(insurance[insurancePolicy].className === "hidden"){
-            userInfo.profileInfo.insurance[insurancePolicy].className = "";
-            userInfo.profileInfo.insurance[insurancePolicy].checked = true;
+        if(licenses[insurancePolicy].className === "hidden"){
+            userInfo.profileInfo.licenses[insurancePolicy].className = "";
+            userInfo.profileInfo.licenses[insurancePolicy].checked = true;
         }   
         else{
-            userInfo.profileInfo.insurance[insurancePolicy].className = "hidden"
-            userInfo.profileInfo.insurance[insurancePolicy].checked = false;
+            userInfo.profileInfo.licenses[insurancePolicy].className = "hidden"
+            userInfo.profileInfo.licenses[insurancePolicy].checked = false;
         } 
         this.props.dispatch(dispatchedUserInfo(userInfo)); 
     }
@@ -110,12 +110,12 @@ class InsuranceTab extends React.Component{
         console.log(tag)
         this.uploadCert(e).then(res=>{
             console.log(res)
-            user.profileInfo.insurance[tag].uploadingCert = res.loading;              
+            user.profileInfo.licenses[tag].uploadingCert = res.loading;              
             this.props.dispatch(dispatchedUserInfo(user));
             setTimeout(this.forceUpdate(), 50);
         }).
         catch(err=>{
-            console.log(err);
+            console.log(err)
         });
     }
 
@@ -132,15 +132,15 @@ class InsuranceTab extends React.Component{
             fnameExt = fnameArr.pop();
             if(fnameExt === "pdf"){
                 let newCertRef = storageRef.child(`${ userId }/${ tag }.${ fnameExt }`);
-                user.profileInfo.insurance[tag].uploadingCert = true;              
-                this.props.dispatch(dispatchedUserInfo(user));
                 newCertRef.put(file).then(()=>{
+                    user.profileInfo.licenses[tag].uploadingCert = true;              
+                    this.props.dispatch(dispatchedUserInfo(user));
                     newCertRef.getDownloadURL().then((url)=>{
                         if(url){
-                            user.profileInfo.insurance[tag].certURL = url;
+                            user.profileInfo.licenses[tag].certURL = url;
                             this.props.dispatch(dispatchedUserInfo(user));
-                            let insurance = {...user.profileInfo.insurance};
-                            this.upload(insurance).then(res=>{
+                            let licenses = {...user.profileInfo.licenses};
+                            this.upload(licenses).then(res=>{
                                 if(res){
                                     let obj = {loading: false};
                                     resolve(obj);
@@ -153,7 +153,7 @@ class InsuranceTab extends React.Component{
                     let avatarProps = {
                         feedback: 'There was an error!, try again.',
                     };
-                    user.profileInfo.insurance.feedback = avatarProps.feedback;              
+                    user.profileInfo.licenses.feedback = avatarProps.feedback;              
                     this.props.dispatch(dispatchedUserInfo(user));
                     reject({message: "There was an error", loading: false});
                 });
@@ -179,15 +179,16 @@ class InsuranceTab extends React.Component{
             console.log('no desId')   
     }
 
-    renderInsurance = (key)=>{
-        let { insurance, userInfo }= this.props,
-        className = insurance[key].className,
-        uploadingCert = userInfo.insurance[key].uploadingCert,
-        policyNumber = insurance[key].policyNumber,
-        expiryDate = insurance[key].expiryDate,
-        name = insurance[key].name,
-        certURL = insurance[key].certURL,
-        value = insurance[key].checked;
+    renderLicenses = (key)=>{
+        let { licenses, userInfo }= this.props,
+        className = licenses[key].className,
+        uploadingCert = userInfo.licenses[key].uploadingCert,
+        licenseType = licenses[key].type,
+        licenseNumber = licenses[key].licenseNumber,
+        expiryDate = licenses[key].expiryDate,
+        name = licenses[key].name,
+        certURL = licenses[key].certURL,
+        value = licenses[key].checked;
         if(key !== "other"){
             return(
                 <div key={ key } className="el">
@@ -195,12 +196,24 @@ class InsuranceTab extends React.Component{
                     <span>{name}</span>
                     <div className={ className }>
                         <Textfield 
-                            id={ key + "-policyNumber" }
-                            label="Policy Number"
-                            value={ policyNumber }
-                            subCategory={"insurance"} 
+                            id={ key + "-type" }
+                            label="Licence Type"
+                            value={ licenseType }
+                            subCategory={"licenses"} 
                             type="text" 
-                            placeholder="Policy Number" 
+                            placeholder="License Type" 
+                            root="inner-textfield" 
+                            fieldClass="textfield"
+                            onBlur={ this.upload() }
+                            onChange = { this.save } 
+                        />
+                        <Textfield 
+                            id={ key + "-licenseNumber" }
+                            label="License Number"
+                            value={ licenseNumber }
+                            subCategory={"licenses"} 
+                            type="text" 
+                            placeholder="License Number" 
                             root="inner-textfield" 
                             fieldClass="textfield"
                             onBlur={ this.upload() }
@@ -211,8 +224,8 @@ class InsuranceTab extends React.Component{
                             <div className="main-certificate">
                                 {certURL?<span className="download-cert">Download <a href={certURL}>{ name }</a> certificate</span>:null}
                                 {uploadingCert?<div className="loader"><Loader /></div>:null}
-                                <div className="textfield uploadCert" id={`pre-upload_` + key } alt="" title="click to change Avatar" onClick={ this.clickUploadCert }>
-                                { "Upload " + name + " certificate." }
+                                <div className="textfield uploadCert" id={`pre-upload_` + key } alt="" title="click to upload certificate" onClick={ this.clickUploadCert }>
+                                { "Upload " + name + " license copy." }
                                 </div>
                             </div>
                         </form>
@@ -220,7 +233,7 @@ class InsuranceTab extends React.Component{
                             id={ key + "-expiryDate"}
                             label="Expiry Date"
                             value={ expiryDate }
-                            subCategory={"insurance"}  
+                            subCategory={"licenses"}  
                             type="date" 
                             placeholder={ expiryDate }
                             root="inner-textfield" 
@@ -238,76 +251,31 @@ class InsuranceTab extends React.Component{
     }
 
     render(){
-        let { insurance }= this.props,
-        other = insurance?insurance.other:{};
+        let { licenses }= this.props,
+        other = licenses?licenses.other:{};
 
         return(
             <div className="main-content">
                 <div className="half left">
-                    <div className="heading">Insurance Policies<div className="bottom-border"></div></div>
+                    <div className="heading">License Details<div className="bottom-border"></div></div>
                     <div className="information">
-                        {Object.keys(insurance).map(this.renderInsurance)}
+                        {Object.keys(licenses).map(this.renderLicenses)}
                     </div>
                 </div>
-                <div className="half left">
-                    <div className="heading">Specify Other insurance Policy if any<div className="bottom-border"></div></div>
-                        <div className="information">
-                            <div className="el">
-                                <div className="el">
-                                    <ChckBox handleChange={ this.toggleDisplay } dispatcher = { dispatchedUserInfo } value={ other.checked } id="other" />
-                                    <span>{other.name}</span>
-                                    <div className={ other.className }>
-                                        <Textfield 
-                                            id="other-policyNumber"
-                                            label="Policy Number"
-                                            value={ other.policyNumber } 
-                                            type="text" 
-                                            placeholder="Policy Number" 
-                                            root="inner-textfield" 
-                                            fieldClass="textfield"
-                                            onBlur={ this.upload() }
-                                            onChange = { this.save } 
-                                        />
-                                        <form method="POST" encType="multipart/form-data">
-                                            <input className="hidden" type="file" id="upload_other" name="certificate" onChange={ this.showLoader } ></input>
-                                            <div className="main-certificate">
-                                                {other.certURL?<span className="download-cert">Download <a href={other.certURL}>{ other.name }</a> certificate</span>:null}
-                                                {other.uploadingCert?<div className="loader"><Loader /></div>:null}
-                                                <div className="textfield uploadCert" id="pre-upload_other" alt="" title="click to change Avatar" onClick={ this.clickUploadCert }>
-                                                { "Upload " + other.name + " certificate." }
-                                                </div>
-                                            </div>
-                                        </form>
-                                        <Textfield 
-                                            id="other-expiryDate"
-                                            label="Expiry Date"
-                                            value={ other.expiryDate } 
-                                            type="date" 
-                                            placeholder={ other.expiryDate }
-                                            root="inner-textfield" 
-                                            fieldClass="textfield"
-                                            onBlur={ this.upload() }
-                                            onChange = { this.save } 
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 <div className="clear"></div>
             </div>
         )
     }
 }
 
-InsuranceTab.defaultProps = {
+LicenseTab.defaultProps = {
     userInfo: {}
 }
 
-InsuranceTab.propTypes = {
+LicenseTab.propTypes = {
     userInfo: PropTypes.object.isRequired,
     currentHorizontalTab: PropTypes.string,
-    insurance: PropTypes.object
+    licenses: PropTypes.object
 }
 
-export default InsuranceTab;
+export default LicenseTab;
