@@ -2,30 +2,56 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { DropDown, Textfield, PhoneNumber } from 'components';
-//import { dispatchedGenInfo } from 'extras/dispatchers';
 import { userTypes, statesAustralia } from 'extras/config';
+import axios from 'axios';
 import './personnelTab.css'
 
+const baseURL = process.env.BACK_END_URL,
+userUpdateEndPoint = process.env.USER_UPDATE_END_POINT;
 
 function PersonnelTab(props){
-    const {  } = props;
-    let userType = JSON.parse(sessionStorage.getItem('loginSession')).userType,
-    userName = JSON.parse(sessionStorage.getItem('loginSession')).fullName,
-    phoneNumber = (JSON.parse(sessionStorage.getItem('loginSession')).phoneNumber).toString(),
-    mobileNumber = JSON.parse(sessionStorage.getItem('loginSession')).mobileNumber,
-    website = JSON.parse(sessionStorage.getItem('loginSession')).website,
-    state = JSON.parse(sessionStorage.getItem('loginSession')).state,
-    city = JSON.parse(sessionStorage.getItem('loginSession')).city,
-    emailAddress = JSON.parse(sessionStorage.getItem('loginSession')).emailAddress;
+    let { userInfo, user } = props;
+    let userlen = Object.keys(userInfo).length;
+    userInfo = userlen > 0?userInfo:JSON.parse(sessionStorage.getItem('profileInfo'));
+    let userType = userInfo.userType,
+    companyName = userInfo.companyName,
+    userName = userInfo.fullName,
+    phoneNumber = userInfo.phoneNumber?(userInfo.phoneNumber).toString():undefined,
+    mobileNumber = userInfo.mobileNumber?(userInfo.mobileNumber).toString():undefined,
+    website = userInfo.website,
+    state = userInfo.state,
+    city = userInfo.city,
+    emailAddress = userInfo.emailAddress;
 
-    const validate=()=>{
+    const upload=(sectTitle, updateData)=>{
         return new Promise((resolve, reject)=>{
-            resolve();
+            let userId = userInfo.id,
+            updateInfoUrl = baseURL + userUpdateEndPoint,
+            updateObject = {userId, sectTitle, updateData};
+            axios.post(updateInfoUrl, updateObject).
+            then(res=>{
+                resolve(res);
+            }).
+            catch(err=>{
+                reject(err);
+            })
         });
     };
-    const save=()=>{
+    const save=(e)=>{
+        e.persist();
         return new Promise((resolve, reject)=>{
-            resolve();
+            let userInfo = {...user},
+            id = e.target.id,
+            origName = e.target.getAttribute("category");
+            origName = origName?origName:id;
+            let nameArr = origName.split("-"),
+            name = nameArr[1],
+            value = e.target.getAttribute('value');
+            userInfo.profileInfo[name] = value;
+            if(userInfo)                     
+                resolve(userInfo);
+            else
+                reject({message: "No data"});
         });
     };
 
@@ -36,7 +62,6 @@ function PersonnelTab(props){
                 <div className="information">
                     <div className="el">
                         <DropDown 
-                            onBlur={ validate }
                             label="Account Type" 
                             id="profile-userType" 
                             className="select" 
@@ -44,7 +69,8 @@ function PersonnelTab(props){
                             width="330px" 
                             options={ userTypes } 
                             selected={ userType } 
-                            onChange={ save} 
+                            onChange={ save }
+                            onBlur={ upload }
                         />
                     </div>
                     <div className="el">
@@ -55,7 +81,9 @@ function PersonnelTab(props){
                             type="text" 
                             placeholder="John Doe" 
                             root="inner-textfield" 
-                            fieldClass="textfield"  
+                            fieldClass="textfield"
+                            onBlur={ upload }
+                            onChange = { save } 
                         />
                     </div>
                     <div className="el">
@@ -66,7 +94,9 @@ function PersonnelTab(props){
                             type="email" 
                             placeholder="Johndoe@email.com" 
                             root="inner-textfield" 
-                            fieldClass="textfield"  
+                            fieldClass="textfield"
+                            onBlur={ upload }
+                            onChange = { save }
                         />
                     </div>
                     <div className="el">
@@ -77,7 +107,9 @@ function PersonnelTab(props){
                             mask= {['(', [0], /\d/,')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
                             placeholder="(07) 9999-9999"
                             root="inner-textfield" 
-                            fieldClass="textfield"  
+                            fieldClass="textfield"
+                            onBlur={ upload }
+                            onChange = { save } 
                         />
                     </div>
                     <div className="el">
@@ -88,7 +120,9 @@ function PersonnelTab(props){
                             mask={['(', [0], /\d/, /\d/, /\d/,')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/,]}
                             root="inner-textfield"
                             placeholder="(0799) 999 999"
-                            fieldClass="textfield"  
+                            fieldClass="textfield"
+                            onBlur={ upload }
+                            onChange = { save }
                         />
                     </div>
                     <div className="el">
@@ -99,7 +133,22 @@ function PersonnelTab(props){
                             type="text" 
                             placeholder="www.website.com" 
                             root="inner-textfield" 
-                            fieldClass="textfield"  
+                            fieldClass="textfield"
+                            onBlur={ upload } 
+                            onChange = { save }
+                        />
+                    </div>
+                    <div className="el">
+                        <Textfield 
+                            id="profile-companyName"
+                            label="Company Name"
+                            value={ companyName } 
+                            type="text" 
+                            placeholder="John Doe" 
+                            root="inner-textfield" 
+                            fieldClass="textfield"
+                            onBlur={ upload }
+                            onChange = { save }
                         />
                     </div>
                 </div>
@@ -109,7 +158,7 @@ function PersonnelTab(props){
                     <div className="information">
                         <div className="el">
                             <DropDown 
-                                onBlur={ validate }
+                                onBlur={ upload }
                                 label="State" 
                                 id="profile-state" 
                                 className="select" 
@@ -117,7 +166,7 @@ function PersonnelTab(props){
                                 width="330px" 
                                 options={ statesAustralia } 
                                 selected={ state } 
-                                onChange={ save} 
+                                onChange={ save } 
                             />
                         </div>
                         <div className="el">
@@ -128,7 +177,9 @@ function PersonnelTab(props){
                                 type="text" 
                                 placeholder="ie.Your city or suburb" 
                                 root="inner-textfield" 
-                                fieldClass="textfield"  
+                                fieldClass="textfield"
+                                onBlur={ upload }
+                                onChange = { save }  
                             />
                         </div>
                     </div>
@@ -140,22 +191,18 @@ function PersonnelTab(props){
 }
 
 PersonnelTab.defaultProps = {
-    user: {},
-    search: {},
-    genInfo: {}
+    userInfo: {}
 }
 
 PersonnelTab.propTypes = {
-    user: PropTypes.object.isRequired,
-    search: PropTypes.object.isRequired,
-    genInfo: PropTypes.object.isRequired
+    userInfo: PropTypes.object.isRequired,
+    currentHorizontalTab: PropTypes.string
 }
 
 export default connect(store=>{
     return {
         user: store.user.info,
-        search: store.search,
-        genInfo: store.genInfo.info,
+        userInfo: store.user.info.profileInfo,
         currentHorizontalTab: store.genInfo.info.sideBar.currenthorizontalTab,
     }
 })(PersonnelTab);

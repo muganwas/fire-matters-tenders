@@ -95,26 +95,26 @@ a {
     width: 50%;
     cursor: pointer;
 }
-.pre-signup #service-provider{
+.pre-signup #service_provider{
     color: #fff;
     background-color: #ED2431;
     box-shadow: -2px 0 2px rgb(172, 138, 109);
 }
-.pre-signup #service-provider:hover{
+.pre-signup #service_provider:hover{
     box-shadow: -2px 1px 3px rgb(172, 138, 109);
 }
-.pre-signup #service-provider:active{
+.pre-signup #service_provider:active{
     box-shadow: -2px 0 2px rgb(172, 138, 109);
 }
-.pre-signup #owner-occupier{
+.pre-signup #owner_occupier{
     color: #fff;
     background-color: #F79A50;
     box-shadow: 2px 0 2px #c4989b;
 }
-.pre-signup #owner-occupier:hover{
+.pre-signup #owner_occupier:hover{
     box-shadow: 2px 1px 4px #c4989b;
 }
-.pre-signup #owner-occupier:active{
+.pre-signup #owner_occupier:active{
     box-shadow: 2px 0 2px #c4989b;
 }
 .postSubmitError{

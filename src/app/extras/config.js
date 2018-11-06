@@ -56,8 +56,8 @@ export const menuIconTitles = {
 }
 
 export const userTypes = {
-    ownerOccupier: "Owner/Occupier",
-    serviceProvider: "Service provider"
+    owner_occupier: "Owner/Occupier",
+    service_provider: "Service provider"
 }
 
 export const ownerOccupierProfileTabs = {
@@ -71,5 +71,4 @@ export const serviceProviderProfileTabs = {
     insurance: "Insurance",
     licencse: "License",
     ratesScedule: "Rates Schedule",
-    subContractors: "Sub-contractors"
 }

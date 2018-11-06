@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import './textField.css';
 import { PropTypes } from 'prop-types';
 
-import { dispatchedTextFieldInfo } from 'extras/dispatchers';
+import { dispatchedUserInfo } from 'extras/dispatchers';
 import TextField from '@material-ui/core/TextField';
-
 
 @connect((store)=>{
     return {
         user: store.user,
+        profileInfo: store.user.info.profileInfo,
         textFields: store.textFields.info
     }
 })
@@ -23,12 +23,43 @@ class Textfield extends React.Component {
         this.props = {...nextProps};
     }
 
+    upload = (e)=>{
+        e.persist();
+        let id = e.target.id,
+        origName = e.target.getAttribute("category");
+        origName = origName?origName:id;
+        let nameArr = origName.split("-"),
+        key = nameArr[0],
+        name = nameArr[1],
+        profileInfoSucCategory = this.props.subCategory,
+        value = e.target.value;
+        let dbValue;
+        if(profileInfoSucCategory)
+            dbValue = (JSON.parse(sessionStorage.getItem('profileInfo')))[profileInfoSucCategory][key][name]
+        else
+            dbValue = (JSON.parse(sessionStorage.getItem('profileInfo')))[name];
+        if(dbValue !== value){
+            this.props.onBlur(name, value).
+            then(res=>{
+                if(res)
+                    console.log(name + "updated");
+            }).
+            catch(err=>{
+                console.log(err)
+            });
+        }
+        
+    }
+
     handleText=(e)=>{
-        let fieldValue = e.target.value;
-        let currUserInfo = {...this.props.user.info};
-        let label = this.props.id;
-        currUserInfo[label] = fieldValue;
-        this.props.dispatch(dispatchedTextFieldInfo(currUserInfo));
+        e.persist();
+        this.props.onChange(e).then(res=>{
+            this.props.dispatch(dispatchedUserInfo(res));
+        }).
+        catch(error=>{
+            console.log(error);
+            throw error;
+        });
     }
 
     render(){
@@ -37,7 +68,7 @@ class Textfield extends React.Component {
                 { this.props.label?<span className="label">{ this.props.label }</span>: null }
                 <div className={this.props.fieldClass}>
                     <TextField
-                        id={this.props.id}
+                        id={ this.props.id }
                         style={{width: "100%"}}
                         InputProps={{
                             disableUnderline: true,
@@ -45,8 +76,9 @@ class Textfield extends React.Component {
                                 root: this.props.root,
                             },
                         }}
-                        value={this.props.value}
+                        defaultValue={this.props.value}
                         onChange={this.handleText}
+                        onBlur={ this.upload }
                         placeholder={this.props.placeholder}
                         type={this.props.type}
                     >
@@ -71,7 +103,8 @@ Textfield.propTypes = {
     type: PropTypes.string.isRequired,
     placeholder: PropTypes.string,
     value: PropTypes.string,
-    label: PropTypes.string
+    label: PropTypes.string,
+    onBlur: PropTypes.func
 }
 
 export default Textfield;

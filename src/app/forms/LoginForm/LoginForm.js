@@ -102,10 +102,7 @@ class LoginForm extends React.Component {
                     fullName = userObj.fullName,
                     userType = userObj.userType,
                     phoneNumber = userObj.phoneNumber,
-                    mobileNubmer = userObj.mobileNumber,
-                    website = userObj.website,
-                    state = userObj.state,
-                    city = userObj.city,
+                    emailAddress= userObj.emailAddress,
                     sectTitle = "active",
                     updateData = true;
                     axios.post(userUpdateURL, { userId, sectTitle, updateData }).
@@ -115,10 +112,15 @@ class LoginForm extends React.Component {
                         if(active){
                             auth.currentUser.getIdToken().then(token=>{
                                 this.getAvatar(userId).then(data=>{
-                                    let loginSession = { userId, avatarURL:data.avatarURL, userType, fullName, phoneNumber, mobileNubmer, website, state, city,  emailAddress, token };
-                                    userInfo.loginInfo.userDetails = data;
+                                    let loginSession = { userId, avatarURL:data.avatarURL, emailAddress, userType, fullName, phoneNumber, token };
+                                    let profileInfo = userObj;
+                                    userInfo.loginInfo.firebaseDetails = data;
+                                    userInfo.profileInfo = userObj;
                                     this.props.dispatch(dispatchedUserInfo(userInfo));
+                                    sessionStorage.setItem("profileInfo", JSON.stringify(profileInfo));
                                     sessionStorage.setItem("loginSession", JSON.stringify(loginSession));
+                                    //dispatch profile information
+                                    this.updateProfile(userObj);
                                     //navigate to loggedin page
                                     this.props.history.push("/userPage:" + userId);
                                 }).
@@ -169,6 +171,12 @@ class LoginForm extends React.Component {
                 userInfo.loginInfo.feedback = error.message;
             this.props.dispatch(dispatchedUserInfo(userInfo));
         });
+    }
+
+    updateProfile = (userData)=>{
+        let userInfo = {...this.props.userInfo};
+        userInfo.profileInfo = userData;
+        this.props.dispatch(dispatchedUserInfo(userInfo));
     }
 
     errorCheck = (e)=>{

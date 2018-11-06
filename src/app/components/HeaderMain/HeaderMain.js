@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Image from 'react-image';
-import * as firebase from 'firebase/app';
-import 'firebase/database';
-import 'firebase/storage';
 import { SocialIcon } from 'react-social-icons';
 import { NavLink, withRouter } from 'react-router-dom';
 import { dispatchedSearchInfo, dispatchedGenInfo } from 'extras/dispatchers';
@@ -11,14 +8,6 @@ import { Lock } from '@material-ui/icons';
 import './headerMain.css';
 import { PropTypes } from 'prop-types';
 
-@connect((store)=>{
-    return {
-        search: store.search,
-        user: store.user,
-        genInfo: store.genInfo,
-        navigation: store.genInfo.info.alternatingNavigation
-    }
-})
 class HeaderMain extends Component {
     constructor(props){
         super(props)
@@ -33,14 +22,19 @@ class HeaderMain extends Component {
         window.removeEventListener("resize", this.updateDimensions);        
     }
 
+    componentWillReceiveProps(nextProps){
+        this.props = {...nextProps}
+    }
+
     componentWillMount(){
-        let genInfo = {...this.props.genInfo.info};
         if(sessionStorage.getItem('loginSession')){
-            let loginSession = JSON.parse(sessionStorage.getItem('loginSession')),
+            let genInfo = {...this.props.genInfo.info},
+            loginSession = JSON.parse(sessionStorage.getItem('loginSession')),
             userId = loginSession.userId;
-            genInfo.alternatingNavigation.home = '/userPage:'+ userId;
-        }   
-        this.props.dispatch(dispatchedGenInfo(genInfo));
+            genInfo.alternatingNavigation.home = '/userPage:'+ userId;  
+            this.props.dispatch(dispatchedGenInfo(genInfo));
+        }
+        
     }
 
     componentWillReceiveProps(nextProps){
@@ -137,13 +131,23 @@ class HeaderMain extends Component {
 HeaderMain.defaultProps = {
     search: {},
     user: {},
-    genInfo: {}
+    genInfo: {},
+    profileInfo: {}
 }
 
 HeaderMain.propTypes = {
     search: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
-    genInfo: PropTypes.object.isRequired
+    genInfo: PropTypes.object.isRequired,
+    profileInfo: PropTypes.object
 }
 
-export default withRouter(HeaderMain);
+export default connect(store=>{
+    return {
+        search: store.search,
+        user: store.user,
+        profileInfo: store.user.info.profileInfo,
+        genInfo: store.genInfo,
+        navigation: store.genInfo.info.alternatingNavigation
+    }
+})(withRouter(HeaderMain));

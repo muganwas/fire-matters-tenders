@@ -3,29 +3,60 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { DropDown, Textfield, PhoneNumber } from 'components';
 //import { dispatchedGenInfo } from 'extras/dispatchers';
-import { userTypes, statesAustralia } from 'extras/config';
+import {  statesAustralia } from 'extras/config';
+import axios from 'axios';
 import './companyTab.css'
 
+const baseURL = process.env.BACK_END_URL,
+userUpdateEndPoint = process.env.USER_UPDATE_END_POINT;
 
 function CompanyTab(props){
-    const { userProfile } = props;
-    let userType = JSON.parse(sessionStorage.getItem('loginSession')).userType,
-    userName = JSON.parse(sessionStorage.getItem('loginSession')).fullName,
-    phoneNumber = (JSON.parse(sessionStorage.getItem('loginSession')).phoneNumber).toString(),
-    mobileNumber = JSON.parse(sessionStorage.getItem('loginSession')).mobileNumber,
-    website = JSON.parse(sessionStorage.getItem('loginSession')).website,
-    state = JSON.parse(sessionStorage.getItem('loginSession')).state,
-    city = JSON.parse(sessionStorage.getItem('loginSession')).city,
-    emailAddress = JSON.parse(sessionStorage.getItem('loginSession')).emailAddress;
 
-    const validate=()=>{
+    let { userInfo, user } = props;
+    userInfo = userInfo?userInfo:JSON.parse(sessionStorage.getItem('profileInfo'));
+    let companyInformation = userInfo || {},
+    emailAddress = companyInformation.companyEmailAddress,
+    phoneNumber = companyInformation.companyPhoneNumber?(companyInformation.companyPhoneNumber).toString():undefined,
+    website = companyInformation.companyWebsite,
+    state = companyInformation.companyState,
+    city = companyInformation.companyCity,
+    physicalAddress = companyInformation.companyPhysicalAddress,
+    postCode = companyInformation.companyPostCode,
+    acn_abn = companyInformation.company_acn_abn,
+    contactName = companyInformation.companyRepFullName,
+    contactEmail = companyInformation.companyRepEmailAddress,
+    contactPhone = companyInformation.companyRepPhoneNumber,
+    contactPosition = companyInformation.companyRepPosition;
+
+    const upload=(sectTitle, updateData)=>{
         return new Promise((resolve, reject)=>{
-            resolve();
+            let userId = userInfo.id,
+            updateInfoUrl = baseURL + userUpdateEndPoint,
+            updateObject = {userId, sectTitle, updateData};
+            axios.post(updateInfoUrl, updateObject).
+            then(res=>{
+                resolve(res);
+            }).
+            catch(err=>{
+                reject(err);
+            })
         });
     };
-    const save=()=>{
+    const save=(e)=>{
+        e.persist();
         return new Promise((resolve, reject)=>{
-            resolve();
+            let userInfo = {...user},
+            id = e.target.id,
+            origName = e.target.getAttribute("category");
+            origName = origName?origName:id;
+            let nameArr = origName.split("-"),
+            name = nameArr[1],
+            value = e.target.getAttribute('value');
+            userInfo.profileInfo[name] = value;
+            if(userInfo)                     
+                resolve(userInfo);
+            else
+                reject({message: "No data"});
         });
     };
 
@@ -36,35 +67,28 @@ function CompanyTab(props){
                 <div className="information">
                     <div className="el">
                         <Textfield 
-                            id="profile-companyName"
-                            label="Company Name"
-                            value={ userName } 
-                            type="text" 
-                            placeholder="John Doe" 
-                            root="inner-textfield" 
-                            fieldClass="textfield"  
-                        />
-                    </div>
-                    <div className="el">
-                        <Textfield 
-                            id="profile-emailAddress" 
+                            id="profile-companyEmailAddress" 
                             value={ emailAddress }
                             label="Email Address"
                             type="email" 
                             placeholder="Johndoe@email.com" 
                             root="inner-textfield" 
-                            fieldClass="textfield"  
+                            fieldClass="textfield"
+                            onBlur={ upload }
+                            onChange = { save } 
                         />
                     </div>
                     <div className="el">
                         <PhoneNumber 
-                            id="profile-phoneNumber"
+                            id="profile-companyPhoneNumber"
                             label = "Phone Number"
                             value={ phoneNumber }  
                             mask= {['(', [0], /\d/,')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
                             placeholder="(07) 9999-9999"
                             root="inner-textfield" 
-                            fieldClass="textfield"  
+                            fieldClass="textfield"
+                            onBlur={ upload }
+                            onChange = { save } 
                         />
                     </div>
                     <div className="el">
@@ -75,64 +99,75 @@ function CompanyTab(props){
                             type="text" 
                             placeholder="www.website.com" 
                             root="inner-textfield" 
-                            fieldClass="textfield"  
+                            fieldClass="textfield"
+                            onBlur={ upload }
+                            onChange = { save }  
                         />
                     </div>
                     <div className="el">
                             <DropDown 
-                                onBlur={ validate }
                                 label="State" 
                                 id="profile-companyState" 
                                 className="select" 
                                 init={ state } 
                                 width="330px" 
                                 options={ statesAustralia } 
-                                selected={ state } 
-                                onChange={ save } 
+                                selected={ state || "Qld" } 
+                                onChange={ save }
+                                onBlur={ upload }
+                                onChange = { save }
                             />
                     </div>
                     <div className="el">
                         <Textfield 
                             id="profile-companyCity"
                             label="City/Suburb"
-                            value={ userName } 
+                            value={ city } 
                             type="text" 
-                            placeholder="John Doe" 
+                            placeholder="City/Suburb" 
                             root="inner-textfield" 
-                            fieldClass="textfield"  
+                            fieldClass="textfield"
+                            onBlur={ upload }
+                            onChange = { save }
                         />
                     </div>
                     <div className="el">
                         <Textfield 
                             id="profile-companyStreet"
-                            label="Street"
-                            value={ userName } 
+                            label="Physical Address"
+                            value={ physicalAddress } 
                             type="text" 
-                            placeholder="John Doe" 
+                            placeholder="Street Address" 
                             root="inner-textfield" 
-                            fieldClass="textfield"  
+                            fieldClass="textfield"
+                            onBlur={ upload }
+                            onChange = { save }  
                         />
                     </div>
                     <div className="el">
                         <Textfield 
-                            id="profile-companyPostaCode"
+                            id="profile-companyPostCode"
                             label="Post Code"
-                            value={ userName } 
+                            value={ postCode } 
                             type="text" 
-                            placeholder="John Doe" 
+                            placeholder="POST/ZIP CODE" 
                             root="inner-textfield" 
-                            fieldClass="textfield"  
+                            fieldClass="textfield"
+                            onBlur={ upload }
+                            onChange = { save }  
                         />
                     </div>
                     <div className="el">
                         <Textfield 
-                            id="profile-companyABN"
+                            id="profile-company_acn_abn"
                             label="ACN/ABN"
-                            value={ userName } 
+                            value={ acn_abn } 
                             type="text" 
-                            placeholder="John Doe" 
+                            placeholder="Bank Account Number" 
                             root="inner-textfield" 
-                            fieldClass="textfield"  
+                            fieldClass="textfield"
+                            onBlur={ upload }
+                            onChange = { save } 
                         />
                     </div>
                     
@@ -143,46 +178,54 @@ function CompanyTab(props){
                     <div className="information">
                         <div className="el">
                             <Textfield 
-                                id="profile-repFullName"
+                                id="profile-companyRepFullName"
                                 label="Full Name"
-                                value={ userName } 
+                                value={ contactName } 
                                 type="text" 
                                 placeholder="John Doe" 
                                 root="inner-textfield" 
-                                fieldClass="textfield"  
+                                fieldClass="textfield"
+                                onBlur={ upload }
+                                onChange = { save }  
                             />
                         </div>
                         <div className="el">
                             <Textfield 
-                                id="profile-repEmailAddress" 
-                                value={ emailAddress }
+                                id="profile-companyRepEmailAddress" 
+                                value={ contactEmail }
                                 label="Email Address"
                                 type="email" 
                                 placeholder="Johndoe@email.com" 
                                 root="inner-textfield" 
-                                fieldClass="textfield"  
+                                fieldClass="textfield"
+                                onBlur={ upload }
+                                onChange = { save }  
                             />
                         </div>
                         <div className="el">
                             <PhoneNumber 
-                                id="profile-repPhoneNumber"
+                                id="profile-companyRepPhoneNumber"
                                 label = "Phone Number"
-                                value={ phoneNumber }  
+                                value={ contactPhone }  
                                 mask= {['(', [0], /\d/,')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
                                 placeholder="(07) 9999-9999"
                                 root="inner-textfield" 
-                                fieldClass="textfield"  
+                                fieldClass="textfield"
+                                onBlur={ upload }
+                                onChange = { save }  
                             />
                         </div>
                         <div className="el">
                             <Textfield 
-                                id="profile-repPosition" 
-                                value={ emailAddress }
+                                id="profile-companyRepPosition" 
+                                value={ contactPosition }
                                 label="Contact Position"
                                 type="text" 
-                                placeholder="Johndoe@email.com" 
+                                placeholder="eg. Head of sales" 
                                 root="inner-textfield" 
-                                fieldClass="textfield"  
+                                fieldClass="textfield"
+                                onBlur={ upload }
+                                onChange = { save } 
                             />
                         </div>
                     </div>
@@ -208,8 +251,7 @@ CompanyTab.propTypes = {
 export default connect(store=>{
     return {
         user: store.user.info,
-        search: store.search,
-        genInfo: store.genInfo.info,
-        userProfile: store.user.info.profileInfo,
+        userInfo: store.user.info.profileInfo,
+        currentHorizontalTab: store.genInfo.info.sideBar.currenthorizontalTab,
     }
 })(CompanyTab);
