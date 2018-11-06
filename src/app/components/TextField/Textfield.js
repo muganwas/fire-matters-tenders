@@ -103,8 +103,7 @@ Textfield.propTypes = {
     type: PropTypes.string.isRequired,
     placeholder: PropTypes.string,
     value: PropTypes.string,
-    label: PropTypes.string,
-    onBlur: PropTypes.func
+    label: PropTypes.string
 }
 
 export default Textfield;

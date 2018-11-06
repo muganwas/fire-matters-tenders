@@ -1,9 +1,11 @@
 .side-bar{
+    box-sizing: border-box;
     display: block;
     position: absolute;
     padding: 50px 0 50px;
     width: 250px;
-    height: 600px;
+    top: 155px;
+    bottom: 0;
     left: 90px;
     z-index: 0;
     text-align: center;

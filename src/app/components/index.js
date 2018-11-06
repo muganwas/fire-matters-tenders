@@ -25,4 +25,5 @@ export { default as ProfileTab } from 'components/ProfileTab/ProfileTab';
 export { default as PersonnelTab } from 'components/PersonnelTab/PersonnelTab';
 export { default as CompanyTab } from 'components/CompanyTab/CompanyTab';
 export { default as InsuranceTab } from 'components/InsuranceTab/InsuranceTab';
+export { default as LicenseTab } from 'components/LicenseTab/LicenseTab';
 export { default as ChckBox } from 'components/CheckBox/ChckBox';

@@ -69,6 +69,6 @@ export const serviceProviderProfileTabs = {
     personnel: "Personnel",
     company: "Company",
     insurance: "Insurance",
-    licencse: "License",
+    license: "License",
     ratesScedule: "Rates Schedule",
 }
