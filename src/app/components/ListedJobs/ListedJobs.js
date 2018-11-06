@@ -55,7 +55,15 @@ class ListedJobs extends Component {
                 <div className="thirty">{ listings[key].serviceRequired }, { listings[key].equipment }</div>
                 <div className="twenty">{ listings[key].closingDate}</div>
                 <div className="twenty"><FmButton variant="contained" color="primary" text="Submit Tender" /></div>
-                <div className="ten"><MoreHoriz className={ listings[key].moreMenuClassName } id={ key } listName = "listings" element={ listings[key] } options={ options } /></div>
+                <div className="ten">
+                    <MoreHoriz 
+                        className={ listings[key].moreMenuClassName } 
+                        id={ key } 
+                        listName = "listings" 
+                        element={ listings[key] }
+                        options={ options }
+                     />
+                </div>
                 <div className="bottom-border"></div>
             </div>
         )

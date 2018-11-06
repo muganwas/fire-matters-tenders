@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { dispatchedGenInfo } from 'extras/dispatchers';
+import { dispatchedGenInfo, dispatchedUserInfo } from 'extras/dispatchers';
 import { HeaderMain, Footer, SideBar, ProfileTab } from 'components';
 import './userPage.css';
 
@@ -58,6 +58,29 @@ class UserPage extends React.Component {
         });
     }
 
+    componentDidMount(){
+        let emailAddress = (JSON.parse(sessionStorage.getItem('loginSession'))).emailAddress,
+        userURL = baseUrl + usersEndPoint + "?emailAddress=" + emailAddress;
+        axios.get(userURL).
+        then(res=>{
+            let userObj = res.data[0];
+            let profileInfo = userObj,
+            userInfo = {...this.props.user.info},
+            dispatchedprofileInfo = {...this.props.profileInfo};
+
+            let dispatchedprofileInfoLen = Object.keys(dispatchedprofileInfo).length;
+
+            userInfo.profileInfo = profileInfo;
+            if(dispatchedprofileInfoLen <= 0){
+                this.props.dispatch(dispatchedUserInfo(userInfo));
+                sessionStorage.setItem('profileInfo', JSON.stringify(profileInfo));
+            }
+        }).
+        catch(err=>{
+            console.log(err)
+        });
+    }
+
     activate = (e)=>{
         let id = e.target.id,
         genInfo = {...this.props.genInfo},
@@ -97,7 +120,8 @@ class UserPage extends React.Component {
                     <div className="hanad left">
                         <div className="content">
                             <div className="tabs">{ Object.keys(tabs).map(this.tabTitle) }</div>
-                            {currentTab==="ProfileTab"?<ProfileTab />:null}
+                            {currentTab==="ProfileTab"?
+                            <ProfileTab />:null}
                         </div>
                     </div>
                     <div className="clear"></div>

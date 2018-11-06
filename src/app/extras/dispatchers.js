@@ -15,6 +15,7 @@ export function dispatchedUserInfo(userInfo) {
         } 
     }
 }
+
 export function dispatchedSearchInfo(searchInfo) {
     if(searchInfo !== undefined && searchInfo !== null){   
       return {

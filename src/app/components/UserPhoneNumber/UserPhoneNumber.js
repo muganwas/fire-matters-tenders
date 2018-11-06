@@ -11,7 +11,7 @@ import MaskedInput from 'react-text-mask';
         user: store.user
     }
 })
-class PhoneNumber extends React.Component {
+class UserPhoneNumber extends React.Component {
     constructor(props){
         super(props)
     }
@@ -20,38 +20,15 @@ class PhoneNumber extends React.Component {
         this.props = {...nextProps};
     }
 
-    upload = (e)=>{
-        e.persist();
-        let id = e.target.id,
-        origName = e.target.getAttribute("category");
-        origName = origName?origName:id;
-        let nameArr = origName.split("-"),
-        name = nameArr[1],
-        value = e.target.value;
-        let dbValue = (JSON.parse(sessionStorage.getItem('profileInfo')))[name];
-        value = (value).replace("(", "").replace(")", "").replace( new RegExp(" ", "g"), "").replace("-", "");
-        if(dbValue !== value){
-            this.props.onBlur(name, value).
-            then(res=>{
-                if(res)
-                    console.log(name + "updated");
-            }).
-            catch(err=>{
-                console.log(err)
-            });
-        }
-        
-    }
-
     handleText=(e)=>{
-        e.persist();
-        this.props.onChange(e).then(res=>{
-            this.props.dispatch(dispatchedUserInfo(res));
-        }).
-        catch(error=>{
-            console.log(error);
-            throw error;
-        });
+        let fieldValue = e.target.value,
+        toBeStored = sessionStorage.getItem('signup')?JSON.parse(sessionStorage.getItem('signup')): {},
+        currUserInfo = {...this.props.user.info},
+        label = this.props.id;
+        currUserInfo[label] = fieldValue;
+        toBeStored[label] = fieldValue;
+        sessionStorage.setItem('signup', JSON.stringify(toBeStored));
+        this.props.dispatch(dispatchedUserInfo(currUserInfo));
     }
 
     render(){
@@ -69,8 +46,7 @@ class PhoneNumber extends React.Component {
                             }}
                         name = {this.props.fieldClass}
                         onBlur = { this.props.onBlur }
-                        defaultValue={ this.props.value }
-                        onBlur={this.upload}
+                        value={ this.props.value }
                         onChange={this.handleText}
                         placeholder={this.props.placeholder}
                         mask={this.props.mask}
@@ -82,7 +58,7 @@ class PhoneNumber extends React.Component {
     }
 }
 
-PhoneNumber.defaultProps = {
+UserPhoneNumber.defaultProps = {
     user: {},
     adornment: "0_0",
     type: "text",
@@ -90,7 +66,7 @@ PhoneNumber.defaultProps = {
     label: null,
 }
 
-PhoneNumber.propTypes = {
+UserPhoneNumber.propTypes = {
     user: PropTypes.object.isRequired,
     adornment: PropTypes.string,
     id: PropTypes.string.isRequired,
@@ -103,4 +79,4 @@ PhoneNumber.propTypes = {
     label: PropTypes.string
 }
 
-export default PhoneNumber;
+export default UserPhoneNumber;

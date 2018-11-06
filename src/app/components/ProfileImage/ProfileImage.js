@@ -13,18 +13,12 @@ const base = Rebase.createClass(firebase.database()),
 storage = firebase.storage(),
 storageRef = storage.ref();
 
-@connect((store)=>{
-    return {
-        userInfo: store.user.info,
-        search: store.search,
-        genInfo: store.genInfo.info
-    }
-})
 class ProfileImage extends React.Component {
     constructor(props){
         super(props);
+        let avatarProps = this.props.userInfo.avatarProps || {};
         this.state = {
-            avatarURL: this.props.userInfo.avatarProps.avatarURL,
+            avatarURL: avatarProps.avatarURL,
             levelId: ""
         }
     }
@@ -46,8 +40,7 @@ class ProfileImage extends React.Component {
     }
 
     getAvatar = ()=>{
-        let userInfo = this.props.userInfo,
-        loginSession = JSON.parse(sessionStorage.getItem('loginSession')),
+        let loginSession = JSON.parse(sessionStorage.getItem('loginSession')),
         userId = (JSON.parse(sessionStorage.getItem('loginSession'))).userId;
         return new Promise((resolve, reject)=>{
             base.fetch(`users/${ userId }`, {
@@ -61,6 +54,7 @@ class ProfileImage extends React.Component {
                         let avURL = data[0];
                         //easiest way I could figure out to check for an upload avatar url
                         if(fl === "h"){
+                            let userInfo = {...this.props.userInfo};
                             userInfo.avatarProps.avatarURL = avURL;
                             loginSession.avatarURL = avURL
                             sessionStorage.setItem("loginSession", JSON.stringify(loginSession));
@@ -68,6 +62,7 @@ class ProfileImage extends React.Component {
                             this.props.dispatch(dispatchedUserInfo(userInfo));
                         }else{
                             storageRef.child('general/avatar.png').getDownloadURL().then((data)=>{
+                                let userInfo = {...this.props.userInfo};
                                 loginSession.avatarURL = data
                                 sessionStorage.setItem("loginSession", JSON.stringify(loginSession));
                                 userInfo.avatarProps.avatarURL = data;
@@ -77,6 +72,7 @@ class ProfileImage extends React.Component {
                         }
                     }else{
                         storageRef.child('general/avatar.png').getDownloadURL().then((data)=>{
+                            let userInfo = {...this.props.userInfo};
                             loginSession.avatarURL = data
                             sessionStorage.setItem("loginSession", JSON.stringify(loginSession));
                             userInfo.avatarProps.avatarURL = data;
@@ -151,7 +147,7 @@ class ProfileImage extends React.Component {
     }
 
     render(){
-        let avatarProps = this.props.userInfo.avatarProps;
+        let avatarProps = this.props.userInfo.avatarProps || {};
         return (
             <div className="avContainer">
                 <span id={ this.state.levelId }>{ this.state.feedback }</span>
@@ -176,8 +172,16 @@ ProfileImage.defaultProps = {
 
 ProfileImage.propTypes = {
     user: PropTypes.object.isRequired,
+    userInfo: PropTypes.object.isRequired,
     search: PropTypes.object.isRequired,
     genInfo: PropTypes.object.isRequired
 }
 
-export default ProfileImage;
+export default connect(store=>{
+    return {
+        userInfo: store.user.info,
+        user: store.user,
+        search: store.search,
+        genInfo: store.genInfo.info
+    }
+})(ProfileImage);

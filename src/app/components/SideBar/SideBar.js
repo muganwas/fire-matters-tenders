@@ -23,7 +23,7 @@ class SideBar extends React.Component {
     componentWillMount(){
         let userType = (JSON.parse(sessionStorage.getItem('loginSession'))).userType,
         genInfo = {...this.props.genInfo};
-        if(userType === "owner-occupier"){
+        if(userType === "Owner/Occupier" || userType === "owner-occupier" || userType === "owner_occupier"){
             genInfo.defaultProps.sideBarOptions = ownerOccupierOptions;
             genInfo.defaultProps.leftMenuClass = "left-menu oo";
             genInfo.defaultProps.sideBarClass = "side-bar oo";

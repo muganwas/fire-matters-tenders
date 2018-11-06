@@ -1,3 +1,9 @@
+.grey-text{
+    color: #bababa;
+}
+.main-content {
+    min-height: 500px;
+}
 .main-content .half .heading{
     font-weight: 500;
     margin: 0 10px 10px 0;
@@ -25,12 +31,22 @@
 .inner-textfield{
     font-weight: thin;
 }
-#profile-phoneNumber, #profile-repMobileNumber, #profile-repPhoneNumber, #profile-mobileNumber{
+#profile-phoneNumber, 
+#profile-companyRepMobileNumber, 
+#profile-companyMobileNumber, 
+#profile-companyPhoneNumber,  
+#profile-companyRepPhoneNumber, 
+#profile-mobileNumber{
     font-size: 15px;
     background-color: #F1F1F2;
     padding: 6px;
 }
-#profile-phoneNumber::placeholder, #profile-repMobileNumber::placeholder, #profile-repPhoneNumber::placeholder, #profile-mobileNumber::placeholder{
+#profile-phoneNumber::placeholder, 
+#profile-companyRepMobileNumber::placeholder, 
+#profile-companyMobileNumber::placeholder,
+#profile-companyPhoneNumber::placeholder,
+#profile-companyRepPhoneNumber::placeholder, 
+#profile-mobileNumber::placeholder{
     color: #bababa;
 }
 
