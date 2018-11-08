@@ -4,6 +4,7 @@ import Image from 'react-image';
 import { SocialIcon } from 'react-social-icons';
 import { NavLink, withRouter } from 'react-router-dom';
 import { dispatchedSearchInfo, dispatchedGenInfo } from 'extras/dispatchers';
+import { SearchInput } from 'components';
 import { Lock } from '@material-ui/icons';
 import './headerMain.css';
 import { PropTypes } from 'prop-types';
@@ -105,12 +106,16 @@ class HeaderMain extends Component {
         console.log(link);
         return false;       
     }
+
+    searchSite = ()=>{
+        
+    }
     render(){
         let home = this.props.navigation.home;
         return(
             <div className={ this.props.navigation.headerClass }>
                 <Image className="App-logo" src={require('images/logo.jpg')} />
-                <div className="search"><input placeholder="search" type="text" onChange={this.search} /><i className="material-icons">search</i></div>
+                <SearchInput className="search" placeholder="search" search={ this.searchSite } />
                 <i class="material-icons menu-icon" onClick={ this.toggleMenu }>menu</i>
                 <div className={ this.props.genInfo['info']['menu'] }>
                     <NavLink activeClassName="active" id="home" onClick={ this.toggleMenu } to={ home }>Home</NavLink>

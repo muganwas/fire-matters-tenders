@@ -5,6 +5,7 @@ import promise from 'redux-promise-middleware';
 import userReducer from 'extras/reducers/userReducer';
 import searchReducer from 'extras/reducers/searchReducer';
 import genInfoReducer from 'extras/reducers/genInfoReducer';
+import listingsReducer from 'extras/reducers/listingsReducer';
 import secondarySearchReducer from 'extras/reducers/secondarySearchReducer';
 import textFieldReducer from 'extras/reducers/texfieldReducer';
 
@@ -14,7 +15,8 @@ const allReducers = combineReducers({
     search: searchReducer,
     textFields: textFieldReducer,
     secondarySearch: secondarySearchReducer,
-    genInfo: genInfoReducer
+    genInfo: genInfoReducer,
+    listingsInfo: listingsReducer
 })
 const store = createStore(
     allReducers, 

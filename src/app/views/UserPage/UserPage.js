@@ -4,7 +4,7 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { dispatchedGenInfo, dispatchedUserInfo } from 'extras/dispatchers';
-import { HeaderMain, Footer, SideBar, ProfileTab } from 'components';
+import { HeaderMain, Footer, SideBar, ProfileTab, TendersTab } from 'components';
 import './userPage.css';
 
 const baseUrl = process.env.BACK_END_URL,
@@ -16,7 +16,6 @@ tokenVerificationEndPoint = process.env.TOKEN_VERIFICATION_END_POINT;
         user: store.user,
         search: store.search,
         genInfo: store.genInfo.info,
-        tabs: store.genInfo.info.sideBar.profilePage.tabs,
         currentTab: store.genInfo.info.sideBar.currentTab,
     }
 })
@@ -80,34 +79,9 @@ class UserPage extends React.Component {
             console.log(err)
         });
     }
-
-    activate = (e)=>{
-        let id = e.target.id,
-        genInfo = {...this.props.genInfo},
-        tabs = this.props.tabs;
-        genInfo.sideBar.currentHorizontalTab = id;
-        this.props.dispatch(dispatchedGenInfo(genInfo));
-        document.getElementById(id).className="active";
-        setTimeout(()=>{
-            Object.keys(tabs).map(key=>{
-                if(key === id)
-                    document.getElementById(key).className="active";
-                else
-                    document.getElementById(key).className="";        
-            });
-        }, 20);
-    }
-
-    tabTitle=(key)=>{
-        let tabs = this.props.tabs;
-        return (
-            <span id={key} onClick={ this.activate } className={ key==="personnel"?"active":null} key={ key }>{ tabs[key] }</span>
-        )
-    }
     
     render(){
-        let tabs = this.props.tabs,
-        currentTab = this.props.currentTab;
+        let currentTab = this.props.currentTab;
         return(
             <div className="main">
                 <div className="top">
@@ -119,9 +93,11 @@ class UserPage extends React.Component {
                     </div>
                     <div className="hanad left">
                         <div className="content">
-                            <div className="tabs">{ Object.keys(tabs).map(this.tabTitle) }</div>
-                            {currentTab==="ProfileTab"?
-                            <ProfileTab />:null}
+                            { currentTab==="Profile"
+                            ?<ProfileTab />
+                            :currentTab==="Tenders"
+                            ?<TendersTab />
+                            :null}
                         </div>
                     </div>
                     <div className="clear"></div>

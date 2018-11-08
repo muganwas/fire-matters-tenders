@@ -44,14 +44,18 @@ class SideBar extends React.Component {
     }
 
     select = (e)=>{
-        let id = e.target.id;
-        let sideBarOptions = this.props.genInfo.defaultProps.sideBarOptions;
+
+        let id = e.target.id,
+        genInfo = {...this.props.genInfo},
+        sideBarOptions = this.props.genInfo.defaultProps.sideBarOptions;
         document.getElementById(id).className="selected";
         setTimeout(()=>{
             Object.keys(sideBarOptions).map(key=>{
-                if(key === id)
+                if(key === id){
+                    genInfo.sideBar.currentTab = key;
+                    this.props.dispatch(dispatchedGenInfo(genInfo));
                     document.getElementById(key).className="selected";
-                else
+                }else
                     document.getElementById(key).className="";        
             });
         }, 20);      
@@ -63,9 +67,10 @@ class SideBar extends React.Component {
     }
 
     menuItems = (key)=>{
-        let sideBarOptions = this.props.genInfo.defaultProps.sideBarOptions;
+        let sideBarOptions = this.props.genInfo.defaultProps.sideBarOptions,
+        selected = this.props.genInfo.sideBar.currentTab;
         return(
-            <span name="menuItems" className = { key==="Profile"?"selected":""} id={ key } onClick={ this.select } key={ key }>
+            <span name="menuItems" className = { key===selected?"selected":""} id={ key } onClick={ this.select } key={ key }>
                 <div name={ key} onClick={ this.clickParent }>
                     <i name={ key } onClick={ this.clickParent } className="material-icons left">{ menuIconTitles[key]}</i>
                     <div name={ key } onClick={ this.clickParent } className="item left">{ sideBarOptions[key] }</div>

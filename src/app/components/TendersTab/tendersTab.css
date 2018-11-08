@@ -1,0 +1,80 @@
+.tenders{
+    padding: 0!important;
+}
+.alt-search{
+    position: relative;
+    display: block;
+    overflow: auto;
+    float: right;
+    padding:5px;
+    margin: 0 5px 0 0;
+    background: #fff;
+    border:thin solid #fff;
+    border-radius: 5px;
+}
+.alt-search input{
+    float: left;
+    border: 0;
+    background: #fff;
+    color: #000;
+    height: 25px;
+    width: 200px;
+}
+.alt-search .material-icons{
+    float: right;
+    color: #979797;
+}
+.title-bar{
+    margin: 0;
+    padding: 20px 20px 20px 20px;
+    border-bottom: 2px solid #fff;
+}
+.title-bar span{
+    display: inline-block;
+    vertical-align: top;
+}
+.title-bar #title{
+    vertical-align: bottom;
+    width: 20%
+}
+.title-bar #search{
+    width: 80%;
+}
+.listing-form-container{
+    position: absolute;
+    text-align: center;
+    top: -10px;
+    left:-20px;
+    bottom:-30%;
+    right: -20px;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 10000;
+}
+.listing-form-container .header{
+    display: block;
+    text-align: left;
+    padding: 10px;
+    color: #000;
+    font-weight: bold;
+    border-bottom: 2px solid #F79A50; 
+}
+.listing-form-container #header-text{
+    display: inline-block;
+    margin: 20px 20px 0;
+}
+.listing-form-container #close{
+    cursor: pointer;
+    color: #F79A50;
+}
+.listing-form-subcontainer{
+    display: inline-block;
+    border-radius: 5px;
+    width: 60%;
+    height: auto;
+    padding: 0;
+    background-color: #fff;
+}
+.listing-form{
+    margin: 10px 0 0 0;
+}

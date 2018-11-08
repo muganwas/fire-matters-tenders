@@ -9,6 +9,23 @@ import { PropTypes } from 'prop-types';
 const baseUrl = process.env.BACK_END_URL,
 listingsEndPoint = process.env.LISTING_END_POINT;
 
+const styles = {
+    button: {
+      margin: 2,
+      padding: '3px 10px',
+      fontSize: 10,
+      backgroundColor: "#F79A50",
+      '&:hover': {
+        background: '#F79A50',
+        boxShadow: '1px 2px 4px #BC2902',
+        transition: 'all 0.2s ease-in'
+      }
+    },
+    input: {
+      display: 'none',
+    },
+};
+
 @connect((store)=>{
     return {
         user: store.user,
@@ -54,7 +71,7 @@ class ListedJobs extends Component {
                 <div className="twenty">{ listings[key].city }, { listings[key].state }</div>
                 <div className="thirty">{ listings[key].serviceRequired }, { listings[key].equipment }</div>
                 <div className="twenty">{ listings[key].closingDate}</div>
-                <div className="twenty"><FmButton variant="contained" color="primary" text="Submit Tender" /></div>
+                <div className="twenty"><FmButton variant="contained" styles = { styles } text="Submit Tender" /></div>
                 <div className="ten">
                     <MoreHoriz 
                         className={ listings[key].moreMenuClassName } 

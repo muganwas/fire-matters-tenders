@@ -9,6 +9,23 @@ import { PropTypes } from 'prop-types';
 const baseUrl = process.env.BACK_END_URL,
 usersEndPoint = process.env.USERS_END_POINT + "?userType=service provider";
 
+const styles = {
+    button: {
+      margin: 2,
+      padding: '3px 10px',
+      fontSize: 10,
+      backgroundColor: "#F79A50",
+      '&:hover': {
+        background: '#F79A50',
+        boxShadow: '1px 2px 4px #BC2902',
+        transition: 'all 0.2s ease-in'
+      }
+    },
+    input: {
+      display: 'none',
+    },
+}
+
 @connect((store)=>{
     return {
         user: store.user,
@@ -56,7 +73,7 @@ class ListedServiceProviders extends Component {
                         )
                     }):<div className="tiny-loader"><Loader /></div> }
                 </div>
-                <div className="twenty"><FmButton variant="contained" color="primary" text="Invite to Tender" /></div>
+                <div className="twenty"><FmButton variant="contained" styles={ styles } text="Invite to Tender" /></div>
                 <div className="bottom-border"></div>
             </div>
         )
