@@ -1,45 +1,38 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { Loader } from 'components';
 import Button from '@material-ui/core/Button';
+import './fmButton.css';
 
-const styles = theme => ({
-    button: {
-      margin: theme.spacing.unit,
-      padding: '3px 10px',
-      fontSize: 10,
-      backgroundColor: "#F79A50",
-      '&:hover': {
-        background: '#F79A50',
-        boxShadow: '1px 2px 4px #BC2902',
-        transition: 'all 0.2s ease-in'
-      }
-    },
-    input: {
-      display: 'none',
-    },
-  });
-
+const Load = props=>{
+  return(
+    <div className="fmLoader"><Loader fill={ props.loaderFill } /></div>
+  )
+} 
 const FmButton = (props)=>{
-  const { classes, variant, color, text } = props;
+  const { styles, variant, text, onClick, isActive, loaderFill } = props;
   return(
     <div>
-      <Button variant={ variant } color={ color } className={classes.button}>
-        { text }
+      <Button disabled={ !isActive } onClick={ onClick } variant={ variant } style={styles.button}>
+        { isActive?text:<Load loaderFill={ loaderFill } />}
       </Button>
     </div>
   )
 }
 
 FmButton.defaultProps = {
-  color: "primary"
+  color: "primary",
+  isActive: true,
+  loaderFill: "#fff"
 }
 
 FmButton.propTypes = {
-    classes: PropTypes.object.isRequired,
-    color: PropTypes.string,
     text: PropTypes.string.isRequired,
-    variant: PropTypes.string
+    variant: PropTypes.string,
+    styles: PropTypes.object.isRequired,
+    onClick: PropTypes.func,
+    isActive: PropTypes.bool.isRequired,
+    loaderFill: PropTypes.string
 }
 
-export default withStyles(styles)(FmButton);
+export default FmButton;

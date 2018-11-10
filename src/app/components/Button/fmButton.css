@@ -1,0 +1,8 @@
+.fmLoader{
+    margin: 0 40%;
+}
+.fmLoader svg {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+}

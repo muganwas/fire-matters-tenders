@@ -46,6 +46,7 @@ html{
   display: block!important;
 }
 .main{
+  box-sizing: border-box;
   position: relative;
   box-sizing: border-box;
   width: 100%;

@@ -9,7 +9,7 @@ const defaultState = {
         SideBarClass: "side-bar"
       },
       sideBar:{
-        currentTab: "ProfileTab",
+        currentTab: "Profile",
         currentHorizontalTab: "personnel",
         profilePage:{
           tabs: {}

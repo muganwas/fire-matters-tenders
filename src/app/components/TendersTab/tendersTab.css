@@ -1,0 +1,51 @@
+.tenders{
+    padding: 0!important;
+}
+.alt-search{
+    position: relative;
+    display: block;
+    overflow: auto;
+    float: right;
+    padding:5px;
+    margin: 0 5px 0 0;
+    background: #fff;
+    border:thin solid #fff;
+    border-radius: 5px;
+}
+.alt-search input{
+    float: left;
+    border: 0;
+    background: #fff;
+    color: #000;
+    height: 25px;
+    width: 200px;
+}
+.alt-search .material-icons{
+    float: right;
+    color: #979797;
+}
+.title-bar{
+    margin: 0;
+    padding: 20px 20px 20px 20px;
+    border-bottom: 2px solid #fff;
+}
+.title-bar span{
+    display: inline-block;
+    vertical-align: top;
+}
+.title-bar #title{
+    vertical-align: bottom;
+    width: 20%
+}
+.title-bar #search{
+    width: 80%;
+}
+.success{
+    box-sizing: border-box;
+    padding: 5px;
+    display: inline-block;
+    font-size: 13px;
+    width: 300px;
+    background-color: #f3fcef;
+    color: rgb(34, 140, 55);
+}

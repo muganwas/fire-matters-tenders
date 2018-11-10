@@ -16,6 +16,7 @@ const config = {
     messagingSenderId: "544850561778"
 };
 firebase.initializeApp(config);
+
 export const statesAustralia = {
     NSW: "New South Wales",
     Qld: "Queensland",
@@ -63,6 +64,40 @@ export const userTypes = {
 export const ownerOccupierProfileTabs = {
     personnel: "Personnel",
     company: "Company"
+}
+
+export const equipmentCategories = {
+    detectionAndWarningSystems: "Detection & Warning Systems",
+    portableEquipment: "Portable Equipment",
+    passiveProtection: "Passive Protection Equipment",
+    emergencyExitLighting: "Emergency Exit Lighting"
+}
+
+export const detectionAndWarningSystems = {
+    fireDetectionAndWarningSystem: "Fire Detection & Warning System",
+    smokeAndHeatAlarms: "Smoke & Heat Alarms",
+    smokeExhaustSystem: "Smoke Exhaust System"
+}
+
+export const portableEquipment = {
+    hoseReels: "Hose Reels",
+    extinguishers: "Extinguishers"
+}
+
+export const emergencyExitLighting = {
+    totalEmergencyExitLighting: "Total Emergency Exit Lighting"
+}
+
+export const contractTypes = {
+    longTerm: "Long-term",
+    shortTerm: "Short-term"
+}
+
+export const passiveProtection = {
+    fireDoorsCA: "Fire Doors(Common Area)",
+    fireDoorsA: "Fire Doors(Appartment)",
+    fireDoorsS: "Fire Doors(Sliding)",
+    servicePenetrations: "Service Penetrations"
 }
 
 export const serviceProviderProfileTabs = {

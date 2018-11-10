@@ -4,6 +4,23 @@ const defaultState = {
       loginInfo: {
         messageClass: "postSubmitMessage"
       },
+      createListing: {
+        listingCompanyName: null,
+        listingState: null,
+        listingCity: null,
+        listingCategory: null,
+        listingCategoryOther: null,
+        listingEquipmentCategory: null,
+        listingEquipment: null,
+        listingEquipmentQuantity: null,
+        listingContractType: null,
+        listingStartDate: null,
+        feedback: undefined,
+        feedbackClass: "hidden",
+        submitButton: {
+          isActive: true
+        }
+      },
       profileInfo:{ },
       avatarProps: {
         feedback: undefined,

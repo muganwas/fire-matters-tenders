@@ -1,9 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { TextSpace } from 'components';
+import { TextSpace, FmButton } from 'components';
 import { Link } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
-import { dispatchedUserInfo, dispatchedGenInfo } from 'extras/dispatchers';
+import { dispatchedUserInfo, dispatchedGenInfo, dispatchedButtonInfo } from 'extras/dispatchers';
 import { Info } from '@material-ui/icons';
 import PropTypes from 'prop-types';
 import Rebase from 're-base';
@@ -23,11 +22,22 @@ baseUrl = process.env.BACK_END_URL,
 usersEndPoint = process.env.USERS_END_POINT,
 userUpdateEndPoint = process.env.USER_UPDATE_END_POINT;
 
-const logginbutton = {
-    color: "#fff",
-    backgroundColor: "#ED2431",
-    margin: "2px 6px"
-}
+const styles = {
+    button: {
+      margin: 2,
+      padding: '3px 10px',
+      fontSize: 14,
+      width: "300px",
+      backgroundColor: "#ED2431",
+      color: "#fff",
+      fontWeight: "bold",
+      '&:hover': {
+        background: '#ED2431',
+        boxShadow: '1px 2px 4px #BC2902',
+        transition: 'all 0.2s ease-in'
+      }
+    }
+};
 
 @connect((store)=>{
     return {
@@ -35,12 +45,22 @@ const logginbutton = {
         userInfo: store.user.info,
         loginInfo: store.user.info.loginInfo,
         search: store.search,
+        buttonsInfo: store.buttonsInfo.info,
         genInfo: store.genInfo.info
     }
 })
 class LoginForm extends React.Component {
     constructor(props) {
         super(props);
+    }
+
+    componentWillMount(){
+        let buttonsInfo = {...this.props.buttonsInfo},
+        userInfo = {...this.props.userInfo};
+        userInfo.loginInfo.feedback = null;
+        buttonsInfo.login.active = true;
+        this.props.dispatch(dispatchedUserInfo(userInfo));
+        this.props.dispatch(dispatchedButtonInfo(buttonsInfo));
     }
 
     componentWillReceiveProps(nextProps){
@@ -87,7 +107,10 @@ class LoginForm extends React.Component {
     login = ()=>{
         let email = this.props.loginInfo.username,
         userInfo = {...this.props.userInfo},
-        password = this.props.loginInfo.password;
+        password = this.props.loginInfo.password,
+        buttonsInfo = {...this.props.buttonsInfo};
+        buttonsInfo.login.active = false;
+        this.props.dispatch(dispatchedButtonInfo(buttonsInfo));
         auth.signInWithEmailAndPassword(email, password).
         then(res=>{
             let emailAddress = res.user.email,
@@ -128,6 +151,8 @@ class LoginForm extends React.Component {
                                     console.log(error);
                                     userInfo.loginInfo.messageClass = "postSubmitError"
                                     userInfo.loginInfo.feedback = "Something went wrong while connecting to server.";
+                                    buttonsInfo.login.active = true;
+                                    this.props.dispatch(dispatchedButtonInfo(buttonsInfo));
                                     this.props.dispatch(dispatchedUserInfo(userInfo));
                                 })
                                 
@@ -136,11 +161,15 @@ class LoginForm extends React.Component {
                                 console.log(error.message);
                                 userInfo.loginInfo.messageClass = "postSubmitError"
                                 userInfo.loginInfo.feedback = "Something went wrong, try agian later.";
+                                buttonsInfo.login.active = true;
+                                this.props.dispatch(dispatchedButtonInfo(buttonsInfo));
                                 this.props.dispatch(dispatchedUserInfo(userInfo));
                             });
                         }else{
                             userInfo.loginInfo.messageClass = "postSubmitError"
                             userInfo.loginInfo.feedback = "Your account is not activated yet.";
+                            buttonsInfo.login.active = true;
+                            this.props.dispatch(dispatchedButtonInfo(buttonsInfo));
                             this.props.dispatch(dispatchedUserInfo(userInfo));
                         }
                     }).
@@ -148,6 +177,8 @@ class LoginForm extends React.Component {
                         console.log(error.message);
                         userInfo.loginInfo.messageClass = "postSubmitError"
                         userInfo.loginInfo.feedback = "Something went wrong, try agian later.";
+                        buttonsInfo.login.active = true;
+                        this.props.dispatch(dispatchedButtonInfo(buttonsInfo));
                         this.props.dispatch(dispatchedUserInfo(userInfo));
                     });
                 }).
@@ -155,11 +186,15 @@ class LoginForm extends React.Component {
                     console.log(error.message);
                     userInfo.loginInfo.messageClass = "postSubmitError"
                     userInfo.loginInfo.feedback = "Something went wrong, try agian later.";
+                    buttonsInfo.login.active = true;
+                    this.props.dispatch(dispatchedButtonInfo(buttonsInfo));
                     this.props.dispatch(dispatchedUserInfo(userInfo));
                 })
             }else{
                 userInfo.loginInfo.messageClass = "postSubmitError"
                 userInfo.loginInfo.feedback = "Your account is not verified yet.";
+                buttonsInfo.login.active = true;
+                this.props.dispatch(dispatchedButtonInfo(buttonsInfo));
                 this.props.dispatch(dispatchedUserInfo(userInfo));
             }
         }).
@@ -169,6 +204,8 @@ class LoginForm extends React.Component {
                 userInfo.loginInfo.feedback = "Your email address was not found.";
             }else
                 userInfo.loginInfo.feedback = error.message;
+            buttonsInfo.login.active = true;
+            this.props.dispatch(dispatchedButtonInfo(buttonsInfo));
             this.props.dispatch(dispatchedUserInfo(userInfo));
         });
     }
@@ -220,7 +257,8 @@ class LoginForm extends React.Component {
         usernameError = genInfo.errors.usernameError,
         loginPasswordError = genInfo.errors.loginPasswordError,
         postSubmitMessage = this.props.loginInfo.feedback,
-        messageClass = this.props.loginInfo.messageClass;
+        messageClass = this.props.loginInfo.messageClass,
+        isActive = this.props.buttonsInfo.login.active;
         return(
             <div className="form login">
                 { postSubmitMessage?<span className={ messageClass }> <Info className="icon" /> { postSubmitMessage } </span>: null }
@@ -233,9 +271,7 @@ class LoginForm extends React.Component {
                     { loginPasswordError?<span className="error-feedback">{ loginPasswordError }</span>:null }
                 </div>
                 <div className="inputRow">
-                    <Button onClick={this.login} variant="outlined" style={ logginbutton } className="login-button" >
-                        Log In
-                    </Button>                
+                    <FmButton isActive={ isActive } loaderFill = "#fff" variant="contained" onClick={ this.login } styles = { styles } text="Login" />              
                 </div>
                 <div className="inputRow">
                     <span>Forgot Password?</span>  <Link to={`/login`} >Reset Password</Link>

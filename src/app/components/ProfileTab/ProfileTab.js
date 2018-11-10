@@ -12,10 +12,11 @@ import { ownerOccupierProfileTabs, serviceProviderProfileTabs } from 'extras/con
         user: store.user.info,
         search: store.search,
         genInfo: store.genInfo.info,
+        tabs: store.genInfo.info.sideBar.profilePage.tabs,
         currentHorizontalTab: store.genInfo.info.sideBar.currentHorizontalTab,
     }
 })
-class ProfilePage extends React.Component {
+class ProfileTab extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -35,10 +36,36 @@ class ProfilePage extends React.Component {
         this.props = {...nextProps};
     }
 
+    activate = (e)=>{
+        let id = e.target.id,
+        genInfo = {...this.props.genInfo},
+        tabs = this.props.tabs;
+        genInfo.sideBar.currentHorizontalTab = id;
+        this.props.dispatch(dispatchedGenInfo(genInfo));
+        document.getElementById(id).className="active";
+        setTimeout(()=>{
+            Object.keys(tabs).map(key=>{
+                if(key === id)
+                    document.getElementById(key).className="active";
+                else
+                    document.getElementById(key).className="";        
+            });
+        }, 20);
+    }
+    
+    tabTitle=(key)=>{
+        let tabs = this.props.tabs,
+        selected = this.props.currentHorizontalTab;
+        return (
+            <span id={key} onClick={ this.activate } className={ key===selected?"active":null} key={ key }>{ tabs[key] }</span>
+        )
+    }
+
     render(){
-        let currentTab = this.props.currentHorizontalTab;
+        let tabs = this.props.tabs, currentTab = this.props.currentHorizontalTab;
         return(
             <div>
+                <div className="tabs">{ Object.keys(tabs).map(this.tabTitle) }</div>
                 {currentTab==="personnel"?
                 <PersonnelTab />:
                 currentTab==="company"?
@@ -52,16 +79,16 @@ class ProfilePage extends React.Component {
     }
 }
 
-ProfilePage.defaultProps = {
+ProfileTab.defaultProps = {
     user: {},
     search: {},
     genInfo: {}
 }
 
-ProfilePage.propTypes = {
+ProfileTab.propTypes = {
     user: PropTypes.object.isRequired,
     search: PropTypes.object.isRequired,
     genInfo: PropTypes.object.isRequired
 }
 
-export default ProfilePage;
+export default ProfileTab;

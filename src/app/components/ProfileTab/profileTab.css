@@ -55,7 +55,7 @@
     padding: 0 0 10px 0;
 }
 .information{
-    text-align: left!important;
+    text-align: left;
 }
 .information .select{
     border: thin solid #ED2431;

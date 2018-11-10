@@ -77,7 +77,8 @@ class LicenseTab extends React.Component{
             let nameArr = origName.split("-"),
             key = nameArr[0],
             name = nameArr[1],
-            value = e.target.value;
+            value = e.target.getAttribute('value');
+            value = value?value:e.target.value;
             userInfo.profileInfo.licenses[key][name] = value;
             if(userInfo)                     
                 resolve(userInfo);

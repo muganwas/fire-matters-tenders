@@ -70,6 +70,40 @@ export function dispatchedTextFieldInfo(Info) {
     }
 }
 
+export function dispatchedButtonInfo(Info) {
+    if(Info !== undefined && Info !== null){   
+      return {
+            type: "FETCH_BUTTON_INFO_FULFILLED",
+            payload: {
+                info: Info
+            }   
+        }
+    }else{
+        return {
+            type: "FETCH_BUTTON_INFO_REJECTED",
+            payload: {
+                error: "could not fetch user details"
+            }
+        } 
+    }
+}
+
+export function dispatchedListingsInfo(info) {
+    if(info !== undefined && info !== null){   
+      return {
+            type: "FETCH_LISTINGS_FULFILLED",
+            payload: { info }
+        }
+    }else{
+        return {
+            type: "FETCH_LISTINGS_REJECTED",
+            payload: {
+                error: "could not fetch user details"
+            }
+        } 
+    }
+}
+
 export function dispatchedGenInfo(info) {
     if(info !== undefined && info !== null){   
       return {

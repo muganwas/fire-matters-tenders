@@ -5,8 +5,10 @@ import promise from 'redux-promise-middleware';
 import userReducer from 'extras/reducers/userReducer';
 import searchReducer from 'extras/reducers/searchReducer';
 import genInfoReducer from 'extras/reducers/genInfoReducer';
+import listingsReducer from 'extras/reducers/listingsReducer';
 import secondarySearchReducer from 'extras/reducers/secondarySearchReducer';
 import textFieldReducer from 'extras/reducers/texfieldReducer';
+import buttonsReducer from 'extras/reducers/buttonsReducer';
 
 const middleware = applyMiddleware(promise(), thunk, logger);
 const allReducers = combineReducers({
@@ -14,7 +16,9 @@ const allReducers = combineReducers({
     search: searchReducer,
     textFields: textFieldReducer,
     secondarySearch: secondarySearchReducer,
-    genInfo: genInfoReducer
+    genInfo: genInfoReducer,
+    listingsInfo: listingsReducer,
+    buttonsInfo: buttonsReducer
 })
 const store = createStore(
     allReducers, 

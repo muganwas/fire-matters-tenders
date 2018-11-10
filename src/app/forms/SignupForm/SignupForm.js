@@ -15,11 +15,6 @@ const auth = firebase.auth(),
 baseUrl = process.env.BACK_END_URL,
 usersEndPoint = process.env.USERS_END_POINT;
 
-const signupbutton = {
-    color: "#fff",
-    backgroundColor: "#ED2431"
-}
-
 @connect((store)=>{
     return {
         user: store.user,
@@ -346,7 +341,6 @@ class SignupForm extends React.Component {
                             passwordError = { passwordError }
                             tmcError={ tmcError }
                             toAddress={ this.toAddress }
-                            signupbutton={ signupbutton }
                         />:
                         level===3?
                         <AddressInformation
@@ -359,7 +353,6 @@ class SignupForm extends React.Component {
                             selected = { selected }
                             setstate = { this.setstate }
                             signup = { this.signUp }
-                            signupbutton={ signupbutton }
                         />:undefined }
                 </div>
             </div> 
