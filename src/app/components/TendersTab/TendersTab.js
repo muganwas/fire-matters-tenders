@@ -179,7 +179,7 @@ class TendersTab extends React.Component {
         equipmentQuantity = listingsData.listingEquipmentQuantity,
         contractType = listingsData.listingContractType,
         startDate = listingsData.listingStartDate,
-        userEmail = this.props.profileInfo.emailAddress;
+        userEmail = this.props.profileInfo.emailAddress,
         postInfoUrl = baseURL + listingsEndPoint;
         serviceRequired = serviceRequired === "Other"?otherServiceType:serviceRequired;
 
