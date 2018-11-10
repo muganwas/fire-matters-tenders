@@ -1,31 +1,33 @@
 const defaultState = {
     info: {
-      createForm: {
-        errors: {},
-        show: false
-      }
-     },
+        login: {
+            active: true
+        },
+        signup: {
+            active: true
+        }
+    },
     fetching: false,
     fetched: false,
     error: null
   }
-  const listingsReducer = (state = defaultState, action)=>{
+  const buttonsReducer = (state = defaultState, action)=>{
       switch(action.type){
-          case "FETCH_LISTINGS_PENDING":{
+          case "FETCH_BUTTON_INFO_PENDING":{
             return {...state,
               fetched: false,
               error: null,
               fetching: true
             }
           }
-          case "FETCH_LISTINGS_REJECTED":{
+          case "FETCH_BUTTON_INFO_REJECTED":{
             return {...state,
               fetching: false,
               fetched: false,
               error: action.payload
             }
           }
-          case "FETCH_LISTINGS_FULFILLED":{
+          case "FETCH_BUTTON_INFO_FULFILLED":{
             return {...state,
               fetched: true,
               fetching: false,
@@ -38,4 +40,4 @@ const defaultState = {
       }  
   }
   
-  export default listingsReducer;
+  export default buttonsReducer;

@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import  { Loader, FmButton, MoreHoriz } from 'components';
 import axios from 'axios';
 import { dispatchedGenInfo } from 'extras/dispatchers';
-import './listedJobs.css';
+import './listedPostedTenders.css';
 import { PropTypes } from 'prop-types';
 
-const baseUrl = process.env.BACK_END_URL,
+const baseURL = process.env.BACK_END_URL,
 listingsEndPoint = process.env.LISTING_END_POINT;
 
 const styles = {
@@ -30,10 +30,11 @@ const styles = {
     return {
         user: store.user,
         search: store.search,
-        genInfo: store.genInfo
+        genInfo: store.genInfo,
+        profileInfo: store.user.info.profileInfo,
     }
 })
-class ListedJobs extends Component {
+class ListedPostedTenders extends Component {
     constructor(props){
         super(props)
     }
@@ -49,8 +50,9 @@ class ListedJobs extends Component {
     }
 
     fetchListings = ()=>{
-        let genInfo = {...this.props.genInfo.info };
-        axios.get(baseUrl + listingsEndPoint).then((response)=>{
+        let genInfo = {...this.props.genInfo.info },
+        userEmail = this.props.profileInfo.emailAddress;
+        axios.get(baseURL + listingsEndPoint + "?userEmail=" + userEmail).then((response)=>{
             //console.log(response.data);
             let listings = genInfo.listings = {...response.data};
             /**Set the more dropdown menu class to hidden for every row*/
@@ -104,16 +106,16 @@ class ListedJobs extends Component {
     }
 }
 
-ListedJobs.defaultProps = {
+ListedPostedTenders.defaultProps = {
     user: {},
     search: {},
     genInfo: {}
 }
 
-ListedJobs.PropTypes = {
+ListedPostedTenders.PropTypes = {
     user: PropTypes.object.isRequired,
     search: PropTypes.object.isRequired,
     genInfo: PropTypes.object.isRequired
 }
 
-export default ListedJobs;
+export default ListedPostedTenders;

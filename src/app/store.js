@@ -8,6 +8,7 @@ import genInfoReducer from 'extras/reducers/genInfoReducer';
 import listingsReducer from 'extras/reducers/listingsReducer';
 import secondarySearchReducer from 'extras/reducers/secondarySearchReducer';
 import textFieldReducer from 'extras/reducers/texfieldReducer';
+import buttonsReducer from 'extras/reducers/buttonsReducer';
 
 const middleware = applyMiddleware(promise(), thunk, logger);
 const allReducers = combineReducers({
@@ -16,7 +17,8 @@ const allReducers = combineReducers({
     textFields: textFieldReducer,
     secondarySearch: secondarySearchReducer,
     genInfo: genInfoReducer,
-    listingsInfo: listingsReducer
+    listingsInfo: listingsReducer,
+    buttonsInfo: buttonsReducer
 })
 const store = createStore(
     allReducers, 

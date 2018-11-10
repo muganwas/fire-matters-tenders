@@ -29,3 +29,4 @@ export { default as InsuranceTab } from 'components/InsuranceTab/InsuranceTab';
 export { default as LicenseTab } from 'components/LicenseTab/LicenseTab';
 export { default as ChckBox } from 'components/CheckBox/ChckBox';
 export { default as SearchInput } from 'components/SearchInput/SearchInput';
+export { default as ListedPostedTenders } from 'components/ListedPostedTenders/ListedPostedTenders';

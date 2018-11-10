@@ -1,10 +1,26 @@
 import React from 'react';
-import { TickBox, TextSpace, DropDown, UserPhoneNumber } from 'components';
+import { TickBox, TextSpace, DropDown, UserPhoneNumber, FmButton } from 'components';
 import { Link } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
 import { dispatchedUserInfo } from 'extras/dispatchers';
 import { Info } from '@material-ui/icons';
 import PropTypes from 'prop-types';
+
+const styles = {
+    button: {
+      margin: 2,
+      padding: '3px 10px',
+      fontSize: 14,
+      width: "300px",
+      backgroundColor: "#ED2431",
+      color: "#fff",
+      fontWeight: "bold",
+      '&:hover': {
+        background: '#ED2431',
+        boxShadow: '1px 2px 4px #BC2902',
+        transition: 'all 0.2s ease-in'
+      }
+    }
+};
 
 export const PreSignup = props=>{
     const { nextView } = props;
@@ -25,7 +41,7 @@ PreSignup.propTypes = {
 }
 
 export const BasicInformation = props=>{
-    const { setError, genInfo, phoneNumberError, emailFormatError, passwordError, passwordMatchError, tmcError, toAddress, signupbutton, userInfo, mobileNumberError } = props;
+    const { setError, genInfo, phoneNumberError, emailFormatError, passwordError, passwordMatchError, tmcError, toAddress, userInfo, mobileNumberError } = props;
     return(
         <div className = "basic-information">
             <div className="inputRow">
@@ -59,9 +75,7 @@ export const BasicInformation = props=>{
                 { tmcError?<span className="error-feedback">{ tmcError }</span>:null }
             </div>
             <div className="inputRow">
-                <Button onClick={ toAddress } variant="outlined" style={ signupbutton } className="signupButton" >
-                    Proceed
-                </Button>
+                <FmButton variant="contained" onClick={ toAddress } styles = { styles } text="Proceed" /> 
             </div>
         </div>
     ) 
@@ -86,7 +100,7 @@ BasicInformation.propTypes = {
 }
 
 export const AddressInformation = props=>{
-    const { statesAustralia, selected, setstate, setError, signup, genInfo, userInfo, signupbutton, postSubmitMessage, messageClass } = props;
+    const { statesAustralia, selected, setstate, setError, signup, genInfo, userInfo, postSubmitMessage, messageClass } = props;
     return(
         <div>
             { postSubmitMessage?<span className={ messageClass }> <Info className="icon" /> { postSubmitMessage } </span>: null }
@@ -100,9 +114,7 @@ export const AddressInformation = props=>{
                 <TextSpace onBlur={ setError } id="physicalAddress" value={ userInfo.physicalAddress } adornment="home" type="text" placeholder="Physical Address" fieldClass={ genInfo.physicalAddressClass || genInfo.textfieldClass } />
             </div> 
             <div className="inputRow">
-                <Button onClick={ signup } variant="outlined" style={ signupbutton } className="signupButton" >
-                    Sign Up
-                </Button>
+                <FmButton variant="contained" onClick={ signup } styles = { styles } text="Sign Up" /> 
             </div>
         </div>
     )

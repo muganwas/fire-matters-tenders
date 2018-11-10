@@ -52,6 +52,7 @@ function CompanyTab(props){
             let nameArr = origName.split("-"),
             name = nameArr[1],
             value = e.target.getAttribute('value');
+            value = value?value:e.target.value;
             userInfo.profileInfo[name] = value;
             if(userInfo)                     
                 resolve(userInfo);

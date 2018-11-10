@@ -77,7 +77,8 @@ class InsuranceTab extends React.Component{
             let nameArr = origName.split("-"),
             key = nameArr[0],
             name = nameArr[1],
-            value = e.target.value;
+            value = e.target.getAttribute('value');
+            value = value?value:e.target.value;
             userInfo.profileInfo.insurance[key][name] = value;
             if(userInfo)                     
                 resolve(userInfo);
@@ -234,7 +235,6 @@ class InsuranceTab extends React.Component{
         }
         else
             return null;
-        
     }
 
     render(){
