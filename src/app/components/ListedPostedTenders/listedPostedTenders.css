@@ -1,0 +1,13 @@
+.posted-count{
+    box-sizing: border-box;
+    display: inline-block;
+    text-align: center;
+    margin-left: 5px;
+    width: 25px;
+    height: 25px;
+    padding: 5px;
+    border-radius: 50%;
+    z-index: 0;
+    border: thin solid #F79A50;
+    cursor: pointer;
+}

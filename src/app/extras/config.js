@@ -38,6 +38,8 @@ export const ownerOccupierOptions = {
     Sites: "Sites"
 }
 
+export const listedPostedTendersOptions = { 1: "View More..." }
+
 export const serviceProviderOptions = {
     Profile: "Profile",
     Tenders: "Tenders",

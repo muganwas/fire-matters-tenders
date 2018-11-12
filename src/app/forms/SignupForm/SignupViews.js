@@ -100,12 +100,12 @@ BasicInformation.propTypes = {
 }
 
 export const AddressInformation = props=>{
-    const { statesAustralia, selected, setstate, setError, signup, genInfo, userInfo, postSubmitMessage, messageClass } = props;
+    const { statesAustralia, selected, setstate, setError, setErrorAlt, signup, genInfo, userInfo, postSubmitMessage, messageClass } = props;
     return(
         <div>
             { postSubmitMessage?<span className={ messageClass }> <Info className="icon" /> { postSubmitMessage } </span>: null }
             <div className="inputRow">
-                <DropDown onBlur={ setError } id="state" className="select" init="Select state" width="300px" options={ statesAustralia } selected={ selected } onChange={ setstate } />
+                <DropDown onBlur={ setErrorAlt } id="state" className="select" init={selected || "Select state"} width="300px" options={ statesAustralia } selected={ selected } onChange={ setstate } />
             </div>
             <div className="inputRow">
                 <TextSpace onBlur={ setError } id="city" value={ userInfo.city} adornment="place" type="text" placeholder="City" fieldClass={ genInfo.cityClass || genInfo.textfieldClass } />

@@ -54,3 +54,18 @@
 .item{
     margin: 0 0 0 10px;
 }
+.listingsCount{
+    display: inline-block;
+    text-align: center;
+    margin-left: 5px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: thin solid #fff;
+    z-index: 0;
+}
+.selected .listingsCount{
+    color: #F79A50;
+    background: #fff;
+    border: thin solid #F79A50;
+}

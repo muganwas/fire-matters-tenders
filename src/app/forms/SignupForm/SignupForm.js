@@ -121,6 +121,108 @@ class SignupForm extends React.Component {
             throw error;
         });
     }
+    /**dropdown set error */
+    ddSetError = (id, value)=>{
+        return new Promise(resolve=>{
+            let info = {...this.props.genInfo.info},
+            toBeStored = sessionStorage.getItem('signup')?JSON.parse(sessionStorage.getItem('signup')): {},
+            userInfo = {...this.props.userInfo};
+            value = (value).trim();
+            let leng = value.length,
+            fieldClass = id,
+            newClass = fieldClass + " error",
+            label = id + "Class";
+            if(!value && (id !== "mobileNumber")){
+                    info[label] = newClass        
+            }else{
+                if(id === "phoneNumber" || id === "mobileNumber"){
+                    switch(leng === 14 || leng < 1){
+                        case true:
+                            switch(id){
+                                case "phoneNumber":
+                                    info.errors.phoneNumberError = "";
+                                    info[label] = "";
+                                    toBeStored[id] = value;
+                                    sessionStorage.setItem('signup', JSON.stringify(toBeStored));
+                                    leng === 14?userInfo.signupInfo[id] = value: "";
+                                break;
+                                case "mobileNumber":
+                                    info.errors.mobileNumberError = "";
+                                    toBeStored[id] = value;
+                                    sessionStorage.setItem('signup', JSON.stringify(toBeStored));
+                                    leng === 14?userInfo.signupInfo[id] = value: "";
+                                break;
+                            }
+                        break;
+                        case false:
+                            switch(id){
+                                case "phoneNumber":
+                                    info.errors.phoneNumberError = "Your phone number is too short";
+                                    userInfo.signupInfo[id] = "";
+                                    toBeStored[id] = "";
+                                    sessionStorage.setItem('signup', JSON.stringify(toBeStored));
+                                    info[label] = "";
+                                break;
+                                case "mobileNumber":
+                                    info.errors.mobileNumberError = "Your mobile number is too short";
+                                    toBeStored[id] = "";
+                                    sessionStorage.setItem('signup', JSON.stringify(toBeStored));
+                                    userInfo.signupInfo[id] = "";
+                                break;
+                            }
+                        break;
+                    }
+                }else{
+                    if(id === "password" || id === "passwordConfirm"){
+                        if(leng >= 6){
+                            let password = this.props.user.info.password,
+                            passwordConfirm = this.props.user.info.passwordConfirm;
+                            if((id === "passwordConfirm" && password && (password !== passwordConfirm)) || (id === "password" && passwordConfirm && (password !== passwordConfirm))){
+                                info.errors.passwordError = "";
+                                info.errors.passwordMatchError = "Your passwords don't match";
+                                id === "passwordConfirm"?toBeStored[id] = userInfo.signupInfo[id] = "":toBeStored[id] = userInfo.signupInfo[id] = value;
+                                sessionStorage.setItem('signup', JSON.stringify(toBeStored));
+                            }          
+                            else{
+                                info.errors.passwordMatchError = "";
+                                info.errors.passwordError = "";
+                                toBeStored[id] = userInfo.signupInfo[id] = value;
+                                sessionStorage.setItem('signup', JSON.stringify(toBeStored));
+                            }
+                            info[label] = "";
+                        }else{
+                            id === "password"?info.errors.passwordError = "Your password should be 6 characters or more.":"";
+                            id === "passwordConfirm"?info.errors.passwordMatchError = "There is a problem with your password":"";
+                            toBeStored[id] = "";
+                            sessionStorage.setItem('signup', JSON.stringify(toBeStored));
+                            userInfo.signupInfo[id] = info[label] = "";
+                        }
+                    }else{
+                        let emailAddress = this.props.user.info.emailAddress;
+                        info[label] = "";
+                        if(emailAddress && !emailAddress.match(emailregex)){
+                            info.errors.emailFormatError = "Wrong email format";
+                            toBeStored[id] ="";
+                            sessionStorage.setItem('signup', JSON.stringify(toBeStored));
+                            userInfo.signupInfo[id] = "";
+                        }else if(emailAddress && emailAddress.match(emailregex)){
+                            info.errors.emailFormatError = "";
+                            toBeStored[id] = value;
+                            sessionStorage.setItem('signup', JSON.stringify(toBeStored));
+                            userInfo.signupInfo[id] = value;
+                        }else{
+                            toBeStored[id] = value;
+                            sessionStorage.setItem('signup', JSON.stringify(toBeStored));
+                            userInfo.signupInfo[id] = value;
+                        }
+                    }
+                }
+            }
+            this.props.dispatch(dispatchedUserInfo(userInfo));
+            this.props.dispatch(dispatchedGenInfo(info));
+            resolve();
+        });
+    }
     /**should have been name errorCheck */
     setError = (e)=>{
         let info = {...this.props.genInfo.info},
@@ -282,15 +384,16 @@ class SignupForm extends React.Component {
     }
 
     setstate = (e)=>{
+        e.persist();
         return new Promise((resolve, reject)=>{
             let state = e.target.id,
             toBeStored = sessionStorage.getItem('signup')?JSON.parse(sessionStorage.getItem('signup')): {},
             userInfo = {...this.props.user.info};
-            userInfo.state = statesAustralia[state];
+            userInfo.signupInfo.state = statesAustralia[state];
             toBeStored.state = statesAustralia[state];
             sessionStorage.setItem('signup', JSON.stringify(toBeStored));
             this.props.dispatch(dispatchedUserInfo(userInfo));
-            resolve("state set");
+            resolve({...userInfo});
         });      
     }
     /** signup progress bar, click to navigate to level */
@@ -315,7 +418,7 @@ class SignupForm extends React.Component {
         mobileNumberError = genInfo.errors.mobileNumberError,
         emailFormatError = genInfo.errors.emailFormatError,
         tmcError = genInfo.errors.tmcError,
-        selected = userInfo.state,
+        selected = userInfo.signupInfo.state,
         postSubmitMessage = genInfo.messages.postSubmitMessage,
         messageClass = genInfo.messages.messageClass,
         first = genInfo.signUpProgressBar.oneClass,
@@ -347,6 +450,7 @@ class SignupForm extends React.Component {
                             messageClass = { messageClass }
                             postSubmitMessage={ postSubmitMessage }
                             statesAustralia={ statesAustralia }
+                            setErrorAlt = { this.ddSetError }
                             setError={ this.setError }
                             genInfo={ genInfo }
                             userInfo={ userInfo }

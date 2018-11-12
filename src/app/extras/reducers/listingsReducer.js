@@ -3,7 +3,12 @@ const defaultState = {
       createForm: {
         errors: {},
         show: false
-      }
+      },
+      tenderForm: {
+        errors:{},
+        show: false
+      },
+      postedTenders: {}
      },
     fetching: false,
     fetched: false,

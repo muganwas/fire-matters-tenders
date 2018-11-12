@@ -153,10 +153,10 @@ class TendersTab extends React.Component {
             let listingsData = {...this.props.listingsData},
             listingsInfo = {...this.props.listingsInfo};
             Object.keys(listingsData).map(key=>{
-                if(!listingsData[key]){
+                if(!listingsData[key] && key !== "feedback" && key !== "feedbackClass" && key !== "submitButton"){
                     listingsInfo.createForm.errors[key] = true;
                     errored.push(listingsInfo.createForm.errors[key]);
-                }else{
+                }else if(listingsData[key] && key !== "feedback" && key !== "feedbackClass" && key !== "submitButton"){
                     listingsInfo.createForm.errors[key] = null;
                 }
             });
@@ -196,6 +196,8 @@ class TendersTab extends React.Component {
             startDate
         };
         this.checkForErrors().then(res=>{
+            console.log(serviceRequired)
+            console.log(res)
             if(serviceRequired &&  res <= 1){
                 userInfo.createListing.submitButton.isActive = false;
                 this.props.dispatch(dispatchedUserInfo(userInfo));
@@ -222,7 +224,7 @@ class TendersTab extends React.Component {
                 axios.post(postInfoUrl, postObject).
                 then(res=>{
                     userInfo.createListing.submitButton.isActive = true;
-                    userInfo.createListing.feedback = "Something went wrong, try again later.";
+                    userInfo.createListing.feedback = "Your listing was posted successfully.";
                     userInfo.createListing.feedbackClass="success";
                     this.props.dispatch(dispatchedUserInfo(userInfo));
                     this.forceUpdate();
@@ -272,6 +274,7 @@ class TendersTab extends React.Component {
         showListingsForm = listingsInfo.createForm.show,
         listingAttributes = this.props.user.createListing,
         errors = listingsInfo.createForm.errors,
+        userType = this.props.profileInfo.userType,
         feedback = listingAttributes.feedback,
         feedbackClass = listingAttributes.feedbackClass,
         equipment = {detectionAndWarningSystems, portableEquipment, passiveProtection, emergencyExitLighting };
@@ -297,11 +300,11 @@ class TendersTab extends React.Component {
                 :null}
                 <div className="title-bar">
                     <span id="title">Postings</span>
-                    <span id="search">
+                    {userType === "Owner/Occupier"?<span id="search">
                         <FmButton variant="contained" styles={ alt_styles } text="Rehire service provider" />
                         <FmButton variant="contained" onClick={ this.renderListingForm } styles={ styles } text="Post New Tender" />
                         <SearchInput className="alt-search" placeholder="search for your listings" search={ this.searchListings } />
-                    </span>
+                    </span>:null}
                 </div>
                 <ListedPostedTenders />
             </div>

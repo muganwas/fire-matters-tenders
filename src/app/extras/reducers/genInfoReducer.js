@@ -12,7 +12,8 @@ const defaultState = {
         currentTab: "Profile",
         currentHorizontalTab: "personnel",
         profilePage:{
-          tabs: {}
+          tabs: {},
+          listCount: {}
         }
       },
       errors: {

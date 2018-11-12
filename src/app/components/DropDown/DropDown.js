@@ -31,6 +31,7 @@ class DropDown extends React.Component {
     }
 
     afterSelect = (e)=>{
+        e.persist();
         this.props.onChange(e).then(res=>{
             this.props.dispatch(dispatchedUserInfo(res));
             this.toggleDisplayDropDown().
@@ -44,7 +45,7 @@ class DropDown extends React.Component {
                 let dbValue = (JSON.parse(sessionStorage.getItem('profileInfo')))[name];
                 //update fiel in db
                 if(dbValue !== value){
-                    this.props.onBlur(name, value).
+                    this.props.onBlur(origName, value).
                     then(res=>{
                         if(res)
                             console.log(name + " updated");

@@ -6,7 +6,7 @@
     bottom:-30%;
     right: -20px;
     padding: 20px;
-    background-color: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.4);
     z-index: 10000;
 }
 .listing-form-container .header{
@@ -28,6 +28,7 @@
 .listing-form-subcontainer{
     display: inline-block;
     border-radius: 5px;
+    margin-top: 5%;
     width: 60%;
     height: auto;
     padding: 0;

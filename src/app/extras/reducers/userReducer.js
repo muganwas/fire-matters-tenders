@@ -21,6 +21,19 @@ const defaultState = {
           isActive: true
         }
       },
+      submitTender: {
+        tenderListingId: null,
+        tenderCompanyName: null,
+        tenderRate: null,
+        tenderStartDate: null,
+        tenderEndDate: null,
+        tenderCoverLetter: null,
+        feedback: undefined,
+        feedbackClass: "hidden",
+        submitButton: {
+          isActive: true
+        }
+      },
       profileInfo:{ },
       avatarProps: {
         feedback: undefined,

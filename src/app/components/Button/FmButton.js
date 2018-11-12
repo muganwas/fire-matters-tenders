@@ -10,11 +10,11 @@ const Load = props=>{
   )
 } 
 const FmButton = (props)=>{
-  const { styles, variant, text, onClick, isActive, loaderFill } = props;
+  const { id, styles, variant, text, onClick, isActive, loaderFill } = props;
   return(
     <div>
-      <Button disabled={ !isActive } onClick={ onClick } variant={ variant } style={styles.button}>
-        { isActive?text:<Load loaderFill={ loaderFill } />}
+      <Button id = { id } disabled={ !isActive } onClick={ onClick } variant={ variant } style={styles.button}>
+        { isActive?<span name={ id }>{ text }</span>:<Load loaderFill={ loaderFill } />}
       </Button>
     </div>
   )
