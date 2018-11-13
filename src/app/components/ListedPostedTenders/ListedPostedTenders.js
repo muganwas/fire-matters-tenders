@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import  { Loader, FmButton, MoreHoriz } from 'components';
+import  { Loader, FmButton, MoreHoriz, PostedTendersOverlay } from 'components';
 import axios from 'axios';
-import { dispatchedGenInfo, dispatchedListingsInfo, dispatchedUserInfo } from 'extras/dispatchers';
+import { dispatchedGenInfo, dispatchedListingsInfo, dispatchedUserInfo, dispatchedTendersInfo } from 'extras/dispatchers';
 import './listedPostedTenders.css';
 import { PropTypes } from 'prop-types';
 import { TenderForm } from 'forms';
@@ -68,6 +68,7 @@ submit_styles = {
         profileInfo: store.user.info.profileInfo,
         listingsInfo: store.listingsInfo.info,
         listingsData: store.user.info.submitTender,
+        tendersInfo: store.tenders.info,
     }
 })
 class ListedPostedTenders extends Component {
@@ -86,13 +87,14 @@ class ListedPostedTenders extends Component {
             if(res === "fetched"){
                 this.fetchTenders();
             }
-        })
+        });
     }
 
     fetchTenders = ()=>{
         let postInfoUrl = baseURL + tenderEndPoint,
         genInfo = {...this.props.genInfo.info },
         userType = (this.props.profileInfo.userType).toLowerCase(),
+        postedTendersComprehensive = [],
         postedTenders = [];
         if(userType === "owner/occupier"){
             let listings = genInfo.listings;
@@ -104,14 +106,18 @@ class ListedPostedTenders extends Component {
                     listingId = currObj.listingId;
                     Object.keys(listings).map(key=>{
                         if(listingId === listings[key].id){
-                            let cO = {[currObj.id]:listings[key].id, listingId: listingId};
+                            let cO = {tenderId:currObj.id, listingId: listingId};
+                            postedTendersComprehensive.push(currObj);
                             postedTenders.push(cO);
                         }
                     });
                 }
             });
-            let listingsInfo = {...this.props.listingsInfo};
+            let listingsInfo = {...this.props.listingsInfo},
+            tendersInfo = {...this.props.tendersInfo};
             listingsInfo.postedTenders.tenders = postedTenders;
+            tendersInfo.tenders = postedTendersComprehensive;
+            this.props.dispatch(dispatchedTendersInfo(tendersInfo));
             this.props.dispatch(dispatchedListingsInfo(listingsInfo));
             this.forceUpdate();
         }
@@ -267,7 +273,12 @@ class ListedPostedTenders extends Component {
     };
 
     displayTenders = (e)=>{
-        console.log(e.target.id);
+        let tenderId = e.target.id;
+        let listingsInfo = {...this.props.listingsInfo},
+        show = listingsInfo.postedTenders.overLay.show;
+        listingsInfo.postedTenders.overLay.show = !show;
+        listingsInfo.postedTenders.overLay.active = tenderId;
+        this.props.dispatch(dispatchedListingsInfo(listingsInfo));
     }
 
     displayListings = (key)=>{
@@ -281,8 +292,10 @@ class ListedPostedTenders extends Component {
         feedback = tenderAttributes.feedback,
         options = listedPostedTendersOptions,
         listingId = listings[key].id,
+        showPostedTendersOverlay = listingsInfo.postedTenders.overLay.show,
         feedbackClass = tenderAttributes.feedbackClass;
         let currListingTenderCount = 0;
+
         if(postedTenders){
             postedTenders.forEach((obj)=>{
                 if(listingId === obj.listingId){
@@ -305,6 +318,9 @@ class ListedPostedTenders extends Component {
                     upload={ this.upload } 
                     save={ this.save } 
                 />:null}
+                { showPostedTendersOverlay
+                ?<PostedTendersOverlay toggleDisplay={ this.displayTenders } listingId = { listingId } />
+                : null }
                 <div className="twenty">{ listings[key].city }, { listings[key].state }</div>
                 <div className="thirty">{ listings[key].serviceRequired }, { listings[key].equipment }</div>
                 <div className="twenty">{ listings[key].startDate}</div>

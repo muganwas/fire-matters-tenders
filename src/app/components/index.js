@@ -30,3 +30,4 @@ export { default as LicenseTab } from 'components/LicenseTab/LicenseTab';
 export { default as ChckBox } from 'components/CheckBox/ChckBox';
 export { default as SearchInput } from 'components/SearchInput/SearchInput';
 export { default as ListedPostedTenders } from 'components/ListedPostedTenders/ListedPostedTenders';
+export { default as PostedTendersOverlay } from 'components/PostedTendersOverlay/PostedTendersOverlay';

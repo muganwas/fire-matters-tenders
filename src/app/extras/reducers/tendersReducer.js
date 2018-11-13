@@ -1,40 +1,28 @@
 const defaultState = {
     info: {
-      createForm: {
-        errors: {},
-        show: false
-      },
-      tenderForm: {
-        errors:{},
-        show: false
-      },
-      postedTenders: {
-        overLay:{
-          show: false
-        }
-      },
+      tenders: null
      },
     fetching: false,
     fetched: false,
     error: null
   }
-  const listingsReducer = (state = defaultState, action)=>{
+  const tendersReducer = (state = defaultState, action)=>{
       switch(action.type){
-          case "FETCH_LISTINGS_PENDING":{
+          case "FETCH_TENDERS_PENDING":{
             return {...state,
               fetched: false,
               error: null,
               fetching: true
             }
           }
-          case "FETCH_LISTINGS_REJECTED":{
+          case "FETCH_TENDERS_REJECTED":{
             return {...state,
               fetching: false,
               fetched: false,
               error: action.payload
             }
           }
-          case "FETCH_LISTINGS_FULFILLED":{
+          case "FETCH_TENDERS_FULFILLED":{
             return {...state,
               fetched: true,
               fetching: false,
@@ -47,4 +35,4 @@ const defaultState = {
       }  
   }
   
-  export default listingsReducer;
+  export default tendersReducer;

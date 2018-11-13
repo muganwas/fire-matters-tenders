@@ -28,7 +28,7 @@ export function dispatchedSearchInfo(searchInfo) {
         return {
             type: "FETCH_SEARCH_REJECTED",
             payload: {
-                error: "could not fetch user details"
+                error: "could not fetch search details"
             }
         } 
     }
@@ -46,7 +46,7 @@ export function dispatchedSecondarySearchInfo(searchInfo) {
         return {
             type: "FETCH_SECONDARY_SEARCH_REJECTED",
             payload: {
-                error: "could not fetch user details"
+                error: "could not fetch search details"
             }
         } 
     }
@@ -64,7 +64,7 @@ export function dispatchedTextFieldInfo(Info) {
         return {
             type: "FETCH_TEXFIELD_INFO_REJECTED",
             payload: {
-                error: "could not fetch user details"
+                error: "could not fetch textfield details"
             }
         } 
     }
@@ -82,7 +82,7 @@ export function dispatchedButtonInfo(Info) {
         return {
             type: "FETCH_BUTTON_INFO_REJECTED",
             payload: {
-                error: "could not fetch user details"
+                error: "could not fetch button details"
             }
         } 
     }
@@ -98,7 +98,23 @@ export function dispatchedListingsInfo(info) {
         return {
             type: "FETCH_LISTINGS_REJECTED",
             payload: {
-                error: "could not fetch user details"
+                error: "could not fetch listing details"
+            }
+        } 
+    }
+}
+
+export function dispatchedTendersInfo(info) {
+    if(info !== undefined && info !== null){   
+      return {
+            type: "FETCH_TENDERS_FULFILLED",
+            payload: { info }
+        }
+    }else{
+        return {
+            type: "FETCH_LTENDERS_REJECTED",
+            payload: {
+                error: "could not fetch tender details"
             }
         } 
     }
@@ -114,7 +130,7 @@ export function dispatchedGenInfo(info) {
         return {
             type: "FETCH_GEN_REJECTED",
             payload: {
-                error: "could not fetch user details"
+                error: "could not fetch general information details"
             }
         } 
     }

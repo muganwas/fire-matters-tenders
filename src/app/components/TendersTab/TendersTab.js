@@ -299,7 +299,7 @@ class TendersTab extends React.Component {
                 />
                 :null}
                 <div className="title-bar">
-                    <span id="title">Postings</span>
+                    <span id="title">Listings</span>
                     {userType === "Owner/Occupier"?<span id="search">
                         <FmButton variant="contained" styles={ alt_styles } text="Rehire service provider" />
                         <FmButton variant="contained" onClick={ this.renderListingForm } styles={ styles } text="Post New Tender" />
