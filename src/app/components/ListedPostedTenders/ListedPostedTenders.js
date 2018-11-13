@@ -11,7 +11,6 @@ import { listedPostedTendersOptions } from 'extras/config';
 const baseURL = process.env.BACK_END_URL,
 listingsEndPoint = process.env.LISTING_END_POINT,
 tenderEndPoint = process.env.TENDERS_END_POINT;
-var currListingTenderCount = 0;
 
 const styles = {
     button: {
@@ -283,7 +282,7 @@ class ListedPostedTenders extends Component {
         options = listedPostedTendersOptions,
         listingId = listings[key].id,
         feedbackClass = tenderAttributes.feedbackClass;
-        
+        let currListingTenderCount = 0;
         if(postedTenders){
             postedTenders.forEach((obj)=>{
                 if(listingId === obj.listingId){
