@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import  { Loader, FmButton, MoreHoriz, PostedTendersOverlay } from 'components';
 import axios from 'axios';
 import { dispatchedGenInfo, dispatchedListingsInfo, dispatchedUserInfo, dispatchedTendersInfo } from 'extras/dispatchers';
-import './listedPostedTenders.css';
+import './listedContracts.css';
 import { PropTypes } from 'prop-types';
 import { TenderForm } from 'forms';
 import { listedPostedTendersOptions } from 'extras/config';
@@ -71,7 +71,7 @@ submit_styles = {
         tendersInfo: store.tenders.info,
     }
 })
-class ListedPostedTenders extends Component {
+class ListedContracts extends Component {
     constructor(props){
         super(props)
     }
@@ -363,29 +363,29 @@ class ListedPostedTenders extends Component {
         return(
             <div className="list left hanad">
                 <div className="list-row header">
-                    <span className="twenty">Location</span>
-                    <span className="thirty">Description</span>
+                    <span className="twenty">Contract Title</span>
+                    <span className="thirty">{ userType === "Owner/Occupier"?"Contractor":"Company Name" }</span>
                     <span className="twenty">Closing Date</span>
-                    <span className="twenty">{ userType === "Owner/Occupier"?"Posted Tenders":null }</span>
+                    <span className="twenty">Contract Status</span>
                     <span className="ten"></span>
                     <div className="bottom-border"></div>
                 </div>
-                { listings?Object.keys(listings).map(this.displayListings):<div className="loader"><Loader /></div> }
+                
             </div>
         )
     }
 }
 
-ListedPostedTenders.defaultProps = {
+ListedContracts.defaultProps = {
     user: {},
     search: {},
     genInfo: {}
 }
 
-ListedPostedTenders.PropTypes = {
+ListedContracts.PropTypes = {
     user: PropTypes.object.isRequired,
     search: PropTypes.object.isRequired,
     genInfo: PropTypes.object.isRequired
 }
 
-export default ListedPostedTenders;
+export default ListedContracts;

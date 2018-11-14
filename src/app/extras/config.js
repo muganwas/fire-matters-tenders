@@ -33,12 +33,12 @@ export const ownerOccupierOptions = {
     Profile: "Profile",
     Tenders: "Tenders",
     Contracts: "Contracts",
-    ServiceProviders: "Service Providers",
-    Messages: "Messages",
-    Sites: "Sites"
+    Sites: "Sites",
+    Messages: "Messages"
 }
 
 export const listedPostedTendersOptions = { 1: "View More..." }
+export const listedPostedSitesOptions = { 1: "View More..." }
 
 export const serviceProviderOptions = {
     Profile: "Profile",

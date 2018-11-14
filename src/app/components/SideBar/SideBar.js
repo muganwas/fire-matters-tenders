@@ -47,33 +47,35 @@ class SideBar extends React.Component {
         let genInfo = {...this.props.genInfo },
         userType = (JSON.parse(sessionStorage.getItem('loginSession')).userType).toLowerCase(),
         userEmail = JSON.parse(sessionStorage.getItem('loginSession')).emailAddress;
-        if(userType !== "owner/occupier"){
-            axios.get(baseURL + listingsEndPoint).then((response)=>{
-                //console.log(response.data);
-                let listings = genInfo.listings = {...response.data};
-                genInfo.sideBar.profilePage.listCount['tenders'] = (response.data).length;
-                /**Set the more dropdown menu class to hidden for every row*/
-                Object.keys(listings).map((key)=>{
-                    genInfo.listings[key].moreMenuClassName = "hidden";
-                })
-                this.props.dispatch(dispatchedGenInfo(genInfo));
-            }).catch(err=>{
-                console.log(err);
-            });
-        }else{
-            axios.get(baseURL + listingsEndPoint + "?userEmail=" + userEmail).then((response)=>{
-                //console.log(response.data);
-                let listings = genInfo.listings = {...response.data};
-                genInfo.sideBar.profilePage.listCount['tenders'] = (response.data).length;
-                /**Set the more dropdown menu class to hidden for every row*/
-                Object.keys(listings).map((key)=>{
-                    genInfo.listings[key].moreMenuClassName = "hidden";
-                })
-                this.props.dispatch(dispatchedGenInfo(genInfo));
-            }).catch(err=>{
-                console.log(err);
-            });            
-        }    
+        if(userType){
+            if(userType !== "owner/occupier"){
+                axios.get(baseURL + listingsEndPoint).then((response)=>{
+                    //console.log(response.data);
+                    let listings = genInfo.listings = {...response.data};
+                    genInfo.sideBar.profilePage.listCount['tenders'] = (response.data).length;
+                    /**Set the more dropdown menu class to hidden for every row*/
+                    Object.keys(listings).map((key)=>{
+                        genInfo.listings[key].moreMenuClassName = "hidden";
+                    })
+                    this.props.dispatch(dispatchedGenInfo(genInfo));
+                }).catch(err=>{
+                    console.log(err);
+                });
+            }else{
+                axios.get(baseURL + listingsEndPoint + "?userEmail=" + userEmail).then((response)=>{
+                    //console.log(response.data);
+                    let listings = genInfo.listings = {...response.data};
+                    genInfo.sideBar.profilePage.listCount['tenders'] = (response.data).length;
+                    /**Set the more dropdown menu class to hidden for every row*/
+                    Object.keys(listings).map((key)=>{
+                        genInfo.listings[key].moreMenuClassName = "hidden";
+                    })
+                    this.props.dispatch(dispatchedGenInfo(genInfo));
+                }).catch(err=>{
+                    console.log(err);
+                });            
+            }
+        }  
     }
 
     removeSelcected = ()=>{

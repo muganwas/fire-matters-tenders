@@ -2,10 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { dispatchedGenInfo, dispatchedTendersInfo, dispatchedListingsInfo, dispatchedUserInfo } from 'extras/dispatchers';
-import './tendersTab.css'
-import { SearchInput, FmButton, ListedPostedTenders} from 'components';
-import { ListingForm } from 'forms';
+import { dispatchedSitesInfo, dispatchedListingsInfo, dispatchedUserInfo } from 'extras/dispatchers';
+import './sitesTab.css'
+import { SearchInput, FmButton, ListedPostedTenders, ListedPostedSites } from 'components';
+import { SitesForm } from 'forms';
 import {  
     statesAustralia, 
     listingCategories, 
@@ -16,80 +16,13 @@ import {
     emergencyExitLighting,
     contractTypes
 } from 'extras/config';
+import  { styles, submit_styles, alt_styles } from './styles';
 
-const styles = {
-    button: {
-        float: "right",
-        margin: 0,
-        padding: "3px 10px",
-        margin: "0 5px",
-        fontSize: 10,
-        backgroundColor: "#ED2431",
-        color: "#fff",
-        fontWeight: "bold",
-        '&:hover': {
-        background: '#ED2431',
-        boxShadow: '1px 2px 4px #BC2902',
-        transition: 'all 0.2s ease-in'
-        }
-    },
-    el:{
-        display: "inline-block",
-        margin: "0 20%"
-    },
-    information:{
-        textAlign: "center"
-    },
-},
-submit_styles = {
-    button: {
-        float: "right",
-        margin: 0,
-        padding: "3px 10px",
-        margin: "0 5px",
-        width: 330,
-        fontSize: 14,
-        backgroundColor: "#ED2431",
-        color: "#fff",
-        fontWeight: "bold",
-        '&:hover': {
-        background: '#ED2431',
-        boxShadow: '1px 2px 4px #BC2902',
-        transition: 'all 0.2s ease-in'
-        }
-    },
-    inputErr:{
-        width: 330,
-        display: "block",
-        margin: "3px",
-        padding: "5px"
-    },
-    el:{
-        display: "inline-block",
-        margin: "0 20%"
-    },
-    information:{
-        textAlign: "center"
-    },
-},
-alt_styles = {
-    button: {
-        float: "right",
-        margin: 0,
-        padding: "3px 10px",
-        margin: "0 0 0 5px",
-        fontSize: 10,
-        color: "#000",
-        fontWeight: "bold",
-        '&:hover': {
-        boxShadow: '1px 2px 4px #BC2902',
-        transition: 'all 0.2s ease-in'
-        }
-    },
-},
-baseURL = process.env.BACK_END_URL,
+
+const baseURL = process.env.BACK_END_URL,
 listingsEndPoint = process.env.LISTING_END_POINT,
-tenderEndPoint = process.env.TENDERS_END_POINT;
+tenderEndPoint = process.env.TENDERS_END_POINT,
+sitesEndPoint = process.env.SITES_END_POINT;
 
 @connect((store)=>{
     return {
@@ -99,29 +32,17 @@ tenderEndPoint = process.env.TENDERS_END_POINT;
         search: store.search,
         genInfo: store.genInfo.info,
         listingsInfo: store.listingsInfo.info,
+        sitesInfo: store.sites.info
     }
 })
-class TendersTab extends React.Component {
+class SitesTab extends React.Component {
     constructor(props) {
         super(props);
     }
 
     componentWillMount(){
         //set initial attributes
-        let userType = JSON.parse(sessionStorage.getItem('profileInfo')).userType,
-        genInfo = {...this.props.genInfo};
-        if(userType === "Owner/Occupier" || userType === "owner-occupier" || userType === "owner_occupier"){
-            
-        }
-        else{
-
-        }  
-        this.props.dispatch(dispatchedGenInfo(genInfo));
-        this.fetchListings().then(res=>{
-            if(res === "fetched"){
-                this.fetchTenders();
-            }
-        });
+        this.fetchSites();
     }
 
     componentWillReceiveProps(nextProps){
@@ -132,75 +53,27 @@ class TendersTab extends React.Component {
 
     }
 
-    fetchTenders = ()=>{
-        let postInfoUrl = baseURL + tenderEndPoint,
-        genInfo = {...this.props.genInfo },
-        userType = (this.props.profileInfo.userType).toLowerCase(),
-        postedTendersComprehensive = [],
-        postedTenders = [];
-        if(userType){
-            if(userType === "owner/occupier"){
-                let listings = genInfo.listings;
-                axios.get(postInfoUrl).then(res=>{
-                    let tendersArr = res.data,
-                    tendersLen = tendersArr.length;
-                    for(let count = 0;count <tendersLen; count++){
-                        let currObj = tendersArr[count],
-                        listingId = currObj.listingId;
-                        Object.keys(listings).map(key=>{
-                            if(listingId === listings[key].id){
-                                let cO = {tenderId:currObj.id, listingId: listingId};
-                                postedTendersComprehensive.push(currObj);
-                                postedTenders.push(cO);
-                            }
-                        });
-                    }
-                });
-                let listingsInfo = {...this.props.listingsInfo},
-                tendersInfo = {...this.props.tendersInfo};
-                listingsInfo.postedTenders.tenders = postedTenders;
-                tendersInfo.tenders = postedTendersComprehensive;
-                this.props.dispatch(dispatchedTendersInfo(tendersInfo));
-                this.props.dispatch(dispatchedListingsInfo(listingsInfo));
-                this.forceUpdate();
-            }
-        }
-    }
-
-    fetchListings = ()=>{
+    fetchSites = ()=>{
         return new Promise(resolve=>{
-            let genInfo = {...this.props.genInfo },
-            userType = (this.props.profileInfo.userType).toLowerCase(),
-            userEmail = this.props.profileInfo.emailAddress;
+            let sitesInfo = {...this.props.sitesInfo },
+            userType = this.props.profileInfo.userType,
+            userEmail = this.props.profileInfo.userEmail,
+            url = baseURL + sitesEndPoint + "emailAddress=" + userEmail;
             if(userType){
-                if(userType !== "owner/occupier"){
-                    axios.get(baseURL + listingsEndPoint).then((response)=>{
+                if(userType !== "Owner/Occupier"){
+                    axios.get(url).then((response)=>{
                         //console.log(response.data);
-                        let listings = genInfo.listings = {...response.data};
-                        genInfo.sideBar.profilePage.listCount['tenders'] = (response.data).length;
+                        let sites = sitesInfo.sites = {...response.data};
+                        genInfo.sideBar.profilePage.listCount['sites'] = (response.data).length;
                         /**Set the more dropdown menu class to hidden for every row*/
-                        Object.keys(listings).map((key)=>{
-                            genInfo.listings[key].moreMenuClassName = "hidden";
+                        Object.keys(sites).map((key)=>{
+                            sitesInfo.sites[key].moreMenuClassName = "hidden";
                         })
-                        this.props.dispatch(dispatchedGenInfo(genInfo));
+                        this.props.dispatch(dispatchedSitesInfo(sitesInfo));
                         resolve("fetched");
                     }).catch(err=>{
                         console.log(err);
                     });
-                }else{
-                    axios.get(baseURL + listingsEndPoint + "?userEmail=" + userEmail).then((response)=>{
-                        //console.log(response.data);
-                        let listings = genInfo.listings = {...response.data};
-                        genInfo.sideBar.profilePage.listCount['tenders'] = (response.data).length;
-                        /**Set the more dropdown menu class to hidden for every row*/
-                        Object.keys(listings).map((key)=>{
-                            genInfo.listings[key].moreMenuClassName = "hidden";
-                        })
-                        this.props.dispatch(dispatchedGenInfo(genInfo));
-                        resolve("fetched");
-                    }).catch(err=>{
-                        console.log(err);
-                    });            
                 }
             }
         });    
@@ -346,13 +219,13 @@ class TendersTab extends React.Component {
         return(
             <div className="tenders main-content">
                 {showListingsForm
-                ?<ListingForm
+                ?<SitesForm
                     feedback = { feedback }
                     feedbackClass = { feedbackClass }
                     errors = { errors }
                     contractTypes = { contractTypes }
                     equipmentCollection = { equipment }
-                    listingCategories = { listingCategories }
+                    contractStatusOptions = {{inactive: "Not Active", active: "Active"}}
                     equipCategories = { equipmentCategories }
                     styles = { submit_styles }
                     states= { statesAustralia } 
@@ -364,29 +237,28 @@ class TendersTab extends React.Component {
                 />
                 :null}
                 <div className="title-bar">
-                    <span id="title">Listings</span>
+                    <span id="title">Sites</span>
                     {userType === "Owner/Occupier"?<span id="search">
-                        <FmButton variant="contained" styles={ alt_styles } text="Rehire service provider" />
-                        <FmButton variant="contained" onClick={ this.renderListingForm } styles={ styles } text="Post New Tender" />
-                        <SearchInput className="alt-search" placeholder="search for your listings" search={ this.searchListings } />
+                        <FmButton variant="contained" onClick={ this.renderListingForm } styles={ styles } text="Register New Site" />
+                        <SearchInput className="alt-search" placeholder="search for your sites" search={ this.searchListings } />
                     </span>:null}
                 </div>
-                <ListedPostedTenders />
+                <ListedPostedSites />
             </div>
         )
     }
 }
 
-TendersTab.defaultProps = {
+SitesTab.defaultProps = {
     user: {},
     search: {},
     genInfo: {}
 }
 
-TendersTab.propTypes = {
+SitesTab.propTypes = {
     user: PropTypes.object.isRequired,
     search: PropTypes.object.isRequired,
     genInfo: PropTypes.object.isRequired
 }
 
-export default TendersTab;
+export default SitesTab;

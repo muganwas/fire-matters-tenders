@@ -112,7 +112,23 @@ export function dispatchedTendersInfo(info) {
         }
     }else{
         return {
-            type: "FETCH_LTENDERS_REJECTED",
+            type: "FETCH_TENDERS_REJECTED",
+            payload: {
+                error: "could not fetch tender details"
+            }
+        } 
+    }
+}
+
+export function dispatchedSitesInfo(info) {
+    if(info !== undefined && info !== null){   
+      return {
+            type: "FETCH_SITES_FULFILLED",
+            payload: { info }
+        }
+    }else{
+        return {
+            type: "FETCH_SITES_REJECTED",
             payload: {
                 error: "could not fetch tender details"
             }

@@ -10,6 +10,7 @@ import secondarySearchReducer from 'extras/reducers/secondarySearchReducer';
 import textFieldReducer from 'extras/reducers/texfieldReducer';
 import buttonsReducer from 'extras/reducers/buttonsReducer';
 import tendersReducer from 'extras/reducers/tendersReducer';
+import sitesReducer from './extras/reducers/sitesReducer';
 
 const middleware = applyMiddleware(promise(), thunk, logger);
 const allReducers = combineReducers({
@@ -20,7 +21,8 @@ const allReducers = combineReducers({
     genInfo: genInfoReducer,
     listingsInfo: listingsReducer,
     buttonsInfo: buttonsReducer,
-    tenders: tendersReducer
+    tenders: tendersReducer,
+    sites: sitesReducer
 })
 const store = createStore(
     allReducers, 

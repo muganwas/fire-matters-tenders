@@ -4,7 +4,7 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { dispatchedGenInfo, dispatchedUserInfo } from 'extras/dispatchers';
-import { HeaderMain, Footer, SideBar, ProfileTab, TendersTab } from 'components';
+import { HeaderMain, Footer, SideBar, ProfileTab, TendersTab, ContractsTab, SitesTab } from 'components';
 import './userPage.css';
 
 const baseUrl = process.env.BACK_END_URL,
@@ -97,6 +97,10 @@ class UserPage extends React.Component {
                             ?<ProfileTab />
                             :currentTab==="Tenders"
                             ?<TendersTab />
+                            :currentTab==="Contracts"
+                            ?<ContractsTab />
+                            :currentTab==="Sites"
+                            ?<SitesTab />
                             :null}
                         </div>
                     </div>

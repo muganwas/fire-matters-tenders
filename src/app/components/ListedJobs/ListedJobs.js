@@ -52,10 +52,10 @@ class ListedJobs extends Component {
         let genInfo = {...this.props.genInfo.info };
         axios.get(baseUrl + listingsEndPoint).then((response)=>{
             //console.log(response.data);
-            let listings = genInfo.listings = {...response.data};
+            let listings = genInfo.generalListings = {...response.data};
             /**Set the more dropdown menu class to hidden for every row*/
             Object.keys(listings).map((key)=>{
-                genInfo.listings[key].moreMenuClassName = "hidden";
+                genInfo.generalListings[key].moreMenuClassName = "hidden";
             })
             this.props.dispatch(dispatchedGenInfo(genInfo));
         }).catch(err=>{
@@ -64,7 +64,7 @@ class ListedJobs extends Component {
     }
 
     displayListings = (key)=>{
-        let listings = this.props.genInfo.info.listings;
+        let listings = this.props.genInfo.info.generalListings;
         let options = { 1: "View More..."};
         return(
             <div className="list-row" key={key} id={ listings[key].id }>
@@ -87,7 +87,7 @@ class ListedJobs extends Component {
     }
 
     render(){
-        let listings = this.props.genInfo.info.listings;
+        let listings = this.props.genInfo.info.generalListings;
         return(
             <div className="list left hanad">
                 <div className="list-row header">

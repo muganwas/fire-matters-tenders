@@ -31,3 +31,7 @@ export { default as ChckBox } from 'components/CheckBox/ChckBox';
 export { default as SearchInput } from 'components/SearchInput/SearchInput';
 export { default as ListedPostedTenders } from 'components/ListedPostedTenders/ListedPostedTenders';
 export { default as PostedTendersOverlay } from 'components/PostedTendersOverlay/PostedTendersOverlay';
+export { default as ContractsTab } from 'components/ContractsTab/ContractsTab';
+export { default as ListedContracts } from 'components/ListedContracts/ListedContracts';
+export { default as SitesTab } from 'components/SitesTab/SitesTab';
+export { default as ListedPostedSites } from 'components/ListedPostedSites/ListedPostedSites';
