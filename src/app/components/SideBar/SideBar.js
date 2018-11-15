@@ -3,13 +3,14 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { ProfileImage } from 'components';
-import { dispatchedGenInfo } from 'extras/dispatchers';
+import { dispatchedGenInfo, dispatchedSitesInfo } from 'extras/dispatchers';
 import axios from 'axios';
 import './sideBar.css';
 import { ownerOccupierOptions, serviceProviderOptions, menuIconTitles } from 'extras/config';
 
 const baseURL = process.env.BACK_END_URL,
-listingsEndPoint = process.env.LISTING_END_POINT;
+listingsEndPoint = process.env.LISTING_END_POINT,
+sitesEndPoint = process.env.SITES_END_POINT;
 
 @connect((store)=>{
     return {
@@ -17,6 +18,8 @@ listingsEndPoint = process.env.LISTING_END_POINT;
         search: store.search,
         genInfo: store.genInfo.info,
         profileInfo: store.user.info.profileInfo,
+        siteData: store.user.info.submitSite,
+        sitesInfo: store.sites.info
     }
 })
 class SideBar extends React.Component {
@@ -36,6 +39,7 @@ class SideBar extends React.Component {
             genInfo.defaultProps.leftMenuClass = "left-menu sp";
             genInfo.defaultProps.sideBarClass = "side-bar sp";
         }
+        this.fetchSites();
         this.props.dispatch(dispatchedGenInfo(genInfo));
     }
 
@@ -43,39 +47,71 @@ class SideBar extends React.Component {
         this.fetchListings();
     }
 
-    fetchListings = ()=>{
-        let genInfo = {...this.props.genInfo },
-        userType = (JSON.parse(sessionStorage.getItem('loginSession')).userType).toLowerCase(),
-        userEmail = JSON.parse(sessionStorage.getItem('loginSession')).emailAddress;
-        if(userType){
-            if(userType !== "owner/occupier"){
-                axios.get(baseURL + listingsEndPoint).then((response)=>{
-                    //console.log(response.data);
-                    let listings = genInfo.listings = {...response.data};
-                    genInfo.sideBar.profilePage.listCount['tenders'] = (response.data).length;
-                    /**Set the more dropdown menu class to hidden for every row*/
-                    Object.keys(listings).map((key)=>{
-                        genInfo.listings[key].moreMenuClassName = "hidden";
-                    })
-                    this.props.dispatch(dispatchedGenInfo(genInfo));
-                }).catch(err=>{
-                    console.log(err);
-                });
-            }else{
-                axios.get(baseURL + listingsEndPoint + "?userEmail=" + userEmail).then((response)=>{
-                    //console.log(response.data);
-                    let listings = genInfo.listings = {...response.data};
-                    genInfo.sideBar.profilePage.listCount['tenders'] = (response.data).length;
-                    /**Set the more dropdown menu class to hidden for every row*/
-                    Object.keys(listings).map((key)=>{
-                        genInfo.listings[key].moreMenuClassName = "hidden";
-                    })
-                    this.props.dispatch(dispatchedGenInfo(genInfo));
-                }).catch(err=>{
-                    console.log(err);
-                });            
+    fetchSites = ()=>{
+        return new Promise(resolve=>{
+            let sitesInfo = {...this.props.sitesInfo },
+            genInfo = { ...this.props.genInfo },
+            userType = (JSON.parse(sessionStorage.getItem("profileInfo"))).userType,
+            userEmail = (JSON.parse(sessionStorage.getItem("profileInfo"))).emailAddress,
+            url = baseURL + sitesEndPoint + "?emailAddress=" + userEmail;
+            if(userType){
+                if(userType === "Owner/Occupier"){
+                    axios.get(url).then((response)=>{
+                        //console.log(response.data);
+                        let sites = sitesInfo.sites = genInfo.sites = {...response.data};
+                        genInfo.sideBar.profilePage.listCount['sites'] = (response.data).length;
+                        /**Set the more dropdown menu class to hidden for every row*/
+                        Object.keys(sites).map((key)=>{
+                            sitesInfo.sites[key].moreMenuClassName = "hidden";
+                        })
+                        this.props.dispatch(dispatchedSitesInfo(sitesInfo));
+                        this.props.dispatch(dispatchedGenInfo(genInfo));
+                        resolve("fetched");
+                    }).catch(err=>{
+                        console.log(err);
+                    });
+                }
             }
-        }  
+        });    
+    }
+
+    fetchListings = ()=>{
+        return new Promise(resolve=>{
+            let genInfo = {...this.props.genInfo },
+            userType = (JSON.parse(sessionStorage.getItem('loginSession')).userType).toLowerCase(),
+            userEmail = JSON.parse(sessionStorage.getItem('loginSession')).emailAddress;
+            if(userType){
+                if(userType !== "owner/occupier"){
+                    axios.get(baseURL + listingsEndPoint).then((response)=>{
+                        //console.log(response.data);
+                        let listings = genInfo.listings = {...response.data};
+                        genInfo.sideBar.profilePage.listCount['tenders'] = (response.data).length;
+                        /**Set the more dropdown menu class to hidden for every row*/
+                        Object.keys(listings).map((key)=>{
+                            genInfo.listings[key].moreMenuClassName = "hidden";
+                        })
+                        this.props.dispatch(dispatchedGenInfo(genInfo));
+                        resolve("fetched");
+                    }).catch(err=>{
+                        console.log(err);
+                    });
+                }else{
+                    axios.get(baseURL + listingsEndPoint + "?userEmail=" + userEmail).then((response)=>{
+                        //console.log(response.data);
+                        let listings = genInfo.listings = {...response.data};
+                        genInfo.sideBar.profilePage.listCount['tenders'] = (response.data).length;
+                        /**Set the more dropdown menu class to hidden for every row*/
+                        Object.keys(listings).map((key)=>{
+                            genInfo.listings[key].moreMenuClassName = "hidden";
+                        })
+                        this.props.dispatch(dispatchedGenInfo(genInfo));
+                        resolve("fetched");
+                    }).catch(err=>{
+                        console.log(err);
+                    });            
+                }
+            } 
+        });
     }
 
     removeSelcected = ()=>{
@@ -116,8 +152,9 @@ class SideBar extends React.Component {
     menuItems = (key)=>{
         let sideBarOptions = this.props.genInfo.defaultProps.sideBarOptions,
         selected = this.props.genInfo.sideBar.currentTab,
-        tendersCount = this.props.genInfo.sideBar.profilePage.listCount.tenders,
-        contractCount = this.props.genInfo.sideBar.profilePage.listCount.contracts || 0;
+        tendersCount = this.props.genInfo.sideBar.profilePage.listCount.tenders || 0,
+        contractCount = this.props.genInfo.sideBar.profilePage.listCount.contracts || 0,
+        sitesCount = this.props.genInfo.sideBar.profilePage.listCount.sites || 0;
         return(
             <span name="menuItems" className = { key===selected?"selected":""} id={ key } onClick={ this.select } key={ key }>
                 <div name={ key} onClick={ this.clickParent }>
@@ -140,6 +177,12 @@ class SideBar extends React.Component {
                         className="listingsCount"
                         onClick={ this.clickParent }
                     >{contractCount}</div>
+                    :key==="Sites"
+                    ?<div 
+                        name = { key }
+                        className="listingsCount"
+                        onClick={ this.clickParent }
+                    >{ sitesCount }</div>
                     :null }</div>
                 </div>
                 <div className = "clear"></div>

@@ -135,16 +135,14 @@ class ListedPostedTenders extends Component {
         return new Promise((resolve, reject)=>{
             let userInfo = {...this.props.user.info},
             id = e.target.id,
-            type = e.target.getAttribute('type'),
             origName = e.target.getAttribute("category");
-            console.log(type)
             origName = origName?origName:id;
             let nameArr = origName.split("-"),
             name = nameArr[1],
             value = e.target.getAttribute('value');
             value = value?value:e.target.value;
-            userInfo.submitTender[name] = value;
-            userInfo.submitTender[name + "_key"] = id;
+            userInfo.submitSite[name] = value;
+            userInfo.submitSite[name + "_key"] = id;
             if(userInfo){
                 resolve(userInfo);
             }                        
@@ -164,34 +162,11 @@ class ListedPostedTenders extends Component {
 
     displaySites = (key)=>{
         let sites = {...this.props.sitesInfo.sites},
-        showTenderForm = listingsInfo.tenderForm.show,
-        tenderAttributes = this.props.user.info.submitTender,
-        errors = listingsInfo.tenderForm.errors,
-        feedback = tenderAttributes.feedback,
-        options = listedPostedSitesOptions,
-        listingId = listings[key].id,
-        showPostedTendersOverlay = listingsInfo.postedTenders.overLay.show,
-        feedbackClass = tenderAttributes.feedbackClass;
-   
+        options = listedPostedSitesOptions;
         return(
             <div className="list-row" key={key}>
-                {showTenderForm
-                ?<TenderForm
-                    feedback = { feedback }
-                    feedbackClass = { feedbackClass }
-                    errors = { errors }
-                    styles = { submit_styles }
-                    attributes = { tenderAttributes } 
-                    close={ this.renderTenderForm } 
-                    onBlur={ this.dummy } 
-                    upload={ this.upload } 
-                    save={ this.save } 
-                />:null}
-                { showPostedTendersOverlay
-                ?<PostedTendersOverlay toggleDisplay={ this.displayTenders } listingId = { listingId } />
-                : null }
                 <div className="twenty">{ sites[key].siteName }</div>
-                <div className="thirty">{ sites[key].location }</div>
+                <div className="thirty">{ sites[key].siteLocation }</div>
                 <div className="twenty">{ sites[key].currentContractor }</div>
                 <div className="twenty">{ sites[key].contractStatus }</div>
                 <div className="ten">

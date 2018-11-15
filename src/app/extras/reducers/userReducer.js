@@ -34,6 +34,17 @@ const defaultState = {
           isActive: true
         }
       },
+      submitSite: {
+        siteName: null,
+        siteLocation: null,
+        currentContractor: null,
+        siteContractStatus: null,
+        feedback: undefined,
+        feedbackClass: "hidden",
+        submitButton: {
+          isActive: true
+        }
+      },
       profileInfo:{ },
       avatarProps: {
         feedback: undefined,

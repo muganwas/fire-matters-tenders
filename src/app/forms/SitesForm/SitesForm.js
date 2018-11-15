@@ -8,37 +8,24 @@ const SitesForm = props=>{
     const { 
         feedback,
         feedbackClass,
-        userInfo, 
         styles, 
         close, 
-        attributes, 
+        attributes,
         upload, 
         save, 
-        states, 
         contractStatusOptions, 
-        onBlur, 
-        equipCategories, 
-        equipmentCollection,
-        contractTypes,
+        onBlur,  
         errors
     } = props,
     { 
-        listingCompanyName, 
-        listingState, 
-        listingCity, 
-        listingCategory, 
-        listingCategoryOther, 
-        listingEquipmentCategory, 
-        listingEquipment, 
-        listingEquipmentQuantity,
-        listingContractType,
-        listingStartDate,
+        siteName, 
+        siteLocation, 
+        currentContractor, 
+        siteContractStatus, 
         submitButton 
     } = attributes,
     mandatoryInput = "This field is mandatory.",
-    isActive = submitButton.isActive,
-    key= userInfo.createListing.listingEquipmentCategory_key,
-    equipment = equipmentCollection[key];
+    isActive = submitButton.isActive;
 
     return(
         <div className="listing-form-container">
@@ -54,7 +41,7 @@ const SitesForm = props=>{
                             <Textfield 
                                 id="sites-siteName"
                                 label="Site Name"
-                                value={ listingCompanyName } 
+                                value={ siteName } 
                                 type="text" 
                                 placeholder="Your buildings name" 
                                 root="inner-textfield" 
@@ -62,13 +49,13 @@ const SitesForm = props=>{
                                 onBlur = { onBlur }
                                 onChange = { save } 
                             />
-                            { errors.listingCompanyName?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
+                            { errors.siteName?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
                         </div>
                         <div className="el" style={ styles.el }>
                             <Textfield 
                                 id="sites-siteLocation"
                                 label="Site Location"
-                                value={ listingCompanyName } 
+                                value={ siteLocation } 
                                 type="text" 
                                 placeholder="Site address" 
                                 root="inner-textfield" 
@@ -76,13 +63,13 @@ const SitesForm = props=>{
                                 onBlur = { onBlur }
                                 onChange = { save } 
                             />
-                            { errors.listingCompanyName?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
+                            { errors.siteLocation?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
                         </div>
                         <div className="el" style={ styles.el }>
                             <Textfield 
                                 id="sites-currentContractor"
                                 label="Current Contractor"
-                                value={ listingCompanyName } 
+                                value={ currentContractor } 
                                 type="text" 
                                 placeholder="Name of your current contractor" 
                                 root="inner-textfield" 
@@ -90,21 +77,21 @@ const SitesForm = props=>{
                                 onBlur = { onBlur }
                                 onChange = { save } 
                             />
-                            { errors.listingCompanyName?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
+                            { errors.currentContractor?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
                         </div>
                         <div className="el" style={ styles.el }>
                             <DropDown 
-                                id="sites-sitesContractStatus"
+                                id="sites-siteContractStatus"
                                 label="Current Contract Staus" 
                                 className="select" 
-                                init={ "Not active" } 
+                                init={ siteContractStatus || "Not active" } 
                                 width="330px" 
                                 options={ contractStatusOptions } 
-                                selected={ listingCategory }
+                                selected={ siteContractStatus }
                                 onBlur = { onBlur } 
                                 onChange={ save }
                             />
-                            { errors.listingCategory?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
+                            { errors.siteContractStatus?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
                         </div>
                         <div className="el" style={ styles.el }>
                             <FmButton
@@ -112,7 +99,7 @@ const SitesForm = props=>{
                                 loaderFill = "#fff" 
                                 variant="contained" 
                                 styles = { styles } 
-                                text="Submit Listing"
+                                text="Submit Site Details"
                                 onClick = { upload } 
                             />
                         </div>
@@ -129,7 +116,6 @@ SitesForm.defaultProps = {
 }
 
 SitesForm.propTypes = {
-    states: PropTypes.object.isRequired,
     close: PropTypes.func.isRequired,
     attributes: PropTypes.object.isRequired,
     upload: PropTypes.func.isRequired,
