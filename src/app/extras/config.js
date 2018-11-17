@@ -7,6 +7,13 @@ export const listingCategories = {
     evacTraining: "Evacuation Training",
     other: "Other"
 }
+
+export const subContractorsSearchCategories = {
+    all: "All",
+    emailAddress: "Email Address",
+    companyName: "Company Name"
+}
+
 const config = {
     apiKey: "AIzaSyDjQJOScdSQ5CAV-YNuf-vzxgh4GOvRlwc",
     authDomain: "firematters-cbaf0.firebaseapp.com",
