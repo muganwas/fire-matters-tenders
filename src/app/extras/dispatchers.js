@@ -130,7 +130,23 @@ export function dispatchedSitesInfo(info) {
         return {
             type: "FETCH_SITES_REJECTED",
             payload: {
-                error: "could not fetch tender details"
+                error: "could not fetch site details"
+            }
+        } 
+    }
+}
+
+export function dispatchedMessagesInfo(info) {
+    if(info !== undefined && info !== null){   
+      return {
+            type: "FETCH_MESSAGES_FULFILLED",
+            payload: { info }
+        }
+    }else{
+        return {
+            type: "FETCH_mESSAGES_REJECTED",
+            payload: {
+                error: "could not fetch message details"
             }
         } 
     }

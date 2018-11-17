@@ -2,63 +2,17 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import  { Loader, FmButton, MoreHoriz, PostedTendersOverlay } from 'components';
 import axios from 'axios';
-import { dispatchedGenInfo, dispatchedListingsInfo, dispatchedUserInfo, dispatchedTendersInfo } from 'extras/dispatchers';
+import { dispatchedGenInfo, dispatchedListingsInfo, dispatchedUserInfo, dispatchedTendersInfo, dispatchedMessagesInfo } from 'extras/dispatchers';
 import './listedPostedTenders.css';
 import { PropTypes } from 'prop-types';
-import { TenderForm } from 'forms';
+import { TenderForm, MessageForm } from 'forms';
 import { listedPostedTendersOptions } from 'extras/config';
+import { styles, submit_styles } from './styles';
 
 const baseURL = process.env.BACK_END_URL,
 listingsEndPoint = process.env.LISTING_END_POINT,
-tenderEndPoint = process.env.TENDERS_END_POINT;
-
-const styles = {
-    button: {
-      margin: 2,
-      padding: '3px 10px',
-      fontSize: 10,
-      backgroundColor: "#F79A50",
-      '&:hover': {
-        background: '#F79A50',
-        boxShadow: '1px 2px 4px #BC2902',
-        transition: 'all 0.2s ease-in'
-      }
-    },
-},
-submit_styles = {
-    button: {
-        float: "right",
-        margin: 0,
-        padding: "3px 10px",
-        margin: "0 5px",
-        width: 330,
-        fontSize: 14,
-        backgroundColor: "#ED2431",
-        color: "#fff",
-        fontWeight: "bold",
-        '&:hover': {
-        background: '#ED2431',
-        boxShadow: '1px 2px 4px #BC2902',
-        transition: 'all 0.2s ease-in'
-        }
-    },
-    inputErr:{
-        width: 330,
-        display: "block",
-        margin: "3px",
-        padding: "5px"
-    },
-    el:{
-        display: "inline-block",
-        margin: "0 20%"
-    },
-    information:{
-        textAlign: "center"
-    },
-    trans: {
-        backgroundColor: "rgba(0,0,0,0.1)"
-    }
-};
+tenderEndPoint = process.env.TENDERS_END_POINT,
+messagesEndPoint = process.env.MESSAGES_END_POINT;
 
 @connect((store)=>{
     return {
@@ -69,6 +23,8 @@ submit_styles = {
         listingsInfo: store.listingsInfo.info,
         listingsData: store.user.info.submitTender,
         tendersInfo: store.tenders.info,
+        messageData: store.user.info.submitMessage,
+        messagesInfo: store.messages.info
     }
 })
 class ListedPostedTenders extends Component {
@@ -89,6 +45,79 @@ class ListedPostedTenders extends Component {
             }
         });*/
     }
+
+    checkForErrors=()=>{
+        let errored = [];
+        return new Promise((resolve, reject)=>{
+            let messageData = {...this.props.messageData},
+            messagesInfo = {...this.props.messagesInfo};
+            Object.keys(messageData).map(key=>{
+                if(!messageData[key] && key !== "feedback" && key !== "feedbackClass" && key !== "submitButton"){
+                    messagesInfo.messageForm.errors[key] = true;
+                    errored.push(messagesInfo.messageForm.errors[key]);
+                }else if(messageData[key] && key !== "feedback" && key !== "feedbackClass" && key !== "submitButton"){
+                    messagesInfo.messageForm.errors[key] = null;
+                }
+            });
+            this.props.dispatch(dispatchedMessagesInfo(messagesInfo));
+            let errCount = errored.length;
+            resolve(errCount);
+        }); 
+    }
+
+    renderMessageForm = (e)=>{
+        let messagesInfo = {...this.props.messagesInfo},
+        listingId = e.target.getAttribute('autoid'),
+        recipient = e.target.getAttribute('email');
+        messagesInfo.currListingId = listingId;
+        messagesInfo.currMessagRecipient = recipient;
+        messagesInfo.messageForm.show = !messagesInfo.messageForm.show;
+        this.props.dispatch(dispatchedMessagesInfo(messagesInfo));               
+    }
+
+    sendMessage=()=>{
+        let messageData = {...this.props.messageData},
+        messagesInfo = {...this.props.messagesInfo },
+        userInfo = {...this.props.user.info},
+        userEmail = this.props.profileInfo.emailAddress,
+        recipientEmail = messagesInfo.currMessagRecipient,
+        listingId = messagesInfo.currListingId,
+        message = messageData.messageBody,
+        postInfoUrl = baseURL + messagesEndPoint;
+
+        let postObject = {
+            listingId,
+            userEmail,
+            recipientEmail, 
+            message
+        };
+
+        console.log(postObject)
+        this.checkForErrors().then(res=>{
+            console.log(res)
+            if(res === 0){
+                userInfo.submitMessage.submitButton.isActive = false;
+                this.props.dispatch(dispatchedUserInfo(userInfo));
+                axios.post(postInfoUrl, postObject).
+                then(res=>{
+                    userInfo.submitMessage.submitButton.isActive = true;
+                    userInfo.submitMessage.feedback = "Your message was posted successfully.";
+                    userInfo.submitMessage.feedbackClass="success";
+                    this.props.dispatch(dispatchedUserInfo(userInfo));
+                    this.forceUpdate();
+                    console.log(res);
+                }).
+                catch(err=>{
+                    userInfo.submitMessage.submitButton.isActive = true;
+                    userInfo.submitMessage.feedbackClass="error-feedback";
+                    userInfo.submitMessage.feedback = "Something went wrong, try again later.";
+                    this.props.dispatch(dispatchedUserInfo(userInfo));
+                    this.forceUpdate();
+                    console.log(err);
+                });
+            }
+        });
+    };
 
     fetchTenders = ()=>{
         let postInfoUrl = baseURL + tenderEndPoint,
@@ -276,6 +305,28 @@ class ListedPostedTenders extends Component {
         });
     };
 
+    saveMessage=(e)=>{
+        e.persist();
+        return new Promise((resolve, reject)=>{
+            let userInfo = {...this.props.user.info},
+            id = e.target.id,
+            type = e.target.getAttribute('type'),
+            origName = e.target.getAttribute("category");
+            origName = origName?origName:id;
+            let nameArr = origName.split("-"),
+            name = nameArr[1],
+            value = e.target.getAttribute('value');
+            value = value?value:e.target.value;
+            userInfo.submitMessage[name] = value;
+            userInfo.submitMessage[name + "_key"] = id;
+            if(userInfo){
+                resolve(userInfo);
+            }                        
+            else
+                reject({message: "No data"});
+        });
+    };
+
     displayTenders = (e)=>{
         let tenderId = e.target.id;
         let listingsInfo = {...this.props.listingsInfo},
@@ -306,6 +357,10 @@ class ListedPostedTenders extends Component {
                     currListingTenderCount ++;
                 }
             });
+        }
+
+        if(userType !== "Owner/Occupier"){
+            options = { ...options, sendMessage: "Send Message"};
         }
             
         return(
@@ -346,8 +401,11 @@ class ListedPostedTenders extends Component {
                 <div className="ten">
                     <MoreHoriz 
                         className={ listings[key].moreMenuClassName } 
-                        id={ key } 
-                        listName = "listings" 
+                        id={ key }
+                        autoid = { listings[key].id }
+                        email = { listings[key].userEmail }
+                        listName = "listings"
+                        onClick = { this.renderMessageForm }
                         element={ listings[key] }
                         options={ options }
                      />
@@ -359,9 +417,30 @@ class ListedPostedTenders extends Component {
 
     render(){
         let listings = this.props.genInfo.info.listings,
-        userType = this.props.profileInfo.userType;
+        userType = this.props.profileInfo.userType,
+        messagesInfo = {...this.props.messagesInfo},
+        showMessageForm = messagesInfo.messageForm.show,
+        messageAttributes = this.props.user.info.submitMessage,
+        errors = messagesInfo.messageForm.errors,
+        feedback = messageAttributes.feedback,
+        feedbackClass = messageAttributes.feedbackClass;
         return(
             <div className="list left hanad">
+                {   
+                    showMessageForm
+                    ?<MessageForm
+                        feedback = { feedback }
+                        feedbackClass = { feedbackClass }
+                        errors = { errors }
+                        styles = { submit_styles }
+                        attributes = { messageAttributes } 
+                        close={ this.renderMessageForm } 
+                        onBlur={ this.dummy } 
+                        upload={ this.sendMessage } 
+                        save={ this.saveMessage } 
+                    />
+                    :null
+                }
                 <div className="list-row header">
                     <span className="twenty">Location</span>
                     <span className="thirty">Description</span>

@@ -3,14 +3,15 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { ProfileImage } from 'components';
-import { dispatchedGenInfo, dispatchedSitesInfo } from 'extras/dispatchers';
+import { dispatchedMessagesInfo, dispatchedGenInfo, dispatchedSitesInfo } from 'extras/dispatchers';
 import axios from 'axios';
 import './sideBar.css';
 import { ownerOccupierOptions, serviceProviderOptions, menuIconTitles } from 'extras/config';
 
 const baseURL = process.env.BACK_END_URL,
 listingsEndPoint = process.env.LISTING_END_POINT,
-sitesEndPoint = process.env.SITES_END_POINT;
+sitesEndPoint = process.env.SITES_END_POINT,
+messagesEndPoint = process.env.MESSAGES_END_POINT;
 
 @connect((store)=>{
     return {
@@ -19,7 +20,9 @@ sitesEndPoint = process.env.SITES_END_POINT;
         genInfo: store.genInfo.info,
         profileInfo: store.user.info.profileInfo,
         siteData: store.user.info.submitSite,
-        sitesInfo: store.sites.info
+        sitesInfo: store.sites.info,
+        messagesInfo: store.messages.info,
+        messageData: store.user.info.submitMessage,
     }
 })
 class SideBar extends React.Component {
@@ -39,12 +42,68 @@ class SideBar extends React.Component {
             genInfo.defaultProps.leftMenuClass = "left-menu sp";
             genInfo.defaultProps.sideBarClass = "side-bar sp";
         }
-        this.fetchSites();
+
+        this.fetchListings().then(res=>{
+            if(res)
+                this.fetchSites();
+        });
+        
+        this.fetchSentMessages().then(res=>{
+            if(res)
+                this.fetchRecievedMessages();
+        });
+
         this.props.dispatch(dispatchedGenInfo(genInfo));
     }
 
     componentDidMount(){
-        this.fetchListings();
+        
+    }
+
+    fetchSentMessages = ()=>{
+        return new Promise(resolve=>{
+            let messagesInfo = { ...this.props.messagesInfo },
+            genInfo = { ...this.props.genInfo },
+            userEmail = (JSON.parse(sessionStorage.getItem("profileInfo"))).emailAddress,
+            url = baseURL + messagesEndPoint + "?sender=" + userEmail;
+            axios.get(url).then((response)=>{
+                //console.log(response.data);
+                let sentMessages = messagesInfo.sentMessages = genInfo.sentMessages = {...response.data};
+                genInfo.sideBar.profilePage.listCount['sentMessages'] = (response.data).length;
+                /**Set the more dropdown menu class to hidden for every row*/
+                Object.keys(sentMessages).map((key)=>{
+                    messagesInfo.sentMessages[key].moreMenuClassName = "hidden";
+                })
+                this.props.dispatch(dispatchedMessagesInfo(messagesInfo));
+                this.props.dispatch(dispatchedGenInfo(genInfo));
+                resolve("fetched");
+            }).catch(err=>{
+                console.log(err);
+            });
+        });    
+    }
+
+    fetchRecievedMessages = ()=>{
+        return new Promise(resolve=>{
+            let messagesInfo = {...this.props.messagesInfo },
+            genInfo = { ...this.props.genInfo },
+            userEmail = (JSON.parse(sessionStorage.getItem("profileInfo"))).emailAddress,
+            url = baseURL + messagesEndPoint + "?recipient=" + userEmail;
+            axios.get(url).then((response)=>{
+                //console.log(response.data);
+                let recievedMessages = messagesInfo.recievedMessages = genInfo.recievedMessages = {...response.data};
+                genInfo.sideBar.profilePage.listCount['recievedMessages'] = (response.data).length;
+                /**Set the more dropdown menu class to hidden for every row*/
+                Object.keys(recievedMessages).map((key)=>{
+                    messagesInfo.recievedMessages[key].moreMenuClassName = "hidden";
+                })
+                this.props.dispatch(dispatchedMessagesInfo(messagesInfo));
+                this.props.dispatch(dispatchedGenInfo(genInfo));
+                resolve("fetched");
+            }).catch(err=>{
+                console.log(err);
+            });
+        });
     }
 
     fetchSites = ()=>{
@@ -154,7 +213,8 @@ class SideBar extends React.Component {
         selected = this.props.genInfo.sideBar.currentTab,
         tendersCount = this.props.genInfo.sideBar.profilePage.listCount.tenders || 0,
         contractCount = this.props.genInfo.sideBar.profilePage.listCount.contracts || 0,
-        sitesCount = this.props.genInfo.sideBar.profilePage.listCount.sites || 0;
+        sitesCount = this.props.genInfo.sideBar.profilePage.listCount.sites || 0,
+        messagesCount = (parseInt(this.props.genInfo.sideBar.profilePage.listCount.sentMessages) + parseInt(this.props.genInfo.sideBar.profilePage.listCount.recievedMessages)) || 0;
         return(
             <span name="menuItems" className = { key===selected?"selected":""} id={ key } onClick={ this.select } key={ key }>
                 <div name={ key} onClick={ this.clickParent }>
@@ -183,6 +243,12 @@ class SideBar extends React.Component {
                         className="listingsCount"
                         onClick={ this.clickParent }
                     >{ sitesCount }</div>
+                    :key==="Messages"
+                    ?<div 
+                        name={ key }
+                        className="listingsCount"
+                        onClick={ this.clickParent }
+                    >{messagesCount}</div>
                     :null }</div>
                 </div>
                 <div className = "clear"></div>

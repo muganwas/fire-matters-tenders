@@ -45,6 +45,14 @@ const defaultState = {
           isActive: true
         }
       },
+      submitMessage: {
+        messageBody: null,
+        feedback: undefined,
+        feedbackClass: "hidden",
+        submitButton: {
+          isActive: true
+        }
+      },
       profileInfo:{ },
       avatarProps: {
         feedback: undefined,

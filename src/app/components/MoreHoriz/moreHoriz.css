@@ -10,3 +10,9 @@
     cursor: pointer;
     z-index: 1000;
 }
+.more-li{
+    padding: 4px 2px;
+}
+.more-li:hover{
+    color: #F79A50;
+}

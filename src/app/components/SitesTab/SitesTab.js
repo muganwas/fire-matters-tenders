@@ -177,8 +177,7 @@ class SitesTab extends React.Component {
         errors = listingsInfo.createForm.errors,
         userType = this.props.profileInfo.userType,
         feedback = listingAttributes.feedback,
-        feedbackClass = listingAttributes.feedbackClass,
-        equipment = {detectionAndWarningSystems, portableEquipment, passiveProtection, emergencyExitLighting };
+        feedbackClass = listingAttributes.feedbackClass;
         return(
             <div className="tenders main-content">
                 {showListingsForm

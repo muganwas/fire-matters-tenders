@@ -42,7 +42,7 @@ export const listedPostedSitesOptions = { 1: "View More..." }
 
 export const serviceProviderOptions = {
     Profile: "Profile",
-    Tenders: "Tenders",
+    Tenders: "Listings",
     Contracts: "Contracts",
     Subcontractors: "Sub-Contractors",
     Messages: "Messages"

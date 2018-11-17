@@ -11,6 +11,7 @@ import textFieldReducer from 'extras/reducers/texfieldReducer';
 import buttonsReducer from 'extras/reducers/buttonsReducer';
 import tendersReducer from 'extras/reducers/tendersReducer';
 import sitesReducer from './extras/reducers/sitesReducer';
+import messagesReducer from './extras/reducers/messagesReducer';
 
 const middleware = applyMiddleware(promise(), thunk, logger);
 const allReducers = combineReducers({
@@ -22,7 +23,8 @@ const allReducers = combineReducers({
     listingsInfo: listingsReducer,
     buttonsInfo: buttonsReducer,
     tenders: tendersReducer,
-    sites: sitesReducer
+    sites: sitesReducer,
+    messages: messagesReducer
 })
 const store = createStore(
     allReducers, 

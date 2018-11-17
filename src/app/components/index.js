@@ -35,3 +35,5 @@ export { default as ContractsTab } from 'components/ContractsTab/ContractsTab';
 export { default as ListedContracts } from 'components/ListedContracts/ListedContracts';
 export { default as SitesTab } from 'components/SitesTab/SitesTab';
 export { default as ListedPostedSites } from 'components/ListedPostedSites/ListedPostedSites';
+export { default as MessagesTab } from 'components/MessagesTab/MessagesTab';
+export { default as ListedPostedMessages } from 'components/ListedPostedMessages/ListedPostedMessages';

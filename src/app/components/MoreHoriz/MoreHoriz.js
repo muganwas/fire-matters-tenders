@@ -45,9 +45,10 @@ class MoreHoriz extends React.Component {
     }
 
     options = (key)=>{
-        let options = this.props.options;
+        let options = this.props.options,
+        onClick = key === "sendMessage"?this.props.onClick:this.props.onClick1;
         return(
-            <div key={key}>{ options[key] }</div>
+            <div className="more-li" autoid= { this.props.autoid } email={ this.props.email } onClick={ onClick } key={key}>{ options[key] }</div>
         )
     }
 
@@ -78,7 +79,10 @@ MoreHoriz.propTypes = {
     options: PropTypes.object.isRequired,
     element: PropTypes.object,
     id: PropTypes.string,
-    className: PropTypes.string.isRequired
+    className: PropTypes.string.isRequired,
+    onClick: PropTypes.func,
+    autoId: PropTypes.string,
+    email: PropTypes.string
 }
 
 export default MoreHoriz;

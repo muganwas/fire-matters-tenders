@@ -111,7 +111,9 @@ class HeaderMain extends Component {
         
     }
     render(){
-        let home = this.props.navigation.home;
+        let home = this.props.navigation.home,
+        profileInfo = sessionStorage.getItem('profileInfo'),
+        userType = profileInfo?JSON.parse(sessionStorage.getItem('profileInfo')).userType: null;
         return(
             <div className={ this.props.navigation.headerClass }>
                 <Image className="App-logo" src={require('images/logo.jpg')} />
@@ -119,7 +121,9 @@ class HeaderMain extends Component {
                 <i class="material-icons menu-icon" onClick={ this.toggleMenu }>menu</i>
                 <div className={ this.props.genInfo['info']['menu'] }>
                     <NavLink activeClassName="active" id="home" onClick={ this.toggleMenu } to={ home }>Home</NavLink>
-                    <NavLink activeClassName="active" id="listings" onClick={ this.toggleMenu } to={`/listings`}>Listings</NavLink>
+                    { userType === "Owner/Occupier" || userType === null
+                    ?<NavLink activeClassName="active" id="listings" onClick={ this.toggleMenu } to={`/listings`}>Listings</NavLink>
+                    :null }
                     <NavLink activeClassName="active" id="service-providers" onClick={ this.toggleMenu } to={`/service-providers`}>Service Providers</NavLink>
                     <NavLink activeClassName="active" id="about" onClick={ this.toggleMenu } to={`/about`}>About</NavLink>
                     <NavLink activeClassName="active" id="contact" onClick={ this.toggleMenu } to={`/contact`}>Contact</NavLink>

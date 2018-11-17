@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import  { Loader, MoreHoriz } from 'components';
 import axios from 'axios';
-import { dispatchedListingsInfo, dispatchedUserInfo } from 'extras/dispatchers';
-import './listedPostedSites.css';
+import { dispatchedListingsInfo, dispatchedMessagesInfo, dispatchedUserInfo } from 'extras/dispatchers';
+import './listedPostedMessages.css';
 import { PropTypes } from 'prop-types';
-import { listedPostedSitesOptions } from 'extras/config';
 
 const baseURL = process.env.BACK_END_URL,
 tenderEndPoint = process.env.TENDERS_END_POINT;
@@ -16,13 +15,11 @@ tenderEndPoint = process.env.TENDERS_END_POINT;
         search: store.search,
         genInfo: store.genInfo,
         profileInfo: store.user.info.profileInfo,
-        listingsInfo: store.listingsInfo.info,
-        listingsData: store.user.info.submitTender,
-        tendersInfo: store.tenders.info,
-        sitesInfo: store.sites.info
+        messagesData: store.user.info.submitMessage,
+        messagesInfo: store.messages.info
     }
 })
-class ListedPostedTenders extends Component {
+class ListedPostedMessages extends Component {
     constructor(props){
         super(props)
     }
@@ -60,6 +57,16 @@ class ListedPostedTenders extends Component {
             else
                 console.log('There was a troblem posting listing id');
         })  
+    }
+
+    renderMessageForm = (e)=>{
+        let listingId = e.target.getAttribute('autoid'),
+        messagesInfo = {...this.props.messagesInfo},
+        recipient = e.target.getAttribute('email');
+        messagesInfo.currListingId = listingId;
+        messagesInfo.currMessagRecipient = recipient;
+        messagesInfo.messageForm.show = !messagesInfo.messageForm.show;
+        this.props.dispatch(dispatchedMessagesInfo(messagesInfo));               
     }
 
     dummy= ()=>{
@@ -149,30 +156,52 @@ class ListedPostedTenders extends Component {
         });
     };
 
-    displayTenders = (e)=>{
-        let tenderId = e.target.id;
-        let listingsInfo = {...this.props.listingsInfo},
-        show = listingsInfo.postedTenders.overLay.show;
-        listingsInfo.postedTenders.overLay.show = !show;
-        listingsInfo.postedTenders.overLay.active = tenderId;
-        this.props.dispatch(dispatchedListingsInfo(listingsInfo));
-    }
-
-    displaySites = (key)=>{
-        let sites = {...this.props.sitesInfo.sites},
-        options = listedPostedSitesOptions;
+    displayRecievedMessages = (key)=>{
+        let recievedMessages = {...this.props.messagesInfo.recievedMessages},
+        listingId = recievedMessages[key].listingId,
+        sender = recievedMessages[key].sender,
+        options = {0: "Delete", sendMessage: "Reply"};
         return(
             <div className="list-row" key={key}>
-                <div className="twenty">{ sites[key].siteName }</div>
-                <div className="thirty">{ sites[key].siteLocation }</div>
-                <div className="twenty">{ sites[key].currentContractor }</div>
-                <div className="twenty">{ sites[key].contractStatus }</div>
+                <div className="thirty">{ recievedMessages[key].sender }</div>
+                <div className="thirty">{ recievedMessages[key].createdDate }</div>
+                <div className="thirty">{ recievedMessages[key].message }</div>
                 <div className="ten">
                     <MoreHoriz 
-                        className={ sites[key].moreMenuClassName } 
+                        className={ recievedMessages[key].moreMenuClassName } 
                         id={ key } 
-                        listName = "sites" 
-                        element={ sites[key] }
+                        listName = "recievedMessages"
+                        autoid = { listingId }
+                        email = { sender }
+                        onClick = { this.renderMessageForm }
+                        element={ recievedMessages[key] }
+                        options={ options }
+                     />
+                </div>
+                <div className="bottom-border"></div>
+            </div>
+        )
+    }
+
+    displaySentMessages = (key)=>{
+        let sentMessages = {...this.props.messagesInfo.sentMessages},
+        listingId = sentMessages[key].listingId,
+        sender = sentMessages[key].sender,
+        options = {0: "Delete", sendMessage: "Send Message"};
+        return(
+            <div className="list-row" key={key}>
+                <div className="thirty">{ sentMessages[key].recipient }</div>
+                <div className="thirty">{ sentMessages[key].createdDate }</div>
+                <div className="thirty">{ sentMessages[key].message }</div>
+                <div className="ten">
+                    <MoreHoriz 
+                        className={ sentMessages[key].moreMenuClassName } 
+                        id={ key }
+                        autoid = { listingId }
+                        sender = { sender }
+                        onClick = { this.renderMessageForm }
+                        listName = "sentMessages" 
+                        element={ sentMessages[key] }
                         options={ options }
                      />
                 </div>
@@ -182,33 +211,52 @@ class ListedPostedTenders extends Component {
     }
 
     render(){
-        let sites = this.props.sitesInfo.sites;
+        let recievedMessages = {...this.props.messagesInfo.recievedMessages},
+        recievedCount = Object.keys(recievedMessages).length,
+        sentMessages = {...this.props.messagesInfo.sentMessages},
+        sentCount = Object.keys(sentMessages).length;
         return(
-            <div className="list left hanad">
-                <div className="list-row header">
-                    <span className="twenty">Site Name</span>
-                    <span className="thirty">Location</span>
-                    <span className="twenty">Current Contractor</span>
-                    <span className="twenty">Contract Status</span>
-                    <span className="ten"></span>
-                    <div className="bottom-border"></div>
+            <div>
+                <div className="list left hanad">
+                <h3>Recieved Messages</h3>
+                    <div className="list-row header">
+                        <span className="thirty">Sender</span>
+                        <span className="thirty">Date Sent</span>
+                        <span className="thirty">Message</span>
+                        <span className="ten"></span>
+                        <div className="bottom-border"></div>
+                    </div>
+                    { recievedCount === 0?<span className="no-messages">No Messages to show</span>:null}
+                    { recievedMessages?Object.keys(recievedMessages).map(this.displayRecievedMessages):<div className="loader"><Loader /></div> }
                 </div>
-                { sites?Object.keys(sites).map(this.displaySites):<div className="loader"><Loader /></div> }
+                <div className="list left hanad">
+                <h3>Sent Messages</h3>
+                    <div className="list-row header">
+                        <span className="thirty">Recipient</span>
+                        <span className="thirty">Date Sent</span>
+                        <span className="thirty">Message</span>
+                        <span className="ten"></span>
+                        <div className="bottom-border"></div>
+                    </div>
+                    { recievedCount === 0?<span className="no-messages">No Messages to show</span>:null}
+                    { sentMessages?Object.keys(sentMessages).map(this.displaySentMessages):<div className="loader"><Loader /></div> }
+                </div>
+
             </div>
         )
     }
 }
 
-ListedPostedTenders.defaultProps = {
+ListedPostedMessages.defaultProps = {
     user: {},
     search: {},
     genInfo: {}
 }
 
-ListedPostedTenders.PropTypes = {
+ListedPostedMessages.PropTypes = {
     user: PropTypes.object.isRequired,
     search: PropTypes.object.isRequired,
     genInfo: PropTypes.object.isRequired
 }
 
-export default ListedPostedTenders;
+export default ListedPostedMessages;
