@@ -216,7 +216,7 @@ class ListedPostedMessages extends Component {
         sentMessages = {...this.props.messagesInfo.sentMessages},
         sentCount = Object.keys(sentMessages).length;
         return(
-            <div>
+            <div className="messages">
                 <div className="list left hanad">
                 <h3>Recieved Messages</h3>
                     <div className="list-row header">

@@ -200,7 +200,6 @@ class SideBar extends React.Component {
 
     clickParent=(e)=>{
         let name = e.target.getAttribute('name');
-        console.log(e.target.id)
         document.getElementById(name).click();
     }
 

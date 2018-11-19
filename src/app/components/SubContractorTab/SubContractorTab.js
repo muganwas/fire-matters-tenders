@@ -2,12 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import  { Loader, FmButton, MoreHoriz, PostedTendersOverlay, SearchInput } from 'components';
 import axios from 'axios';
-import { dispatchedGenInfo, dispatchedListingsInfo, dispatchedUserInfo, dispatchedTendersInfo, dispatchedMessagesInfo } from 'extras/dispatchers';
+import { dispatchedGenInfo, dispatchedListingsInfo, dispatchedUserInfo, dispatchedTendersInfo, dispatchedSubContractorsInfo } from 'extras/dispatchers';
 import './subContractorTab.css';
 import { PropTypes } from 'prop-types';
-import { TenderForm, MessageForm } from 'forms';
-import { listedPostedTendersOptions } from 'extras/config';
-import { styles, submit_styles, alt_styles } from './styles';
+import { SubContractorForm } from 'forms';
+import { listedPostedTendersOptions, statesAustralia } from 'extras/config';
+import { styles, submit_styles } from './styles';
 
 const baseURL = process.env.BACK_END_URL,
 listingsEndPoint = process.env.LISTING_END_POINT,
@@ -23,8 +23,8 @@ messagesEndPoint = process.env.MESSAGES_END_POINT;
         listingsInfo: store.listingsInfo.info,
         listingsData: store.user.info.submitTender,
         tendersInfo: store.tenders.info,
-        messageData: store.user.info.submitMessage,
-        messagesInfo: store.messages.info
+        subContractorData: store.user.info.addSubContractor,
+        subContractorsInfo: store.subContractors.info
     }
 })
 class SubContractorTab extends React.Component {
@@ -34,55 +34,41 @@ class SubContractorTab extends React.Component {
     
     componentWillReceiveProps(nextProps){
         this.props = {...nextProps};
-        if(!this.props.genInfo.info.listings)
-            this.fetchListings();
-    }
-
-    componentWillMount(){
-        /*this.fetchListings().then(res=>{
-            if(res === "fetched"){
-                this.fetchTenders();
-            }
-        });*/
     }
 
     checkForErrors=()=>{
         let errored = [];
         return new Promise((resolve, reject)=>{
-            let messageData = {...this.props.messageData},
-            messagesInfo = {...this.props.messagesInfo};
-            Object.keys(messageData).map(key=>{
-                if(!messageData[key] && key !== "feedback" && key !== "feedbackClass" && key !== "submitButton"){
-                    messagesInfo.messageForm.errors[key] = true;
-                    errored.push(messagesInfo.messageForm.errors[key]);
-                }else if(messageData[key] && key !== "feedback" && key !== "feedbackClass" && key !== "submitButton"){
-                    messagesInfo.messageForm.errors[key] = null;
+            let subContractorData = {...this.props.subContractorData},
+            subContractorsInfo = {...this.props.subContractorsInfo};
+            Object.keys(subContractorData).map(key=>{
+                if(!subContractorData[key] && key !== "feedback" && key !== "feedbackClass" && key !== "submitButton"){
+                    subContractorsInfo.subContractorForm.errors[key] = true;
+                    errored.push(subContractorsInfo.subContractorForm.errors[key]);
+                }else if(subContractorData[key] && key !== "feedback" && key !== "feedbackClass" && key !== "submitButton"){
+                    subContractorsInfo.subContractorForm.errors[key] = null;
                 }
             });
-            this.props.dispatch(dispatchedMessagesInfo(messagesInfo));
+            this.props.dispatch(dispatchedSubContractorsInfo(subContractorsInfo));
             let errCount = errored.length;
             resolve(errCount);
         }); 
     }
 
-    renderMessageForm = (e)=>{
-        let messagesInfo = {...this.props.messagesInfo},
-        listingId = e.target.getAttribute('autoid'),
-        recipient = e.target.getAttribute('email');
-        messagesInfo.currListingId = listingId;
-        messagesInfo.currMessagRecipient = recipient;
-        messagesInfo.messageForm.show = !messagesInfo.messageForm.show;
-        this.props.dispatch(dispatchedMessagesInfo(messagesInfo));               
+    renderSubContractorForm = ()=>{
+        let subContractorsInfo = {...this.props.subContractorsInfo};
+        subContractorsInfo.subContractorForm.show = !subContractorsInfo.subContractorForm.show;
+        this.props.dispatch(dispatchedSubContractorsInfo(subContractorsInfo));               
     }
 
-    sendMessage=()=>{
-        let messageData = {...this.props.messageData},
-        messagesInfo = {...this.props.messagesInfo },
+    addSubContractor=()=>{
+        let subContractorData = {...this.props.subContractorData},
+        subContractorsInfo = {...this.props.subContractorsInfo },
         userInfo = {...this.props.user.info},
         userEmail = this.props.profileInfo.emailAddress,
-        recipientEmail = messagesInfo.currMessagRecipient,
-        listingId = messagesInfo.currListingId,
-        message = messageData.messageBody,
+        recipientEmail = subContractorsInfo.currMessagRecipient,
+        listingId = subContractorsInfo.currListingId,
+        message = subContractorData.messageBody,
         postInfoUrl = baseURL + messagesEndPoint;
 
         let postObject = {
@@ -91,10 +77,7 @@ class SubContractorTab extends React.Component {
             recipientEmail, 
             message
         };
-
-        console.log(postObject)
         this.checkForErrors().then(res=>{
-            console.log(res)
             if(res === 0){
                 userInfo.submitMessage.submitButton.isActive = false;
                 this.props.dispatch(dispatchedUserInfo(userInfo));
@@ -115,188 +98,30 @@ class SubContractorTab extends React.Component {
                     this.forceUpdate();
                     console.log(err);
                 });
+            }else{
+                console.log("error count: " + res)
             }
         });
     };
 
-    fetchTenders = ()=>{
-        let postInfoUrl = baseURL + tenderEndPoint,
-        genInfo = {...this.props.genInfo.info },
-        userType = (this.props.profileInfo.userType).toLowerCase(),
-        postedTendersComprehensive = [],
-        postedTenders = [];
-        if(userType){
-            if(userType === "owner/occupier"){
-                let listings = genInfo.listings;
-                axios.get(postInfoUrl).then(res=>{
-                    let tendersArr = res.data,
-                    tendersLen = tendersArr.length;
-                    for(let count = 0;count <tendersLen; count++){
-                        let currObj = tendersArr[count],
-                        listingId = currObj.listingId;
-                        Object.keys(listings).map(key=>{
-                            if(listingId === listings[key].id){
-                                let cO = {tenderId:currObj.id, listingId: listingId};
-                                postedTendersComprehensive.push(currObj);
-                                postedTenders.push(cO);
-                            }
-                        });
-                    }
-                });
-                let listingsInfo = {...this.props.listingsInfo},
-                tendersInfo = {...this.props.tendersInfo};
-                listingsInfo.postedTenders.tenders = postedTenders;
-                tendersInfo.tenders = postedTendersComprehensive;
-                this.props.dispatch(dispatchedTendersInfo(tendersInfo));
-                this.props.dispatch(dispatchedListingsInfo(listingsInfo));
-                this.forceUpdate();
-            }
-        }
-    }
-
-    fetchListings = ()=>{
-        return new Promise(resolve=>{
-            let genInfo = {...this.props.genInfo.info },
-            userType = (this.props.profileInfo.userType).toLowerCase(),
-            userEmail = this.props.profileInfo.emailAddress;
-            if(userType){
-                if(userType !== "owner/occupier"){
-                    axios.get(baseURL + listingsEndPoint).then((response)=>{
-                        //console.log(response.data);
-                        let listings = genInfo.listings = {...response.data};
-                        genInfo.sideBar.profilePage.listCount['tenders'] = (response.data).length;
-                        /**Set the more dropdown menu class to hidden for every row*/
-                        Object.keys(listings).map((key)=>{
-                            genInfo.listings[key].moreMenuClassName = "hidden";
-                        })
-                        this.props.dispatch(dispatchedGenInfo(genInfo));
-                        resolve("fetched");
-                    }).catch(err=>{
-                        console.log(err);
-                    });
-                }else{
-                    axios.get(baseURL + listingsEndPoint + "?userEmail=" + userEmail).then((response)=>{
-                        //console.log(response.data);
-                        let listings = genInfo.listings = {...response.data};
-                        genInfo.sideBar.profilePage.listCount['tenders'] = (response.data).length;
-                        /**Set the more dropdown menu class to hidden for every row*/
-                        Object.keys(listings).map((key)=>{
-                            genInfo.listings[key].moreMenuClassName = "hidden";
-                        })
-                        this.props.dispatch(dispatchedGenInfo(genInfo));
-                        resolve("fetched");
-                    }).catch(err=>{
-                        console.log(err);
-                    });            
-                }
-            }
-        });    
-    }
-
-    postListingId = (id)=>{
-        return new Promise(resolve=>{
-            let userInfo = {...this.props.user.info};
-            userInfo.submitTender.tenderListingId = id;
-            this.props.dispatch(dispatchedUserInfo(userInfo));
-            resolve('id posted');
-        });
-    }
-
-    renderTenderForm = (e)=>{
-        let id = e.target.id;
-        let name = e.target.getAttribute('name');
-        id = !id?name:id;
-        let listingsInfo = {...this.props.listingsInfo};
-        listingsInfo.tenderForm.show = !listingsInfo.tenderForm.show;
-        this.postListingId(id).then(res=>{
-            if(res === "id posted")
-                this.props.dispatch(dispatchedListingsInfo(listingsInfo));
-            else
-                console.log('There was a troblem posting listing id');
-        })  
-    }
 
     dummy= ()=>{
         return Promise.resolve("Nassing");
     }
 
-    checkForErrors(){
-        let errored = [];
-        return new Promise(resolve=>{
-            let listingsData = {...this.props.listingsData},
-            listingsInfo = {...this.props.listingsInfo};
-            Object.keys(listingsData).map(key=>{
-                if(!listingsData[key] && key !== "feedback" && key !== "feedbackClass" && key !== "submitButton"){
-                    listingsInfo.tenderForm.errors[key] = true;
-                    errored.push(listingsInfo.tenderForm.errors[key]);
-                }else if(listingsData[key] && key !== "feedback" && key !== "feedbackClass" && key !== "submitButton"){
-                    listingsInfo.tenderForm.errors[key] = null;
-                }
-            });
-            this.props.dispatch(dispatchedListingsInfo(listingsInfo));
-            let errCount = errored.length;
-            resolve(errCount);
-        }); 
-    }
-
-    upload=()=>{
-        let listingsData = {...this.props.listingsData},
-        userInfo = {...this.props.user.info},
-        companyName = listingsData.tenderCompanyName,
-        rate = listingsData.tenderRate,
-        startDate = listingsData.tenderStartDate,
-        endDate = listingsData.tenderEndDate,
-        coverLetter = listingsData.tenderCoverLetter,
-        listingId = listingsData.tenderListingId,
-        postInfoUrl = baseURL + tenderEndPoint;
-
-        let postObject = {
-            listingId,
-            companyName, 
-            rate, 
-            coverLetter, 
-            startDate, 
-            endDate
-        };
-        this.checkForErrors().then(res=>{
-            if(res === 0){
-                userInfo.submitTender.submitButton.isActive = false;
-                this.props.dispatch(dispatchedUserInfo(userInfo));
-                axios.post(postInfoUrl, postObject).
-                then(res=>{
-                    userInfo.submitTender.submitButton.isActive = true;
-                    userInfo.submitTender.feedback = "You successfully posted your tender.";
-                    userInfo.submitTender.feedbackClass="success";
-                    this.props.dispatch(dispatchedUserInfo(userInfo));
-                    this.forceUpdate();
-                }).
-                catch(err=>{
-                    userInfo.submitTender.submitButton.isActive = true;
-                    userInfo.submitTender.feedbackClass="error-feedback";
-                    userInfo.submitTender.feedback = "Something went wrong, try again later.";
-                    this.props.dispatch(dispatchedUserInfo(userInfo));
-                    this.forceUpdate();
-                    console.log(err);
-                });
-            }
-        });
-    };
-
-    save=(e)=>{
+    saveSubContractors=(e)=>{
         e.persist();
         return new Promise((resolve, reject)=>{
             let userInfo = {...this.props.user.info},
             id = e.target.id,
-            type = e.target.getAttribute('type'),
             origName = e.target.getAttribute("category");
-            console.log(type)
             origName = origName?origName:id;
             let nameArr = origName.split("-"),
             name = nameArr[1],
             value = e.target.getAttribute('value');
             value = value?value:e.target.value;
-            userInfo.submitTender[name] = value;
-            userInfo.submitTender[name + "_key"] = id;
+            userInfo.addSubContractor[name] = value;
+            userInfo.addSubContractor[name + "_key"] = id;
             if(userInfo){
                 resolve(userInfo);
             }                        
@@ -304,37 +129,6 @@ class SubContractorTab extends React.Component {
                 reject({message: "No data"});
         });
     };
-
-    saveMessage=(e)=>{
-        e.persist();
-        return new Promise((resolve, reject)=>{
-            let userInfo = {...this.props.user.info},
-            id = e.target.id,
-            type = e.target.getAttribute('type'),
-            origName = e.target.getAttribute("category");
-            origName = origName?origName:id;
-            let nameArr = origName.split("-"),
-            name = nameArr[1],
-            value = e.target.getAttribute('value');
-            value = value?value:e.target.value;
-            userInfo.submitMessage[name] = value;
-            userInfo.submitMessage[name + "_key"] = id;
-            if(userInfo){
-                resolve(userInfo);
-            }                        
-            else
-                reject({message: "No data"});
-        });
-    };
-
-    displayTenders = (e)=>{
-        let tenderId = e.target.id;
-        let listingsInfo = {...this.props.listingsInfo},
-        show = listingsInfo.postedTenders.overLay.show;
-        listingsInfo.postedTenders.overLay.show = !show;
-        listingsInfo.postedTenders.overLay.active = tenderId;
-        this.props.dispatch(dispatchedListingsInfo(listingsInfo));
-    }
 
     displayListings = (key)=>{
         let listings = {...this.props.genInfo.info.listings},
@@ -371,6 +165,7 @@ class SubContractorTab extends React.Component {
                     feedbackClass = { feedbackClass }
                     errors = { errors }
                     styles = { submit_styles }
+                    statesAustralia = { statesAustralia }
                     attributes = { tenderAttributes } 
                     close={ this.renderTenderForm } 
                     onBlur={ this.dummy } 
@@ -400,26 +195,38 @@ class SubContractorTab extends React.Component {
         )
     }
 
-    renderSubContractorForm = ()=>{
-
-    }
-
     searchSubContractors = ()=>{
         
     }
 
     render(){
-        let listings = this.props.genInfo.info.listings,
+        const listings = {...this.props.genInfo.info.listings},
         subContractors = {},
         userType = this.props.profileInfo.userType,
-        messagesInfo = {...this.props.messagesInfo},
-        showMessageForm = messagesInfo.messageForm.show,
-        messageAttributes = this.props.user.info.submitMessage,
-        errors = messagesInfo.messageForm.errors,
-        feedback = messageAttributes.feedback,
-        feedbackClass = messageAttributes.feedbackClass;
+        subContractorsInfo = {...this.props.subContractorsInfo},
+        showSubContractorForm = subContractorsInfo.subContractorForm.show,
+        subContractorAttributes = this.props.user.info.addSubContractor,
+        errors = subContractorsInfo.subContractorForm.errors,
+        feedback = subContractorAttributes.feedback,
+        feedbackClass = subContractorAttributes.feedbackClass;
         return(
             <div className="tenders main-content">
+                {   
+                    showSubContractorForm
+                    ?<SubContractorForm
+                        feedback = { feedback }
+                        feedbackClass = { feedbackClass }
+                        errors = { errors }
+                        styles = { submit_styles }
+                        statesAustralia = { statesAustralia }
+                        attributes = { subContractorAttributes } 
+                        close={ this.renderSubContractorForm } 
+                        onBlur={ this.dummy } 
+                        upload={ this.addSubContractor } 
+                        save={ this.saveSubContractors } 
+                    />
+                    :null
+                }
                 <div className="title-bar">
                         <span id="title">Sub-Contractors</span>
                         {userType !== "Owner/Occupier"
@@ -429,21 +236,6 @@ class SubContractorTab extends React.Component {
                         </span>:null}
                 </div>
                 <div className="list left hanad">
-                    {   
-                        showMessageForm
-                        ?<MessageForm
-                            feedback = { feedback }
-                            feedbackClass = { feedbackClass }
-                            errors = { errors }
-                            styles = { submit_styles }
-                            attributes = { messageAttributes } 
-                            close={ this.renderMessageForm } 
-                            onBlur={ this.dummy } 
-                            upload={ this.sendMessage } 
-                            save={ this.saveMessage } 
-                        />
-                        :null
-                    }
                     <div className="list-row header">
                         <span className="twenty">Company Name</span>
                         <span className="thirty">Location</span>
@@ -467,7 +259,7 @@ SubContractorTab.defaultProps = {
 SubContractorTab.propTypes = {
     user: PropTypes.object.isRequired,
     search: PropTypes.object.isRequired,
-    genInfo: PropTypes.object.isRequired
+    genInfo: PropTypes.object.isRequired,
 }
 
 export default SubContractorTab;

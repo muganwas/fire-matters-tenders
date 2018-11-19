@@ -120,6 +120,22 @@ export function dispatchedTendersInfo(info) {
     }
 }
 
+export function dispatchedSubContractorsInfo(info) {
+    if(info !== undefined && info !== null){   
+      return {
+            type: "FETCH_SUBCONTRACTOR_FULFILLED",
+            payload: { info }
+        }
+    }else{
+        return {
+            type: "FETCH_SUBCONTRACTOR_REJECTED",
+            payload: {
+                error: "could not fetch sub-contractor details"
+            }
+        } 
+    }
+}
+
 export function dispatchedSitesInfo(info) {
     if(info !== undefined && info !== null){   
       return {

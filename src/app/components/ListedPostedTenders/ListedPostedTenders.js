@@ -220,7 +220,7 @@ class ListedPostedTenders extends Component {
         return Promise.resolve("Nassing");
     }
 
-    checkForErrors(){
+    checkForListingErrors(){
         let errored = [];
         return new Promise(resolve=>{
             let listingsData = {...this.props.listingsData},
@@ -258,7 +258,7 @@ class ListedPostedTenders extends Component {
             startDate, 
             endDate
         };
-        this.checkForErrors().then(res=>{
+        this.checkForListingErrors().then(res=>{
             if(res === 0){
                 userInfo.submitTender.submitButton.isActive = false;
                 this.props.dispatch(dispatchedUserInfo(userInfo));

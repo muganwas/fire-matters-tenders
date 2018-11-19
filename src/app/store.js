@@ -12,6 +12,8 @@ import buttonsReducer from 'extras/reducers/buttonsReducer';
 import tendersReducer from 'extras/reducers/tendersReducer';
 import sitesReducer from './extras/reducers/sitesReducer';
 import messagesReducer from './extras/reducers/messagesReducer';
+import subContractorsReducer from './extras/reducers/subContractorsReducer';
+
 
 const middleware = applyMiddleware(promise(), thunk, logger);
 const allReducers = combineReducers({
@@ -24,7 +26,8 @@ const allReducers = combineReducers({
     buttonsInfo: buttonsReducer,
     tenders: tendersReducer,
     sites: sitesReducer,
-    messages: messagesReducer
+    messages: messagesReducer,
+    subContractors: subContractorsReducer
 })
 const store = createStore(
     allReducers, 

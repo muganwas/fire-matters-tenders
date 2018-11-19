@@ -28,7 +28,7 @@ const TenderForm = props=>{
     mandatoryInput = "This field is mandatory.",
     isActive = submitButton.isActive;
     return(
-        <div style={ styles.trans } className="listing-form-container">
+        <div style={ styles.trans } className="tenders listing-form-container">
             <div className="listing-form-subcontainer">
                 <div className="header">
                     <span id="header-text">Post Listing </span>

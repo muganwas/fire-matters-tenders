@@ -17,7 +17,6 @@ const MessageForm = props=>{
         errors
     } = props,
     { 
-        messageRecipient, 
         messageBody,
         submitButton 
     } = attributes,

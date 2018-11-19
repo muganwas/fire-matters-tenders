@@ -53,6 +53,21 @@ const defaultState = {
           isActive: true
         }
       },
+      addSubContractor: {
+        contractorFullName: null,
+        contractorCompanyName: null,
+        contractorPhoneNumber: null,
+        contractorMobileNubmer: " ",
+        contractorEmailAddress: null,
+        contractorState: null,
+        contractorCity: null,
+        contractorPhysicalAddress: null,
+        feedback: undefined,
+        feedbackClass: "hidden",
+        submitButton: {
+          isActive: true
+        }
+      },
       profileInfo:{ },
       avatarProps: {
         feedback: undefined,

@@ -214,6 +214,7 @@ class MessagesTab extends React.Component {
                     </span>
                 </div>
                 <ListedPostedMessages />
+                <div className = "clear"></div>
             </div>
         )
     }
