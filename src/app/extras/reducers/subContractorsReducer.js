@@ -3,8 +3,7 @@ const defaultState = {
       subContractorForm:{
         errors: {},
         show:false
-      },
-      sites:{}
+      }
      },
     fetching: false,
     fetched: false,

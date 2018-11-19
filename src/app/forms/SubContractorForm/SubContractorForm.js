@@ -13,7 +13,6 @@ class SubContractorForm extends React.Component {
     }
     componentWillReceiveProps(nextProps){
         this.props = {...nextProps}
-        console.log(nextProps)
     }
     render(){
         const { 
@@ -42,8 +41,6 @@ class SubContractorForm extends React.Component {
         mandatoryInput = "This field is mandatory.",
         isActive = submitButton.isActive;
 
-        console.log(errors)
-
         return(
             <div className="listing-form-container">
                 <div className="listing-form-subcontainer">
@@ -53,7 +50,7 @@ class SubContractorForm extends React.Component {
                     </div>
                     <div className="listing-form">
                         <div className="information" style={ styles.information }>
-                        <div className="el" style={ styles.el }><span className={ feedbackClass }>{ feedback }</span></div>
+                            <div className="el" style={ styles.el }><span className={ feedbackClass }>{ feedback }</span></div>
                             <div className="el" style={ styles.el }>
                                 <Textfield 
                                     id="subcontractor-contractorFullName"
@@ -154,7 +151,7 @@ class SubContractorForm extends React.Component {
                             <div className="el" style={ styles.el }>
                                 <Textfield 
                                     id="subcontractor-contractorPhysicalAddress"
-                                    label="City/Suburb"
+                                    label="Physical Address"
                                     value={ contractorPhysicalAddress } 
                                     type="text"
                                     multiline

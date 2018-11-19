@@ -3,8 +3,7 @@ const defaultState = {
       messageForm:{
         errors: {},
         show:false
-      },
-      sites:{}
+      }
      },
     fetching: false,
     fetched: false,

@@ -36,7 +36,9 @@
 #profile-companyRepMobileNumber, 
 #profile-companyMobileNumber, 
 #profile-companyPhoneNumber,  
-#profile-companyRepPhoneNumber, 
+#profile-companyRepPhoneNumber,
+#subcontractor-contractorPhoneNumber,
+#subcontractor-contractorMobileNumber,
 #profile-mobileNumber{
     font-size: 15px;
     background-color: #F1F1F2;
@@ -46,6 +48,8 @@
 #profile-companyRepMobileNumber::placeholder, 
 #profile-companyMobileNumber::placeholder,
 #profile-companyPhoneNumber::placeholder,
+#subcontractor-contractorPhoneNumber::placeholder,
+#subcontractor-contractorMobileNumber::placeholder,
 #profile-companyRepPhoneNumber::placeholder, 
 #profile-mobileNumber::placeholder{
     color: #bababa;

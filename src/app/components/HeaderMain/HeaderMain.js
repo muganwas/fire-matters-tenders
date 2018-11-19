@@ -77,6 +77,8 @@ class HeaderMain extends Component {
         let info = {...this.props.genInfo.info};
         info.alternatingNavigation.home = "/home";
         info.alternatingNavigation.headerClass = "App-header";
+        sessionStorage.removeItem('profileInfo');
+        sessionStorage.removeItem('loginSession');
         this.props.dispatch(dispatchedGenInfo(info));
         sessionStorage.removeItem('loginSession');
         this.props.history.push('/login');

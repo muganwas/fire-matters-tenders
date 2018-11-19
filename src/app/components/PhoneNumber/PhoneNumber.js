@@ -68,10 +68,9 @@ class PhoneNumber extends React.Component {
                                 boxShadow: "none"
                             }}
                         name = {this.props.fieldClass}
-                        onBlur = { this.props.onBlur }
+                        onBlur = { this.upload }
                         defaultValue={ this.props.value }
-                        onBlur={this.upload}
-                        onChange={this.handleText}
+                        onChange={ this.handleText }
                         placeholder={this.props.placeholder}
                         mask={this.props.mask}
                         placeholderChar={'\u2000'}

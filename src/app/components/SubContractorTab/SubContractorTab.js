@@ -12,7 +12,7 @@ import { styles, submit_styles } from './styles';
 const baseURL = process.env.BACK_END_URL,
 listingsEndPoint = process.env.LISTING_END_POINT,
 tenderEndPoint = process.env.TENDERS_END_POINT,
-messagesEndPoint = process.env.MESSAGES_END_POINT;
+subContractorsEndPoint = process.env.SUB_CONTRACTORS_END_POINT;
 
 @connect((store)=>{
     return {
@@ -63,44 +63,60 @@ class SubContractorTab extends React.Component {
 
     addSubContractor=()=>{
         let subContractorData = {...this.props.subContractorData},
-        subContractorsInfo = {...this.props.subContractorsInfo },
         userInfo = {...this.props.user.info},
-        userEmail = this.props.profileInfo.emailAddress,
-        recipientEmail = subContractorsInfo.currMessagRecipient,
-        listingId = subContractorsInfo.currListingId,
-        message = subContractorData.messageBody,
-        postInfoUrl = baseURL + messagesEndPoint;
+        mainUserId = this.props.profileInfo.id,
+        companyName = subContractorData.contractorCompanyName,
+        fullName = subContractorData.contractorFullName,
+        phoneNumber = (subContractorData.contractorPhoneNumber).replace("(", "").replace(")", "").replace( new RegExp(" ", "g"), "").replace("-", ""),
+        mobileNumber = subContractorData.contractorMobileNumber,
+        emailAddress = subContractorData.contractorEmailAddress,
+        state = subContractorData.contractorState,
+        city = subContractorData.contractorCity,
+        physicalAddress = subContractorData.contractorPhysicalAddress,
+        postInfoUrl = baseURL + subContractorsEndPoint;
+
+        mobileNumber = mobileNumber?mobileNumber.replace("(", "").replace(")", "").replace( new RegExp(" ", "g"), "").replace("-", ""): undefined;
 
         let postObject = {
-            listingId,
-            userEmail,
-            recipientEmail, 
-            message
+            mainUserId,
+            companyName,
+            fullName, 
+            phoneNumber,
+            mobileNumber,
+            emailAddress,
+            state,
+            city,
+            physicalAddress
         };
         this.checkForErrors().then(res=>{
+            userInfo.addSubContractor.submitButton.isActive = false;
+            this.props.dispatch(dispatchedUserInfo(userInfo));
             if(res === 0){
-                userInfo.submitMessage.submitButton.isActive = false;
+                userInfo.addSubContractor.submitButton.isActive = false;
                 this.props.dispatch(dispatchedUserInfo(userInfo));
                 axios.post(postInfoUrl, postObject).
                 then(res=>{
-                    userInfo.submitMessage.submitButton.isActive = true;
-                    userInfo.submitMessage.feedback = "Your message was posted successfully.";
-                    userInfo.submitMessage.feedbackClass="success";
+                    userInfo.addSubContractor.submitButton.isActive = true;
+                    userInfo.addSubContractor.feedback = fullName + "was added successfully.";
+                    userInfo.addSubContractor.feedbackClass="success";
                     this.props.dispatch(dispatchedUserInfo(userInfo));
                     this.forceUpdate();
                     console.log(res);
                 }).
                 catch(err=>{
-                    userInfo.submitMessage.submitButton.isActive = true;
-                    userInfo.submitMessage.feedbackClass="error-feedback";
-                    userInfo.submitMessage.feedback = "Something went wrong, try again later.";
+                    userInfo.addSubContractor.submitButton.isActive = true;
+                    userInfo.addSubContractor.feedbackClass="error-feedback";
+                    userInfo.addSubContractor.feedback = "Something went wrong, try again later.";
                     this.props.dispatch(dispatchedUserInfo(userInfo));
                     this.forceUpdate();
                     console.log(err);
                 });
             }else{
-                console.log("error count: " + res)
+                userInfo.addSubContractor.submitButton.isActive = true;
+                this.props.dispatch(dispatchedUserInfo(userInfo));
+                this.forceUpdate();
             }
+            
         });
     };
 
@@ -118,8 +134,8 @@ class SubContractorTab extends React.Component {
             origName = origName?origName:id;
             let nameArr = origName.split("-"),
             name = nameArr[1],
-            value = e.target.getAttribute('value');
-            value = value?value:e.target.value;
+            value = e.target.value;
+            value = value?value:e.target.getAttribute('value');
             userInfo.addSubContractor[name] = value;
             userInfo.addSubContractor[name + "_key"] = id;
             if(userInfo){
