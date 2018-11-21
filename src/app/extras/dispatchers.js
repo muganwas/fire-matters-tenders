@@ -52,6 +52,24 @@ export function dispatchedSecondarySearchInfo(searchInfo) {
     }
 }
 
+export function dispatchedSecondarySelectInfo(selectInfo) {
+    if(selectInfo !== undefined && selectInfo !== null){   
+      return {
+            type: "FETCH_SECONDARY_SELECT_FULFILLED",
+            payload: {
+                info: selectInfo
+            }   
+        }
+    }else{
+        return {
+            type: "FETCH_SECONDARY_SEARCH_REJECTED",
+            payload: {
+                error: "could not fetch search details"
+            }
+        } 
+    }
+}
+
 export function dispatchedTextFieldInfo(Info) {
     if(Info !== undefined && Info !== null){   
       return {

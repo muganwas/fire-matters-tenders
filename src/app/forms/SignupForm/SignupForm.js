@@ -325,7 +325,8 @@ class SignupForm extends React.Component {
     }
 
     signUp = ()=>{
-        let info = {...this.props.user.info.signupInfo},
+        let userInfo = {...this.props.user.info},
+        info = {...userInfo.signupInfo},
         genInfo = {...this.props.genInfo.info},
         createUser = baseUrl + usersEndPoint,
         userType = info.userType,
@@ -340,12 +341,17 @@ class SignupForm extends React.Component {
         physicalAddress = info.physicalAddress,
         password = info.password;
 
+        userInfo.signUpInfo.submitButton.isActive = false;
+        this.props.dispatch(dispatchedUserInfo(userInfo));
+
         axios.post(createUser, { userType, fullName, companyName, phoneNumber, mobileNumber, emailAddress, state, city, physicalAddress, password }).
         then(res=>{
             message = res.data.message;
             if(message){
                 genInfo.messages.postSubmitMessage = message;
                 genInfo.messages.messageClass = "postSubmitError";
+                userInfo.signUpInfo.submitButton.isActive = true;
+                this.props.dispatch(dispatchedUserInfo(userInfo));
             }else{
                 genInfo.messages.postSubmitMessage = undefined;
                 auth.createUserWithEmailAndPassword(emailAddress, password).
@@ -356,12 +362,16 @@ class SignupForm extends React.Component {
                             sessionStorage.removeItem('signup');
                             genInfo.messages.postSubmitMessage = "You signed up successfully, check your " + emailAddress + " inbox for a confirmation email.";
                             genInfo.messages.messageClass = "postSubmitMessage";
+                            userInfo.signUpInfo.submitButton.isActive = true;
+                            this.props.dispatch(dispatchedUserInfo(userInfo));
                             this.props.dispatch(dispatchedGenInfo(genInfo));
                         }).
                         catch(err=>{
                             message = err.message;
                             genInfo.messages.postSubmitMessage = message;
                             genInfo.messages.messageClass = "postSubmitError";
+                            userInfo.signUpInfo.submitButton.isActive = true;
+                            this.props.dispatch(dispatchedUserInfo(userInfo));
                             this.props.dispatch(dispatchedGenInfo(genInfo));
                         }); 
 
@@ -369,6 +379,8 @@ class SignupForm extends React.Component {
                         message = "Something went wrong, please try again";
                         genInfo.messages.postSubmitMessage = message;
                         genInfo.messages.messageClass = "postSubmitError";
+                        userInfo.signUpInfo.submitButton.isActive = true;
+                        this.props.dispatch(dispatchedUserInfo(userInfo));
                     }         
                 }).
                 catch(err=>{
@@ -376,9 +388,13 @@ class SignupForm extends React.Component {
                     message = err.message;
                     genInfo.messages.postSubmitMessage = message;
                     genInfo.messages.messageClass = "postSubmitError";
+                    userInfo.signUpInfo.submitButton.isActive = true;
+                    this.props.dispatch(dispatchedUserInfo(userInfo));
                     this.props.dispatch(dispatchedGenInfo(genInfo));
                 });
             }
+            userInfo.signUpInfo.submitButton.isActive = true;
+            this.props.dispatch(dispatchedUserInfo(userInfo));
             this.props.dispatch(dispatchedGenInfo(genInfo));
         });        
     }
@@ -423,7 +439,8 @@ class SignupForm extends React.Component {
         messageClass = genInfo.messages.messageClass,
         first = genInfo.signUpProgressBar.oneClass,
         second = genInfo.signUpProgressBar.twoClass,
-        third = genInfo.signUpProgressBar.threeClass;
+        third = genInfo.signUpProgressBar.threeClass,
+        isActive = userInfo.signUpInfo.submitButton.isActive;
         
         return(
             <div>
@@ -455,6 +472,7 @@ class SignupForm extends React.Component {
                             genInfo={ genInfo }
                             userInfo={ userInfo }
                             selected = { selected }
+                            isActive = { isActive }
                             setstate = { this.setstate }
                             signup = { this.signUp }
                         />:undefined }

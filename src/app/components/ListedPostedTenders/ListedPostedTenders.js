@@ -38,14 +38,6 @@ class ListedPostedTenders extends Component {
             this.fetchListings();
     }
 
-    componentWillMount(){
-        /*this.fetchListings().then(res=>{
-            if(res === "fetched"){
-                this.fetchTenders();
-            }
-        });*/
-    }
-
     checkForErrors=()=>{
         let errored = [];
         return new Promise((resolve, reject)=>{

@@ -1,17 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import  { Loader, FmButton, MoreHoriz, PostedTendersOverlay, SearchInput } from 'components';
+import  { Loader, FmButton, MoreHoriz, SubContractorDetailsView, SearchInput } from 'components';
 import axios from 'axios';
-import { dispatchedGenInfo, dispatchedListingsInfo, dispatchedUserInfo, dispatchedTendersInfo, dispatchedSubContractorsInfo } from 'extras/dispatchers';
+import { dispatchedUserInfo, dispatchedGenInfo, dispatchedSubContractorsInfo } from 'extras/dispatchers';
 import './subContractorTab.css';
 import { PropTypes } from 'prop-types';
 import { SubContractorForm } from 'forms';
-import { listedPostedTendersOptions, statesAustralia } from 'extras/config';
+import { statesAustralia } from 'extras/config';
 import { styles, submit_styles } from './styles';
 
 const baseURL = process.env.BACK_END_URL,
-listingsEndPoint = process.env.LISTING_END_POINT,
-tenderEndPoint = process.env.TENDERS_END_POINT,
 subContractorsEndPoint = process.env.SUB_CONTRACTORS_END_POINT;
 
 @connect((store)=>{
@@ -20,8 +18,6 @@ subContractorsEndPoint = process.env.SUB_CONTRACTORS_END_POINT;
         search: store.search,
         genInfo: store.genInfo,
         profileInfo: store.user.info.profileInfo,
-        listingsInfo: store.listingsInfo.info,
-        listingsData: store.user.info.submitTender,
         tendersInfo: store.tenders.info,
         subContractorData: store.user.info.addSubContractor,
         subContractorsInfo: store.subContractors.info
@@ -59,6 +55,12 @@ class SubContractorTab extends React.Component {
         let subContractorsInfo = {...this.props.subContractorsInfo};
         subContractorsInfo.subContractorForm.show = !subContractorsInfo.subContractorForm.show;
         this.props.dispatch(dispatchedSubContractorsInfo(subContractorsInfo));               
+    }
+
+    renderSubContractorDetails = ()=>{
+        let subContractorsInfo = {...this.props.subContractorsInfo};
+        subContractorsInfo.detailsView.show = !subContractorsInfo.detailsView.show;
+        this.props.dispatch(dispatchedSubContractorsInfo(subContractorsInfo));
     }
 
     addSubContractor=()=>{
@@ -146,63 +148,25 @@ class SubContractorTab extends React.Component {
         });
     };
 
-    displayListings = (key)=>{
-        let listings = {...this.props.genInfo.info.listings},
-        listingsInfo = {...this.props.listingsInfo},
-        postedTenders = listingsInfo.postedTenders.tenders,
-        showTenderForm = listingsInfo.tenderForm.show,
-        userType = this.props.profileInfo.userType,
-        tenderAttributes = this.props.user.info.submitTender,
-        errors = listingsInfo.tenderForm.errors,
-        feedback = tenderAttributes.feedback,
-        options = listedPostedTendersOptions,
-        listingId = listings[key].id,
-        showPostedTendersOverlay = listingsInfo.postedTenders.overLay.show,
-        feedbackClass = tenderAttributes.feedbackClass;
-        let currListingTenderCount = 0;
-
-        if(postedTenders){
-            postedTenders.forEach((obj)=>{
-                if(listingId === obj.listingId){
-                    currListingTenderCount ++;
-                }
-            });
-        }
-
-        if(userType !== "Owner/Occupier"){
-            options = { ...options, sendMessage: "Send Message"};
-        }
+    displaySubContractors = (key)=>{
+        let subContractorsInfo = {...this.props.subContractorsInfo},
+        subContractors = {...subContractorsInfo.subContractors},
+        showDetailsView = subContractorsInfo.detailsView.show,    
+        options = { 0: "View More..." };
             
         return(
             <div className="list-row" key={key}>
-                {showTenderForm
-                ?<TenderForm
-                    feedback = { feedback }
-                    feedbackClass = { feedbackClass }
-                    errors = { errors }
-                    styles = { submit_styles }
-                    statesAustralia = { statesAustralia }
-                    attributes = { tenderAttributes } 
-                    close={ this.renderTenderForm } 
-                    onBlur={ this.dummy } 
-                    upload={ this.upload } 
-                    save={ this.save } 
-                />:null}
-                { showPostedTendersOverlay
-                ?<PostedTendersOverlay toggleDisplay={ this.displayTenders } listingId = { listingId } />
-                : null }
-                <div className="twenty">{ listings[key].city }, { listings[key].state }</div>
-                <div className="thirty">{ listings[key].serviceRequired }, { listings[key].equipment }</div>
-                <div className="thirty">{ listings[key].startDate}</div>
+                {showDetailsView
+                ?<SubContractorDetailsView />:null}
+                <div className="twenty">{ subContractors[key].companyName }</div>
+                <div className="thirty">{ subContractors[key].physicalAddress }</div>
+                <div className="thirty">{ subContractors[key].categoriesOfService}</div>
                 <div className="twenty">
                     <MoreHoriz 
-                        className={ listings[key].moreMenuClassName } 
+                        className={ subContractors[key].moreMenuClassName } 
                         id={ key }
-                        autoid = { listings[key].id }
-                        email = { listings[key].userEmail }
-                        listName = "listings"
-                        onClick = { this.renderMessageForm }
-                        element={ listings[key] }
+                        listName = "subContractors"
+                        element={ subContractors[key] }
                         options={ options }
                      />
                 </div>
@@ -216,10 +180,9 @@ class SubContractorTab extends React.Component {
     }
 
     render(){
-        const listings = {...this.props.genInfo.info.listings},
-        subContractors = {},
+        const subContractorsInfo = {...this.props.subContractorsInfo},
+        subContractors = subContractorsInfo.subContractors,
         userType = this.props.profileInfo.userType,
-        subContractorsInfo = {...this.props.subContractorsInfo},
         showSubContractorForm = subContractorsInfo.subContractorForm.show,
         subContractorAttributes = this.props.user.info.addSubContractor,
         errors = subContractorsInfo.subContractorForm.errors,
@@ -259,7 +222,7 @@ class SubContractorTab extends React.Component {
                         <span className="twenty"></span>
                         <div className="bottom-border"></div>
                     </div>
-                    { listings?Object.keys(subContractors).map(this.displayListings):<div className="loader"><Loader /></div> }
+                    { subContractors?Object.keys(subContractors).map(this.displaySubContractors):<div className="loader"><Loader /></div> }
                 </div>
             </div>
         )

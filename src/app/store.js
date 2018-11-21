@@ -7,6 +7,7 @@ import searchReducer from 'extras/reducers/searchReducer';
 import genInfoReducer from 'extras/reducers/genInfoReducer';
 import listingsReducer from 'extras/reducers/listingsReducer';
 import secondarySearchReducer from 'extras/reducers/secondarySearchReducer';
+import secondarySelectReducer from 'extras/reducers/secondarySelectReducer';
 import textFieldReducer from 'extras/reducers/texfieldReducer';
 import buttonsReducer from 'extras/reducers/buttonsReducer';
 import tendersReducer from 'extras/reducers/tendersReducer';
@@ -27,7 +28,8 @@ const allReducers = combineReducers({
     tenders: tendersReducer,
     sites: sitesReducer,
     messages: messagesReducer,
-    subContractors: subContractorsReducer
+    subContractors: subContractorsReducer,
+    secondarySelect: secondarySelectReducer
 })
 const store = createStore(
     allReducers, 

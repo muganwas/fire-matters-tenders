@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { dispatchedGenInfo } from 'extras/dispatchers';
-import './profileTab.css'
-import { PersonnelTab, CompanyTab, InsuranceTab, LicenseTab, EquipmentTab } from 'components';
+import './subContractorDetailsView.css'
+import { PersonnelTab, CompanyTab, InsuranceTab, LicenseTab } from 'components';
 import { ownerOccupierProfileTabs, serviceProviderProfileTabs } from 'extras/config';
 
 
@@ -16,7 +16,7 @@ import { ownerOccupierProfileTabs, serviceProviderProfileTabs } from 'extras/con
         currentHorizontalTab: store.genInfo.info.sideBar.currentHorizontalTab,
     }
 })
-class ProfileTab extends React.Component {
+class SubContractorDetailsView extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -73,24 +73,22 @@ class ProfileTab extends React.Component {
                 currentTab==="insurance"?
                 <InsuranceTab />
                 :currentTab==="license"?
-                <LicenseTab />
-                :currentTab==="equipment"?
-                <EquipmentTab />:null}
+                <LicenseTab />:null}
             </div>
         )
     }
 }
 
-ProfileTab.defaultProps = {
+SubContractorDetailsView.defaultProps = {
     user: {},
     search: {},
     genInfo: {}
 }
 
-ProfileTab.propTypes = {
+SubContractorDetailsView.propTypes = {
     user: PropTypes.object.isRequired,
     search: PropTypes.object.isRequired,
     genInfo: PropTypes.object.isRequired
 }
 
-export default ProfileTab;
+export default SubContractorDetailsView;

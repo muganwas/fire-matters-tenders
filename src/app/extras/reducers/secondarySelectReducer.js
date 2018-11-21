@@ -1,35 +1,27 @@
 const defaultState = {
     info: {
-      subContractors: {},
-      detailsView: {
-        show: false
-      },
-      subContractorForm:{
-        errors: {},
-        show:false
-      }
-     },
+    },
     fetching: false,
     fetched: false,
     error: null
   }
-  const SubContractorsReducer = (state = defaultState, action)=>{
+  const SecondarySelectReducer = (state = defaultState, action)=>{
       switch(action.type){
-          case "FETCH_SUBCONTRACTOR_PENDING":{
+          case "FETCH_SECONDARY_SELECT_PENDING":{
             return {...state,
               fetched: false,
               error: null,
               fetching: true
             }
           }
-          case "FETCH_SUBCONTRACTOR_REJECTED":{
+          case "FETCH_SECONDARY_SELECT_REJECTED":{
             return {...state,
               fetching: false,
               fetched: false,
               error: action.payload
             }
           }
-          case "FETCH_SUBCONTRACTOR_FULFILLED":{
+          case "FETCH_SECONDARY_SELECT_FULFILLED":{
             return {...state,
               fetched: true,
               fetching: false,
@@ -42,4 +34,4 @@ const defaultState = {
       }  
   }
   
-  export default SubContractorsReducer;
+  export default SecondarySelectReducer;

@@ -28,14 +28,6 @@ class ListedPostedMessages extends Component {
         this.props = {...nextProps};
     }
 
-    componentWillMount(){
-        /*this.fetchListings().then(res=>{
-            if(res === "fetched"){
-                this.fetchTenders();
-            }
-        });*/
-    }
-
     postListingId = (id)=>{
         return new Promise(resolve=>{
             let userInfo = {...this.props.user.info};

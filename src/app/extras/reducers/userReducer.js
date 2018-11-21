@@ -1,6 +1,11 @@
 const defaultState = {
     info: {
       state: "Select State",
+      signUpInfo:{
+        submitButton: {
+          isActive: true
+        }
+      },
       loginInfo: {
         messageClass: "postSubmitMessage"
       },

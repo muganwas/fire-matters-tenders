@@ -100,7 +100,7 @@ BasicInformation.propTypes = {
 }
 
 export const AddressInformation = props=>{
-    const { statesAustralia, selected, setstate, setError, setErrorAlt, signup, genInfo, userInfo, postSubmitMessage, messageClass } = props;
+    const { statesAustralia, selected, setstate, isActive, setError, setErrorAlt, signup, genInfo, userInfo, postSubmitMessage, messageClass } = props;
     return(
         <div>
             { postSubmitMessage?<span className={ messageClass }> <Info className="icon" /> { postSubmitMessage } </span>: null }
@@ -114,7 +114,7 @@ export const AddressInformation = props=>{
                 <TextSpace onBlur={ setError } id="physicalAddress" value={ userInfo.physicalAddress } adornment="home" type="text" placeholder="Physical Address" fieldClass={ genInfo.physicalAddressClass || genInfo.textfieldClass } />
             </div> 
             <div className="inputRow">
-                <FmButton variant="contained" onClick={ signup } styles = { styles } text="Sign Up" /> 
+                <FmButton isActive={ isActive } variant="contained" onClick={ signup } styles = { styles } text="Sign Up" /> 
             </div>
         </div>
     )

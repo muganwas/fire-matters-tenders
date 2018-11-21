@@ -2,12 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import './moreHoriz.css';
-import { dispatchedGenInfo } from 'extras/dispatchers';
+import { dispatchedGenInfo, dispatchedSubContractorsInfo } from 'extras/dispatchers';
 
 @connect((store)=>{
     return {
         user: store.user,
-        genInfo: store.genInfo
+        genInfo: store.genInfo,
+        subContractorsInfo: store.subContractors.info
     }
 })
 class MoreHoriz extends React.Component {
@@ -21,18 +22,34 @@ class MoreHoriz extends React.Component {
     
     toggleMenu = ()=>{
         let genInfo = { ...this.props.genInfo.info },
+        subContractorsInfo = { ...this.props.subContractorsInfo},
         listName = this.props.listName;
-        if(this.props.className === "hidden"){
-            genInfo[listName][this.props.id].moreMenuClassName = "dropDownMenu";
-            Object.keys(genInfo[listName]).map((key)=>{
-                if(key !== this.props.id)
-                    genInfo[listName][key].moreMenuClassName = "hidden";
-            })
-            this.props.dispatch(dispatchedGenInfo(genInfo));           
+        //dispatch issues let to duplication
+        if(listName === "subContractors"){
+            if(this.props.className === "hidden"){
+                subContractorsInfo[listName][this.props.id].moreMenuClassName = "dropDownMenu";
+                Object.keys(subContractorsInfo[listName]).map((key)=>{
+                    if(key !== this.props.id)
+                    subContractorsInfo[listName][key].moreMenuClassName = "hidden";
+                })
+                this.props.dispatch(dispatchedSubContractorsInfo(subContractorsInfo));           
+            }else{
+                subContractorsInfo[listName][this.props.id].moreMenuClassName = "hidden";
+                this.props.dispatch(dispatchedSubContractorsInfo(subContractorsInfo));
+            }
         }else{
-            genInfo[listName][this.props.id].moreMenuClassName = "hidden";
-            this.props.dispatch(dispatchedGenInfo(genInfo));
-        }             
+            if(this.props.className === "hidden"){
+                genInfo[listName][this.props.id].moreMenuClassName = "dropDownMenu";
+                Object.keys(genInfo[listName]).map((key)=>{
+                    if(key !== this.props.id)
+                        genInfo[listName][key].moreMenuClassName = "hidden";
+                })
+                this.props.dispatch(dispatchedGenInfo(genInfo));           
+            }else{
+                genInfo[listName][this.props.id].moreMenuClassName = "hidden";
+                this.props.dispatch(dispatchedGenInfo(genInfo));
+            } 
+        }           
     }
 
     detailedElement = (key)=>{

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { ProfileImage } from 'components';
-import { dispatchedMessagesInfo, dispatchedGenInfo, dispatchedSitesInfo } from 'extras/dispatchers';
+import { dispatchedMessagesInfo, dispatchedGenInfo, dispatchedSubContractorsInfo, dispatchedSitesInfo } from 'extras/dispatchers';
 import axios from 'axios';
 import './sideBar.css';
 import { ownerOccupierOptions, serviceProviderOptions, menuIconTitles } from 'extras/config';
@@ -11,7 +11,8 @@ import { ownerOccupierOptions, serviceProviderOptions, menuIconTitles } from 'ex
 const baseURL = process.env.BACK_END_URL,
 listingsEndPoint = process.env.LISTING_END_POINT,
 sitesEndPoint = process.env.SITES_END_POINT,
-messagesEndPoint = process.env.MESSAGES_END_POINT;
+messagesEndPoint = process.env.MESSAGES_END_POINT,
+subContractorsEndPoint = process.env.SUB_CONTRACTORS_END_POINT;
 
 @connect((store)=>{
     return {
@@ -23,6 +24,8 @@ messagesEndPoint = process.env.MESSAGES_END_POINT;
         sitesInfo: store.sites.info,
         messagesInfo: store.messages.info,
         messageData: store.user.info.submitMessage,
+        subContractorData: store.user.info.addSubContractor,
+        subContractorsInfo: store.subContractors.info
     }
 })
 class SideBar extends React.Component {
@@ -44,20 +47,17 @@ class SideBar extends React.Component {
         }
 
         this.fetchListings().then(res=>{
-            if(res)
+            if(res){
                 this.fetchSites();
+                this.fetchSubContractors();
+            }
         });
         
         this.fetchSentMessages().then(res=>{
             if(res)
                 this.fetchRecievedMessages();
         });
-
         this.props.dispatch(dispatchedGenInfo(genInfo));
-    }
-
-    componentDidMount(){
-        
     }
 
     fetchSentMessages = ()=>{
@@ -75,7 +75,6 @@ class SideBar extends React.Component {
                     messagesInfo.sentMessages[key].moreMenuClassName = "hidden";
                 })
                 this.props.dispatch(dispatchedMessagesInfo(messagesInfo));
-                this.props.dispatch(dispatchedGenInfo(genInfo));
                 resolve("fetched");
             }).catch(err=>{
                 console.log(err);
@@ -98,8 +97,32 @@ class SideBar extends React.Component {
                     messagesInfo.recievedMessages[key].moreMenuClassName = "hidden";
                 })
                 this.props.dispatch(dispatchedMessagesInfo(messagesInfo));
-                this.props.dispatch(dispatchedGenInfo(genInfo));
                 resolve("fetched");
+            }).catch(err=>{
+                console.log(err);
+            });
+        });
+    }
+
+    fetchSubContractors = ()=>{
+        return new Promise(resolve=>{
+            let mainUserId = (JSON.parse(sessionStorage.getItem("profileInfo"))).id,
+            url = baseURL + subContractorsEndPoint + "?mainUserId=" + mainUserId;
+            axios.get(url).then((response)=>{
+                //console.log(response.data);
+                if(response){
+                    let genInfo = { ...this.props.genInfo },
+                    subContractorInfo = {...this.props.subContractorsInfo };
+                    let subContractors = subContractorInfo.subContractors = {...response.data};
+                    genInfo.sideBar.profilePage.listCount['subContractors'] = (response.data).length;
+                    genInfo.subContractors = {...response.data};
+                    /**Set the more dropdown menu class to hidden for every row*/
+                    Object.keys(subContractors).map((key)=>{
+                        subContractorInfo.subContractors[key].moreMenuClassName = "hidden";
+                    });
+                    this.props.dispatch(dispatchedSubContractorsInfo(subContractorInfo));
+                    resolve(genInfo);
+                }     
             }).catch(err=>{
                 console.log(err);
             });
@@ -124,7 +147,7 @@ class SideBar extends React.Component {
                             sitesInfo.sites[key].moreMenuClassName = "hidden";
                         })
                         this.props.dispatch(dispatchedSitesInfo(sitesInfo));
-                        this.props.dispatch(dispatchedGenInfo(genInfo));
+                        //this.props.dispatch(dispatchedGenInfo(genInfo));
                         resolve("fetched");
                     }).catch(err=>{
                         console.log(err);
@@ -163,7 +186,7 @@ class SideBar extends React.Component {
                         Object.keys(listings).map((key)=>{
                             genInfo.listings[key].moreMenuClassName = "hidden";
                         })
-                        this.props.dispatch(dispatchedGenInfo(genInfo));
+                        //this.props.dispatch(dispatchedGenInfo(genInfo));
                         resolve("fetched");
                     }).catch(err=>{
                         console.log(err);
@@ -213,7 +236,8 @@ class SideBar extends React.Component {
         tendersCount = this.props.genInfo.sideBar.profilePage.listCount.tenders || 0,
         contractCount = this.props.genInfo.sideBar.profilePage.listCount.contracts || 0,
         sitesCount = this.props.genInfo.sideBar.profilePage.listCount.sites || 0,
-        messagesCount = (parseInt(this.props.genInfo.sideBar.profilePage.listCount.sentMessages) + parseInt(this.props.genInfo.sideBar.profilePage.listCount.recievedMessages)) || 0;
+        messagesCount = (parseInt(this.props.genInfo.sideBar.profilePage.listCount.sentMessages) + parseInt(this.props.genInfo.sideBar.profilePage.listCount.recievedMessages)) || 0,
+        subContractorCount = this.props.genInfo.sideBar.profilePage.listCount.subContractors || 0;
         return(
             <span name="menuItems" className = { key===selected?"selected":""} id={ key } onClick={ this.select } key={ key }>
                 <div name={ key} onClick={ this.clickParent }>
@@ -248,6 +272,12 @@ class SideBar extends React.Component {
                         className="listingsCount"
                         onClick={ this.clickParent }
                     >{messagesCount}</div>
+                    :key==="Subcontractors"?
+                    <div 
+                        name={ key }
+                        className="listingsCount"
+                        onClick={ this.clickParent }
+                    >{subContractorCount}</div>
                     :null }</div>
                 </div>
                 <div className = "clear"></div>

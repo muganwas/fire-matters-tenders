@@ -1,5 +1,5 @@
 import React from 'react';
-import './dropDown.css';
+import './altDropDown.css';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import { dispatchedGenInfo, dispatchedUserInfo } from 'extras/dispatchers';
@@ -13,7 +13,7 @@ import { dispatchedGenInfo, dispatchedUserInfo } from 'extras/dispatchers';
         dropDownClass: store.genInfo.info.dropDown.dropDownClass
     }
 })
-class DropDown extends React.Component {
+class AltDropDown extends React.Component {
     constructor(props){
         super(props)
     }
@@ -33,7 +33,7 @@ class DropDown extends React.Component {
     afterSelect = (e)=>{
         e.persist();
         this.props.onChange(e).then(res=>{
-            this.props.dispatch(dispatchedUserInfo(res));
+            this.props.dispatch(this.props.dispatcher(res));
             this.toggleDisplayDropDown().
             then(()=>{
                 let id = e.target.id,
@@ -42,7 +42,7 @@ class DropDown extends React.Component {
                 let nameArr = origName.split("-"),
                 name = nameArr[1],
                 value = e.target.getAttribute('value');
-                let dbValue = sessionStorage.getItem('profileInfo')?(JSON.parse(sessionStorage.getItem('profileInfo')))[name]:null;
+                let dbValue = (JSON.parse(sessionStorage.getItem('profileInfo')))[name];
                 //update fiel in db
                 if(dbValue !== value){
                     this.props.onBlur(origName, value).
@@ -109,7 +109,7 @@ class DropDown extends React.Component {
     }
 }
 
-DropDown.defaultProps = {
+AltDropDown.defaultProps = {
     user: {},
     options: {},
     onChange: null,
@@ -118,7 +118,7 @@ DropDown.defaultProps = {
     label: null
 }
 
-DropDown.propTypes = {
+AltDropDown.propTypes = {
     user: PropTypes.object.isRequired,
     options: PropTypes.object.isRequired,
     onChange: PropTypes.func,
@@ -130,4 +130,4 @@ DropDown.propTypes = {
     label: PropTypes.string
 }
 
-export default DropDown;
+export default AltDropDown;

@@ -93,6 +93,13 @@ export const portableEquipment = {
     extinguishers: "Extinguishers"
 }
 
+export const passiveProtection = {
+    fireDoorsCA: "Fire Doors(Common Area)",
+    fireDoorsA: "Fire Doors(Appartment)",
+    fireDoorsS: "Fire Doors(Sliding)",
+    servicePenetrations: "Service Penetrations"
+}
+
 export const emergencyExitLighting = {
     totalEmergencyExitLighting: "Total Emergency Exit Lighting"
 }
@@ -102,17 +109,10 @@ export const contractTypes = {
     shortTerm: "Short-term"
 }
 
-export const passiveProtection = {
-    fireDoorsCA: "Fire Doors(Common Area)",
-    fireDoorsA: "Fire Doors(Appartment)",
-    fireDoorsS: "Fire Doors(Sliding)",
-    servicePenetrations: "Service Penetrations"
-}
-
 export const serviceProviderProfileTabs = {
     personnel: "Personnel",
     company: "Company",
     insurance: "Insurance",
     license: "License",
-    ratesScedule: "Rates Schedule",
+    equipment: "Equipment",
 }
