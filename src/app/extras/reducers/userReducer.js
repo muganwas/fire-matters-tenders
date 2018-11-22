@@ -73,6 +73,13 @@ const defaultState = {
           isActive: true
         }
       },
+      addEquipment: {
+        mainCategory: null,
+        subCategory: null,
+        submitButton: {
+          isActive: true
+        }
+      },
       profileInfo:{ },
       avatarProps: {
         feedback: undefined,

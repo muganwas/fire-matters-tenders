@@ -1,15 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { SecondarySelect } from 'components';
+import { SecondarySelect, FmButton  } from 'components';
 import axios from 'axios';
 import * as firebase from 'firebase/app';
 import 'extras/config';
 import 'firebase/storage';
 import 'firebase/database';
-import './equipmentTab.css'
-import { dispatchedUserInfo } from 'extras/dispatchers';
-import { equipmentCategories } from 'extras/config';
+import './equipmentTab.css';
+import { submit_styles } from './styles';
+import { dispatchedUserInfo, dispatchedSecondarySelectInfo } from 'extras/dispatchers';
+import { equipmentCategories, equipmentCategoriesFull } from 'extras/config';
 
 const baseURL = process.env.BACK_END_URL,
 userEndPoint = process.env.USERS_END_POINT,
@@ -18,7 +19,7 @@ storageRef = storage.ref(),
 userUpdateEndPoint = process.env.USER_UPDATE_END_POINT;
 
 const RenderEquipment = props => {
-    let { currCat, onClose } = props;
+    let { currCat, onClose, id } = props;
     return (
         <div>{
             Object.keys(currCat).map(key=>{
@@ -28,7 +29,7 @@ const RenderEquipment = props => {
                             { key }
                             <span 
                                 className="close right" 
-                                category={ currCat } 
+                                category={ id } 
                                 subcategory={ key } 
                                 onClick={ onClose } 
                                 id="close"
@@ -51,6 +52,7 @@ const RenderEquipment = props => {
         userInfo: store.user.info.profileInfo,
         equipment: store.user.info.profileInfo.equipment,
         licenses: store.user.info.profileInfo.licenses,
+        secondarySelect: store.secondarySelect.info,
         currentHorizontalTab: store.genInfo.info.sideBar.currenthorizontalTab,
     }
 })
@@ -211,9 +213,92 @@ class EquipmentTab extends React.Component{
     }
 
     removeSubCategory = (e)=>{
-        let category = e.target.getAttribute('category'),
-        subCategory = e.target.getAttribute('subcategory');
-        console.log( subCategory );
+        let userInfo = {...this.props.user},
+        userId = userInfo.profileInfo.id,
+        equipment = {...userInfo.profileInfo.equipment},
+        equipmentCategory = e.target.getAttribute('category'),
+        url = baseURL + userUpdateEndPoint,
+        equipmentName = e.target.getAttribute('subcategory');
+        equipment[equipmentCategory][equipmentName] = false;
+        userInfo.addEquipment.submitButton.isActive = false;
+        this.props.dispatch(dispatchedUserInfo(userInfo));
+        axios.post(url, {userId, sectTitle: "equipment", updateData: equipment}).then(res=>{
+            if(res){
+                userInfo.addEquipment.submitButton.isActive = true;
+                this.props.dispatch(dispatchedUserInfo(userInfo));
+                this.forceUpdate();
+            }   
+        }).
+        catch(err=>{
+            userInfo.addEquipment.submitButton.isActive = true;
+            this.props.dispatch(dispatchedUserInfo(userInfo));
+            this.forceUpdate();
+            throw err;
+        });
+    }
+
+    getCategory = (e)=>{
+        return new Promise((resolve, reject)=>{
+            let id = e.target.id,
+            categoryTitle = "searchEquipmentSelectedCategories",
+            categoryTitleKey = "searchEquipmentSelectedCategoriesKey",
+            categoryTitleAlt = "searchEquipmentSelectedSubCategories",
+            categoryTitleAltKey = "searchEquipmentSelectedSubCategoriesKey",
+            searchCategories = equipmentCategories,
+            selectInfo = {...this.props.secondarySelect};
+            selectInfo[categoryTitle] = searchCategories[id];
+            selectInfo[categoryTitleKey] = id;
+            selectInfo[categoryTitleAlt] = null;
+            selectInfo[categoryTitleAltKey] = null;
+            resolve(selectInfo);
+        });
+    }
+
+    getCategoryAlt = (e)=>{
+        let categoryTitle = "searchEquipmentSelectedCategories",
+        categoryTitleAlt = "searchEquipmentSelectedSubCategories",
+        categoryTitleAltKey = "searchEquipmentSelectedSubCategoriesKey",
+        selected = this.props.secondarySelect[categoryTitle],
+        selectedKey ="";
+        Object.keys(equipmentCategories).map(key=>{
+            if(equipmentCategories[key] === selected)
+                selectedKey = key;
+        });
+        let secondaryOptions = equipmentCategoriesFull[selectedKey];
+        return new Promise((resolve, reject)=>{
+            let id = e.target.id,
+            searchCategories = secondaryOptions,
+            selectInfo = {...this.props.secondarySelect};
+            selectInfo[categoryTitleAlt] = searchCategories[id];
+            selectInfo[categoryTitleAltKey] = id;
+            resolve(selectInfo);
+        });
+    }
+
+    addEquipment = ()=>{
+        let selectInfo = {...this.props.secondarySelect},
+        userInfo = {...this.props.user},
+        userId = userInfo.profileInfo.id,
+        equipment = {...userInfo.profileInfo.equipment},
+        equipmentCategory = selectInfo.searchEquipmentSelectedCategoriesKey,
+        url = baseURL + userUpdateEndPoint,
+        equipmentName = selectInfo.searchEquipmentSelectedSubCategoriesKey;
+        equipment[equipmentCategory][equipmentName] = true;
+        userInfo.addEquipment.submitButton.isActive = false;
+        this.props.dispatch(dispatchedUserInfo(userInfo));
+        axios.post(url, {userId, sectTitle: "equipment", updateData: equipment}).then(res=>{
+            if(res){
+                userInfo.addEquipment.submitButton.isActive = true;
+                this.props.dispatch(dispatchedUserInfo(userInfo));
+                this.forceUpdate();
+            }   
+        }).
+        catch(err=>{
+            userInfo.addEquipment.submitButton.isActive = true;
+            this.props.dispatch(dispatchedUserInfo(userInfo));
+            this.forceUpdate();
+            throw err;
+        });
     }
 
     render(){
@@ -253,6 +338,9 @@ class EquipmentTab extends React.Component{
             }
         });
 
+        let userInfo = this.props.user,
+        isActive = userInfo.addEquipment.submitButton.isActive;
+
         return(
             <div className="main-content">
                 <div className="half left">
@@ -263,7 +351,7 @@ class EquipmentTab extends React.Component{
                             ?<div className="subCategories">
                                 <h3>Detection and Warning System</h3>
                                 <div className="body">
-                                    <RenderEquipment currCat={detectionAndWarningSystem} onClose={ this.removeSubCategory } />
+                                    <RenderEquipment id="detectionAndWarningSystem" currCat={detectionAndWarningSystem} onClose={ this.removeSubCategory } />
                                 </div>
                             </div>
                             :null}
@@ -271,7 +359,7 @@ class EquipmentTab extends React.Component{
                             ?<div className="subCategories">
                                 <h3>Portable Fire-Fighting Equipment</h3>
                                 <div className="body">
-                                    <RenderEquipment currCat={portableFireFightingEquipment} onClose={ this.removeSubCategory } />
+                                    <RenderEquipment id="portableFireFightingEquipment" currCat={portableFireFightingEquipment} onClose={ this.removeSubCategory } />
                                 </div>
                             </div>
                             :null}
@@ -279,7 +367,7 @@ class EquipmentTab extends React.Component{
                             ?<div className="subCategories">
                                 <h3>Passive Fire Protection</h3>
                                 <div className="body">
-                                    <RenderEquipment currCat={passiveFireProtection} onClose={ this.removeSubCategory } />
+                                    <RenderEquipment id="passiveFireProtection" currCat={passiveFireProtection} onClose={ this.removeSubCategory } />
                                 </div>
                             </div>
                             :null}
@@ -287,7 +375,7 @@ class EquipmentTab extends React.Component{
                             ?<div className="subCategories">
                                 <h3>Emergency Exit Lighting</h3>
                                 <div className="body">
-                                    <RenderEquipment currCat={emergencyExitLighting} onClose={ this.removeSubCategory } />
+                                    <RenderEquipment id="emergencyExitLighting" currCat={emergencyExitLighting} onClose={ this.removeSubCategory } />
                                 </div>
                             </div>
                             :null}
@@ -296,14 +384,30 @@ class EquipmentTab extends React.Component{
                                 <div className="heading">Add licensed Equipment <div className="bottom-border"></div></div>
                                 <div className="body">
                                     <SecondarySelect 
-                                        categories = { equipmentCategories } 
-                                        selectWidth = "180px"
-                                        selectWidthAlt = "180px"
-                                        dropDownWidth = "210px"
-                                        dropDownWidthAlt = "210px"
+                                        categories = { equipmentCategories }
+                                        categoriesFull = { equipmentCategoriesFull }
+                                        selectWidth = "240px"
+                                        selectWidthAlt = "240px"
+                                        dropDownWidth = "260px"
+                                        dropDownWidthAlt = "260px"
                                         categoryTitle = "searchEquipmentSelectedCategories"
                                         categoryTitleAlt = "searchEquipmentSelectedSubCategories"
+                                        onChange = { this.getCategory }
+                                        onChangeAlt = { this.getCategoryAlt }
+                                        dispatcher = { dispatchedSecondarySelectInfo }
+                                        dispatcherAlt =  { dispatchedSecondarySelectInfo }
+                                        
                                     />
+                                    <div className="addEquip">
+                                        <FmButton 
+                                            id="addCategory" 
+                                            text="Add" 
+                                            onClick = { this.addEquipment } 
+                                            isActive = { isActive }  
+                                            styles={ submit_styles }
+                                            variant = "contained"
+                                        />
+                                    </div>
                                 </div>
                         </div>
                     </div>

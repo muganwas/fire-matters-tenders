@@ -28,7 +28,7 @@
     background: url('~images/down_arrow.png') no-repeat right rgba(255,255,255, 0);
     background-size: 30px 10px;
     overflow: hidden;
-    padding: 6px 20px 6px 8px;
+    padding: 6px 10px 6px 8px;
     border-right: thin solid #fff;
     cursor: pointer;
 }

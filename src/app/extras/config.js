@@ -76,28 +76,51 @@ export const ownerOccupierProfileTabs = {
 }
 
 export const equipmentCategories = {
-    detectionAndWarningSystems: "Detection & Warning Systems",
-    portableEquipment: "Portable Equipment",
-    passiveProtection: "Passive Protection Equipment",
+    detectionAndWarningSystem: "Detection & Warning Systems",
+    portableFireFightingEquipment: "Portable Equipment",
+    passiveFireProtection: "Passive Protection Equipment",
     emergencyExitLighting: "Emergency Exit Lighting"
 }
 
-export const detectionAndWarningSystems = {
+export const equipmentCategoriesFull = {
+    detectionAndWarningSystem: {
+        fireDetectionAndWarningSystem: "Fire Detection & Warning System",
+        smokeAndHeatAlarms: "Smoke & Heat Alarms",
+        smokeExhaustSystem: "Smoke Exhaust System",
+        totalDetectionAndAlarmSystem: "Total Detection & AlarmSystem"
+    },
+    portableFireFightingEquipment: {
+        hoseReels: "Hose Reels",
+        extinguishers: "Extinguishers",
+        totalPortableFireFighting: "Total Portable FireFighting"
+    },
+    passiveFireProtection: {
+        fireDoors: "Fire Doors",
+        servicePenetrations: "Service Penetrations",
+        totalPassiveFireProtection: "Total PassiveFire Protection"
+    },
+    emergencyExitLighting: {
+        totalEmergencyExitLighting: "Total Emergency Exit Lighting"
+    }
+}
+
+export const detectionAndWarningSystem = {
     fireDetectionAndWarningSystem: "Fire Detection & Warning System",
     smokeAndHeatAlarms: "Smoke & Heat Alarms",
-    smokeExhaustSystem: "Smoke Exhaust System"
+    smokeExhaustSystem: "Smoke Exhaust System",
+    totalDetectionAndAlarmSystem: "Total Detection & AlarmSystem"
 }
 
-export const portableEquipment = {
+export const portableFireFightingEquipment = {
     hoseReels: "Hose Reels",
-    extinguishers: "Extinguishers"
+    extinguishers: "Extinguishers",
+    totalPortableFireFighting: "Total Portable FireFighting"
 }
 
-export const passiveProtection = {
-    fireDoorsCA: "Fire Doors(Common Area)",
-    fireDoorsA: "Fire Doors(Appartment)",
-    fireDoorsS: "Fire Doors(Sliding)",
-    servicePenetrations: "Service Penetrations"
+export const passiveFireProtection = {
+    fireDoorsCA: "Fire Doors",
+    servicePenetrations: "Service Penetrations",
+    totalPassiveFireProtection: "Total PassiveFire Protection"
 }
 
 export const emergencyExitLighting = {

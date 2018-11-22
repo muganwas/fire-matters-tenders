@@ -42,9 +42,9 @@ class AltDropDown extends React.Component {
                 let nameArr = origName.split("-"),
                 name = nameArr[1],
                 value = e.target.getAttribute('value');
-                let dbValue = (JSON.parse(sessionStorage.getItem('profileInfo')))[name];
+                let dbValue = sessionStorage.getItem('profileInfo')?(JSON.parse(sessionStorage.getItem('profileInfo')))[name]:null;
                 //update fiel in db
-                if(dbValue !== value){
+                if(dbValue !== value && this.props.onBlur){
                     this.props.onBlur(origName, value).
                     then(res=>{
                         if(res)

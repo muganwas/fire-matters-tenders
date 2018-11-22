@@ -1,18 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-//import { Link } from 'react-router-dom';
-//import Image from 'react-image';
-import { dispatchedSecondarySelectInfo } from 'extras/dispatchers';
 import './secondarySelect.css';
 import { AltDropDown } from 'components';
 import { PropTypes } from 'prop-types';
-import { detectionAndWarningSystems, passiveProtection, portableEquipment, emergencyExitLighting  } from 'extras/config';
 @connect((store)=>{
     return {
         search: store.search,
         secondarySelect: store.secondarySelect.info,
         textFields: store.textFields.info,
-        user: store.user
+        userInfo: store.user.info
     }
 })
 class SecondarySelect extends Component {
@@ -24,41 +20,43 @@ class SecondarySelect extends Component {
         this.props = {...nextProps};
     }
 
-    getCategory = (e)=>{
-        console.log(e.target.id)
-        return new Promise((resolve, reject)=>{
-            let id = e.target.id,
-            categoryTitle = this.props.categoryTitle,
-            searchCategories = this.props.categories,
-            selectInfo = {...this.props.secondarySelect};
-            selectInfo[categoryTitle] = searchCategories[id];
-            resolve(selectInfo);
-        });
-    }
     render(){
         let selected = this.props.secondarySelect[this.props.categoryTitle],
-        selectedAlt = this.props.secondarySelect[this.props.categoryTitleAlt];
+        selectedAlt = this.props.secondarySelect[this.props.categoryTitleAlt],
+        selectedKey ="";
+
+        Object.keys(this.props.categories).map(key=>{
+            if(this.props.categories[key] === selected)
+                selectedKey = key;
+        }); 
+        
+        let secondaryOptions = this.props.categoriesFull[selectedKey];
+        
         return(
-            <div className="secondary-select">
-                <AltDropDown 
+            <div className="secondary-select search-main">
+                <AltDropDown
+                    id = "mainCategories"
                     init={ selected || "Select Equip Category" } 
                     selectWidth={ this.props.selectWidth } 
                     width={ this.props.dropDownWidth } 
-                    className="select left" 
+                    className="selectAlt left" 
                     options={ this.props.categories } 
                     selected={ selected } 
-                    onChange={ this.getCategory }
-                    dispatcher = { dispatchedSecondarySelectInfo }  
+                    onChange={ this.props.onChange }
+                    dispatcher = { this.props.dispatcher }  
                 />
-                {/*<DropDown 
-                    init={ selected_alt || "Select Equip Sub-category" } 
+                {<AltDropDown
+                    id = "minorCategories" 
+                    init={ selectedAlt || "Select Equip Sub-category" } 
                     selectWidth={ this.props.selectWidthAlt } 
                     width={ this.props.dropDownWidthAlt } 
-                    className="select left" 
-                    options={ this.props.categoriesAlt } 
+                    className="selectAlt left" 
+                    options={ secondaryOptions } 
                     selected={ selectedAlt } 
-                    onChange={ this.getCategory }   
-                />*/}      
+                    onChange={ this.props.onChangeAlt }
+                    dispatcher = { this.props.dispatcherAlt }    
+                />}
+                <div className="clear"></div>                   
             </div>
         )
     }
@@ -66,9 +64,11 @@ class SecondarySelect extends Component {
 
 SecondarySelect.defaultProps = {
     search: {},
+    categories: {},
+    categoriesFull: {},
     secondarySearch: {},
     textFields: {},
-    user: {},
+    userInfo: {},
     categoryTitle: null,
     dropDownWidth: null,
     selectWidth: null,
@@ -76,11 +76,11 @@ SecondarySelect.defaultProps = {
 }
 
 SecondarySelect.propTypes = {
-    user: PropTypes.object.isRequired,
+    userInfo: PropTypes.object.isRequired,
     search: PropTypes.object.isRequired,
     textFields: PropTypes.object.isRequired,
     secondarySearch: PropTypes.object.isRequired,
-    categories: PropTypes.object.isRequired,
+    categories: PropTypes.object,
     categoryTitle: PropTypes.string.isRequired,
     dropDownWidth: PropTypes.string,
     selectWidth: PropTypes.string,

@@ -30,10 +30,11 @@ class Listings extends React.Component {
                     <HeaderMain />
                 </div>
                 <div className="mid listings">
-                    <SecondarySearch 
+                    <SecondarySearch
+                        id= "searchListings"
                         init="All" 
                         selectWidth="160px" 
-                        dropDownWidth="190px" 
+                        dropDownWidth="170px" 
                         categoryTitle="searchCategoryListings" 
                         categories={ listingCategories } 
                         placeholder="Find listings"   

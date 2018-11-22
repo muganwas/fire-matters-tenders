@@ -27,19 +27,29 @@ class SecondarySearch extends Component {
     getCategory = (e)=>{
         return new Promise((resolve, reject)=>{
             let id = e.target.id,
+            userInfo = {...this.props.user.info},
             categoryTitle = this.props.categoryTitle,
             searchCategories = this.props.categories,
             searchInfo = {...this.props.secondarySearch.info};
             searchInfo[categoryTitle] = searchCategories[id];
             this.props.dispatch(dispatchedSecondarySearchInfo(searchInfo));
-            resolve("category set");
+            resolve(userInfo);
         });
     }
     render(){
         let selected = this.props.secondarySearch.info[this.props.categoryTitle];
         return(
             <div className="search-main">
-                <DropDown init={ this.props.init } selectWidth={ this.props.selectWidth } width={ this.props.dropDownWidth } className="select left" options={ this.props.categories } selected={ selected } onChange={ this.getCategory } />
+                <DropDown
+                    id={ this.props.id }
+                    init={ selected || this.props.init } 
+                    selectWidth={ this.props.selectWidth } 
+                    width={ this.props.dropDownWidth } 
+                    className="select left" 
+                    options={ this.props.categories } 
+                    selected={ selected } 
+                    onChange={ this.getCategory } 
+                />
                 <Textfield id="listingSearch" fieldClass="search-field" placeholder={ this.props.placeholder } type="text" />
                 <i className="material-icons search-icon">search</i>        
             </div>
