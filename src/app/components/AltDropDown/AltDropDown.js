@@ -2,7 +2,7 @@ import React from 'react';
 import './altDropDown.css';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
-import { dispatchedGenInfo, dispatchedUserInfo } from 'extras/dispatchers';
+import { dispatchedGenInfo } from 'extras/dispatchers';
 
 @connect((store)=>{
     return {
@@ -71,7 +71,16 @@ class AltDropDown extends React.Component {
             return;
         else{
             return(   
-                <span onClick={ this.afterSelect } category={ this.props.id } className="option" id={ key } key={ key } value={options[key]}>{options[key]}</span>   
+                <span 
+                    onClick={ this.afterSelect } 
+                    category={ this.props.id } 
+                    className="option" 
+                    id={ key } 
+                    key={ key } 
+                    value={options[key]}
+                >
+                {options[key]}
+                </span>   
             )
         }
     }
