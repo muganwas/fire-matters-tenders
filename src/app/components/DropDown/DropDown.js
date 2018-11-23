@@ -71,7 +71,22 @@ class DropDown extends React.Component {
             return;
         else{
             return(   
-                <span onClick={ this.afterSelect } category={ this.props.id } className="option" id={ key } key={ key } value={options[key]}>{options[key]}</span>   
+                <span 
+                    onClick={ 
+                        this.props.upload?(e)=>{
+                        e.persist();
+                        this.props.save(e);
+                        this.props.upload(e);
+                        this.toggleDisplayDropDown();
+                    }:this.afterSelect }
+                    category={ this.props.id } 
+                    className="option" 
+                    id={ key }
+                    key={ key } 
+                    value={options[key]}
+                >
+                {options[key]}
+                </span>   
             )
         }
     }

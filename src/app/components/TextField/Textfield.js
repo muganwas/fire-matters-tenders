@@ -31,11 +31,11 @@ class Textfield extends React.Component {
         let nameArr = origName.split("-"),
         key = nameArr[0],
         name = nameArr[1],
-        profileInfoSucCategory = this.props.subCategory,
+        profileInfoSubCategory = this.props.subCategory,
         value = e.target.value;
         let dbValue;
-        if(profileInfoSucCategory)
-            dbValue = (JSON.parse(sessionStorage.getItem('profileInfo')))[profileInfoSucCategory][key][name]
+        if(profileInfoSubCategory)
+            dbValue = (JSON.parse(sessionStorage.getItem('profileInfo')))[profileInfoSubCategory][key][name]
         else
             dbValue = (JSON.parse(sessionStorage.getItem('profileInfo')))[name];
         if(dbValue !== value){
@@ -81,8 +81,8 @@ class Textfield extends React.Component {
                             rowsMax = "30"
                             rows="4"
                             defaultValue={this.props.value}
-                            onChange={this.handleText}
-                            onBlur={ this.upload }
+                            onChange={ this.props.save || this.handleText}
+                            onBlur={ this.props.upload || this.upload }
                             placeholder={this.props.placeholder}
                             type={this.props.type}
                         >
@@ -105,8 +105,8 @@ class Textfield extends React.Component {
                                 },
                             }}
                             defaultValue={this.props.value}
-                            onChange={this.handleText}
-                            onBlur={ this.upload }
+                            onChange={ this.props.save || this.handleText}
+                            onBlur={ this.props.upload || this.upload }
                             placeholder={this.props.placeholder}
                             type={this.props.type}
                         >

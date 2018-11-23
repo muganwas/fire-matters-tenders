@@ -10,7 +10,7 @@
     margin: 0 10px 10px 0;
 }
 .heading .bottom-border{
-    display: inline-block;
+    display: block;
     background: #f79a50!important;
     border: none;
     height: 1px;
@@ -65,7 +65,7 @@
 .information .select{
     border: thin solid #ED2431;
     border-radius: 5px;
-    width: 300px;
+    width: 310px;
 }
 .information .label{
     font-size: 13px;
