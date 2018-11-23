@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import './secondarySelect.css';
 import { AltDropDown } from 'components';
 import { PropTypes } from 'prop-types';
+
 @connect((store)=>{
     return {
         search: store.search,
@@ -47,7 +48,7 @@ class SecondarySelect extends Component {
                 />
                 {<AltDropDown
                     id = "minorCategories" 
-                    init={ selectedAlt || "Select Equip Sub-category" } 
+                    init={ selectedAlt || "Select Equipment" } 
                     selectWidth={ this.props.selectWidthAlt } 
                     width={ this.props.dropDownWidthAlt } 
                     className="selectAlt left" 

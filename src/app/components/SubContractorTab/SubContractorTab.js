@@ -57,7 +57,10 @@ class SubContractorTab extends React.Component {
         this.props.dispatch(dispatchedSubContractorsInfo(subContractorsInfo));               
     }
 
-    renderSubContractorDetails = ()=>{
+    renderSubContractorDetails = (e)=>{
+        e.persist();
+        let id = e.target.getAttribute('autoid');
+        console.log(id);
         let subContractorsInfo = {...this.props.subContractorsInfo};
         subContractorsInfo.detailsView.show = !subContractorsInfo.detailsView.show;
         this.props.dispatch(dispatchedSubContractorsInfo(subContractorsInfo));
@@ -103,7 +106,6 @@ class SubContractorTab extends React.Component {
                     userInfo.addSubContractor.feedbackClass="success";
                     this.props.dispatch(dispatchedUserInfo(userInfo));
                     this.forceUpdate();
-                    console.log(res);
                 }).
                 catch(err=>{
                     userInfo.addSubContractor.submitButton.isActive = true;
@@ -118,7 +120,6 @@ class SubContractorTab extends React.Component {
                 this.props.dispatch(dispatchedUserInfo(userInfo));
                 this.forceUpdate();
             }
-            
         });
     };
 
@@ -150,14 +151,11 @@ class SubContractorTab extends React.Component {
 
     displaySubContractors = (key)=>{
         let subContractorsInfo = {...this.props.subContractorsInfo},
-        subContractors = {...subContractorsInfo.subContractors},
-        showDetailsView = subContractorsInfo.detailsView.show,    
+        subContractors = {...subContractorsInfo.subContractors},   
         options = { 0: "View More..." };
             
         return(
             <div className="list-row" key={key}>
-                {showDetailsView
-                ?<SubContractorDetailsView />:null}
                 <div className="twenty">{ subContractors[key].companyName }</div>
                 <div className="thirty">{ subContractors[key].physicalAddress }</div>
                 <div className="thirty">{ subContractors[key].categoriesOfService}</div>
@@ -165,7 +163,9 @@ class SubContractorTab extends React.Component {
                     <MoreHoriz 
                         className={ subContractors[key].moreMenuClassName } 
                         id={ key }
+                        autoid = { subContractors[key].id }
                         listName = "subContractors"
+                        onClickAlt = { this.renderSubContractorDetails }
                         element={ subContractors[key] }
                         options={ options }
                      />
@@ -187,9 +187,25 @@ class SubContractorTab extends React.Component {
         subContractorAttributes = this.props.user.info.addSubContractor,
         errors = subContractorsInfo.subContractorForm.errors,
         feedback = subContractorAttributes.feedback,
-        feedbackClass = subContractorAttributes.feedbackClass;
+        feedbackClass = subContractorAttributes.feedbackClass,
+        showDetailsView = subContractorsInfo.detailsView.show;
         return(
             <div className="tenders main-content">
+                
+                {showDetailsView
+                    ?<div className="subcontractors-container">
+                        <span 
+                            className="close right" 
+                            onClick={ this.renderSubContractorDetails } 
+                            id="close"
+                        >
+                            &#x2716;
+                        </span>
+                        <SubContractorDetailsView />
+                    </div>
+                    :null
+                }
+                
                 {   
                     showSubContractorForm
                     ?<SubContractorForm

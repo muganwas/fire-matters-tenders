@@ -1,10 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { dispatchedGenInfo } from 'extras/dispatchers';
-import './subContractorDetailsView.css'
-import { PersonnelTab, CompanyTab, InsuranceTab, LicenseTab } from 'components';
-import { ownerOccupierProfileTabs, serviceProviderProfileTabs } from 'extras/config';
+import { dispatchedSubContractorsInfo } from 'extras/dispatchers';
+import './subContractorDetailsView.css';
+import PersonnelTab from './PersonnelTab/PersonnelTab'; 
+import CompanyTab from './CompanyTab/CompanyTab'; 
+import InsuranceTab from './InsuranceTab/InsuranceTab';
+import LicenseTab from './LicenseTab/LicenseTab'; 
+import EquipmentTab from './EquipmentTab/EquipmentTab';
+import { subContractorProfileTabs } from 'extras/config';
 
 
 @connect((store)=>{
@@ -12,8 +16,8 @@ import { ownerOccupierProfileTabs, serviceProviderProfileTabs } from 'extras/con
         user: store.user.info,
         search: store.search,
         genInfo: store.genInfo.info,
-        tabs: store.genInfo.info.sideBar.profilePage.tabs,
-        currentHorizontalTab: store.genInfo.info.sideBar.currentHorizontalTab,
+        subContractorsInfo: store.subContractors.info,
+        currentTab: store.subContractors.info.currentTab,
     }
 })
 class SubContractorDetailsView extends React.Component {
@@ -23,13 +27,6 @@ class SubContractorDetailsView extends React.Component {
 
     componentWillMount(){
         //set initial attributes
-        let userType = JSON.parse(sessionStorage.getItem('profileInfo')).userType,
-        genInfo = {...this.props.genInfo};
-        if(userType === "Owner/Occupier" || userType === "owner-occupier" || userType === "owner_occupier")
-            genInfo.sideBar.profilePage.tabs = ownerOccupierProfileTabs;
-        else
-            genInfo.sideBar.profilePage.tabs = serviceProviderProfileTabs;
-        this.props.dispatch(dispatchedGenInfo(genInfo));
     }
 
     componentWillReceiveProps(nextProps){
@@ -38,10 +35,10 @@ class SubContractorDetailsView extends React.Component {
 
     activate = (e)=>{
         let id = e.target.id,
-        genInfo = {...this.props.genInfo},
-        tabs = this.props.tabs;
-        genInfo.sideBar.currentHorizontalTab = id;
-        this.props.dispatch(dispatchedGenInfo(genInfo));
+        subContractorsInfo = {...this.props.subContractorsInfo},
+        tabs = subContractorProfileTabs;
+        subContractorsInfo.currentTab = id;
+        this.props.dispatch(dispatchedSubContractorsInfo(subContractorsInfo));
         document.getElementById(id).className="active";
         setTimeout(()=>{
             Object.keys(tabs).map(key=>{
@@ -54,18 +51,18 @@ class SubContractorDetailsView extends React.Component {
     }
     
     tabTitle=(key)=>{
-        let tabs = this.props.tabs,
-        selected = this.props.currentHorizontalTab;
+        let tabs = subContractorProfileTabs,
+        selected = this.props.currentTab;
         return (
             <span id={key} onClick={ this.activate } className={ key===selected?"active":null} key={ key }>{ tabs[key] }</span>
         )
     }
 
     render(){
-        let tabs = this.props.tabs, currentTab = this.props.currentHorizontalTab;
+        let { currentTab } = this.props;
         return(
-            <div>
-                <div className="tabs">{ Object.keys(tabs).map(this.tabTitle) }</div>
+            <div className="sub-container">
+                <div className="tabs">{ Object.keys(subContractorProfileTabs).map(this.tabTitle) }</div>
                 {currentTab==="personnel"?
                 <PersonnelTab />:
                 currentTab==="company"?
@@ -73,7 +70,10 @@ class SubContractorDetailsView extends React.Component {
                 currentTab==="insurance"?
                 <InsuranceTab />
                 :currentTab==="license"?
-                <LicenseTab />:null}
+                <LicenseTab />
+                :currentTab==="equipment"?
+                <EquipmentTab />:null}
+                <div className = "clear"></div>
             </div>
         )
     }

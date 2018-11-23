@@ -1,135 +1,91 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
-import { dispatchedGenInfo, dispatchedUserInfo } from 'extras/dispatchers';
-import { HeaderMain, Footer, SideBar, ProfileTab, TendersTab, ContractsTab, SitesTab, MessagesTab, SubContractorTab } from 'components';
-import './userPage.css';
+import { dispatchedGenInfo } from 'extras/dispatchers';
+import './subContractorDetails.css'
+import { PersonnelTab, CompanyTab, InsuranceTab, LicenseTab, EquipmentTab } from 'components';
+import { subContractorProfileTabs } from 'extras/config';
 
-const baseUrl = process.env.BACK_END_URL,
-usersEndPoint = process.env.USERS_END_POINT,
-tokenVerificationEndPoint = process.env.TOKEN_VERIFICATION_END_POINT;
 
 @connect((store)=>{
     return {
-        user: store.user,
+        user: store.user.info,
         search: store.search,
         genInfo: store.genInfo.info,
-        currentTab: store.genInfo.info.sideBar.currentTab,
+        subContractorsInfo: store.subContractors.info,
+        tabs: store.genInfo.info.sideBar.profilePage.tabs,
     }
 })
-class UserPage extends React.Component {
+class SubContractorDetails extends React.Component {
     constructor(props) {
         super(props);
     }
 
-    componentWillReceiveProps(nextProps){
-        this.props = {...nextProps}
-    }
-
     componentWillMount(){
-        let info = {...this.props.genInfo};
-        let sessionInfo = sessionStorage.getItem('loginSession')?JSON.parse(sessionStorage.getItem('loginSession')): {},
-        token = sessionInfo.token,
-        tokenCheckURL = baseUrl + tokenVerificationEndPoint;
-        if(!token)
-            this.props.history.push('/login');
-        axios.post(tokenCheckURL, {token}).
-        then(res=>{
-            if(!res.data.uid){
-                info.alternatingNavigation.home = "/home";
-                info.alternatingNavigation.headerClass = "App-header";
-                this.props.dispatch(dispatchedGenInfo(info));
-                sessionStorage.removeItem('loginSession');
-                this.props.history.push('/login');
-            }
-            info.alternatingNavigation.headerClass = "App-header-loggedin";
-            this.props.dispatch(dispatchedGenInfo(info));    
-        }).
-        catch(error=>{
-            console.log(error);
-            info.alternatingNavigation.home = "/home";
-            info.alternatingNavigation.headerClass = "App-header";
-            this.props.dispatch(dispatchedGenInfo(info));
-            sessionStorage.removeItem('loginSession');
-            this.props.history.push('/login');
-        });
+        //set initial attributes
     }
 
-    componentDidMount(){
-        let emailAddress = (JSON.parse(sessionStorage.getItem('loginSession'))).emailAddress,
-        userURL = baseUrl + usersEndPoint + "?emailAddress=" + emailAddress;
-        axios.get(userURL).
-        then(res=>{
-            let userObj = res.data[0];
-            let profileInfo = userObj,
-            userInfo = {...this.props.user.info},
-            dispatchedprofileInfo = {...this.props.profileInfo};
+    componentWillReceiveProps(nextProps){
+        this.props = {...nextProps};
+    }
 
-            let dispatchedprofileInfoLen = Object.keys(dispatchedprofileInfo).length;
-
-            userInfo.profileInfo = profileInfo;
-            if(dispatchedprofileInfoLen <= 0){
-                this.props.dispatch(dispatchedUserInfo(userInfo));
-                sessionStorage.setItem('profileInfo', JSON.stringify(profileInfo));
-            }
-        }).
-        catch(err=>{
-            console.log(err)
-        });
+    activate = (e)=>{
+        let id = e.target.id,
+        genInfo = {...this.props.genInfo},
+        tabs = this.props.tabs;
+        genInfo.sideBar.currentHorizontalTab = id;
+        this.props.dispatch(dispatchedGenInfo(genInfo));
+        document.getElementById(id).className="active";
+        setTimeout(()=>{
+            Object.keys(tabs).map(key=>{
+                if(key === id)
+                    document.getElementById(key).className="active";
+                else
+                    document.getElementById(key).className="";        
+            });
+        }, 20);
     }
     
+    tabTitle=(key)=>{
+        let tabs = subContractorProfileTabs,
+        selected = this.props.currentTab;
+        return (
+            <span id={key} onClick={ this.activate } className={ key===selected?"active":null} key={ key }>{ tabs[key] }</span>
+        )
+    }
+
     render(){
-        let currentTab = this.props.currentTab;
+        let { currentTab } = this.props;
         return(
-            <div className="main">
-                <div className="top">
-                    <HeaderMain />
-                </div>
-                <div className="user-page mid">
-                    <div className="twenty left">
-                        <SideBar />
+            <div className="subcontractors-container">
+                <div className="sub-container">
+                    <div className="tabs">{ Object.keys(subContractorProfileTabs).map(this.tabTitle) }</div>
+                    {currentTab==="personnel"?
+                    <PersonnelTab />:
+                    currentTab==="company"?
+                    <CompanyTab />:
+                    currentTab==="insurance"?
+                    <InsuranceTab />
+                    :currentTab==="license"?
+                    <LicenseTab />
+                    :currentTab==="equipment"?
+                    <EquipmentTab />:null}
                     </div>
-                    <div className="hanad left">
-                        <div className="content">
-                            { 
-                                currentTab==="Profile"
-                                ?<ProfileTab />
-                                :currentTab==="Tenders"
-                                ?<TendersTab />
-                                :currentTab==="Contracts"
-                                ?<ContractsTab />
-                                :currentTab==="Sites"
-                                ?<SitesTab />
-                                :currentTab==="Messages"
-                                ?<MessagesTab />
-                                :currentTab==="Subcontractors"
-                                ?<SubContractorTab />
-                                :null
-                            }
-                        </div>
-                    </div>
-                    <div className="clear"></div>
-                </div>
-                <div className="bottom-alt">
-                    <Footer />
-                </div>
             </div>
         )
     }
 }
 
-UserPage.defaultProps = {
+SubContractorDetails.defaultProps = {
     user: {},
     search: {},
     genInfo: {}
 }
 
-UserPage.propTypes = {
+SubContractorDetails.propTypes = {
     user: PropTypes.object.isRequired,
     search: PropTypes.object.isRequired,
     genInfo: PropTypes.object.isRequired
 }
 
-export default withRouter(UserPage);
+export default SubContractorDetails;

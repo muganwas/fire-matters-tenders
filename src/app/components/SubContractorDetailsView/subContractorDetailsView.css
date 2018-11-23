@@ -1,0 +1,23 @@
+.subcontractors-container{
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 10000000;
+    background-color: rgba(0,0,0, 0.6);
+    padding: 20px;
+}
+.subcontractors-container .sub-container{
+    box-sizing: border-box;
+    border: thin solid rgb(172, 172, 172);
+    background-color: #fff;
+    padding: 30px 50px 30px 30px;
+}
+
+.subcontractors-container .close {
+    color: #F79A50;
+    margin: 10px;
+    cursor: pointer;
+
+}

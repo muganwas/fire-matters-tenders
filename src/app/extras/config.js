@@ -70,11 +70,6 @@ export const userTypes = {
     service_provider: "Service provider"
 }
 
-export const ownerOccupierProfileTabs = {
-    personnel: "Personnel",
-    company: "Company"
-}
-
 export const equipmentCategories = {
     detectionAndWarningSystem: "Detection & Warning Systems",
     portableFireFightingEquipment: "Portable Equipment",
@@ -132,7 +127,20 @@ export const contractTypes = {
     shortTerm: "Short-term"
 }
 
+export const ownerOccupierProfileTabs = {
+    personnel: "Personnel",
+    company: "Company"
+}
+
 export const serviceProviderProfileTabs = {
+    personnel: "Personnel",
+    company: "Company",
+    insurance: "Insurance",
+    license: "License",
+    equipment: "Equipment",
+}
+
+export const subContractorProfileTabs = {
     personnel: "Personnel",
     company: "Company",
     insurance: "Insurance",
