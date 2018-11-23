@@ -2,6 +2,7 @@ const defaultState = {
     info: {
       subContractors: {},
       currentTab: "personnel",
+      currentSub: {},
       detailsView: {
         show: false
       },

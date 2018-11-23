@@ -11,9 +11,8 @@ userUpdateEndPoint = process.env.USER_UPDATE_END_POINT;
 
 function CompanyTab(props){
 
-    let { userInfo, user } = props;
-    userInfo = userInfo?userInfo:JSON.parse(sessionStorage.getItem('profileInfo'));
-    let companyInformation = userInfo || {},
+    let { currSub, user } = props;
+    let companyInformation = currSub || {},
     emailAddress = companyInformation.companyEmailAddress,
     phoneNumber = companyInformation.companyPhoneNumber?(companyInformation.companyPhoneNumber).toString():undefined,
     website = companyInformation.companyWebsite,
@@ -238,20 +237,20 @@ function CompanyTab(props){
 
 CompanyTab.defaultProps = {
     user: {},
-    search: {},
-    genInfo: {}
+    currSub: {},
+    subContractorsInfo: {}
 }
 
 CompanyTab.propTypes = {
     user: PropTypes.object.isRequired,
-    search: PropTypes.object.isRequired,
-    genInfo: PropTypes.object.isRequired
+    currSub: PropTypes.object.isRequired,
+    subContractorsInfo: PropTypes.object.isRequired
 }
 
 export default connect(store=>{
     return {
         user: store.user.info,
-        userInfo: store.user.info.profileInfo,
-        currentHorizontalTab: store.genInfo.info.sideBar.currenthorizontalTab,
+        subContractorsInfo: store.subContractors.info,
+        currSub: store.subContractors.info.currentSub
     }
 })(CompanyTab);

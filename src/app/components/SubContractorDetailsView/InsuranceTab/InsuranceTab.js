@@ -18,9 +18,9 @@ userUpdateEndPoint = process.env.USER_UPDATE_END_POINT;
 @connect(store=>{
     return {
         user: store.user.info,
-        userInfo: store.user.info.profileInfo,
-        insurance: store.user.info.profileInfo.insurance,
-        currentHorizontalTab: store.genInfo.info.sideBar.currenthorizontalTab,
+        subContractorsInfo: store.subContractors.info,
+        currSub: store.subContractors.info.currentSub,
+        insurance: store.subContractors.info.currentSub.insurance
     }
 })
 class InsuranceTab extends React.Component{
@@ -30,25 +30,6 @@ class InsuranceTab extends React.Component{
 
     componentWillReceiveProps(nextProps){
         this.props= {...nextProps};
-    }
-
-    componentWillMount(){
-        let emailAddress = (JSON.parse(sessionStorage.getItem('profileInfo'))).emailAddress,
-        userInfoURL = baseURL + userEndPoint + "?emailAddress=" + emailAddress,
-        insurance = (JSON.parse(sessionStorage.getItem('profileInfo'))).insurance;
-        axios.get(userInfoURL).then(res=>{
-            if(res){
-                let newInsurance = res.data[0].insurance,
-                userInfo = {...this.props.user};
-                userInfo.profileInfo.insurance = newInsurance;
-                if(JSON.stringify(insurance) !== JSON.stringify(newInsurance)){
-                    this.props.dispatch(dispatchedUserInfo(newInsurance));
-                }
-            }     
-        }).
-        catch(err=>{
-            console.log(err)
-        });
     }
 
     upload=()=>{
@@ -180,7 +161,8 @@ class InsuranceTab extends React.Component{
     }
 
     renderInsurance = (key)=>{
-        let { insurance, userInfo }= this.props,
+        let { insurance, currSub }= this.props,
+        userInfo = currSub,
         className = insurance[key].className,
         uploadingCert = userInfo.insurance[key].uploadingCert,
         policyNumber = insurance[key].policyNumber,

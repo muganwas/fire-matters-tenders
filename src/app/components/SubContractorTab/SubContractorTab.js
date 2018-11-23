@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import  { Loader, FmButton, MoreHoriz, SubContractorDetailsView, SearchInput } from 'components';
 import axios from 'axios';
-import { dispatchedUserInfo, dispatchedGenInfo, dispatchedSubContractorsInfo } from 'extras/dispatchers';
+import { dispatchedUserInfo, dispatchedSubContractorsInfo } from 'extras/dispatchers';
 import './subContractorTab.css';
 import { PropTypes } from 'prop-types';
 import { SubContractorForm } from 'forms';
@@ -59,9 +59,11 @@ class SubContractorTab extends React.Component {
 
     renderSubContractorDetails = (e)=>{
         e.persist();
-        let id = e.target.getAttribute('autoid');
-        console.log(id);
-        let subContractorsInfo = {...this.props.subContractorsInfo};
+        let id = e.target.id,
+        subContractorsInfo = { ...this.props.subContractorsInfo },
+        subContractors = { ...subContractorsInfo.subContractors },
+        currSub = {...subContractors[id]};
+        subContractorsInfo.currentSub = currSub;
         subContractorsInfo.detailsView.show = !subContractorsInfo.detailsView.show;
         this.props.dispatch(dispatchedSubContractorsInfo(subContractorsInfo));
     }

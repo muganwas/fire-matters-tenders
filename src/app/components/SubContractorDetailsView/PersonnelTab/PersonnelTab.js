@@ -2,17 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { DropDown, Textfield, PhoneNumber } from 'components';
-import { userTypes, statesAustralia } from 'extras/config';
+import { statesAustralia } from 'extras/config';
 import axios from 'axios';
 
 const baseURL = process.env.BACK_END_URL,
 userUpdateEndPoint = process.env.USER_UPDATE_END_POINT;
 
 function PersonnelTab(props){
-    let { userInfo, user } = props;
-    let userlen = Object.keys(userInfo).length;
-    userInfo = userlen > 0?userInfo:JSON.parse(sessionStorage.getItem('profileInfo'));
-    let userType = userInfo.userType,
+    let { currSub, user } = props,
+    userInfo = currSub,
     companyName = userInfo.companyName,
     userName = userInfo.fullName,
     phoneNumber = userInfo.phoneNumber?(userInfo.phoneNumber).toString():undefined,
@@ -60,19 +58,6 @@ function PersonnelTab(props){
             <div className="half left">
                 <div className="heading">Basic Information <div className="bottom-border"></div></div>
                 <div className="information">
-                    <div className="el">
-                        <DropDown 
-                            label="Account Type" 
-                            id="profile-userType" 
-                            className="select" 
-                            init={ userType } 
-                            width="330px" 
-                            options={ userTypes } 
-                            selected={ userType } 
-                            onChange={ save }
-                            onBlur={ upload }
-                        />
-                    </div>
                     <div className="el">
                         <Textfield 
                             id="profile-fullName"
@@ -191,18 +176,21 @@ function PersonnelTab(props){
 }
 
 PersonnelTab.defaultProps = {
-    userInfo: {}
+    user: {},
+    currSub: {},
+    subContractorsInfo: {}
 }
 
 PersonnelTab.propTypes = {
-    userInfo: PropTypes.object.isRequired,
-    currentHorizontalTab: PropTypes.string
+    user: PropTypes.object.isRequired,
+    currSub: PropTypes.object.isRequired,
+    subContractorsInfo: PropTypes.object.isRequired
 }
 
 export default connect(store=>{
     return {
         user: store.user.info,
-        userInfo: store.user.info.profileInfo,
-        currentHorizontalTab: store.genInfo.info.sideBar.currenthorizontalTab,
+        subContractorsInfo: store.subContractors.info,
+        currSub: store.subContractors.info.currentSub
     }
 })(PersonnelTab);

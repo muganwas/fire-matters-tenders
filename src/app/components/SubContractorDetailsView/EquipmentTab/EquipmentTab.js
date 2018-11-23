@@ -48,11 +48,10 @@ const RenderEquipment = props => {
 @connect(store=>{
     return {
         user: store.user.info,
-        userInfo: store.user.info.profileInfo,
-        equipment: store.user.info.profileInfo.equipment,
-        licenses: store.user.info.profileInfo.licenses,
-        secondarySelect: store.secondarySelect.info,
-        currentHorizontalTab: store.genInfo.info.sideBar.currenthorizontalTab,
+        userInfo: store.subContractors.info.currentSub,
+        equipment: store.subContractors.info.currentSub.equipment,
+        subContractorsInfo: store.subContractors.info,
+        secondarySelect: store.secondarySelect.info
     }
 })
 class EquipmentTab extends React.Component{
@@ -62,25 +61,6 @@ class EquipmentTab extends React.Component{
 
     componentWillReceiveProps(nextProps){
         this.props= {...nextProps};
-    }
-
-    componentWillMount(){
-        let emailAddress = (JSON.parse(sessionStorage.getItem('profileInfo'))).emailAddress,
-        userInfoURL = baseURL + userEndPoint + "?emailAddress=" + emailAddress,
-        licenses = (JSON.parse(sessionStorage.getItem('profileInfo'))).licenses;
-        axios.get(userInfoURL).then(res=>{
-            if(res){
-                let newLicense = res.data[0].licenses,
-                userInfo = {...this.props.user};
-                userInfo.profileInfo.licenses = newLicense;
-                if(JSON.stringify(licenses) !== JSON.stringify(newLicense)){
-                    this.props.dispatch(dispatchedUserInfo(newLicense));
-                }
-            }     
-        }).
-        catch(err=>{
-            console.log(err)
-        });
     }
 
     upload=()=>{
@@ -239,10 +219,10 @@ class EquipmentTab extends React.Component{
     getCategory = (e)=>{
         return new Promise((resolve, reject)=>{
             let id = e.target.id,
-            categoryTitle = "searchEquipmentSelectedCategories",
-            categoryTitleKey = "searchEquipmentSelectedCategoriesKey",
-            categoryTitleAlt = "searchEquipmentSelectedSubCategories",
-            categoryTitleAltKey = "searchEquipmentSelectedSubCategoriesKey",
+            categoryTitle = "subEquipmentSelectedCategories",
+            categoryTitleKey = "subEquipmentSelectedCategoriesKey",
+            categoryTitleAlt = "subEquipmentSelectedSubCategories",
+            categoryTitleAltKey = "subEquipmentSelectedSubCategoriesKey",
             searchCategories = equipmentCategories,
             selectInfo = {...this.props.secondarySelect};
             selectInfo[categoryTitle] = searchCategories[id];
@@ -254,9 +234,9 @@ class EquipmentTab extends React.Component{
     }
 
     getCategoryAlt = (e)=>{
-        let categoryTitle = "searchEquipmentSelectedCategories",
-        categoryTitleAlt = "searchEquipmentSelectedSubCategories",
-        categoryTitleAltKey = "searchEquipmentSelectedSubCategoriesKey",
+        let categoryTitle = "subEquipmentSelectedCategories",
+        categoryTitleAlt = "subEquipmentSelectedSubCategories",
+        categoryTitleAltKey = "subEquipmentSelectedSubCategoriesKey",
         selected = this.props.secondarySelect[categoryTitle],
         selectedKey ="";
         Object.keys(equipmentCategories).map(key=>{
@@ -276,12 +256,12 @@ class EquipmentTab extends React.Component{
 
     addEquipment = ()=>{
         let selectInfo = {...this.props.secondarySelect},
-        userInfo = {...this.props.user},
-        userId = userInfo.profileInfo.id,
-        equipment = {...userInfo.profileInfo.equipment},
-        equipmentCategory = selectInfo.searchEquipmentSelectedCategoriesKey,
+        userInfo = {...this.props.userInfo},
+        userId = userInfo.id,
+        equipment = {...userInfo.equipment},
+        equipmentCategory = selectInfo.subEquipmentSelectedCategoriesKey,
         url = baseURL + userUpdateEndPoint,
-        equipmentName = selectInfo.searchEquipmentSelectedSubCategoriesKey;
+        equipmentName = selectInfo.subEquipmentSelectedSubCategoriesKey;
         equipment[equipmentCategory][equipmentName] = true;
         userInfo.addEquipment.submitButton.isActive = false;
         this.props.dispatch(dispatchedUserInfo(userInfo));
@@ -389,8 +369,8 @@ class EquipmentTab extends React.Component{
                                         selectWidthAlt = "240px"
                                         dropDownWidth = "260px"
                                         dropDownWidthAlt = "260px"
-                                        categoryTitle = "searchEquipmentSelectedCategories"
-                                        categoryTitleAlt = "searchEquipmentSelectedSubCategories"
+                                        categoryTitle = "subEquipmentSelectedCategories"
+                                        categoryTitleAlt = "subEquipmentSelectedSubCategories"
                                         onChange = { this.getCategory }
                                         onChangeAlt = { this.getCategoryAlt }
                                         dispatcher = { dispatchedSecondarySelectInfo }
@@ -423,8 +403,8 @@ EquipmentTab.defaultProps = {
 
 EquipmentTab.propTypes = {
     userInfo: PropTypes.object.isRequired,
-    currentHorizontalTab: PropTypes.string,
-    licenses: PropTypes.object
+    licenses: PropTypes.object,
+    equipment: PropTypes.object
 }
 
 export default EquipmentTab;

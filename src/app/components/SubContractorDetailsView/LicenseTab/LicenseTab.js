@@ -18,9 +18,9 @@ userUpdateEndPoint = process.env.USER_UPDATE_END_POINT;
 @connect(store=>{
     return {
         user: store.user.info,
-        userInfo: store.user.info.profileInfo,
-        licenses: store.user.info.profileInfo.licenses,
-        currentHorizontalTab: store.genInfo.info.sideBar.currenthorizontalTab,
+        subContractorsInfo: store.subContractors.info,
+        currSub: store.subContractors.info.currentSub,
+        licenses: store.subContractors.info.currentSub.licenses
     }
 })
 class LicenseTab extends React.Component{
@@ -30,25 +30,6 @@ class LicenseTab extends React.Component{
 
     componentWillReceiveProps(nextProps){
         this.props= {...nextProps};
-    }
-
-    componentWillMount(){
-        let emailAddress = (JSON.parse(sessionStorage.getItem('profileInfo'))).emailAddress,
-        userInfoURL = baseURL + userEndPoint + "?emailAddress=" + emailAddress,
-        licenses = (JSON.parse(sessionStorage.getItem('profileInfo'))).licenses;
-        axios.get(userInfoURL).then(res=>{
-            if(res){
-                let newLicense = res.data[0].licenses,
-                userInfo = {...this.props.user};
-                userInfo.profileInfo.licenses = newLicense;
-                if(JSON.stringify(licenses) !== JSON.stringify(newLicense)){
-                    this.props.dispatch(dispatchedUserInfo(newLicense));
-                }
-            }     
-        }).
-        catch(err=>{
-            console.log(err)
-        });
     }
 
     upload=()=>{
@@ -180,7 +161,8 @@ class LicenseTab extends React.Component{
     }
 
     renderLicenses = (key)=>{
-        let { licenses, userInfo }= this.props,
+        let { licenses, currSub }= this.props,
+        userInfo = currSub,
         className = licenses[key].className,
         uploadingCert = userInfo.licenses[key].uploadingCert,
         licenseType = licenses[key].type,
@@ -251,8 +233,7 @@ class LicenseTab extends React.Component{
     }
 
     render(){
-        let { licenses }= this.props,
-        other = licenses?licenses.other:{};
+        let { licenses }= this.props;
 
         return(
             <div className="main-content">
@@ -274,7 +255,6 @@ LicenseTab.defaultProps = {
 
 LicenseTab.propTypes = {
     userInfo: PropTypes.object.isRequired,
-    currentHorizontalTab: PropTypes.string,
     licenses: PropTypes.object
 }
 
