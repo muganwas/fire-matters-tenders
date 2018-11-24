@@ -7,17 +7,16 @@ import * as firebase from 'firebase/app';
 import 'extras/config';
 import 'firebase/storage';
 import 'firebase/database';
-import { dispatchedUserInfo } from 'extras/dispatchers';
+import { dispatchedSubContractorsInfo } from 'extras/dispatchers';
 
 const baseURL = process.env.BACK_END_URL,
-userEndPoint = process.env.USERS_END_POINT,
 storage = firebase.storage(),
 storageRef = storage.ref(),
-userUpdateEndPoint = process.env.USER_UPDATE_END_POINT;
+userUpdateEndPoint = process.env.SUB_CONTRACTORS_UPDATE_END_POINT;
 
 @connect(store=>{
     return {
-        user: store.user.info,
+        user: store.subContractors.info,
         subContractorsInfo: store.subContractors.info,
         currSub: store.subContractors.info.currentSub,
         licenses: store.subContractors.info.currentSub.licenses
@@ -36,7 +35,7 @@ class LicenseTab extends React.Component{
         let sectTitle = "licenses";
         let updateData = {...this.props.licenses};
         return new Promise((resolve, reject)=>{
-            let userId = this.props.userInfo.id,
+            let userId = this.props.currSub.id,
             updateInfoUrl = baseURL + userUpdateEndPoint,
             updateObject = {userId, sectTitle, updateData};
             axios.post(updateInfoUrl, updateObject).
@@ -57,9 +56,10 @@ class LicenseTab extends React.Component{
             let nameArr = origName.split("-"),
             key = nameArr[0],
             name = nameArr[1],
-            value = e.target.getAttribute('value');
-            value = value?value:e.target.value;
-            userInfo.profileInfo.licenses[key][name] = value;
+            value = e.target.value;
+            value = value?value:e.target.getAttribute('value');
+            userInfo.currentSub.licenses[key][name] = value;
+            this.props.dispatch(dispatchedSubContractorsInfo(userInfo));
             if(userInfo)                     
                 resolve(userInfo);
             else
@@ -69,17 +69,17 @@ class LicenseTab extends React.Component{
 
     toggleDisplay = (e)=>{
         let userInfo = {...this.props.user};
-        let licenses = userInfo.profileInfo.licenses;
+        let licenses = userInfo.currentSub.licenses;
         let insurancePolicy = e.target.id;
         if(licenses[insurancePolicy].className === "hidden"){
-            userInfo.profileInfo.licenses[insurancePolicy].className = "";
-            userInfo.profileInfo.licenses[insurancePolicy].checked = true;
+            userInfo.currentSub.licenses[insurancePolicy].className = "";
+            userInfo.currentSub.licenses[insurancePolicy].checked = true;
         }   
         else{
-            userInfo.profileInfo.licenses[insurancePolicy].className = "hidden"
-            userInfo.profileInfo.licenses[insurancePolicy].checked = false;
+            userInfo.currentSub.licenses[insurancePolicy].className = "hidden"
+            userInfo.currentSub.licenses[insurancePolicy].checked = false;
         } 
-        this.props.dispatch(dispatchedUserInfo(userInfo)); 
+        this.props.dispatch(dispatchedSubContractorsInfo(userInfo)); 
     }
 
     showLoader=(e)=>{
@@ -91,8 +91,8 @@ class LicenseTab extends React.Component{
         console.log(tag)
         this.uploadCert(e).then(res=>{
             console.log(res)
-            user.profileInfo.licenses[tag].uploadingCert = res.loading;              
-            this.props.dispatch(dispatchedUserInfo(user));
+            user.currentSub.licenses[tag].uploadingCert = res.loading;              
+            this.props.dispatch(dispatchedSubContractorsInfo(user));
             setTimeout(this.forceUpdate(), 50);
         }).
         catch(err=>{
@@ -105,6 +105,7 @@ class LicenseTab extends React.Component{
             let userId = (JSON.parse(sessionStorage.getItem('loginSession'))).userId,
             { user } = this.props,
             id = e.target.id,
+            minorUserId = user.currentSub.id,
             tagArr = id.split('_'),
             tag = tagArr[1],
             file = e.target.files[0],
@@ -112,15 +113,15 @@ class LicenseTab extends React.Component{
             fnameArr = fname.split('.'),
             fnameExt = fnameArr.pop();
             if(fnameExt === "pdf"){
-                let newCertRef = storageRef.child(`${ userId }/${ tag }.${ fnameExt }`);
+                let newCertRef = storageRef.child(`${ userId }/${ minorUserId }/${ tag }.${ fnameExt }`);
                 newCertRef.put(file).then(()=>{
-                    user.profileInfo.licenses[tag].uploadingCert = true;              
-                    this.props.dispatch(dispatchedUserInfo(user));
+                    user.currentSub.licenses[tag].uploadingCert = true;              
+                    this.props.dispatch(dispatchedSubContractorsInfo(user));
                     newCertRef.getDownloadURL().then((url)=>{
                         if(url){
-                            user.profileInfo.licenses[tag].certURL = url;
-                            this.props.dispatch(dispatchedUserInfo(user));
-                            let licenses = {...user.profileInfo.licenses};
+                            user.currentSub.licenses[tag].certURL = url;
+                            this.props.dispatch(dispatchedSubContractorsInfo(user));
+                            let licenses = {...user.currentSub.licenses};
                             this.upload(licenses).then(res=>{
                                 if(res){
                                     let obj = {loading: false};
@@ -134,16 +135,16 @@ class LicenseTab extends React.Component{
                     let avatarProps = {
                         feedback: 'There was an error!, try again.',
                     };
-                    user.profileInfo.licenses.feedback = avatarProps.feedback;              
-                    this.props.dispatch(dispatchedUserInfo(user));
+                    user.currentSub.licenses.feedback = avatarProps.feedback;              
+                    this.props.dispatch(dispatchedSubContractorsInfo(user));
                     reject({message: "There was an error", loading: false});
                 });
             }else{
                 let avatarProps = {
                     feedback: `only PDFs are allowed!`,
                 };
-                user.profileInfo.insurancefeedback = avatarProps.feedback;
-                this.props.dispatch(dispatchedUserInfo(user));
+                user.currentSub.insurancefeedback = avatarProps.feedback;
+                this.props.dispatch(dispatchedSubContractorsInfo(user));
                 reject({message: "There was an error", loading: false});
             }
         });
@@ -174,7 +175,7 @@ class LicenseTab extends React.Component{
         if(key !== "other"){
             return(
                 <div key={ key } className="el">
-                    <ChckBox handleChange={ this.toggleDisplay } dispatcher = { dispatchedUserInfo } value={ value } id={ key } />
+                    <ChckBox handleChange={ this.toggleDisplay } dispatcher = { dispatchedSubContractorsInfo } value={ value } id={ key } />
                     <span>{name}</span>
                     <div className={ className }>
                         <Textfield 
@@ -186,8 +187,8 @@ class LicenseTab extends React.Component{
                             placeholder="License Type" 
                             root="inner-textfield" 
                             fieldClass="textfield"
-                            onBlur={ this.upload() }
-                            onChange = { this.save } 
+                            upload={ this.upload }
+                            save = { this.save } 
                         />
                         <Textfield 
                             id={ key + "-licenseNumber" }
@@ -198,8 +199,8 @@ class LicenseTab extends React.Component{
                             placeholder="License Number" 
                             root="inner-textfield" 
                             fieldClass="textfield"
-                            onBlur={ this.upload() }
-                            onChange = { this.save } 
+                            upload={ this.upload }
+                            save = { this.save } 
                         />
                         <form method="POST" encType="multipart/form-data">
                             <input className="hidden" type="file" id={`upload_` + key } name="certificate" onChange={ this.showLoader } ></input>
@@ -220,8 +221,8 @@ class LicenseTab extends React.Component{
                             placeholder={ expiryDate }
                             root="inner-textfield" 
                             fieldClass="textfield"
-                            onBlur={ this.upload() }
-                            onChange = { this.save } 
+                            upload={ this.upload }
+                            save = { this.save }
                         />
                     </div>
                 </div>

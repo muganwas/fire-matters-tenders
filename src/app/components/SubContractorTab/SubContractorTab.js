@@ -184,7 +184,6 @@ class SubContractorTab extends React.Component {
     render(){
         const subContractorsInfo = {...this.props.subContractorsInfo},
         subContractors = subContractorsInfo.subContractors,
-        userType = this.props.profileInfo.userType,
         showSubContractorForm = subContractorsInfo.subContractorForm.show,
         subContractorAttributes = this.props.user.info.addSubContractor,
         errors = subContractorsInfo.subContractorForm.errors,
@@ -225,12 +224,7 @@ class SubContractorTab extends React.Component {
                     :null
                 }
                 <div className="title-bar">
-                        <span id="title">Sub-Contractors</span>
-                        {userType !== "Owner/Occupier"
-                        ?<span id="search">
-                            <FmButton variant="contained" onClick={ this.renderSubContractorForm } styles={ styles } text="New Sub-contractor" />
-                            <SearchInput className="alt-search" placeholder="search for sub-contractors" search={ this.searchSubContractors } />
-                        </span>:null}
+                    <span id="title">Sub-Contractors</span>
                 </div>
                 <div className="list left hanad">
                     <div className="list-row header">

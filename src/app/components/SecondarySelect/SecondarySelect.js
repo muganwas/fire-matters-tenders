@@ -46,7 +46,7 @@ class SecondarySelect extends Component {
                     onChange={ this.props.onChange }
                     dispatcher = { this.props.dispatcher }  
                 />
-                {<AltDropDown
+                <AltDropDown
                     id = "minorCategories" 
                     init={ selectedAlt || "Select Equipment" } 
                     selectWidth={ this.props.selectWidthAlt } 
@@ -56,7 +56,7 @@ class SecondarySelect extends Component {
                     selected={ selectedAlt } 
                     onChange={ this.props.onChangeAlt }
                     dispatcher = { this.props.dispatcherAlt }    
-                />}
+                />
                 <div className="clear"></div>                   
             </div>
         )

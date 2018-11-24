@@ -2,7 +2,15 @@ const defaultState = {
     info: {
       subContractors: {},
       currentTab: "personnel",
-      currentSub: {},
+      currentSub: {
+        addEquipment: {
+          mainCategory: null,
+          subCategory: null,
+          submitButton: {
+            isActive: true
+          }
+        }
+      },
       detailsView: {
         show: false
       },

@@ -40,7 +40,7 @@ class PersonnelTab extends React.Component {
                 reject(err);
             });
         });
-    };
+    }
 
     save=(e)=>{
         e.persist();
@@ -61,7 +61,7 @@ class PersonnelTab extends React.Component {
             else
                 reject({message: "No data"});
         }); 
-    };
+    }
 
     render(){
         let { currSub } = this.props,

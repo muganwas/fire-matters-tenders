@@ -204,7 +204,7 @@ class InsuranceTab extends React.Component{
                             placeholder="Policy Number" 
                             root="inner-textfield" 
                             fieldClass="textfield"
-                            onBlur={ this.upload() }
+                            onBlur={ this.upload }
                             onChange = { this.save } 
                         />
                         <form method="POST" encType="multipart/form-data">
@@ -226,7 +226,7 @@ class InsuranceTab extends React.Component{
                             placeholder={ expiryDate }
                             root="inner-textfield" 
                             fieldClass="textfield"
-                            onBlur={ this.upload() }
+                            onBlur={ this.upload }
                             onChange = { this.save } 
                         />
                     </div>
@@ -265,7 +265,7 @@ class InsuranceTab extends React.Component{
                                             placeholder="Policy Number" 
                                             root="inner-textfield" 
                                             fieldClass="textfield"
-                                            onBlur={ this.upload() }
+                                            onBlur={ this.upload }
                                             onChange = { this.save } 
                                         />
                                         <form method="POST" encType="multipart/form-data">
@@ -286,7 +286,7 @@ class InsuranceTab extends React.Component{
                                             placeholder={ other.expiryDate }
                                             root="inner-textfield" 
                                             fieldClass="textfield"
-                                            onBlur={ this.upload() }
+                                            onBlur={ this.upload }
                                             onChange = { this.save } 
                                         />
                                     </div>

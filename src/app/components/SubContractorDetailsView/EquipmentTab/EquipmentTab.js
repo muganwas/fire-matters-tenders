@@ -3,19 +3,13 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { SecondarySelect, FmButton  } from 'components';
 import axios from 'axios';
-import * as firebase from 'firebase/app';
 import 'extras/config';
-import 'firebase/storage';
-import 'firebase/database';
 import { submit_styles } from './styles';
 import { dispatchedUserInfo, dispatchedSecondarySelectInfo } from 'extras/dispatchers';
 import { equipmentCategories, equipmentCategoriesFull } from 'extras/config';
 
 const baseURL = process.env.BACK_END_URL,
-userEndPoint = process.env.USERS_END_POINT,
-storage = firebase.storage(),
-storageRef = storage.ref(),
-userUpdateEndPoint = process.env.USER_UPDATE_END_POINT;
+userUpdateEndPoint = process.env.SUB_CONTRACTORS_UPDATE_END_POINT;
 
 const RenderEquipment = props => {
     let { currCat, onClose, id } = props;
@@ -61,134 +55,6 @@ class EquipmentTab extends React.Component{
 
     componentWillReceiveProps(nextProps){
         this.props= {...nextProps};
-    }
-
-    upload=()=>{
-        let sectTitle = "licenses";
-        let updateData = {...this.props.licenses};
-        return new Promise((resolve, reject)=>{
-            let userId = this.props.userInfo.id,
-            updateInfoUrl = baseURL + userUpdateEndPoint,
-            updateObject = {userId, sectTitle, updateData};
-            axios.post(updateInfoUrl, updateObject).
-            then(res=>{
-                resolve(res);
-            }).
-            catch(err=>{
-                reject(err);
-            })
-        });
-    };
-
-    save=(e)=>{
-        return new Promise((resolve, reject)=>{
-            let userInfo = {...this.props.user},
-            id = e.target.id,
-            origName = id;
-            let nameArr = origName.split("-"),
-            key = nameArr[0],
-            name = nameArr[1],
-            value = e.target.getAttribute('value');
-            value = value?value:e.target.value;
-            userInfo.profileInfo.licenses[key][name] = value;
-            if(userInfo)                     
-                resolve(userInfo);
-            else
-                reject({message: "No data"});
-        });
-    };
-
-    toggleDisplay = (e)=>{
-        let userInfo = {...this.props.user};
-        let licenses = userInfo.profileInfo.licenses;
-        let insurancePolicy = e.target.id;
-        if(licenses[insurancePolicy].className === "hidden"){
-            userInfo.profileInfo.licenses[insurancePolicy].className = "";
-            userInfo.profileInfo.licenses[insurancePolicy].checked = true;
-        }   
-        else{
-            userInfo.profileInfo.licenses[insurancePolicy].className = "hidden"
-            userInfo.profileInfo.licenses[insurancePolicy].checked = false;
-        } 
-        this.props.dispatch(dispatchedUserInfo(userInfo)); 
-    }
-
-    showLoader=(e)=>{
-        e.persist(); 
-        let id = e.target.id,
-        tagArr = id.split('_'),
-        tag = tagArr[1],
-        { user } = this.props; 
-        console.log(tag)
-        this.uploadCert(e).then(res=>{
-            console.log(res)
-            user.profileInfo.licenses[tag].uploadingCert = res.loading;              
-            this.props.dispatch(dispatchedUserInfo(user));
-            setTimeout(this.forceUpdate(), 50);
-        }).
-        catch(err=>{
-            console.log(err)
-        });
-    }
-
-    uploadCert = (e)=>{
-        return new Promise((resolve, reject)=>{
-            let userId = (JSON.parse(sessionStorage.getItem('loginSession'))).userId,
-            { user } = this.props,
-            id = e.target.id,
-            tagArr = id.split('_'),
-            tag = tagArr[1],
-            file = e.target.files[0],
-            fname = file.name,
-            fnameArr = fname.split('.'),
-            fnameExt = fnameArr.pop();
-            if(fnameExt === "pdf"){
-                let newCertRef = storageRef.child(`${ userId }/${ tag }.${ fnameExt }`);
-                newCertRef.put(file).then(()=>{
-                    user.profileInfo.licenses[tag].uploadingCert = true;              
-                    this.props.dispatch(dispatchedUserInfo(user));
-                    newCertRef.getDownloadURL().then((url)=>{
-                        if(url){
-                            user.profileInfo.licenses[tag].certURL = url;
-                            this.props.dispatch(dispatchedUserInfo(user));
-                            let licenses = {...user.profileInfo.licenses};
-                            this.upload(licenses).then(res=>{
-                                if(res){
-                                    let obj = {loading: false};
-                                    resolve(obj);
-                                }
-                            });
-                        }
-                    });
-                }, ()=>{
-                    console.log("err")
-                    let avatarProps = {
-                        feedback: 'There was an error!, try again.',
-                    };
-                    user.profileInfo.licenses.feedback = avatarProps.feedback;              
-                    this.props.dispatch(dispatchedUserInfo(user));
-                    reject({message: "There was an error", loading: false});
-                });
-            }else{
-                let avatarProps = {
-                    feedback: `only PDFs are allowed!`,
-                };
-                user.profileInfo.insurancefeedback = avatarProps.feedback;
-                this.props.dispatch(dispatchedUserInfo(user));
-                reject({message: "There was an error", loading: false});
-            }
-        });
-    }
-
-    clickUploadCert = (e)=>{
-        let id = e.target.id,
-        idArr = id.split('-'),
-        desId = idArr[1];
-        if(desId){
-            let uploadB = document.getElementById(desId);
-            uploadB.click();
-        }else
-            console.log('no desId')   
     }
 
     removeSubCategory = (e)=>{
@@ -257,24 +123,25 @@ class EquipmentTab extends React.Component{
     addEquipment = ()=>{
         let selectInfo = {...this.props.secondarySelect},
         userInfo = {...this.props.userInfo},
+        user = {...this.props.user},
         userId = userInfo.id,
         equipment = {...userInfo.equipment},
         equipmentCategory = selectInfo.subEquipmentSelectedCategoriesKey,
         url = baseURL + userUpdateEndPoint,
         equipmentName = selectInfo.subEquipmentSelectedSubCategoriesKey;
         equipment[equipmentCategory][equipmentName] = true;
-        userInfo.addEquipment.submitButton.isActive = false;
-        this.props.dispatch(dispatchedUserInfo(userInfo));
+        user.addEquipment.submitButton.isActive = false;
+        this.props.dispatch(dispatchedUserInfo(user));
         axios.post(url, {userId, sectTitle: "equipment", updateData: equipment}).then(res=>{
             if(res){
-                userInfo.addEquipment.submitButton.isActive = true;
-                this.props.dispatch(dispatchedUserInfo(userInfo));
+                user.addEquipment.submitButton.isActive = true;
+                this.props.dispatch(dispatchedUserInfo(user));
                 this.forceUpdate();
             }   
         }).
         catch(err=>{
-            userInfo.addEquipment.submitButton.isActive = true;
-            this.props.dispatch(dispatchedUserInfo(userInfo));
+            user.addEquipment.submitButton.isActive = true;
+            this.props.dispatch(dispatchedUserInfo(user));
             this.forceUpdate();
             throw err;
         });

@@ -33,25 +33,6 @@ class LicenseTab extends React.Component{
         this.props= {...nextProps};
     }
 
-    componentWillMount(){
-        let emailAddress = (JSON.parse(sessionStorage.getItem('profileInfo'))).emailAddress,
-        userInfoURL = baseURL + userEndPoint + "?emailAddress=" + emailAddress,
-        licenses = (JSON.parse(sessionStorage.getItem('profileInfo'))).licenses;
-        axios.get(userInfoURL).then(res=>{
-            if(res){
-                let newLicense = res.data[0].licenses,
-                userInfo = {...this.props.user};
-                userInfo.profileInfo.licenses = newLicense;
-                if(JSON.stringify(licenses) !== JSON.stringify(newLicense)){
-                    this.props.dispatch(dispatchedUserInfo(newLicense));
-                }
-            }     
-        }).
-        catch(err=>{
-            console.log(err)
-        });
-    }
-
     upload=()=>{
         let sectTitle = "licenses";
         let updateData = {...this.props.licenses};
@@ -77,8 +58,8 @@ class LicenseTab extends React.Component{
             let nameArr = origName.split("-"),
             key = nameArr[0],
             name = nameArr[1],
-            value = e.target.getAttribute('value');
-            value = value?value:e.target.value;
+            value = e.target.value;
+            value = value?value:e.target.getAttribute('value');
             userInfo.profileInfo.licenses[key][name] = value;
             if(userInfo)                     
                 resolve(userInfo);
@@ -205,7 +186,7 @@ class LicenseTab extends React.Component{
                             placeholder="License Type" 
                             root="inner-textfield" 
                             fieldClass="textfield"
-                            onBlur={ this.upload() }
+                            onBlur={ this.upload }
                             onChange = { this.save } 
                         />
                         <Textfield 
@@ -217,7 +198,7 @@ class LicenseTab extends React.Component{
                             placeholder="License Number" 
                             root="inner-textfield" 
                             fieldClass="textfield"
-                            onBlur={ this.upload() }
+                            onBlur={ this.upload }
                             onChange = { this.save } 
                         />
                         <form method="POST" encType="multipart/form-data">
@@ -239,7 +220,7 @@ class LicenseTab extends React.Component{
                             placeholder={ expiryDate }
                             root="inner-textfield" 
                             fieldClass="textfield"
-                            onBlur={ this.upload() }
+                            onBlur={ this.upload }
                             onChange = { this.save } 
                         />
                     </div>
