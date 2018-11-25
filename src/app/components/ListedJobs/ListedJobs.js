@@ -127,6 +127,7 @@ class ListedJobs extends Component {
 
     displayListings = (key)=>{
         let listings = this.props.genInfo.generalListings,
+        filter = (this.props.listingsInfo).filter.categoryTitle,
         profileInfo = sessionStorage.getItem('profileInfo'),
         userType = profileInfo?JSON.parse(sessionStorage.getItem('profileInfo')).userType: null,
         options;
@@ -140,7 +141,17 @@ class ListedJobs extends Component {
                 <div className="twenty">{ listings[key].city }, { listings[key].state }</div>
                 <div className="thirty">{ listings[key].serviceRequired }, { listings[key].equipment }</div>
                 <div className="twenty">{ listings[key].startDate}</div>
-                <div className="twenty"><FmButton variant="contained" styles = { styles } text="Submit Tender" /></div>
+                <div className="twenty">
+                { 
+                    userType !== "Owner/Occupier"
+                    ?<FmButton 
+                        variant="contained" 
+                        styles = { styles } 
+                        text="Submit Tender" 
+                    />
+                    :null
+                }
+                </div>
                 <div className="ten">
                     <MoreHoriz 
                         className={ listings[key].moreMenuClassName } 
@@ -188,7 +199,25 @@ class ListedJobs extends Component {
         messageAttributes = this.props.user.submitMessage,
         errors = messagesInfo.messageForm.errors,
         feedback = messageAttributes.feedback,
-        feedbackClass = messageAttributes.feedbackClass;
+        filter = (this.props.listingsInfo).filter.categoryTitle,
+        keyWords = (this.props.listingsInfo).filter.keyWords || " ",
+        feedbackClass = messageAttributes.feedbackClass,
+        filtered = {};
+        if(listings){
+            Object.keys(listings).map(key=>{
+                keyWords = (keyWords).toLowerCase();
+                let equipment = (listings[key].equipment).toLowerCase(),
+                city = (listings[key].city).toLowerCase(),
+                state = (listings[key].state).toLowerCase();
+                if(listings[key].serviceRequired === filter 
+                    && (equipment.includes(keyWords)
+                        || city.includes(keyWords) 
+                        || state.includes(keyWords) )){
+
+                    filtered[key] = listings[key];
+                }
+            });
+        }
         return(
             <div className="list left hanad">
                 {
@@ -214,7 +243,12 @@ class ListedJobs extends Component {
                     <span className="ten"></span>
                     <div className="bottom-border"></div>
                 </div>
-                { listings?Object.keys(listings).map(this.displayListings):<div className="loader"><Loader /></div> }
+                { 
+                    filter
+                    ?Object.keys(filtered).map(this.displayListings)
+                    :listings?Object.keys(listings).map(this.displayListings)
+                    :<div className="loader"><Loader /></div> 
+                }
             </div>
         )
     }

@@ -58,8 +58,11 @@ class ListedServiceProviders extends Component {
     }
 
     displayServiceProviders = (key)=>{
-        let serviceProviders = this.props.genInfo.info.serviceProviders;
-        let categories = this.props.genInfo.info.serviceProviders[key].categoriesOfService;
+        let serviceProviders = this.props.genInfo.info.serviceProviders,
+        profileInfo = sessionStorage.getItem('profileInfo'),
+        categories = this.props.genInfo.info.serviceProviders[key].categoriesOfService,
+        userType = profileInfo?JSON.parse(sessionStorage.getItem('profileInfo')).userType: null;
+
         return(
             <div className="list-row" key={key} id={ serviceProviders[key].id }>
                 <div className="twenty">{ serviceProviders[key].companyName }</div>
@@ -73,7 +76,12 @@ class ListedServiceProviders extends Component {
                         )
                     }):<div className="tiny-loader"><Loader /></div> }
                 </div>
-                <div className="twenty"><FmButton variant="contained" styles={ styles } text="Invite to Tender" /></div>
+                <div className="twenty">{
+                    userType === "Owner/Occupier" || !userType
+                    ?<FmButton variant="contained" styles={ styles } text="Invite to Tender" />
+                    :null 
+                    }
+                </div>
                 <div className="bottom-border"></div>
             </div>
         )

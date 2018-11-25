@@ -27,17 +27,31 @@ class SecondarySearch extends Component {
     getCategory = (e)=>{
         return new Promise((resolve, reject)=>{
             let id = e.target.id,
+            info = {...this.props.info},
             userInfo = {...this.props.user.info},
             categoryTitle = this.props.categoryTitle,
             searchCategories = this.props.categories,
-            searchInfo = {...this.props.secondarySearch.info};
-            searchInfo[categoryTitle] = searchCategories[id];
-            this.props.dispatch(dispatchedSecondarySearchInfo(searchInfo));
+            searchInfo = info?info:{...this.props.secondarySearch.info},
+            infoLen = Object.keys(info).length;
+            if(infoLen > 0){
+                searchInfo.filter.categoryTitle = searchCategories[id];
+                this.props.dispatch(this.props.dispatcher(searchInfo));
+            }
+            else{
+                searchInfo[categoryTitle] = searchCategories[id];
+                this.props.dispatch(dispatchedSecondarySearchInfo(searchInfo));
+            }
             resolve(userInfo);
         });
     }
     render(){
-        let selected = this.props.secondarySearch.info[this.props.categoryTitle];
+        let info = {...this.props.info},
+        infoLen = Object.keys(info).length,
+        selected;
+        if(infoLen > 0)
+            selected = this.props.info['filter'].categoryTitle;
+        else
+            selected = this.props.secondarySearch.info[this.props.categoryTitle];
         return(
             <div className="search-main">
                 <DropDown
@@ -50,7 +64,7 @@ class SecondarySearch extends Component {
                     selected={ selected } 
                     onChange={ this.getCategory } 
                 />
-                <Textfield id="listingSearch" fieldClass="search-field" placeholder={ this.props.placeholder } type="text" />
+                <Textfield id="listingSearch" save = { this.props.onChange } upload = { ()=>{} } fieldClass="search-field" placeholder={ this.props.placeholder } type="text" />
                 <i className="material-icons search-icon">search</i>        
             </div>
         )
@@ -77,7 +91,8 @@ SecondarySearch.propTypes = {
     categoryTitle: PropTypes.string.isRequired,
     dropDownWidth: PropTypes.string,
     selectWidth: PropTypes.string,
-    init: PropTypes.string
+    init: PropTypes.string,
+    info: PropTypes.object
 }
 
 export default SecondarySearch;

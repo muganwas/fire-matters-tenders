@@ -8,6 +8,7 @@ const defaultState = {
         errors:{},
         show: false
       },
+      filter: {},
       postedTenders: {
         overLay:{
           show: false

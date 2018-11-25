@@ -1,16 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import './listings.css';
-import  { Footer, HeaderMain, SecondarySearch, ListedJobs } from 'components';
-
+import { Footer, HeaderMain, SecondarySearch, ListedJobs } from 'components';
 import { listingCategories } from 'extras/config';
 import { PropTypes } from 'prop-types';
+import { dispatchedListingsInfo } from 'extras/dispatchers';
 
 @connect((store)=>{
     return {
         user: store.user,
         search: store.search,
-        genInfo: store.genInfo
+        genInfo: store.genInfo,
+        listingsInfo: store.listingsInfo.info
     }
 })
 class Listings extends React.Component {
@@ -22,6 +23,13 @@ class Listings extends React.Component {
         this.props = {...nextProps};
     }
 
+    refinedSearch = (e)=>{
+        e.persist();
+        let info = {...this.props.listingsInfo},
+        keyWords = e.target.value;
+        info.filter.keyWords = keyWords;
+        this.props.dispatch(dispatchedListingsInfo(info));
+    }
     
     render(){
         return(
@@ -34,9 +42,12 @@ class Listings extends React.Component {
                         id= "searchListings"
                         init="All" 
                         selectWidth="160px" 
-                        dropDownWidth="170px" 
+                        dropDownWidth="170px"
+                        info = { this.props.listingsInfo }
+                        dispatcher = { dispatchedListingsInfo }
                         categoryTitle="searchCategoryListings" 
-                        categories={ listingCategories } 
+                        categories={ listingCategories }
+                        onChange = { this.refinedSearch }
                         placeholder="Find listings"   
                     />
                     <ListedJobs />
