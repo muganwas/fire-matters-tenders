@@ -69,10 +69,11 @@ class MoreHoriz extends React.Component {
         )
     }
 
-    render(){
+    render(){ 
+        let click = this.props.toggle?()=>this.props.toggle(this.props.id):this.toggleMenu;
         return(
             <div id={ this.props.id }>
-                <div onClick={ this.toggleMenu } className="more">
+                <div  onClick={ click } className="more">
                     <i class="material-icons yellow">more_horiz</i>
                 </div>
                 <div className={ this.props.className }>

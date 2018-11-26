@@ -1,6 +1,11 @@
 const defaultState = {
     info: {
-      tenders: null
+      tenders: null,
+      editTenderForm:{
+        show: false,
+        feedback: undefined,
+        feedbackClass: "hidden"
+      }
      },
     fetching: false,
     fetched: false,

@@ -6,7 +6,7 @@ import { dispatchedGenInfo, dispatchedListingsInfo, dispatchedUserInfo, dispatch
 import './listedPostedTenders.css';
 import { PropTypes } from 'prop-types';
 import { TenderForm, MessageForm } from 'forms';
-import { listedPostedTendersOptions } from 'extras/config';
+import { listedPostedTendersOptions, tenderOptions } from 'extras/config';
 import { styles, submit_styles } from './styles';
 
 const baseURL = process.env.BACK_END_URL,
@@ -142,6 +142,23 @@ class ListedPostedTenders extends Component {
                 this.props.dispatch(dispatchedTendersInfo(tendersInfo));
                 this.props.dispatch(dispatchedListingsInfo(listingsInfo));
                 this.forceUpdate();
+            }else{
+                let tendererId = JSON.parse(sessionStorage.getItem('profileInfo')).id,
+                genInfo = {...this.props.genInfo.info},
+                tendersInfo = {...this.props.tendersInfo},
+                getInfoUrl = baseURL + tenderEndPoint + "?tendererId=" + tendererId;
+                axios.get(getInfoUrl).then(res=>{
+                    if(res){
+                        tendersInfo.tenders = res.data;
+                        Object.keys(tendersInfo.tenders).map((key)=>{
+                            tendersInfo.tenders[key].moreMenuClassName = "hidden";
+                        });
+                        tendersInfo.tenders = res.data;
+                        genInfo.sideBar.profilePage.listCount['tenders'] = (res.data).length
+                        this.props.dispatch(dispatchedGenInfo(genInfo));
+                        this.props.dispatch(dispatchedTendersInfo(tendersInfo));
+                    }
+                }); 
             }
         }
     }
@@ -156,7 +173,6 @@ class ListedPostedTenders extends Component {
                     axios.get(baseURL + listingsEndPoint).then((response)=>{
                         //console.log(response.data);
                         let listings = genInfo.listings = {...response.data};
-                        genInfo.sideBar.profilePage.listCount['tenders'] = (response.data).length;
                         /**Set the more dropdown menu class to hidden for every row*/
                         Object.keys(listings).map((key)=>{
                             genInfo.listings[key].moreMenuClassName = "hidden";
@@ -302,7 +318,6 @@ class ListedPostedTenders extends Component {
         return new Promise((resolve, reject)=>{
             let userInfo = {...this.props.user.info},
             id = e.target.id,
-            type = e.target.getAttribute('type'),
             origName = e.target.getAttribute("category");
             origName = origName?origName:id;
             let nameArr = origName.split("-"),
@@ -326,6 +341,52 @@ class ListedPostedTenders extends Component {
         listingsInfo.postedTenders.overLay.show = !show;
         listingsInfo.postedTenders.overLay.active = tenderId;
         this.props.dispatch(dispatchedListingsInfo(listingsInfo));
+    }
+
+    toggleMoreMenu = (id)=>{
+        let listingsInfo = {...this.props.tendersInfo},
+        tenders = {...listingsInfo.tenders},
+        ddClass = tenders[id].moreMenuClassName;
+        if(ddClass === "hidden")
+            listingsInfo.tenders[id].moreMenuClassName = "dropDownMenu";
+        else
+            listingsInfo.tenders[id].moreMenuClassName = "hidden";  
+        this.props.dispatch(dispatchedTendersInfo(listingsInfo));
+    }
+
+    renderTenders = (key)=>{
+        let listingsInfo = {...this.props.tendersInfo},
+        listings = {...listingsInfo.tenders},
+        //showTenderForm = listingsInfo.editTenderForm.show,
+        //feedback = listingsInfo.editTenderForm.feedback,
+        options = tenderOptions;
+        //feedbackClass = listingsInfo.editTenderForm.feedbackClass;
+        //currListingTenderCount = 0;
+            
+        return(
+            <div className="list-row" key={key}>
+                { /*showPostedTendersOverlay
+                ?<PostedTendersOverlay toggleDisplay={ this.displayTenders } listingId = { listingId } />
+                : null */}
+                <div className="twenty">{ listings[key].companyName }</div>
+                <div className="thirty">{ listings[key].coverLetter }</div>
+                <div className="twenty">{ listings[key].startDate }</div>
+                <div className="twenty">{ listings[key].rate }</div>
+                <div className="ten">
+                    <MoreHoriz 
+                        className={ listings[key].moreMenuClassName } 
+                        id={ key }
+                        toggle = { this.toggleMoreMenu }
+                        autoid = { listings[key].id }
+                        listName = "tenders"
+                        element={ listings[key] }
+                        options={ options }
+                     />
+                </div>
+                <div className="bottom-border"></div>
+            </div>
+        )
+
     }
 
     displayListings = (key)=>{
@@ -357,21 +418,28 @@ class ListedPostedTenders extends Component {
             
         return(
             <div className="list-row" key={key}>
-                {showTenderForm
-                ?<TenderForm
-                    feedback = { feedback }
-                    feedbackClass = { feedbackClass }
-                    errors = { errors }
-                    styles = { submit_styles }
-                    attributes = { tenderAttributes } 
-                    close={ this.renderTenderForm } 
-                    onBlur={ this.dummy } 
-                    upload={ this.upload } 
-                    save={ this.save } 
-                />:null}
-                { showPostedTendersOverlay
-                ?<PostedTendersOverlay toggleDisplay={ this.displayTenders } listingId = { listingId } />
-                : null }
+                {
+                    showTenderForm
+                    ?<TenderForm
+                        feedback = { feedback }
+                        feedbackClass = { feedbackClass }
+                        errors = { errors }
+                        styles = { submit_styles }
+                        attributes = { tenderAttributes } 
+                        close={ this.renderTenderForm } 
+                        onBlur={ this.dummy } 
+                        upload={ this.upload } 
+                        save={ this.save } 
+                    />:null
+                }
+                { 
+                    showPostedTendersOverlay
+                    ?<PostedTendersOverlay 
+                        toggleDisplay={ this.displayTenders } 
+                        listingId = { listingId } 
+                    />
+                    : null 
+                }
                 <div className="twenty">{ listings[key].city }, { listings[key].state }</div>
                 <div className="thirty">{ listings[key].serviceRequired }, { listings[key].equipment }</div>
                 <div className="twenty">{ listings[key].startDate}</div>
@@ -409,6 +477,7 @@ class ListedPostedTenders extends Component {
 
     render(){
         let listings = this.props.genInfo.info.listings,
+        tenders = this.props.tendersInfo.tenders,
         userType = this.props.profileInfo.userType,
         messagesInfo = {...this.props.messagesInfo},
         showMessageForm = messagesInfo.messageForm.show,
@@ -433,15 +502,32 @@ class ListedPostedTenders extends Component {
                     />
                     :null
                 }
-                <div className="list-row header">
-                    <span className="twenty">Location</span>
-                    <span className="thirty">Description</span>
-                    <span className="twenty">Closing Date</span>
-                    <span className="twenty">{ userType === "Owner/Occupier"?"Posted Tenders":null }</span>
-                    <span className="ten"></span>
-                    <div className="bottom-border"></div>
-                </div>
-                { listings?Object.keys(listings).map(this.displayListings):<div className="loader"><Loader /></div> }
+                { 
+                    userType === "Owner/Occupier"
+                    ?<div className="list-row header">
+                        <span className="twenty">Location</span>
+                        <span className="thirty">Description</span>
+                        <span className="twenty">Closing Date</span>
+                        <span className="twenty">{ userType === "Owner/Occupier"?"Posted Tenders":null }</span>
+                        <span className="ten"></span>
+                        <div className="bottom-border"></div>
+                    </div>
+                    :<div className="list-row header">
+                        <span className="twenty">Company Name</span>
+                        <span className="thirty">Cover Letter</span>
+                        <span className="twenty">starting Date</span>
+                        <span className="twenty">Rate</span>
+                        <span className="ten"></span>
+                        <div className="bottom-border"></div>
+                    </div>
+                }
+                { 
+                    userType === "Owner/Occupier" && listings
+                    ?Object.keys(listings).map(this.displayListings)
+                    :userType !== "OwnerOccupier" && tenders
+                    ?Object.keys(tenders).map(this.renderTenders)
+                    :<div className="loader"><Loader /></div>
+                }
             </div>
         )
     }

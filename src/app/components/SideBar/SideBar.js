@@ -3,13 +3,21 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { ProfileImage } from 'components';
-import { dispatchedMessagesInfo, dispatchedGenInfo, dispatchedSubContractorsInfo, dispatchedSitesInfo } from 'extras/dispatchers';
+import { 
+    dispatchedMessagesInfo, 
+    dispatchedGenInfo, 
+    dispatchedListingsInfo, 
+    dispatchedTendersInfo, 
+    dispatchedSubContractorsInfo, 
+    dispatchedSitesInfo 
+} from 'extras/dispatchers';
 import axios from 'axios';
 import './sideBar.css';
 import { ownerOccupierOptions, serviceProviderOptions, menuIconTitles } from 'extras/config';
 
 const baseURL = process.env.BACK_END_URL,
 listingsEndPoint = process.env.LISTING_END_POINT,
+tenderEndPoint = process.env.TENDERS_END_POINT,
 sitesEndPoint = process.env.SITES_END_POINT,
 messagesEndPoint = process.env.MESSAGES_END_POINT,
 subContractorsEndPoint = process.env.SUB_CONTRACTORS_END_POINT;
@@ -21,6 +29,7 @@ subContractorsEndPoint = process.env.SUB_CONTRACTORS_END_POINT;
         genInfo: store.genInfo.info,
         profileInfo: store.user.info.profileInfo,
         siteData: store.user.info.submitSite,
+        listingsInfo: store.listingsInfo.info,
         sitesInfo: store.sites.info,
         messagesInfo: store.messages.info,
         messageData: store.user.info.submitMessage,
@@ -48,6 +57,7 @@ class SideBar extends React.Component {
 
         this.fetchListings().then(res=>{
             if(res){
+                this.fetchTenders();
                 this.fetchSites();
                 this.fetchSubContractors();
             }
@@ -157,6 +167,58 @@ class SideBar extends React.Component {
         });    
     }
 
+    fetchTenders = ()=>{
+        let postInfoUrl = baseURL + tenderEndPoint,
+        genInfo = {...this.props.genInfo },
+        userType = (JSON.parse(sessionStorage.getItem("profileInfo")).userType).toLowerCase(),
+        postedTendersComprehensive = [],
+        postedTenders = [];
+        if(userType){
+            if(userType === "owner/occupier"){
+                let listings = genInfo.listings;
+                axios.get(postInfoUrl).then(res=>{
+                    let tendersArr = res.data,
+                    tendersLen = tendersArr.length;
+                    for(let count = 0;count <tendersLen; count++){
+                        let currObj = tendersArr[count],
+                        listingId = currObj.listingId;
+                        Object.keys(listings).map(key=>{
+                            if(listingId === listings[key].id){
+                                let cO = {tenderId:currObj.id, listingId: listingId};
+                                postedTendersComprehensive.push(currObj);
+                                postedTenders.push(cO);
+                            }
+                        });
+                    }
+                });
+                let listingsInfo = {...this.props.listingsInfo},
+                tendersInfo = {...this.props.tendersInfo};
+                listingsInfo.postedTenders.tenders = postedTenders;
+                tendersInfo.tenders = postedTendersComprehensive;
+                this.props.dispatch(dispatchedTendersInfo(tendersInfo));
+                this.props.dispatch(dispatchedListingsInfo(listingsInfo));
+                this.forceUpdate();
+            }else{
+                let tendererId = JSON.parse(sessionStorage.getItem('profileInfo')).id,
+                genInfo = {...this.props.genInfo},
+                tendersInfo = {...this.props.tendersInfo},
+                getInfoUrl = baseURL + tenderEndPoint + "?tendererId=" + tendererId;
+                axios.get(getInfoUrl).then(res=>{
+                    if(res){
+                        tendersInfo.tenders = res.data;
+                        Object.keys(tendersInfo.tenders).map((key)=>{
+                            tendersInfo.tenders[key].moreMenuClassName = "hidden";
+                        });
+                        tendersInfo.tenders = res.data;
+                        genInfo.sideBar.profilePage.listCount['tenders'] = (res.data).length
+                        this.props.dispatch(dispatchedGenInfo(genInfo));
+                        this.props.dispatch(dispatchedTendersInfo(tendersInfo));
+                    }
+                }); 
+            }
+        }
+    }
+
     fetchListings = ()=>{
         return new Promise(resolve=>{
             let genInfo = {...this.props.genInfo },
@@ -167,7 +229,6 @@ class SideBar extends React.Component {
                     axios.get(baseURL + listingsEndPoint).then((response)=>{
                         //console.log(response.data);
                         let listings = genInfo.listings = {...response.data};
-                        genInfo.sideBar.profilePage.listCount['tenders'] = (response.data).length;
                         /**Set the more dropdown menu class to hidden for every row*/
                         Object.keys(listings).map((key)=>{
                             genInfo.listings[key].moreMenuClassName = "hidden";
@@ -186,7 +247,7 @@ class SideBar extends React.Component {
                         Object.keys(listings).map((key)=>{
                             genInfo.listings[key].moreMenuClassName = "hidden";
                         })
-                        //this.props.dispatch(dispatchedGenInfo(genInfo));
+                        this.props.dispatch(dispatchedGenInfo(genInfo));
                         resolve("fetched");
                     }).catch(err=>{
                         console.log(err);

@@ -8,7 +8,6 @@ const TenderForm = props=>{
     const { 
         feedback,
         feedbackClass,
-        userInfo, 
         styles, 
         close, 
         attributes, 

@@ -163,6 +163,23 @@ class TendersTab extends React.Component {
                 this.props.dispatch(dispatchedTendersInfo(tendersInfo));
                 this.props.dispatch(dispatchedListingsInfo(listingsInfo));
                 this.forceUpdate();
+            }else{
+                let tendererId = JSON.parse(sessionStorage.getItem('profileInfo')).id,
+                genInfo = {...this.props.genInfo},
+                tendersInfo = {...this.props.tendersInfo},
+                getInfoUrl = baseURL + tenderEndPoint + "?tendererId=" + tendererId;
+                axios.get(getInfoUrl).then(res=>{
+                    if(res){
+                        tendersInfo.tenders = res.data;
+                        Object.keys(tendersInfo.tenders).map((key)=>{
+                            tendersInfo.tenders[key].moreMenuClassName = "hidden";
+                        });
+                        tendersInfo.tenders = res.data;
+                        genInfo.sideBar.profilePage.listCount['tenders'] = (res.data).length
+                        this.props.dispatch(dispatchedGenInfo(genInfo));
+                        this.props.dispatch(dispatchedTendersInfo(tendersInfo));
+                    }
+                }); 
             }
         }
     }
@@ -177,7 +194,6 @@ class TendersTab extends React.Component {
                     axios.get(baseURL + listingsEndPoint).then((response)=>{
                         //console.log(response.data);
                         let listings = genInfo.listings = {...response.data};
-                        genInfo.sideBar.profilePage.listCount['tenders'] = (response.data).length;
                         /**Set the more dropdown menu class to hidden for every row*/
                         Object.keys(listings).map((key)=>{
                             genInfo.listings[key].moreMenuClassName = "hidden";
@@ -364,7 +380,7 @@ class TendersTab extends React.Component {
                 />
                 :null}
                 <div className="title-bar">
-                    <span id="title">Listings</span>
+                    <span id="title">Tenders</span>
                     {userType === "Owner/Occupier"?<span id="search">
                         <FmButton variant="contained" styles={ alt_styles } text="Rehire service provider" />
                         <FmButton variant="contained" onClick={ this.renderListingForm } styles={ styles } text="Post New Tender" />
