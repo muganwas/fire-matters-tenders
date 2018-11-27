@@ -40,7 +40,7 @@ class Listings extends React.Component {
                 <div className="mid listings">
                     <SecondarySearch
                         id= "searchListings"
-                        init="All" 
+                        init="All Categories" 
                         selectWidth="160px" 
                         dropDownWidth="170px"
                         info = { this.props.listingsInfo }

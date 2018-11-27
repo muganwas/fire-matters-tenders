@@ -91,23 +91,67 @@ class ListedServiceProviders extends Component {
     render(){
         let serviceProviders = this.props.genInfo.info.serviceProviders,
         filter = this.props.serviceProvidersInfo.filter.categoryTitle,
-        keyWords = this.props.serviceProvidersInfo.filter.keyWords || " ",
-        filtered = {};
+        serviceProviderInfo = this.props.serviceProvidersInfo,
+        secondaryFilters = serviceProviderInfo?serviceProviderInfo.signupInfo:{},
+        secondaryFilterLenArr = [],
+        keyWords = this.props.serviceProvidersInfo.filter.keyWords || "",
+        keyWordsLen = keyWords.length,
+        filtered = {},
+        filteredNext = {},
+        filteredNextNext = {};
+
+        Object.keys(secondaryFilters).map(key=>{
+            if(secondaryFilters[key] === true)
+                secondaryFilterLenArr.push(key);  
+        });
+        
+        let secondaryFilterLen = secondaryFilterLenArr.length;
         if(serviceProviders){
             Object.keys(serviceProviders).map(key=>{
-                keyWords = (keyWords).toLowerCase();
-                let companyName = (serviceProviders[key].companyName).toLowerCase(),
-                fullName = (serviceProviders[key].fullName).toLowerCase(),
-                state = (serviceProviders[key].state).toLowerCase();
-                if(serviceProviders[key].state === filter 
-                    && (companyName.includes(keyWords)
-                        || fullName.includes(keyWords) 
-                        || state.includes(keyWords) )){
-
+                if(
+                    serviceProviders[key].state === filter                  
+                ){
                     filtered[key] = serviceProviders[key];
                 }
             });
+            keyWords = (keyWords).toLowerCase();
+            let filteredLen = Object.keys(filtered).length;
+            filtered = filteredLen > 0?filtered:serviceProviders;
+            Object.keys(filtered).map(key=>{
+                let companyName = (serviceProviders[key].companyName).toLowerCase(),
+                fullName = (serviceProviders[key].fullName).toLowerCase(),
+                city = (serviceProviders[key].city).toLowerCase();
+                if(
+                    companyName.includes(keyWords)
+                    || fullName.includes(keyWords) 
+                    || city.includes(keyWords) 
+                ){
+                    filteredNext[key] = filtered[key];
+                }
+            });
+            filteredNext = keyWordsLen > 0?filteredNext:filtered;
+            if(secondaryFilterLen > 0){
+                Object.keys(secondaryFilters).map(key=>{
+                    let currFilter = key,
+                    currFilterVal = secondaryFilters[key];
+                    Object.keys(filteredNext).map(key1=>{
+                        let currSP = filteredNext[key1],
+                        categoriesOfService = currSP.categoriesOfService,
+                        categoriesOfServiceLen = Object.keys(categoriesOfService).length;
+                        if(categoriesOfServiceLen > 0){
+                            Object.keys(categoriesOfService).map(key2=>{
+                                let currCategory = key2;
+                                if(currCategory === currFilter && currFilterVal){
+                                    filteredNextNext[key1] = currSP;
+                                }
+                            })
+                        }
+                    });             
+                });
+            }
+            filteredNextNext = secondaryFilterLen >0?filteredNextNext:filteredNext;
         }
+
         return(
             <div className="list left seventy5">
                 <div className="list-row header">
@@ -118,8 +162,8 @@ class ListedServiceProviders extends Component {
                     <div className="bottom-border"></div>
                 </div>
                 { 
-                    filter
-                    ?Object.keys(filtered).map(this.displayServiceProviders)
+                    filter || keyWordsLen > 0 || secondaryFilterLen > 0
+                    ?Object.keys(filteredNextNext).map(this.displayServiceProviders)
                     :serviceProviders
                     ?Object.keys(serviceProviders).map(this.displayServiceProviders)
                     :<div className="loader">

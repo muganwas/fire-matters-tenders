@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { dispatchedGenInfo } from 'extras/dispatchers';
 import './listFilter.css';
 import { PropTypes } from 'prop-types';
 import { TickBox } from 'components';
@@ -9,7 +8,8 @@ import { TickBox } from 'components';
     return {
         user: store.user,
         search: store.search,
-        genInfo: store.genInfo
+        genInfo: store.genInfo,
+        serviceProvidersInfo: store.serviceProviders.info
     }
 })
 class ListFilter extends Component {
@@ -22,19 +22,19 @@ class ListFilter extends Component {
             <div className="list-filter right quarter">
                 <div className="header">{ this.props.title }</div>
                 <span className="row">
-                    <TickBox id = "maintenance" dispatcher = { dispatchedGenInfo } placement = { this.props.genInfo.info } />
+                    <TickBox id = "maintenance" dispatcher = { this.props.tickDispatcher } placement = { this.props.listPlacement } />
                     <span className="list-text">Maintenance</span>
                 </span>
                 <span className="row">
-                    <TickBox id = "repair" dispatcher = { dispatchedGenInfo } placement = { this.props.genInfo.info } />
+                    <TickBox id = "repair" dispatcher = { this.props.tickDispatcher } placement = { this.props.listPlacement } />
                     <span className="list-text">Repair</span>
                 </span>
                 <span className="row">
-                    <TickBox id = "evacTraining" dispatcher = { dispatchedGenInfo } placement = { this.props.genInfo.info } />
+                    <TickBox id = "evacTraining" dispatcher = { this.props.tickDispatcher} placement = { this.props.listPlacement } />
                     <span className="list-text">Evac Training</span>
                 </span>
                 <span className="row">
-                    <TickBox id = "other" dispatcher = { dispatchedGenInfo } placement = { this.props.genInfo.info } />
+                    <TickBox id = "other" dispatcher = { this.props.tickDispatcher } placement = { this.props.listPlacement } />
                     <span className="list-text">Other</span>
                 </span>
                 

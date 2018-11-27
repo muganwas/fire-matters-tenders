@@ -51,7 +51,7 @@ class TickBox extends React.Component {
                 color = "default"
                 className={classes.tick}
                 checked={ this.props.value || this.state.checked}
-                onChange={this.handleChange}
+                onChange={ this.handleChange}
                 value={(this.state.checked).toString()}
             >
             </Checkbox>

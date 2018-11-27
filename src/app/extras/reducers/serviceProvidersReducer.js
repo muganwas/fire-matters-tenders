@@ -1,7 +1,8 @@
 const defaultState = {
     info: {
-      filter: {},
-      serviceProviders: {}
+        signupInfo:{},
+        filter: {},
+        serviceProviders: {}
      },
     fetching: false,
     fetched: false,

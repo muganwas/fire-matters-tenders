@@ -8,7 +8,7 @@ import  { Footer, HeaderMain, SecondarySearch, ListedServiceProviders, ListFilte
 
 import { statesAustralia } from 'extras/config';
 import { PropTypes } from 'prop-types';
-import { dispatchedGenInfo, dispatchedServiceProvidersInfo } from 'extras/dispatchers';
+import { dispatchedServiceProvidersInfo } from 'extras/dispatchers';
 
 @connect((store)=>{
     return {
@@ -43,7 +43,7 @@ class ServiceProviders extends React.Component {
                 </div>
                 <div className="mid listings">
                     <SecondarySearch 
-                        init="All" 
+                        init="All States" 
                         selectWidth="200px" 
                         dropDownWidth="230px"
                         info = { this.props.serviceProvidersInfo }
@@ -51,11 +51,12 @@ class ServiceProviders extends React.Component {
                         categoryTitle="searchCategoryServiceProviders" 
                         categories={ statesAustralia }
                         onChange = { this.refinedSearch }
-                        placeholder="Find service providers" 
+                        placeholder="Find by Name or City" 
                     />
                     <ListedServiceProviders />
-                    <ListFilter 
-                        tickDispatcher={ dispatchedGenInfo } 
+                    <ListFilter
+                        tickDispatcher={ dispatchedServiceProvidersInfo }
+                        listPlacement = { this.props.serviceProvidersInfo }
                         title="Categories Filter" 
                     />
                     <div className="clear"></div>
