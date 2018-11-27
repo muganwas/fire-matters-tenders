@@ -30,7 +30,8 @@ const styles = {
     return {
         user: store.user,
         search: store.search,
-        genInfo: store.genInfo
+        genInfo: store.genInfo,
+        serviceProvidersInfo: store.serviceProviders.info
     }
 })
 class ListedServiceProviders extends Component {
@@ -88,7 +89,25 @@ class ListedServiceProviders extends Component {
     }
 
     render(){
-        let serviceProviders = this.props.genInfo.info.serviceProviders;
+        let serviceProviders = this.props.genInfo.info.serviceProviders,
+        filter = this.props.serviceProvidersInfo.filter.categoryTitle,
+        keyWords = this.props.serviceProvidersInfo.filter.keyWords || " ",
+        filtered = {};
+        if(serviceProviders){
+            Object.keys(serviceProviders).map(key=>{
+                keyWords = (keyWords).toLowerCase();
+                let companyName = (serviceProviders[key].companyName).toLowerCase(),
+                fullName = (serviceProviders[key].fullName).toLowerCase(),
+                state = (serviceProviders[key].state).toLowerCase();
+                if(serviceProviders[key].state === filter 
+                    && (companyName.includes(keyWords)
+                        || fullName.includes(keyWords) 
+                        || state.includes(keyWords) )){
+
+                    filtered[key] = serviceProviders[key];
+                }
+            });
+        }
         return(
             <div className="list left seventy5">
                 <div className="list-row header">
@@ -98,7 +117,15 @@ class ListedServiceProviders extends Component {
                     <span className="twenty"></span>
                     <div className="bottom-border"></div>
                 </div>
-                { serviceProviders?Object.keys(serviceProviders).map(this.displayServiceProviders):<div className="loader"><Loader /></div> }
+                { 
+                    filter
+                    ?Object.keys(filtered).map(this.displayServiceProviders)
+                    :serviceProviders
+                    ?Object.keys(serviceProviders).map(this.displayServiceProviders)
+                    :<div className="loader">
+                        <Loader />
+                    </div> 
+                }
             </div>
         )
     }

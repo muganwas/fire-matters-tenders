@@ -127,7 +127,6 @@ class ListedJobs extends Component {
 
     displayListings = (key)=>{
         let listings = this.props.genInfo.generalListings,
-        filter = (this.props.listingsInfo).filter.categoryTitle,
         profileInfo = sessionStorage.getItem('profileInfo'),
         userType = profileInfo?JSON.parse(sessionStorage.getItem('profileInfo')).userType: null,
         options;
@@ -246,7 +245,8 @@ class ListedJobs extends Component {
                 { 
                     filter
                     ?Object.keys(filtered).map(this.displayListings)
-                    :listings?Object.keys(listings).map(this.displayListings)
+                    :listings
+                    ?Object.keys(listings).map(this.displayListings)
                     :<div className="loader"><Loader /></div> 
                 }
             </div>

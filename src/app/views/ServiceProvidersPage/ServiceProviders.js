@@ -8,13 +8,14 @@ import  { Footer, HeaderMain, SecondarySearch, ListedServiceProviders, ListFilte
 
 import { statesAustralia } from 'extras/config';
 import { PropTypes } from 'prop-types';
-import { dispatchedGenInfo } from 'extras/dispatchers';
+import { dispatchedGenInfo, dispatchedServiceProvidersInfo } from 'extras/dispatchers';
 
 @connect((store)=>{
     return {
         user: store.user,
         search: store.search,
-        genInfo: store.genInfo
+        genInfo: store.genInfo,
+        serviceProvidersInfo: store.serviceProviders.info
     }
 })
 class ServiceProviders extends React.Component {
@@ -26,6 +27,14 @@ class ServiceProviders extends React.Component {
         this.props = {...nextProps};
     }
 
+    refinedSearch = (e)=>{
+        e.persist();
+        let info = {...this.props.serviceProvidersInfo},
+        keyWords = e.target.value;
+        info.filter.keyWords = keyWords;
+        this.props.dispatch(dispatchedServiceProvidersInfo(info));
+    }
+
     render(){
         return(
             <div className="main">
@@ -33,9 +42,22 @@ class ServiceProviders extends React.Component {
                     <HeaderMain />
                 </div>
                 <div className="mid listings">
-                    <SecondarySearch init="All" selectWidth="200px" dropDownWidth="230px" categoryTitle="searchCategoryServiceProviders" categories={ statesAustralia } placeholder="Find service providers" />
+                    <SecondarySearch 
+                        init="All" 
+                        selectWidth="200px" 
+                        dropDownWidth="230px"
+                        info = { this.props.serviceProvidersInfo }
+                        dispatcher = { dispatchedServiceProvidersInfo }
+                        categoryTitle="searchCategoryServiceProviders" 
+                        categories={ statesAustralia }
+                        onChange = { this.refinedSearch }
+                        placeholder="Find service providers" 
+                    />
                     <ListedServiceProviders />
-                    <ListFilter tickDispatcher={ dispatchedGenInfo } title="Categories Filter" />
+                    <ListFilter 
+                        tickDispatcher={ dispatchedGenInfo } 
+                        title="Categories Filter" 
+                    />
                     <div className="clear"></div>
                 </div>
                 <div className="bottom">

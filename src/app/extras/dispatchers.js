@@ -122,6 +122,22 @@ export function dispatchedListingsInfo(info) {
     }
 }
 
+export function dispatchedServiceProvidersInfo(info) {
+    if(info !== undefined && info !== null){   
+      return {
+            type: "FETCH_SERVICE_PROVIDERS_FULFILLED",
+            payload: { info }
+        }
+    }else{
+        return {
+            type: "FETCH_SERVICE_PROVIDERS_REJECTED",
+            payload: {
+                error: "could not fetch service providers details"
+            }
+        } 
+    }
+}
+
 export function dispatchedTendersInfo(info) {
     if(info !== undefined && info !== null){   
       return {
