@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import  { Loader, MoreHoriz } from 'components';
 import axios from 'axios';
-import { dispatchedListingsInfo, dispatchedUserInfo } from 'extras/dispatchers';
+import { dispatchedListingsInfo, dispatchedUserInfo, dispatchedSitesInfo } from 'extras/dispatchers';
+import { ListedPostedSiteDetails } from 'components';
 import './listedPostedSites.css';
 import { PropTypes } from 'prop-types';
 import { listedPostedSitesOptions } from 'extras/config';
@@ -31,14 +32,6 @@ class ListedPostedTenders extends Component {
         this.props = {...nextProps};
     }
 
-    componentWillMount(){
-        /*this.fetchListings().then(res=>{
-            if(res === "fetched"){
-                this.fetchTenders();
-            }
-        });*/
-    }
-
     postListingId = (id)=>{
         return new Promise(resolve=>{
             let userInfo = {...this.props.user.info};
@@ -60,6 +53,20 @@ class ListedPostedTenders extends Component {
             else
                 console.log('There was a troblem posting listing id');
         })  
+    }
+
+    renderSiteDetails = (e) =>{
+        e.persist();
+        let sitesInfo = this.props.sitesInfo,
+        id = e.target.id;
+        sitesInfo.detailsView.show = !sitesInfo.detailsView.show;
+        
+        if(id !== "close"){
+            let currSite = sitesInfo.sites[id];
+            sitesInfo.activeSite = currSite;
+        }
+        this.props.dispatch(dispatchedSitesInfo(sitesInfo));
+        this.forceUpdate();
     }
 
     dummy= ()=>{
@@ -160,9 +167,25 @@ class ListedPostedTenders extends Component {
 
     displaySites = (key)=>{
         let sites = {...this.props.sitesInfo.sites},
+        sitesInfo = this.props.sitesInfo,
+        showDetailsView = sitesInfo.detailsView.show,
         options = listedPostedSitesOptions;
         return(
             <div className="list-row" key={key}>
+                {showDetailsView
+                    ?<div className="subcontractors-container">
+                        <span 
+                            className="close right" 
+                            onClick={ this.renderSiteDetails } 
+                            id="close"
+                        >
+                            &#x2716;
+                        </span>
+                        <ListedPostedSiteDetails />
+                    </div>
+                    :null
+                }
+
                 <div className="twenty">{ sites[key].siteName }</div>
                 <div className="thirty">{ sites[key].siteLocation }</div>
                 <div className="twenty">{ sites[key].currentContractor }</div>
@@ -170,7 +193,8 @@ class ListedPostedTenders extends Component {
                 <div className="ten">
                     <MoreHoriz 
                         className={ sites[key].moreMenuClassName } 
-                        id={ key } 
+                        id={ key }
+                        onClickAlt = { this.renderSiteDetails }
                         listName = "sites" 
                         element={ sites[key] }
                         options={ options }

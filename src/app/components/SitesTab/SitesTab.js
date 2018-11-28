@@ -43,10 +43,6 @@ class SitesTab extends React.Component {
         this.props = {...nextProps};
     }
 
-    searchListings = ()=>{
-
-    }
-
     fetchSites = ()=>{
         return new Promise(resolve=>{
             let sitesInfo = {...this.props.sitesInfo },
@@ -118,7 +114,6 @@ class SitesTab extends React.Component {
             siteContractStatus
         };
         this.checkForErrors().then(res=>{
-            console.log(res)
             if(res === 0){
                 userInfo.submitSite.submitButton.isActive = false;
                 this.props.dispatch(dispatchedUserInfo(userInfo));
@@ -180,6 +175,7 @@ class SitesTab extends React.Component {
         feedbackClass = listingAttributes.feedbackClass;
         return(
             <div className="tenders main-content">
+
                 {showListingsForm
                 ?<SitesForm
                     feedback = { feedback }

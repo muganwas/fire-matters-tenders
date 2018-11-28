@@ -152,7 +152,7 @@ class ListedPostedMessages extends Component {
         let recievedMessages = {...this.props.messagesInfo.recievedMessages},
         listingId = recievedMessages[key].listingId,
         sender = recievedMessages[key].sender,
-        options = {0: "Delete", sendMessage: "Reply"};
+        options = {delete: "Delete", sendMessage: "Reply"};
         return(
             <div className="list-row" key={key}>
                 <div className="thirty">{ recievedMessages[key].sender }</div>
@@ -179,7 +179,7 @@ class ListedPostedMessages extends Component {
         let sentMessages = {...this.props.messagesInfo.sentMessages},
         listingId = sentMessages[key].listingId,
         sender = sentMessages[key].sender,
-        options = {0: "Delete", sendMessage: "Send Message"};
+        options = {delete: "Delete", sendMessage: "Send Message"};
         return(
             <div className="list-row" key={key}>
                 <div className="thirty">{ sentMessages[key].recipient }</div>

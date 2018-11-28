@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
 
 export const listingCategories = {
-    all: "All",
+    all: "All Categories",
     maintenance: "Maintenance",
     repair: "Repair",
     evacTraining: "Evacuation Training",
@@ -45,11 +45,11 @@ export const ownerOccupierOptions = {
 }
 
 export const tenderOptions = {
-    1:"View More..."
+    more:"View More..."
 }
 
-export const listedPostedTendersOptions = { 1: "View More..." }
-export const listedPostedSitesOptions = { 1: "View More..." }
+export const listedPostedTendersOptions = { more: "View More..." }
+export const listedPostedSitesOptions = { delete: "Delete", more: "View More..." }
 
 export const serviceProviderOptions = {
     Profile: "Profile",

@@ -192,7 +192,6 @@ class SubContractorTab extends React.Component {
         showDetailsView = subContractorsInfo.detailsView.show;
         return(
             <div className="tenders main-content">
-                
                 {showDetailsView
                     ?<div className="subcontractors-container">
                         <span 

@@ -1,6 +1,10 @@
 const defaultState = {
     info: {
-      sites:{}
+      sites:{},
+      activeSite: {},
+      detailsView: {
+        show: false
+      },
      },
     fetching: false,
     fetched: false,
