@@ -22,19 +22,19 @@ class ListFilter extends Component {
             <div className="list-filter right quarter">
                 <div className="header">{ this.props.title }</div>
                 <span className="row">
-                    <TickBox id = "maintenance" dispatcher = { this.props.tickDispatcher } placement = { this.props.listPlacement } />
+                    <TickBox id = "Maintenance" dispatcher = { this.props.tickDispatcher } placement = { this.props.listPlacement } />
                     <span className="list-text">Maintenance</span>
                 </span>
                 <span className="row">
-                    <TickBox id = "repair" dispatcher = { this.props.tickDispatcher } placement = { this.props.listPlacement } />
+                    <TickBox id = "Repair" dispatcher = { this.props.tickDispatcher } placement = { this.props.listPlacement } />
                     <span className="list-text">Repair</span>
                 </span>
                 <span className="row">
-                    <TickBox id = "evacTraining" dispatcher = { this.props.tickDispatcher} placement = { this.props.listPlacement } />
+                    <TickBox id = "EvacTraining" dispatcher = { this.props.tickDispatcher} placement = { this.props.listPlacement } />
                     <span className="list-text">Evac Training</span>
                 </span>
                 <span className="row">
-                    <TickBox id = "other" dispatcher = { this.props.tickDispatcher } placement = { this.props.listPlacement } />
+                    <TickBox id = "Other" dispatcher = { this.props.tickDispatcher } placement = { this.props.listPlacement } />
                     <span className="list-text">Other</span>
                 </span>
                 

@@ -43,3 +43,5 @@ export { default as ListedPostedMessages } from 'components/ListedPostedMessages
 export { default as SubContractorTab } from 'components/SubContractorTab/SubContractorTab';
 export { default as SubContractorDetailsView } from 'components/SubContractorDetailsView/SubContractorDetailsView';
 export { default as SecondarySelect } from 'components/SecondarySelect/SecondarySelect';
+export { default as ProfileInfo } from 'components/ProfileInfo/ProfileInfo';
+export { default as PublicProfileImage } from 'components/PublicProfileImage/PublicProfileImage';

@@ -45,7 +45,7 @@ class SideBar extends React.Component {
     componentWillMount(){
         let userType = (JSON.parse(sessionStorage.getItem('loginSession'))).userType,
         genInfo = {...this.props.genInfo};
-        if(userType === "Owner/Occupier" || userType === "owner-occupier" || userType === "owner_occupier"){
+        if(userType === "owner_occupier" || userType === "owner-occupier" || userType === "owner_occupier"){
             genInfo.defaultProps.sideBarOptions = ownerOccupierOptions;
             genInfo.defaultProps.leftMenuClass = "left-menu oo";
             genInfo.defaultProps.sideBarClass = "side-bar oo";
@@ -147,7 +147,7 @@ class SideBar extends React.Component {
             userEmail = (JSON.parse(sessionStorage.getItem("profileInfo"))).emailAddress,
             url = baseURL + sitesEndPoint + "?emailAddress=" + userEmail;
             if(userType){
-                if(userType === "Owner/Occupier"){
+                if(userType === "owner_occupier"){
                     axios.get(url).then((response)=>{
                         //console.log(response.data);
                         let sites = sitesInfo.sites = genInfo.sites = {...response.data};
@@ -174,7 +174,7 @@ class SideBar extends React.Component {
         postedTendersComprehensive = [],
         postedTenders = [];
         if(userType){
-            if(userType === "owner/occupier"){
+            if(userType === "owner_occupier"){
                 let listings = genInfo.listings;
                 axios.get(postInfoUrl).then(res=>{
                     let tendersArr = res.data,
@@ -225,7 +225,7 @@ class SideBar extends React.Component {
             userType = (JSON.parse(sessionStorage.getItem('loginSession')).userType).toLowerCase(),
             userEmail = JSON.parse(sessionStorage.getItem('loginSession')).emailAddress;
             if(userType){
-                if(userType !== "owner/occupier"){
+                if(userType !== "owner_occupier"){
                     axios.get(baseURL + listingsEndPoint).then((response)=>{
                         //console.log(response.data);
                         let listings = genInfo.listings = {...response.data};

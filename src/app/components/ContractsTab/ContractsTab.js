@@ -110,7 +110,7 @@ class ContractsTab extends React.Component {
             userType = (this.props.profileInfo.userType).toLowerCase(),
             userEmail = this.props.profileInfo.emailAddress;
             if(userType){
-                if(userType !== "owner/occupier"){
+                if(userType !== "owner_occupier"){
                     axios.get(baseURL + listingsEndPoint).then((response)=>{
                         //console.log(response.data);
                         let listings = genInfo.listings = {...response.data};

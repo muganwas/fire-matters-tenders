@@ -99,7 +99,7 @@
     display: block;
     padding: 10px 2px;
     text-decoration: none;
-    color: rgb(255, 255, 255);
+    color: #ffffff;
   }
   .Mobile-Menu a:hover, .signup-login a:hover{
     color: #ED2431;

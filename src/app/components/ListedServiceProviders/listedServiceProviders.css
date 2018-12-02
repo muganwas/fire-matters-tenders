@@ -50,6 +50,11 @@
     height: 50px;
     padding: 0;
 }
+.clickable {
+    font-weight: bold;
+    color: #878686;
+    cursor: pointer;
+}
 .tinyLoader svg {
     width: 10px;
     height: 10px;

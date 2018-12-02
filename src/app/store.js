@@ -15,6 +15,7 @@ import sitesReducer from './extras/reducers/sitesReducer';
 import messagesReducer from './extras/reducers/messagesReducer';
 import subContractorsReducer from './extras/reducers/subContractorsReducer';
 import serviceProvidersReducer from './extras/reducers/serviceProvidersReducer';
+import profileReducer from './extras/reducers/profileReducer';
 
 
 const middleware = applyMiddleware(promise(), thunk, logger);
@@ -31,7 +32,8 @@ const allReducers = combineReducers({
     messages: messagesReducer,
     subContractors: subContractorsReducer,
     secondarySelect: secondarySelectReducer,
-    serviceProviders: serviceProvidersReducer
+    serviceProviders: serviceProvidersReducer,
+    profile: profileReducer
 })
 const store = createStore(
     allReducers, 

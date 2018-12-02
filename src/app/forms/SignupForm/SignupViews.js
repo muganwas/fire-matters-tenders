@@ -27,7 +27,7 @@ export const PreSignup = props=>{
     return(
         <div className="pre-signup">
             <div id="service_provider" onClick = { nextView } className="service-provider">I'm a Service Provider</div>
-            <div id="owner_occupier" onClick = { nextView } className="owner-occupier">I'm an Owner/Occupier</div>
+            <div id="owner_occupier" onClick = { nextView } className="owner-occupier">I'm an owner_occupier</div>
         </div>
     )
 }

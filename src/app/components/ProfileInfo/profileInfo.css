@@ -1,0 +1,30 @@
+.personalInfo {
+    background-color: #e1e1e1;
+    width: 60%;
+    padding: 20px 40px;
+    margin: 20px 0 0 90px;
+    border-radius: 5px 5px 0 0;
+}
+.profileInfo{
+    background-color: #e1e1e1;
+    width: 60%;
+    padding: 20px 40px;
+    margin: 20px 0 0 90px;
+}
+.profileInfo h3{
+    font-weight: lighter;
+}
+#user-category{
+    color: #F79A50;
+    font-weight: bold;
+}
+#location-profile{
+    color: #ED2431;
+    font-size: 17px;
+    padding: 0;
+    margin: 0;
+}
+.info{
+    float: left;
+    padding: 25px 10px;
+}

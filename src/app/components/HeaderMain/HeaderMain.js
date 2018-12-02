@@ -123,7 +123,7 @@ class HeaderMain extends Component {
                 <i class="material-icons menu-icon" onClick={ this.toggleMenu }>menu</i>
                 <div className={ this.props.genInfo['info']['menu'] }>
                     <NavLink activeClassName="active" id="home" onClick={ this.toggleMenu } to={ home }>Home</NavLink>
-                    { userType !== "Owner/Occupier" || userType === null
+                    { userType !== "owner_occupier" || userType === null
                     ?<NavLink activeClassName="active" id="listings" onClick={ this.toggleMenu } to={`/listings`}>Listings</NavLink>
                     :null }
                     <NavLink activeClassName="active" id="service-providers" onClick={ this.toggleMenu } to={`/service-providers`}>Service Providers</NavLink>

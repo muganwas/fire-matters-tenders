@@ -97,7 +97,7 @@ class ListedContracts extends Component {
         postedTendersComprehensive = [],
         postedTenders = [];
         if(userType){
-            if(userType === "owner/occupier"){
+            if(userType === "owner_occupier"){
                 let listings = genInfo.listings;
                 axios.get(postInfoUrl).then(res=>{
                     let tendersArr = res.data,
@@ -131,7 +131,7 @@ class ListedContracts extends Component {
             userType = (this.props.profileInfo.userType).toLowerCase(),
             userEmail = this.props.profileInfo.emailAddress;
             if(userType){
-                if(userType !== "owner/occupier"){
+                if(userType !== "owner_occupier"){
                     axios.get(baseURL + listingsEndPoint).then((response)=>{
                         //console.log(response.data);
                         let listings = genInfo.listings = {...response.data};
@@ -330,7 +330,7 @@ class ListedContracts extends Component {
                 <div className="twenty">{ listings[key].startDate}</div>
                 <div className="twenty">
                 { 
-                    userType !== "Owner/Occupier"
+                    userType !== "owner_occupier"
                     ?<FmButton 
                         id={ listings[key].id } 
                         onClick={ this.renderTenderForm } 
@@ -364,7 +364,7 @@ class ListedContracts extends Component {
             <div className="list left hanad">
                 <div className="list-row header">
                     <span className="twenty">Contract Title</span>
-                    <span className="thirty">{ userType === "Owner/Occupier"?"Contractor":"Company Name" }</span>
+                    <span className="thirty">{ userType === "owner_occupier"?"Contractor":"Company Name" }</span>
                     <span className="twenty">Closing Date</span>
                     <span className="twenty">Contract Status</span>
                     <span className="ten"></span>

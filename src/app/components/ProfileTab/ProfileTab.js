@@ -25,7 +25,7 @@ class ProfileTab extends React.Component {
         //set initial attributes
         let userType = JSON.parse(sessionStorage.getItem('profileInfo')).userType,
         genInfo = {...this.props.genInfo};
-        if(userType === "Owner/Occupier" || userType === "owner-occupier" || userType === "owner_occupier")
+        if(userType === "owner_occupier" || userType === "owner-occupier" || userType === "owner_occupier")
             genInfo.sideBar.profilePage.tabs = ownerOccupierProfileTabs;
         else
             genInfo.sideBar.profilePage.tabs = serviceProviderProfileTabs;

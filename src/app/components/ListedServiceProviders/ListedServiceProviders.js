@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import  { Loader, FmButton } from 'components';
 import axios from 'axios';
-import { dispatchedGenInfo } from 'extras/dispatchers';
+import { dispatchedGenInfo, dispatchedProfileInfo } from 'extras/dispatchers';
 import './listedServiceProviders.css';
 import { PropTypes } from 'prop-types';
+import { NavLink, withRouter } from 'react-router-dom';
 
 const baseUrl = process.env.BACK_END_URL,
-usersEndPoint = process.env.USERS_END_POINT + "?userType=service provider";
+usersEndPoint = process.env.USERS_END_POINT + "?userType=service_provider";
 
 const styles = {
     button: {
@@ -31,6 +32,7 @@ const styles = {
         user: store.user,
         search: store.search,
         genInfo: store.genInfo,
+        profileInfo: store.profile.info,
         serviceProvidersInfo: store.serviceProviders.info
     }
 })
@@ -58,27 +60,51 @@ class ListedServiceProviders extends Component {
         });
     }
 
+    goToProfile = (e)=>{
+        let id = e.target.id,
+        profileInfo = {...this.props.profileInfo},
+        currentSP = {},
+        genInfo = this.props.genInfo.info,
+        serviceProviders = {...genInfo.serviceProviders};
+        Object.keys(serviceProviders).map(key=>{
+            let currId = serviceProviders[key].id;
+            if(currId === id){
+                currentSP = {...serviceProviders[key]}
+            }
+        });
+        profileInfo.activeProfile = currentSP;
+        this.props.dispatch(dispatchedProfileInfo(profileInfo));
+    }
+
     displayServiceProviders = (key)=>{
         let serviceProviders = this.props.genInfo.info.serviceProviders,
         profileInfo = sessionStorage.getItem('profileInfo'),
-        categories = this.props.genInfo.info.serviceProviders[key].categoriesOfService,
-        userType = profileInfo?JSON.parse(sessionStorage.getItem('profileInfo')).userType: null;
+        categories = this.props.genInfo.info.serviceProviders[key].profile.categoriesOfService,
+        userType = profileInfo?JSON.parse(sessionStorage.getItem('profileInfo')).userType: null,
+        serviceProviderId = serviceProviders[key].id;
 
         return(
             <div className="list-row" key={key} id={ serviceProviders[key].id }>
-                <div className="twenty">{ serviceProviders[key].companyName }</div>
+                <div className="twenty clickable">
+                    <NavLink id={ serviceProviders[key].id } onClick = { this.goToProfile } to={`/profilePage:${ serviceProviderId }`}>
+                        { serviceProviders[key].companyName }
+                    </NavLink>
+                </div>
                 <div className="thirty">{ serviceProviders[key].city }, { serviceProviders[key].state }</div>
                 <div className="thirty">
                     { categories?Object.keys(categories).map((newKey)=>{
-                        return(
-                            <div key={ newKey }>
-                                <span className="service">{ categories[newKey] }</span>
-                            </div>
-                        )
-                    }):<div className="tiny-loader"><Loader /></div> }
+                        if(categories[newKey]){
+                            return(
+                                <div key={ newKey }>
+                                    <span className="service">{ newKey }</span>
+                                </div>
+                            )
+                        }
+                        
+                    }):null }
                 </div>
                 <div className="twenty">{
-                    userType === "Owner/Occupier" || !userType
+                    userType === "owner_occupier" || !userType
                     ?<FmButton variant="contained" styles={ styles } text="Invite to Tender" />
                     :null 
                     }
@@ -136,12 +162,19 @@ class ListedServiceProviders extends Component {
                     currFilterVal = secondaryFilters[key];
                     Object.keys(filteredNext).map(key1=>{
                         let currSP = filteredNext[key1],
-                        categoriesOfService = currSP.categoriesOfService,
-                        categoriesOfServiceLen = Object.keys(categoriesOfService).length;
-                        if(categoriesOfServiceLen > 0){
+                        categoriesOfService = currSP.profile.categoriesOfService,
+                        categoriesOfServiceLen = [];
+
+                        Object.keys(categoriesOfService).map(altKey=>{
+                            if(categoriesOfService[altKey]){
+                                categoriesOfServiceLen.push(altKey);
+                            }
+                        });
+
+                        if(categoriesOfServiceLen.length > 0){
                             Object.keys(categoriesOfService).map(key2=>{
                                 let currCategory = key2;
-                                if(currCategory === currFilter && currFilterVal){
+                                if(currCategory === currFilter && currFilterVal && categoriesOfService[key2]){
                                     filteredNextNext[key1] = currSP;
                                 }
                             })
@@ -187,5 +220,5 @@ ListedServiceProviders.PropTypes = {
     genInfo: PropTypes.object.isRequired
 }
 
-export default ListedServiceProviders;
+export default withRouter(ListedServiceProviders);
 

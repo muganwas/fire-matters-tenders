@@ -118,7 +118,7 @@ class ListedPostedTenders extends Component {
         postedTendersComprehensive = [],
         postedTenders = [];
         if(userType){
-            if(userType === "owner/occupier"){
+            if(userType === "owner_occupier"){
                 let listings = genInfo.listings;
                 axios.get(postInfoUrl).then(res=>{
                     let tendersArr = res.data,
@@ -169,7 +169,7 @@ class ListedPostedTenders extends Component {
             userType = (this.props.profileInfo.userType).toLowerCase(),
             userEmail = this.props.profileInfo.emailAddress;
             if(userType){
-                if(userType !== "owner/occupier"){
+                if(userType !== "owner_occupier"){
                     axios.get(baseURL + listingsEndPoint).then((response)=>{
                         //console.log(response.data);
                         let listings = genInfo.listings = {...response.data};
@@ -412,7 +412,7 @@ class ListedPostedTenders extends Component {
             });
         }
 
-        if(userType !== "Owner/Occupier"){
+        if(userType !== "owner_occupier"){
             options = { ...options, sendMessage: "Send Message"};
         }
             
@@ -445,7 +445,7 @@ class ListedPostedTenders extends Component {
                 <div className="twenty">{ listings[key].startDate}</div>
                 <div className="twenty">
                 { 
-                    userType !== "Owner/Occupier"
+                    userType !== "owner_occupier"
                     ?<FmButton 
                         id={ listings[key].id } 
                         onClick={ this.renderTenderForm } 
@@ -503,12 +503,12 @@ class ListedPostedTenders extends Component {
                     :null
                 }
                 { 
-                    userType === "Owner/Occupier"
+                    userType === "owner_occupier"
                     ?<div className="list-row header">
                         <span className="twenty">Location</span>
                         <span className="thirty">Description</span>
                         <span className="twenty">Closing Date</span>
-                        <span className="twenty">{ userType === "Owner/Occupier"?"Posted Tenders":null }</span>
+                        <span className="twenty">{ userType === "owner_occupier"?"Posted Tenders":null }</span>
                         <span className="ten"></span>
                         <div className="bottom-border"></div>
                     </div>
@@ -522,7 +522,7 @@ class ListedPostedTenders extends Component {
                     </div>
                 }
                 { 
-                    userType === "Owner/Occupier" && listings
+                    userType === "owner_occupier" && listings
                     ?Object.keys(listings).map(this.displayListings)
                     :userType !== "OwnerOccupier" && tenders
                     ?Object.keys(tenders).map(this.renderTenders)

@@ -130,7 +130,7 @@ class ListedJobs extends Component {
         profileInfo = sessionStorage.getItem('profileInfo'),
         userType = profileInfo?JSON.parse(sessionStorage.getItem('profileInfo')).userType: null,
         options;
-        if(userType && userType !== "Owner/Occupier"){
+        if(userType && userType !== "owner_occupier"){
             options = { 0: "View More...", sendMessage: "Send Message"};
         }else{
             options = { 0: "View More..."};
@@ -142,7 +142,7 @@ class ListedJobs extends Component {
                 <div className="twenty">{ listings[key].startDate}</div>
                 <div className="twenty">
                 { 
-                    userType !== "Owner/Occupier"
+                    userType !== "owner_occupier"
                     ?<FmButton 
                         variant="contained" 
                         styles = { styles } 

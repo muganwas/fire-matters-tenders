@@ -51,7 +51,7 @@ class SitesTab extends React.Component {
             userEmail = this.props.profileInfo.emailAddress,
             url = baseURL + sitesEndPoint + "?emailAddress=" + userEmail;
             if(userType){
-                if(userType === "Owner/Occupier"){
+                if(userType === "owner_occupier"){
                     axios.get(url).then((response)=>{
                         //console.log(response.data);
                         let sites = sitesInfo.sites = genInfo.sites = {...response.data};
@@ -192,7 +192,7 @@ class SitesTab extends React.Component {
                 :null}
                 <div className="title-bar">
                     <span id="title">Sites</span>
-                    {userType === "Owner/Occupier"?<span id="search">
+                    {userType === "owner_occupier"?<span id="search">
                         <FmButton variant="contained" onClick={ this.renderListingForm } styles={ styles } text="Register New Site" />
                         <SearchInput className="alt-search" placeholder="search for your sites" search={ this.searchListings } />
                     </span>:null}

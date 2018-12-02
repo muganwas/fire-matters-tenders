@@ -110,7 +110,7 @@ class TendersTab extends React.Component {
         //set initial attributes
         let userType = JSON.parse(sessionStorage.getItem('profileInfo')).userType,
         genInfo = {...this.props.genInfo};
-        if(userType === "Owner/Occupier" || userType === "owner-occupier" || userType === "owner_occupier"){
+        if(userType === "owner_occupier" || userType === "owner-occupier" || userType === "owner_occupier"){
             
         }
         else{
@@ -139,7 +139,7 @@ class TendersTab extends React.Component {
         postedTendersComprehensive = [],
         postedTenders = [];
         if(userType){
-            if(userType === "owner/occupier"){
+            if(userType === "owner_occupier"){
                 let listings = genInfo.listings;
                 axios.get(postInfoUrl).then(res=>{
                     let tendersArr = res.data,
@@ -190,7 +190,7 @@ class TendersTab extends React.Component {
             userType = (this.props.profileInfo.userType).toLowerCase(),
             userEmail = this.props.profileInfo.emailAddress;
             if(userType){
-                if(userType !== "owner/occupier"){
+                if(userType !== "owner_occupier"){
                     axios.get(baseURL + listingsEndPoint).then((response)=>{
                         //console.log(response.data);
                         let listings = genInfo.listings = {...response.data};
@@ -381,7 +381,7 @@ class TendersTab extends React.Component {
                 :null}
                 <div className="title-bar">
                     <span id="title">Tenders</span>
-                    {userType === "Owner/Occupier"?<span id="search">
+                    {userType === "owner_occupier"?<span id="search">
                         <FmButton variant="contained" styles={ alt_styles } text="Rehire service provider" />
                         <FmButton variant="contained" onClick={ this.renderListingForm } styles={ styles } text="Post New Tender" />
                         <SearchInput className="alt-search" placeholder="search for your listings" search={ this.searchListings } />
