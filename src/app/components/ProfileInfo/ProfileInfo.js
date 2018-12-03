@@ -4,13 +4,14 @@ import { connect } from 'react-redux';
 import Rebase from 're-base';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import { PublicProfileImage } from 'components';
+import { PublicProfileImage, FmButton, Loader } from 'components';
 import * as firebase from 'firebase/app';
 import 'extras/config';
 import 'firebase/storage';
 import 'firebase/database';
 import { dispatchedProfileInfo } from 'extras/dispatchers';
 import './profileInfo.css';
+import styles from './styles';
 
 const base = Rebase.createClass(firebase.database()),
 storage = firebase.storage(),
@@ -102,14 +103,24 @@ class ProfileInfo extends Component {
         });
     }
 
-    displayServiceCategories = (key)=>{
+    verifyLicense = (e)=>{
+        let id = e.target.id;
+        console.log(id);
+    }
+
+    displayLicenses = (key)=>{
+        let verificationCount = 0;
         return(
-            <div className="category-of-service" key={key}>{ key }</div>
+            <div className="category-of-service" key={key}>
+                { key }
+                <span id="verification-count"><span id="num">{ verificationCount }</span> Verifications</span>
+                <span className="verify-license" id={ key } onClick={ this.verifyLicense }>Verify License</span>
+            </div>
         )
     }
 
     displayAverateRating(count){
-        if(count<1){
+        if(count < 1){
             return "There is no rating available"
         }else{
             return <span>star</span>
@@ -128,16 +139,17 @@ class ProfileInfo extends Component {
 
         let profileInfo = {...this.props.profileInfo},
         activeProfile = {...profileInfo.activeProfile},
+        activeProfileLen = Object.keys(activeProfile).length,
         profile = {...activeProfile.profile},
-        categoriesOfService = {...profile.categoriesOfService},
+        licenses = {...activeProfile.licenses},
         userType = activeProfile.userType,
         avatarURL = activeProfile.avatarURL,
-        serviceCategories = {},
+        licenseCategories = {},
         userTypeString;
 
-        Object.keys(categoriesOfService).map(key=>{
-            if(categoriesOfService[key]){
-                serviceCategories[key] = categoriesOfService[key];
+        Object.keys(licenses).map(key=>{
+            if(licenses[key].checked){
+                licenseCategories[key] = licenses[key];
             }
         });
 
@@ -147,34 +159,41 @@ class ProfileInfo extends Component {
             else
                 userTypeString = "owner_occupier";
         }
-        
         return(
             <div className="main">
-                <div className="personalInfo">
-                    <div id="user-category">{ userTypeString }</div>
-                    <PublicProfileImage avatarURL = { avatarURL } />
-                    <div className="info">
-                        <div id="name">{ activeProfile.fullName }</div>
-                        <div id="location">
-                            <i id="location-profile" className="material-icons">room</i>{ activeProfile.city }, { activeProfile.state }
+                {activeProfileLen > 0
+                ?<div>
+                    <div className="personalInfo">
+                        <div id="user-category">{ userTypeString }</div>
+                        <PublicProfileImage avatarURL = { avatarURL } />
+                        <div className="info">
+                            <div id="name">{ activeProfile.fullName }</div>
+                            <div id="location">
+                                <i id="location-profile" className="material-icons">room</i>{ activeProfile.city }, { activeProfile.state }
+                            </div>
                         </div>
+                        <div className="clear"></div>
+                    </div>
+                    <div className="action">
+                        <FmButton variant="contained" styles={ styles } text="Invite to Tender" />
+                    </div>
+                    <div className="profileInfo">
+                        <div id="intro">
+                            <h3>Introduction</h3>
+                            <span className="detail" >{ profile.introduction }</span>
+                            <h3>Licenses</h3>
+                            <span className="detail">{ Object.keys(licenseCategories).map(this.displayLicenses) }</span>
+                            <h3>Average Rating</h3>
+                            <span className="detail">{ this.displayAverateRating(profile.averageRating) }</span>
+                            <h3>Tenders Won</h3>
+                            <span className="detail">{ profile.tendersWon }</span>
+                        </div> 
                     </div>
                     <div className="clear"></div>
                 </div>
-                <div className="profileInfo">
-                    <div id="intro">
-                        <h3>Introduction</h3>
-                        <p>{ profile.introduction }</p>
-                        <h3>Service Categories</h3>
-                        { Object.keys(serviceCategories).map(this.displayServiceCategories) }
-                        <h3>Average Rating</h3>
-                        { this.displayAverateRating(profile.averageRating) }
-                        <h3>Tenders Won</h3>
-                        { profile.tendersWon }
-                    </div> 
-                </div>
+                :<div className="profileLoader"><Loader fill="#F79A50" /></div>}
             </div>
-        )
+        )        
     }
 }
 
