@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { DropDown, Textfield, PhoneNumber } from 'components';
-import { userTypes, statesAustralia } from 'extras/config';
+import { DropDown, Textfield, PhoneNumber, FmButton } from 'components';
+import { userTypes, statesAustralia, serviceCategories } from 'extras/config';
 import axios from 'axios';
+import { submit_styles } from './styles';
 import './personnelTab.css'
 
 const baseURL = process.env.BACK_END_URL,
@@ -21,6 +22,7 @@ function PersonnelTab(props){
     website = userInfo.website,
     state = userInfo.state,
     city = userInfo.city,
+    isActive = true,
     emailAddress = userInfo.emailAddress;
 
     const upload=(sectTitle, updateData)=>{
@@ -55,6 +57,18 @@ function PersonnelTab(props){
                 reject({message: "No data"});
         });
     };
+
+    const dummy = ()=>{
+
+    }
+
+    const setSelectedServiceCategory = ()=>{
+
+    }
+
+    const addCategory = ()=>{
+
+    }
 
     return(
         <div className="main-content">
@@ -185,6 +199,39 @@ function PersonnelTab(props){
                         </div>
                     </div>
                 </div>
+                {userType === "service_provider"?
+                <div className="half left">
+                    <div className="heading">Service Categories<div className="bottom-border"></div></div>
+                    <div className="information">
+                        <div className="el">
+                            { /**selected service categories go here */}
+                        </div>
+                        <div className="el">
+                            <DropDown 
+                                onBlur={ dummy }
+                                label="Add service" 
+                                id="profile-serviceCategory" 
+                                className="select" 
+                                init={ "Select Service Category" } 
+                                width="330px" 
+                                options={ serviceCategories } 
+                                selected={ state } 
+                                onChange={ save } 
+                            />
+                        </div>
+                        <div className="addEquip">
+                            <FmButton 
+                                id="addServiceCategory" 
+                                text="Add Service" 
+                                onClick = { addCategory } 
+                                isActive = { isActive }  
+                                styles={ submit_styles }
+                                variant = "contained"
+                            />
+                        </div>
+                    </div>
+                </div>
+                : null}
             <div className="clear"></div>
         </div>
     )

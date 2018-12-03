@@ -34,10 +34,10 @@ class SecondarySelect extends Component {
         let secondaryOptions = this.props.categoriesFull[selectedKey];
         
         return(
-            <div className="secondary-select search-main">
+            <div className={ this.props.double?"secondary-select search-main":"secondary-selectAlt search-main"}>
                 <AltDropDown
                     id = "mainCategories"
-                    init={ selected || "Select Equip Category" } 
+                    init={ selected || this.props.init || "Select Equip Category" } 
                     selectWidth={ this.props.selectWidth } 
                     width={ this.props.dropDownWidth } 
                     className="selectAlt left" 
@@ -46,9 +46,10 @@ class SecondarySelect extends Component {
                     onChange={ this.props.onChange }
                     dispatcher = { this.props.dispatcher }  
                 />
+                { this.props.double?
                 <AltDropDown
                     id = "minorCategories" 
-                    init={ selectedAlt || "Select Equipment" } 
+                    init={ selectedAlt || this.props.initAlt || "Select Equipment" } 
                     selectWidth={ this.props.selectWidthAlt } 
                     width={ this.props.dropDownWidthAlt } 
                     className="selectAlt left" 
@@ -57,6 +58,7 @@ class SecondarySelect extends Component {
                     onChange={ this.props.onChangeAlt }
                     dispatcher = { this.props.dispatcherAlt }    
                 />
+                : null}
                 <div className="clear"></div>                   
             </div>
         )

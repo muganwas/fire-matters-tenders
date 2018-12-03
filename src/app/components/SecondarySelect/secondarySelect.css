@@ -9,6 +9,14 @@
     background: none;
     margin: 0 0 20px 0;
 }
+.secondary-selectAlt.search-main{
+    display: block;
+    width: 330px;
+    border:thin solid #979797;
+    border-radius: 5px;
+    background: none;
+    margin: 0 0 20px 0;
+}
 .selectAlt{
     background: url('~images/down_arrow.png') no-repeat right rgba(255,255,255, 0);
     background-size: 30px 10px;

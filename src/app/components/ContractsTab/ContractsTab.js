@@ -114,7 +114,7 @@ class ContractsTab extends React.Component {
                     axios.get(baseURL + listingsEndPoint).then((response)=>{
                         //console.log(response.data);
                         let listings = genInfo.listings = {...response.data};
-                        genInfo.sideBar.profilePage.listCount['tenders'] = (response.data).length;
+                        //genInfo.sideBar.profilePage.listCount['contracts'] = (response.data).length;
                         /**Set the more dropdown menu class to hidden for every row*/
                         Object.keys(listings).map((key)=>{
                             genInfo.listings[key].moreMenuClassName = "hidden";
@@ -128,7 +128,7 @@ class ContractsTab extends React.Component {
                     axios.get(baseURL + listingsEndPoint + "?userEmail=" + userEmail).then((response)=>{
                         //console.log(response.data);
                         let listings = genInfo.listings = {...response.data};
-                        genInfo.sideBar.profilePage.listCount['tenders'] = (response.data).length;
+                        //genInfo.sideBar.profilePage.listCount['contracts'] = (response.data).length;
                         /**Set the more dropdown menu class to hidden for every row*/
                         Object.keys(listings).map((key)=>{
                             genInfo.listings[key].moreMenuClassName = "hidden";

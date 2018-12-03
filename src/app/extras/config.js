@@ -4,7 +4,14 @@ export const listingCategories = {
     all: "All Categories",
     maintenance: "Maintenance",
     repair: "Repair",
-    evacTraining: "Evacuation Training",
+    evacTraining: "EvacTraining",
+    other: "Other"
+}
+
+export const serviceCategories = {
+    maintenance: "Maintenance",
+    repair: "Repair",
+    evacTraining: "EvacTraining",
     other: "Other"
 }
 

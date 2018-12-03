@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import  { Loader, FmButton, MoreHoriz } from 'components';
-import { MessageForm } from 'forms';
+import { TenderForm, MessageForm } from 'forms';
 import axios from 'axios';
-import { dispatchedGenInfo, dispatchedMessagesInfo } from 'extras/dispatchers';
+import { dispatchedGenInfo, dispatchedUserInfo, dispatchedListingsInfo, dispatchedMessagesInfo } from 'extras/dispatchers';
 import './listedJobs.css';
 import { PropTypes } from 'prop-types';
 import { styles, submit_styles } from './styles';
 
 const baseURL = process.env.BACK_END_URL,
 messagesEndPoint = process.env.MESSAGES_END_POINT,
+tenderEndPoint = process.env.TENDERS_END_POINT,
 listingsEndPoint = process.env.LISTING_END_POINT;
 
 @connect((store)=>{
@@ -21,6 +22,7 @@ listingsEndPoint = process.env.LISTING_END_POINT;
         search: store.search,
         genInfo: store.genInfo.info,
         listingsInfo: store.listingsInfo.info,
+        listingsData: store.user.info.submitTender,
         messagesInfo: store.messages.info
     }
 })
@@ -57,6 +59,92 @@ class ListedJobs extends Component {
             resolve(errCount);
         }); 
     }
+
+    checkForListingErrors(){
+        let errored = [];
+        return new Promise(resolve=>{
+            let listingsData = {...this.props.listingsData},
+            listingsInfo = {...this.props.listingsInfo};
+            Object.keys(listingsData).map(key=>{
+                if(!listingsData[key] && key !== "feedback" && key !== "feedbackClass" && key !== "submitButton"){
+                    listingsInfo.tenderForm.errors[key] = true;
+                    errored.push(listingsInfo.tenderForm.errors[key]);
+                }else if(listingsData[key] && key !== "feedback" && key !== "feedbackClass" && key !== "submitButton"){
+                    listingsInfo.tenderForm.errors[key] = null;
+                }
+            });
+            this.props.dispatch(dispatchedListingsInfo(listingsInfo));
+            let errCount = errored.length;
+            resolve(errCount);
+        }); 
+    }
+
+    upload=()=>{
+        let listingsData = {...this.props.listingsData},
+        userInfo = {...this.props.user},
+        companyName = listingsData.tenderCompanyName,
+        rate = listingsData.tenderRate,
+        startDate = listingsData.tenderStartDate,
+        endDate = listingsData.tenderEndDate,
+        coverLetter = listingsData.tenderCoverLetter,
+        listingId = listingsData.tenderListingId,
+        postInfoUrl = baseURL + tenderEndPoint;
+
+        let postObject = {
+            listingId,
+            companyName, 
+            rate, 
+            coverLetter, 
+            startDate, 
+            endDate
+        };
+        this.checkForListingErrors().then(res=>{
+            if(res === 0){
+                userInfo.submitTender.submitButton.isActive = false;
+                this.props.dispatch(dispatchedUserInfo(userInfo));
+                axios.post(postInfoUrl, postObject).
+                then(res=>{
+                    userInfo.submitTender.submitButton.isActive = true;
+                    userInfo.submitTender.feedback = "You successfully posted your tender.";
+                    userInfo.submitTender.feedbackClass="success";
+                    this.props.dispatch(dispatchedUserInfo(userInfo));
+                    this.forceUpdate();
+                }).
+                catch(err=>{
+                    userInfo.submitTender.submitButton.isActive = true;
+                    userInfo.submitTender.feedbackClass="error-feedback";
+                    userInfo.submitTender.feedback = "Something went wrong, try again later.";
+                    this.props.dispatch(dispatchedUserInfo(userInfo));
+                    this.forceUpdate();
+                    console.log(err);
+                });
+            }
+        });
+    };
+    
+    save=(e)=>{
+        e.persist();
+        return new Promise((resolve, reject)=>{
+            let userInfo = {...this.props.user},
+            id = e.target.id,
+            type = e.target.getAttribute('type'),
+            origName = e.target.getAttribute("category");
+            console.log(type)
+            origName = origName?origName:id;
+            let nameArr = origName.split("-"),
+            name = nameArr[1],
+            value = e.target.getAttribute('value');
+            value = value?value:e.target.value;
+            userInfo.submitMessage[name] = value;
+            userInfo.submitMessage[name + "_key"] = id;
+            if(userInfo){
+                resolve(userInfo);
+            }                        
+            else
+                reject({message: "No data"});
+        });
+    };
+
 
     sendMessage=()=>{
         let messageData = {...this.props.messageData},
@@ -125,25 +213,78 @@ class ListedJobs extends Component {
         this.props.dispatch(dispatchedMessagesInfo(messagesInfo));               
     }
 
+    dummy= ()=>{
+        return Promise.resolve("Nassing");
+    }
+
+    postListingId = (id)=>{
+        return new Promise(resolve=>{
+            let userInfo = {...this.props.user};
+            userInfo.submitTender.tenderListingId = id;
+            this.props.dispatch(dispatchedUserInfo(userInfo));
+            resolve('id posted');
+        });
+    }
+
+    renderTenderForm = (e)=>{
+        let id = e.target.id;
+        let name = e.target.getAttribute('name');
+        id = !id?name:id;
+        let listingsInfo = {...this.props.listingsInfo};
+        listingsInfo.tenderForm.show = !listingsInfo.tenderForm.show;
+        this.postListingId(id).then(res=>{
+            if(res === "id posted")
+                this.props.dispatch(dispatchedListingsInfo(listingsInfo));
+            else
+                console.log('There was a troblem posting listing id');
+        })  
+    }
+
+    renderListingDetails = ()=>{
+
+    }
+
     displayListings = (key)=>{
         let listings = this.props.genInfo.generalListings,
+        listingsInfo = {...this.props.listingsInfo},
+        errors = listingsInfo.tenderForm.errors,
+        tenderAttributes = this.props.user.submitTender,
+        feedback = tenderAttributes.feedback,
+        feedbackClass = tenderAttributes.feedbackClass,
+        showTenderForm = listingsInfo.tenderForm.show,
         profileInfo = sessionStorage.getItem('profileInfo'),
         userType = profileInfo?JSON.parse(sessionStorage.getItem('profileInfo')).userType: null,
         options;
         if(userType && userType !== "owner_occupier"){
-            options = { 0: "View More...", sendMessage: "Send Message"};
+            options = { more: "View More...", sendMessage: "Send Message"};
         }else{
-            options = { 0: "View More..."};
+            options = { more: "View More..."};
         }
         return(
             <div className="list-row" key={key} id={ listings[key].id }>
+                {
+                    showTenderForm
+                    ?<TenderForm
+                        feedback = { feedback }
+                        feedbackClass = { feedbackClass }
+                        errors = { errors }
+                        styles = { submit_styles }
+                        attributes = { tenderAttributes } 
+                        close={ this.renderTenderForm } 
+                        onBlur={ this.dummy } 
+                        upload={ this.upload } 
+                        save={ this.save } 
+                    />:null
+                }
                 <div className="twenty">{ listings[key].city }, { listings[key].state }</div>
                 <div className="thirty">{ listings[key].serviceRequired }, { listings[key].equipment }</div>
                 <div className="twenty">{ listings[key].startDate}</div>
                 <div className="twenty">
                 { 
                     userType !== "owner_occupier"
-                    ?<FmButton 
+                    ?<FmButton
+                        id = { listings[key].id }
+                        onClick = { this.renderTenderForm }
                         variant="contained" 
                         styles = { styles } 
                         text="Submit Tender" 
@@ -158,6 +299,7 @@ class ListedJobs extends Component {
                         autoid = { listings[key].id }
                         email = { listings[key].userEmail }
                         onClick = { this.renderMessageForm }
+                        onClickAlt = { this.renderListingDetails }
                         listName = "generalListings" 
                         element={ listings[key] }
                         options={ options }
@@ -167,29 +309,6 @@ class ListedJobs extends Component {
             </div>
         )
     }
-
-    save=(e)=>{
-        e.persist();
-        return new Promise((resolve, reject)=>{
-            let userInfo = {...this.props.user},
-            id = e.target.id,
-            type = e.target.getAttribute('type'),
-            origName = e.target.getAttribute("category");
-            console.log(type)
-            origName = origName?origName:id;
-            let nameArr = origName.split("-"),
-            name = nameArr[1],
-            value = e.target.getAttribute('value');
-            value = value?value:e.target.value;
-            userInfo.submitMessage[name] = value;
-            userInfo.submitMessage[name + "_key"] = id;
-            if(userInfo){
-                resolve(userInfo);
-            }                        
-            else
-                reject({message: "No data"});
-        });
-    };
 
     render(){
         let listings = this.props.genInfo.generalListings,
@@ -219,6 +338,7 @@ class ListedJobs extends Component {
         }
         return(
             <div className="list left hanad">
+                
                 {
                     showMessageForm
                     ?<MessageForm

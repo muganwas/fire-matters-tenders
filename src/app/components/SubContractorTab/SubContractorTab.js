@@ -154,7 +154,7 @@ class SubContractorTab extends React.Component {
     displaySubContractors = (key)=>{
         let subContractorsInfo = {...this.props.subContractorsInfo},
         subContractors = {...subContractorsInfo.subContractors},   
-        options = { 0: "View More..." };
+        options = { more: "View More..." };
             
         return(
             <div className="list-row" key={key}>

@@ -61,6 +61,10 @@ class ListedPostedMessages extends Component {
         this.props.dispatch(dispatchedMessagesInfo(messagesInfo));               
     }
 
+    deleteMessage = (e)=>{
+
+    }
+
     dummy= ()=>{
         return Promise.resolve("Nassing");
     }
@@ -166,6 +170,7 @@ class ListedPostedMessages extends Component {
                         autoid = { listingId }
                         email = { sender }
                         onClick = { this.renderMessageForm }
+                        onClickAlt = { this.deleteMessage }
                         element={ recievedMessages[key] }
                         options={ options }
                      />
@@ -192,6 +197,7 @@ class ListedPostedMessages extends Component {
                         autoid = { listingId }
                         sender = { sender }
                         onClick = { this.renderMessageForm }
+                        onClickAlt = { this.deleteMessage }
                         listName = "sentMessages" 
                         element={ sentMessages[key] }
                         options={ options }
