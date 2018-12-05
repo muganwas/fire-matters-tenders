@@ -87,7 +87,8 @@ const defaultState = {
       },
       addCompanyUser: {
         submitButton: {
-          isActive: true
+          isActive: true,
+          text: "Invite User"
         }
       },
       profileInfo:{ },

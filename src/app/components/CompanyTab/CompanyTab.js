@@ -17,29 +17,53 @@ class CompanyTab extends React.Component{
         super(props)
     }
 
+    componentWillMount(nextProps){
+        this.props = {...nextProps}
+    }
+
     sendAdditionRequest = ()=>{
         let { userInfo, user } = this.props,
         companyInformation = userInfo,
         recipient = companyInformation.companyAddUser,
         companyName = companyInformation.companyName,
         sender  = companyInformation.emailAddress,
+        currAddress = window.location.hostname,
+        addAddress = currAddress + "/addUser?companyName=" + companyName + "&email=" + recipient,
         subject = "INVITATION TO FIRE-MATTERS TENDERS",
-        invitationLink = "https://fire-matters-tenders-dev.herokuapp.com",
         body = "<p> You have been invited by " 
         + companyName 
-        + " to subscribe as a company user.<br/> Click the link below to accept the invitation. <br/> <a href='http://fire-matters-tenders-dev.herokuapp.com'>"
-        + invitationLink 
+        + " to subscribe as a company user.<br/> Click the link below to accept the invitation. <br/> <a href='"
+        + addAddress 
+        +"'>"
+        + addAddress 
         + "</a> </p>",
         url = baseURL + sendEmailEndPoint;
-        user.addCompanyUser.submitButton.isActive = false;
-        this.props.dispatch(dispatchedUserInfo(user));
-        axios.post(url, { sender, recipient, subject, body }).then(res=>{
-            if(res.data.message ==="mail sent"){
-                user.addCompanyUser.submitButton.isActive = false;
+        if(recipient){
+            user.addCompanyUser.submitButton.isActive = false;
+            this.props.dispatch(dispatchedUserInfo(user));
+            this.forceUpdate();
+            axios.post(url, { sender, recipient, subject, body }).then(res=>{
+                if(res.data.message){
+                    console.log(res.data.message)
+                    user.addCompanyUser.submitButton.text = "Email Sent, Send Another";
+                    user.addCompanyUser.submitButton.isActive = true;
+                    this.props.dispatch(dispatchedUserInfo(user));
+                    this.forceUpdate();
+                }else{
+                    user.addCompanyUser.submitButton.text = "There was Error, Resend";
+                    user.addCompanyUser.submitButton.isActive = true;
+                    this.props.dispatch(dispatchedUserInfo(user));
+                    this.forceUpdate();
+                }
+            }).
+            catch(err=>{
+                console.log(err);
+                user.addCompanyUser.submitButton.text = "There was Error, Resend";
+                user.addCompanyUser.submitButton.isActive = true;
                 this.props.dispatch(dispatchedUserInfo(user));
-                this.forceUpdate;
-            }
-        });
+                this.forceUpdate();
+            });
+        }  
     }
 
     render(){
@@ -62,7 +86,8 @@ class CompanyTab extends React.Component{
         contactPhone = companyInformation.companyRepPhoneNumber,
         contactPosition = companyInformation.companyRepPosition,
         userToBeAdded = companyInformation.companyAddUser,
-        isActive = user.addCompanyUser.submitButton.isActive;
+        isActive = user?user.addCompanyUser.submitButton.isActive:true,
+        inviteUser = user?user.addCompanyUser.submitButton.text: "Invite User";
 
         const upload=(sectTitle, updateData)=>{
             return new Promise((resolve, reject)=>{
@@ -293,7 +318,7 @@ class CompanyTab extends React.Component{
                                     onClick = { this.sendAdditionRequest }
                                     styles={ submit_styles}
                                     isActive = { isActive }
-                                    text="Invite User"
+                                    text={ inviteUser }
                                 />
                             </div>
                         </div>
