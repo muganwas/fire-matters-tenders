@@ -35,8 +35,7 @@ const RenderEquipment = props => {
                 }else
                     return null;
             })
-        }</div>
-         
+        }</div>  
     ) 
 }
 

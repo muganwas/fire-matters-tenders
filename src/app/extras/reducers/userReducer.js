@@ -80,6 +80,16 @@ const defaultState = {
           isActive: true
         }
       },
+      addServiceCategory: {
+        submitButton: {
+          isActive: true
+        }
+      },
+      addCompanyUser: {
+        submitButton: {
+          isActive: true
+        }
+      },
       profileInfo:{ },
       avatarProps: {
         feedback: undefined,

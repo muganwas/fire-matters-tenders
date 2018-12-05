@@ -187,7 +187,7 @@ class TendersTab extends React.Component {
     fetchListings = ()=>{
         return new Promise(resolve=>{
             let genInfo = {...this.props.genInfo },
-            userType = (this.props.profileInfo.userType).toLowerCase(),
+            userType = this.props.profileInfo.userType,
             userEmail = this.props.profileInfo.emailAddress;
             if(userType){
                 if(userType !== "owner_occupier"){

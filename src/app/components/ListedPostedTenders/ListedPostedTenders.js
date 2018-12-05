@@ -478,6 +478,7 @@ class ListedPostedTenders extends Component {
     render(){
         let listings = this.props.genInfo.info.listings,
         tenders = this.props.tendersInfo.tenders,
+        tendersCount = Object.keys(tenders).length,
         userType = this.props.profileInfo.userType,
         messagesInfo = {...this.props.messagesInfo},
         showMessageForm = messagesInfo.messageForm.show,
@@ -503,7 +504,8 @@ class ListedPostedTenders extends Component {
                     :null
                 }
                 { 
-                    userType === "owner_occupier"
+                    tendersCount > 0
+                    ?userType === "owner_occupier"
                     ?<div className="list-row header">
                         <span className="twenty">Location</span>
                         <span className="thirty">Description</span>
@@ -520,11 +522,12 @@ class ListedPostedTenders extends Component {
                         <span className="ten"></span>
                         <div className="bottom-border"></div>
                     </div>
+                    :<div className="list-row header">There is no tender information to show</div>
                 }
                 { 
                     userType === "owner_occupier" && listings
                     ?Object.keys(listings).map(this.displayListings)
-                    :userType !== "OwnerOccupier" && tenders
+                    :userType !== "owner_occupier" && tenders
                     ?Object.keys(tenders).map(this.renderTenders)
                     :<div className="loader"><Loader /></div>
                 }

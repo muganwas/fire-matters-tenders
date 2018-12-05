@@ -69,6 +69,7 @@ submit_styles = {
         listingsInfo: store.listingsInfo.info,
         listingsData: store.user.info.submitTender,
         tendersInfo: store.tenders.info,
+        contractsInfo: store.contracts.info
     }
 })
 class ListedContracts extends Component {
@@ -358,11 +359,15 @@ class ListedContracts extends Component {
     }
 
     render(){
-        let listings = this.props.genInfo.info.listings,
+        let listings = {...this.props.genInfo.info.listings},
+        contractsInfo = {...this.props.contractsInfo},
+        contracts = {...contractsInfo.contracts},
+        contractsCount = Object.keys(contracts).length,
         userType = this.props.profileInfo.userType;
         return(
             <div className="list left hanad">
-                <div className="list-row header">
+            {   contractsCount > 0
+                ?<div className="list-row header">
                     <span className="twenty">Contract Title</span>
                     <span className="thirty">{ userType === "owner_occupier"?"Contractor":"Company Name" }</span>
                     <span className="twenty">Closing Date</span>
@@ -370,6 +375,8 @@ class ListedContracts extends Component {
                     <span className="ten"></span>
                     <div className="bottom-border"></div>
                 </div>
+                :<div className="list-row header">There is no contract information to display</div>
+            }
                 
             </div>
         )
@@ -379,13 +386,15 @@ class ListedContracts extends Component {
 ListedContracts.defaultProps = {
     user: {},
     search: {},
-    genInfo: {}
+    genInfo: {},
+    contractsInfo: {}
 }
 
 ListedContracts.PropTypes = {
     user: PropTypes.object.isRequired,
     search: PropTypes.object.isRequired,
-    genInfo: PropTypes.object.isRequired
+    genInfo: PropTypes.object.isRequired,
+    contractsInfo: PropTypes.object
 }
 
 export default ListedContracts;

@@ -184,6 +184,7 @@ class SubContractorTab extends React.Component {
     render(){
         const subContractorsInfo = {...this.props.subContractorsInfo},
         subContractors = subContractorsInfo.subContractors,
+        subContractorsCount = Object.keys(subContractors).length,
         showSubContractorForm = subContractorsInfo.subContractorForm.show,
         subContractorAttributes = this.props.user.info.addSubContractor,
         errors = subContractorsInfo.subContractorForm.errors,
@@ -226,13 +227,16 @@ class SubContractorTab extends React.Component {
                     <span id="title">Sub-Contractors</span>
                 </div>
                 <div className="list left hanad">
-                    <div className="list-row header">
-                        <span className="twenty">Company Name</span>
-                        <span className="thirty">Location</span>
-                        <span className="thirty">Categories</span>
-                        <span className="twenty"></span>
-                        <div className="bottom-border"></div>
-                    </div>
+                    {   subContractorsCount > 0
+                        ?<div className="list-row header">
+                            <span className="twenty">Company Name</span>
+                            <span className="thirty">Location</span>
+                            <span className="thirty">Categories</span>
+                            <span className="twenty"></span>
+                            <div className="bottom-border"></div>
+                        </div>
+                        :<div className="list-row header">There are no sub-contractors to show</div>
+                    }
                     { subContractors?Object.keys(subContractors).map(this.displaySubContractors):<div className="loader"><Loader /></div> }
                 </div>
             </div>

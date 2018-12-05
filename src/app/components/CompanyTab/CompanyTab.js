@@ -1,215 +1,180 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { DropDown, Textfield, PhoneNumber } from 'components';
-//import { dispatchedGenInfo } from 'extras/dispatchers';
+import { DropDown, Textfield, PhoneNumber, FmButton } from 'components';
+import { dispatchedUserInfo} from 'extras/dispatchers';
 import {  statesAustralia } from 'extras/config';
+import { submit_styles } from './styles';
 import axios from 'axios';
-import './companyTab.css'
+import './companyTab.css';
 
 const baseURL = process.env.BACK_END_URL,
+sendEmailEndPoint = process.env.SEND_EMAIL_END_POINT,
 userUpdateEndPoint = process.env.USER_UPDATE_END_POINT;
 
-function CompanyTab(props){
+class CompanyTab extends React.Component{
+    constructor(props){
+        super(props)
+    }
 
-    let { userInfo, user } = props;
-    userInfo = userInfo?userInfo:JSON.parse(sessionStorage.getItem('profileInfo'));
-    let companyInformation = userInfo || {},
-    emailAddress = companyInformation.companyEmailAddress,
-    phoneNumber = companyInformation.companyPhoneNumber?(companyInformation.companyPhoneNumber).toString():undefined,
-    website = companyInformation.companyWebsite,
-    state = companyInformation.companyState,
-    city = companyInformation.companyCity,
-    physicalAddress = companyInformation.companyPhysicalAddress,
-    postCode = companyInformation.companyPostCode,
-    acn_abn = companyInformation.company_acn_abn,
-    contactName = companyInformation.companyRepFullName,
-    contactEmail = companyInformation.companyRepEmailAddress,
-    contactPhone = companyInformation.companyRepPhoneNumber,
-    contactPosition = companyInformation.companyRepPosition;
-
-    const upload=(sectTitle, updateData)=>{
-        return new Promise((resolve, reject)=>{
-            let userId = userInfo.id,
-            updateInfoUrl = baseURL + userUpdateEndPoint,
-            updateObject = {userId, sectTitle, updateData};
-            axios.post(updateInfoUrl, updateObject).
-            then(res=>{
-                resolve(res);
-            }).
-            catch(err=>{
-                reject(err);
-            })
+    sendAdditionRequest = ()=>{
+        let { userInfo, user } = this.props,
+        companyInformation = userInfo,
+        recipient = companyInformation.companyAddUser,
+        companyName = companyInformation.companyName,
+        sender  = companyInformation.emailAddress,
+        subject = "INVITATION TO FIRE-MATTERS TENDERS",
+        invitationLink = "https://fire-matters-tenders-dev.herokuapp.com",
+        body = "<p> You have been invited by " 
+        + companyName 
+        + " to subscribe as a company user.<br/> Click the link below to accept the invitation. <br/> <a href='http://fire-matters-tenders-dev.herokuapp.com'>"
+        + invitationLink 
+        + "</a> </p>",
+        url = baseURL + sendEmailEndPoint;
+        user.addCompanyUser.submitButton.isActive = false;
+        this.props.dispatch(dispatchedUserInfo(user));
+        axios.post(url, { sender, recipient, subject, body }).then(res=>{
+            if(res.data.message ==="mail sent"){
+                user.addCompanyUser.submitButton.isActive = false;
+                this.props.dispatch(dispatchedUserInfo(user));
+                this.forceUpdate;
+            }
         });
-    };
-    const save=(e)=>{
-        e.persist();
-        return new Promise((resolve, reject)=>{
-            let userInfo = {...user},
-            id = e.target.id,
-            origName = e.target.getAttribute("category");
-            origName = origName?origName:id;
-            let nameArr = origName.split("-"),
-            name = nameArr[1],
-            value = e.target.getAttribute('value');
-            value = value?value:e.target.value;
-            userInfo.profileInfo[name] = value;
-            if(userInfo)                     
-                resolve(userInfo);
-            else
-                reject({message: "No data"});
-        });
-    };
+    }
 
-    return(
-        <div className="main-content">
-            <div className="half left">
-                <div className="heading">Company Information(Optional) <div className="bottom-border"></div></div>
-                <div className="information">
-                    <div className="el">
-                        <Textfield 
-                            id="profile-companyEmailAddress" 
-                            value={ emailAddress }
-                            label="Email Address"
-                            type="email" 
-                            placeholder="Johndoe@email.com" 
-                            root="inner-textfield" 
-                            fieldClass="textfield"
-                            onBlur={ upload }
-                            onChange = { save } 
-                        />
-                    </div>
-                    <div className="el">
-                        <PhoneNumber 
-                            id="profile-companyPhoneNumber"
-                            label = "Phone Number"
-                            value={ phoneNumber }  
-                            mask= {['(', [0], /\d/,')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
-                            placeholder="(07) 9999-9999"
-                            root="inner-textfield" 
-                            fieldClass="textfield"
-                            onBlur={ upload }
-                            onChange = { save } 
-                        />
-                    </div>
-                    <div className="el">
-                        <Textfield 
-                            id="profile-companyWebsite" 
-                            value={ website }
-                            label="Website"
-                            type="text" 
-                            placeholder="www.website.com" 
-                            root="inner-textfield" 
-                            fieldClass="textfield"
-                            onBlur={ upload }
-                            onChange = { save }  
-                        />
-                    </div>
-                    <div className="el">
-                            <DropDown 
-                                label="State" 
-                                id="profile-companyState" 
-                                className="select" 
-                                init={ state } 
-                                width="330px" 
-                                options={ statesAustralia } 
-                                selected={ state || "Qld" } 
-                                onChange={ save }
-                                onBlur={ upload }
-                                onChange = { save }
-                            />
-                    </div>
-                    <div className="el">
-                        <Textfield 
-                            id="profile-companyCity"
-                            label="City/Suburb"
-                            value={ city } 
-                            type="text" 
-                            placeholder="City/Suburb" 
-                            root="inner-textfield" 
-                            fieldClass="textfield"
-                            onBlur={ upload }
-                            onChange = { save }
-                        />
-                    </div>
-                    <div className="el">
-                        <Textfield 
-                            id="profile-companyStreet"
-                            label="Physical Address"
-                            value={ physicalAddress } 
-                            type="text" 
-                            placeholder="Street Address" 
-                            root="inner-textfield" 
-                            fieldClass="textfield"
-                            onBlur={ upload }
-                            onChange = { save }  
-                        />
-                    </div>
-                    <div className="el">
-                        <Textfield 
-                            id="profile-companyPostCode"
-                            label="Post Code"
-                            value={ postCode } 
-                            type="text" 
-                            placeholder="POST/ZIP CODE" 
-                            root="inner-textfield" 
-                            fieldClass="textfield"
-                            onBlur={ upload }
-                            onChange = { save }  
-                        />
-                    </div>
-                    <div className="el">
-                        <Textfield 
-                            id="profile-company_acn_abn"
-                            label="ACN/ABN"
-                            value={ acn_abn } 
-                            type="text" 
-                            placeholder="Bank Account Number" 
-                            root="inner-textfield" 
-                            fieldClass="textfield"
-                            onBlur={ upload }
-                            onChange = { save } 
-                        />
-                    </div>
-                    
-                </div>
-            </div>
-            <div className="half left">
-                <div className="heading">Company Contact Person(Optional) <div className="bottom-border"></div></div>
+    render(){
+
+        let { userInfo, user } = this.props;
+        userInfo = userInfo?userInfo:JSON.parse(sessionStorage.getItem('profileInfo'));
+        let companyInformation = userInfo || {},
+        emailAddress = companyInformation.companyEmailAddress,
+        companyUsers = companyInformation.companyUsers || {},
+        companyUsersCount = Object.keys(companyUsers).length,
+        phoneNumber = companyInformation.companyPhoneNumber?(companyInformation.companyPhoneNumber).toString():undefined,
+        website = companyInformation.companyWebsite,
+        state = companyInformation.companyState,
+        city = companyInformation.companyCity,
+        physicalAddress = companyInformation.companyPhysicalAddress,
+        postCode = companyInformation.companyPostCode,
+        acn_abn = companyInformation.company_acn_abn,
+        contactName = companyInformation.companyRepFullName,
+        contactEmail = companyInformation.companyRepEmailAddress,
+        contactPhone = companyInformation.companyRepPhoneNumber,
+        contactPosition = companyInformation.companyRepPosition,
+        userToBeAdded = companyInformation.companyAddUser,
+        isActive = user.addCompanyUser.submitButton.isActive;
+
+        const upload=(sectTitle, updateData)=>{
+            return new Promise((resolve, reject)=>{
+                let userId = userInfo.id,
+                updateInfoUrl = baseURL + userUpdateEndPoint,
+                updateObject = {userId, sectTitle, updateData};
+                axios.post(updateInfoUrl, updateObject).
+                then(res=>{
+                    resolve(res);
+                }).
+                catch(err=>{
+                    reject(err);
+                })
+            });
+        };
+        const save=(e)=>{
+            e.persist();
+            return new Promise((resolve, reject)=>{
+                let userInfo = {...user},
+                id = e.target.id,
+                origName = e.target.getAttribute("category");
+                origName = origName?origName:id;
+                let nameArr = origName.split("-"),
+                name = nameArr[1],
+                value = e.target.getAttribute('value');
+                value = value?value:e.target.value;
+                userInfo.profileInfo[name] = value;
+                if(userInfo)                     
+                    resolve(userInfo);
+                else
+                    reject({message: "No data"});
+            });
+        };
+
+        return(
+            <div className="main-content">
+                <div className="half left">
+                    <div className="heading">Company Information(Optional) <div className="bottom-border"></div></div>
                     <div className="information">
                         <div className="el">
                             <Textfield 
-                                id="profile-companyRepFullName"
-                                label="Full Name"
-                                value={ contactName } 
-                                type="text" 
-                                placeholder="John Doe" 
-                                root="inner-textfield" 
-                                fieldClass="textfield"
-                                onBlur={ upload }
-                                onChange = { save }  
-                            />
-                        </div>
-                        <div className="el">
-                            <Textfield 
-                                id="profile-companyRepEmailAddress" 
-                                value={ contactEmail }
+                                id="profile-companyEmailAddress" 
+                                value={ emailAddress }
                                 label="Email Address"
                                 type="email" 
                                 placeholder="Johndoe@email.com" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
                                 onBlur={ upload }
-                                onChange = { save }  
+                                onChange = { save } 
                             />
                         </div>
                         <div className="el">
                             <PhoneNumber 
-                                id="profile-companyRepPhoneNumber"
+                                id="profile-companyPhoneNumber"
                                 label = "Phone Number"
-                                value={ contactPhone }  
+                                value={ phoneNumber }  
                                 mask= {['(', [0], /\d/,')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
                                 placeholder="(07) 9999-9999"
+                                root="inner-textfield" 
+                                fieldClass="textfield"
+                                onBlur={ upload }
+                                onChange = { save } 
+                            />
+                        </div>
+                        <div className="el">
+                            <Textfield 
+                                id="profile-companyWebsite" 
+                                value={ website }
+                                label="Website"
+                                type="text" 
+                                placeholder="www.website.com" 
+                                root="inner-textfield" 
+                                fieldClass="textfield"
+                                onBlur={ upload }
+                                onChange = { save }  
+                            />
+                        </div>
+                        <div className="el">
+                                <DropDown 
+                                    label="State" 
+                                    id="profile-companyState" 
+                                    className="select" 
+                                    init={ state } 
+                                    width="330px" 
+                                    options={ statesAustralia } 
+                                    selected={ state || "Qld" } 
+                                    onChange={ save }
+                                    onBlur={ upload }
+                                    onChange = { save }
+                                />
+                        </div>
+                        <div className="el">
+                            <Textfield 
+                                id="profile-companyCity"
+                                label="City/Suburb"
+                                value={ city } 
+                                type="text" 
+                                placeholder="City/Suburb" 
+                                root="inner-textfield" 
+                                fieldClass="textfield"
+                                onBlur={ upload }
+                                onChange = { save }
+                            />
+                        </div>
+                        <div className="el">
+                            <Textfield 
+                                id="profile-companyStreet"
+                                label="Physical Address"
+                                value={ physicalAddress } 
+                                type="text" 
+                                placeholder="Street Address" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
                                 onBlur={ upload }
@@ -218,22 +183,125 @@ function CompanyTab(props){
                         </div>
                         <div className="el">
                             <Textfield 
-                                id="profile-companyRepPosition" 
-                                value={ contactPosition }
-                                label="Contact Position"
+                                id="profile-companyPostCode"
+                                label="Post Code"
+                                value={ postCode } 
                                 type="text" 
-                                placeholder="eg. Head of sales" 
+                                placeholder="POST/ZIP CODE" 
+                                root="inner-textfield" 
+                                fieldClass="textfield"
+                                onBlur={ upload }
+                                onChange = { save }  
+                            />
+                        </div>
+                        <div className="el">
+                            <Textfield 
+                                id="profile-company_acn_abn"
+                                label="ACN/ABN"
+                                value={ acn_abn } 
+                                type="text" 
+                                placeholder="Bank Account Number" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
                                 onBlur={ upload }
                                 onChange = { save } 
                             />
                         </div>
+                        
                     </div>
                 </div>
-            <div className="clear"></div>
-        </div>
-    )
+                <div className="half left">
+                    <div className="heading">Company Contact Person(Optional) <div className="bottom-border"></div></div>
+                        <div className="information">
+                            <div className="el">
+                                <Textfield 
+                                    id="profile-companyRepFullName"
+                                    label="Full Name"
+                                    value={ contactName } 
+                                    type="text" 
+                                    placeholder="John Doe" 
+                                    root="inner-textfield" 
+                                    fieldClass="textfield"
+                                    onBlur={ upload }
+                                    onChange = { save }  
+                                />
+                            </div>
+                            <div className="el">
+                                <Textfield 
+                                    id="profile-companyRepEmailAddress" 
+                                    value={ contactEmail }
+                                    label="Email Address"
+                                    type="email" 
+                                    placeholder="Johndoe@email.com" 
+                                    root="inner-textfield" 
+                                    fieldClass="textfield"
+                                    onBlur={ upload }
+                                    onChange = { save }  
+                                />
+                            </div>
+                            <div className="el">
+                                <PhoneNumber 
+                                    id="profile-companyRepPhoneNumber"
+                                    label = "Phone Number"
+                                    value={ contactPhone }  
+                                    mask= {['(', [0], /\d/,')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+                                    placeholder="(07) 9999-9999"
+                                    root="inner-textfield" 
+                                    fieldClass="textfield"
+                                    onBlur={ upload }
+                                    onChange = { save }  
+                                />
+                            </div>
+                            <div className="el">
+                                <Textfield 
+                                    id="profile-companyRepPosition" 
+                                    value={ contactPosition }
+                                    label="Contact Position"
+                                    type="text" 
+                                    placeholder="eg. Head of sales" 
+                                    root="inner-textfield" 
+                                    fieldClass="textfield"
+                                    onBlur={ upload }
+                                    onChange = { save } 
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="half left">
+                    <div className="information">
+                        <div className="heading">Company users<div className="bottom-border"></div></div>
+                            <div className="el">
+                            { companyUsersCount < 1?<span className="no-info">There are no company users to display</span>:null}
+                            </div>
+                            <div className="el">
+                                <Textfield 
+                                    id="profile-companyAddUser" 
+                                    value={ userToBeAdded }
+                                    label="Persons Email Address"
+                                    type="email" 
+                                    placeholder="example@email.com" 
+                                    root="inner-textfield" 
+                                    fieldClass="textfield"
+                                    upload={ ()=>{} }
+                                    onChange = { save } 
+                                />
+                            </div>
+                            <div>
+                                <FmButton
+                                    id="sendEmail"
+                                    variant="contained"
+                                    onClick = { this.sendAdditionRequest }
+                                    styles={ submit_styles}
+                                    isActive = { isActive }
+                                    text="Invite User"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                <div className="clear"></div>
+            </div>
+        )
+    }
 
 }
 

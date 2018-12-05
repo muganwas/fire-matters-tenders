@@ -146,6 +146,10 @@ class ContractsTab extends React.Component {
     render(){
         return(
             <div className="tenders main-content">
+                <div className="title-bar">
+                    <span id="title">Contracts</span>
+                </div>
+                
                 <ListedContracts />
             </div>
         )

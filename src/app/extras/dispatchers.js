@@ -124,6 +124,24 @@ export function dispatchedProfileInfo(Info) {
     }
 }
 
+export function dispatchedContractsInfo(Info) {
+    if(Info !== undefined && Info !== null){   
+      return {
+            type: "FETCH_CONTRACTS_FULFILLED",
+            payload: {
+                info: Info
+            }   
+        }
+    }else{
+        return {
+            type: "FETCH_CONTRACTS_REJECTED",
+            payload: {
+                error: "could not fetch contracts details"
+            }
+        } 
+    }
+}
+
 export function dispatchedListingsInfo(info) {
     if(info !== undefined && info !== null){   
       return {

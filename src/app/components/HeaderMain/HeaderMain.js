@@ -130,7 +130,7 @@ class HeaderMain extends Component {
                     <NavLink activeClassName="active" id="about" onClick={ this.toggleMenu } to={`/about`}>About</NavLink>
                     <NavLink activeClassName="active" id="contact" onClick={ this.toggleMenu } to={`/contact`}>Contact</NavLink>
                 <div className="login-social right">
-                    { this.socialIcons }
+                    { /*this.socialIcons*/ }
                     { sessionStorage.getItem('loginSession')?this.loggeInOptions:this.NotLoggedInOptions }
                 </div>                   
                 </div>

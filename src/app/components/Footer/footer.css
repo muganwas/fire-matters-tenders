@@ -17,6 +17,7 @@
 .social-icons{
     text-align: right;
     width: 30%;
+    min-height: 40px;
     display: inline-block;
 }
 .footer-links{
