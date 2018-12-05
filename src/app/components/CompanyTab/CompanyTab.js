@@ -38,6 +38,7 @@ class CompanyTab extends React.Component{
         + addAddress 
         + "</a> </p>",
         url = baseURL + sendEmailEndPoint;
+        
         if(recipient){
             user.addCompanyUser.submitButton.isActive = false;
             this.props.dispatch(dispatchedUserInfo(user));
