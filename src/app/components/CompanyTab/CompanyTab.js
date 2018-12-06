@@ -68,6 +68,38 @@ class CompanyTab extends React.Component{
         }  
     }
 
+    removeCompnayUser = (e)=>{
+        let { userInfo } = this.props;
+        userInfo = userInfo?userInfo:JSON.parse(sessionStorage.getItem('profileInfo'));
+        let companyInformation = userInfo,
+        companyUsers = companyInformation.companyUsers || {},
+        userId = e.target.id;
+        console.log(userId)
+    }
+
+    renderCompanyUsers = (key)=>{
+        let { userInfo } = this.props;
+        userInfo = userInfo?userInfo:JSON.parse(sessionStorage.getItem('profileInfo'));
+        let companyInformation = userInfo,
+        companyUsers = companyInformation.companyUsers || {};
+        if(companyUsers[key]){
+            return(
+                <div className="serviceCategory" key = { key }>
+                    { key }
+                    <span 
+                        className="close right"  
+                        onClick = { this.removeCompnayUser } 
+                        id={ key }
+                    >
+                        &#x2716;
+                    </span>
+                </div>
+            )
+        }else
+            return null;
+
+    }
+
     render(){
 
         let { userInfo, user } = this.props;
@@ -298,7 +330,11 @@ class CompanyTab extends React.Component{
                     <div className="information">
                         <div className="heading">Company users<div className="bottom-border"></div></div>
                             <div className="el">
-                            { companyUsersCount < 1?<span className="no-info">There are no company users to display</span>:null}
+                            { 
+                                companyUsersCount < 1?<span className="no-info">There are no company users to display</span>
+                                :Object.keys(companyUsers).map(this.renderCompanyUsers)
+                            }
+                            
                             </div>
                             <div className="el">
                                 <Textfield 
