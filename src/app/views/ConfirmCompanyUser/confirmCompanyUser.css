@@ -1,0 +1,15 @@
+#feedback{
+    display: block;
+    margin: 30px 40%;
+    padding: 20px;
+    border: thin solid #dfdfdf;
+    border-radius: 3px;
+    text-align: center;
+    width: 18%;
+}
+.neg{
+    color: #ED2431;
+}
+.pos{
+    color: #F79A50;
+}

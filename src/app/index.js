@@ -4,86 +4,94 @@ import registerServiceWorker from  "./registerServiceWorker";
 import { Router, Route, Switch} from 'react-router-dom';
 import { createBrowserHistory } from "history";
 import { Provider } from "react-redux";
-import { LandingPage, Listings, NotFound, Login, Signup, ServiceProviders, ContactPage, ProfilePage, UserPage } from 'views';
+import { 
+	LandingPage, 
+	Listings, 
+	NotFound, 
+	Login, 
+	Signup, 
+	ServiceProviders, 
+	ContactPage, 
+	ProfilePage, 
+	UserPage,
+	ConfirmCompanyUser
+} from 'views';
 import store from './store';
 import 'css/App.css';
 
 var mPoint = document.getElementById('root'),
-hist = createBrowserHistory();
-
-let LandingPageComponent = ()=>{
+hist = createBrowserHistory(),
+LandingPageComponent = ()=>{
 	return(
 		<Provider store={store}>
 			<LandingPage />
 		</Provider>
 	)
-}
-
-let ContactComponent = ()=>{
+},
+ConfirmCompanyUserComponent = ()=>{
+	return(
+		<Provider store={store}>
+			<ConfirmCompanyUser />
+		</Provider>
+	)
+},
+ContactComponent = ()=>{
 	return(
 		<Provider store={store}>
 			<ContactPage />
 		</Provider>
 	)
-}
-
-let UserPageComponent = ()=>{
+},
+UserPageComponent = ()=>{
 	return(
 		<Provider store={store}>
 			<UserPage />
 		</Provider>
 	)
-}
-
-let ProfilePageComponent = ()=>{
+},
+ProfilePageComponent = ()=>{
 	return(
 		<Provider store={store}>
 			<ProfilePage />
 		</Provider>
 	)
-}
-
-let ListingComponent = ()=>{
+},
+ListingComponent = ()=>{
 	return(
 		<Provider store={store}>
 			<Listings />
 		</Provider>
 	)
-}
-
-let ServiceProvidersComponent = ()=>{
+},
+ServiceProvidersComponent = ()=>{
 	return(
 		<Provider store={store}>
 			<ServiceProviders />
 		</Provider>
 	)
-}
-
-let LoginComponent = ()=>{
+},
+LoginComponent = ()=>{
 	return(
 		<Provider store={store}>
 			<Login />
 		</Provider>
 	)
-}
-
-let SignupComponent = ()=>{
+},
+SignupComponent = ()=>{
 	return(
 		<Provider store={store}>
 			<Signup/>
 		</Provider>
 	)
-}
-
-let NotFoundComponent = ()=>{
+},
+NotFoundComponent = ()=>{
 	return(
 		<Provider store={store}>
 			<NotFound/>
 		</Provider>
 	)
-}
-
-let Root = ()=>{
+},
+Root = ()=>{
 	return(
 		<Router history={hist} basename = "/" >
 			<div className="main">
@@ -97,12 +105,13 @@ let Root = ()=>{
 					<Route exact path="/contact" component={ ContactComponent } />
 					<Route exact path="/login" component={ LoginComponent } />
 					<Route exact path="/signup" component={ SignupComponent } />
+					<Route exact path="/addUser" component={ ConfirmCompanyUserComponent } />
 					<Route component={ NotFoundComponent } />
 				</Switch>
 			</div>
 		</Router>
 	)
-}
+};
 ReactDom.render(
 	<Root/>,mPoint
 )
