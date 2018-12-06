@@ -134,8 +134,11 @@ export const emergencyExitLighting = {
 }
 
 export const contractTypes = {
-    longTerm: "Long-term",
-    shortTerm: "Short-term"
+    1: "1 year",
+    2: "2 years",
+    3: "3 years",
+    5: "5 years",
+    custom: "Custom"
 }
 
 export const ownerOccupierProfileTabs = {

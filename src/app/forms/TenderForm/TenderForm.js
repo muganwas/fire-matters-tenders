@@ -30,7 +30,7 @@ const TenderForm = props=>{
         <div style={ styles.trans } className="tenders listing-form-container">
             <div className="listing-form-subcontainer">
                 <div className="header">
-                    <span id="header-text">Post Listing </span>
+                    <span id="header-text">Post New Tender </span>
                     <span className="right" onClick={ close } id="close">&#x2716;</span>
                 </div>
                 <div className="listing-form">

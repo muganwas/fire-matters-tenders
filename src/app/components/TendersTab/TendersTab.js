@@ -10,9 +10,9 @@ import {
     statesAustralia, 
     listingCategories, 
     equipmentCategories,
-    detectionAndWarningSystems,
-    portableEquipment,
-    passiveProtection,
+    detectionAndWarningSystem,
+    portableFireFightingEquipment,
+    passiveFireProtection,
     emergencyExitLighting,
     contractTypes
 } from 'extras/config';
@@ -358,7 +358,7 @@ class TendersTab extends React.Component {
         userType = this.props.profileInfo.userType,
         feedback = listingAttributes.feedback,
         feedbackClass = listingAttributes.feedbackClass,
-        equipment = {detectionAndWarningSystems, portableEquipment, passiveProtection, emergencyExitLighting };
+        equipment = { detectionAndWarningSystem, portableFireFightingEquipment, passiveFireProtection, emergencyExitLighting };
         return(
             <div className="tenders main-content">
                 {showListingsForm
@@ -383,7 +383,7 @@ class TendersTab extends React.Component {
                     <span id="title">Tenders</span>
                     {userType === "owner_occupier"?<span id="search">
                         <FmButton variant="contained" styles={ alt_styles } text="Rehire service provider" />
-                        <FmButton variant="contained" onClick={ this.renderListingForm } styles={ styles } text="Post New Tender" />
+                        <FmButton variant="contained" onClick={ this.renderListingForm } styles={ styles } text="Post New Listing" />
                         <SearchInput className="alt-search" placeholder="search for your listings" search={ this.searchListings } />
                     </span>:null}
                 </div>
