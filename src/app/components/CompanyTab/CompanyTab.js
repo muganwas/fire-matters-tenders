@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { DropDown, Textfield, PhoneNumber, FmButton } from 'components';
-import { dispatchedUserInfo} from 'extras/dispatchers';
+import { dispatchedUserInfo } from 'extras/dispatchers';
 import {  statesAustralia } from 'extras/config';
 import { submit_styles } from './styles';
 import axios from 'axios';
@@ -69,12 +69,28 @@ class CompanyTab extends React.Component{
     }
 
     removeCompnayUser = (e)=>{
-        let { userInfo } = this.props;
+        let { userInfo, user } = this.props;
         userInfo = userInfo?userInfo:JSON.parse(sessionStorage.getItem('profileInfo'));
         let companyInformation = userInfo,
         companyUsers = companyInformation.companyUsers || {},
+        updateURL = baseURL + userUpdateEndPoint,
+        mainUserId = companyInformation.id,
         userId = e.target.id;
-        console.log(userId)
+
+        Object.keys(companyUsers).map(key=>{
+            if(key === userId){
+                delete companyUsers[key];
+            }
+        });
+
+        user.profileInfo.companyUsers = companyUsers;
+        axios.post(updateURL, { userId: mainUserId, sectTitle: "companyUsers", updateData: companyUsers }).
+        then(res=>{
+            if(res.data){
+                this.props.dispatch(dispatchedUserInfo(user));
+                this.forceUpdate();
+            }
+        });
     }
 
     renderCompanyUsers = (key)=>{
