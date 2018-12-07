@@ -2,6 +2,11 @@ const defaultState = {
     info: {
       sites:{},
       activeSite: {},
+      addEquipment: {
+        submitButton:{
+          isActive: true
+        }
+      },
       detailsView: {
         show: false
       },

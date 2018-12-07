@@ -33,9 +33,10 @@ export default class Footer extends Component {
                     <SocialIcon url="https://google.com/" style={{ height: 35, width: 35, margin: 5  }} color="#fff"/>*/}
                 </div>
                 <div className="misc">
-                    <span className="footer-phone"><i className="material-icons">phone</i><a href="tel:(07) 3071 9088">(07) 3071 9088</a></span>
+                    {/*<span className="footer-phone"><i className="material-icons">phone</i><a href="tel:(07) 3071 9088">(07) 3071 9088</a></span>
                     <span className="footer-phone"><i className="material-icons">email</i><a href="mailto:info@firematters.com.au">info@firematters.com.au</a></span>
-                    <span className="footer-phone"><i className="material-icons">home</i>34, Queens street. Darwin</span>
+                    <span className="footer-phone"><i className="material-icons">home</i>34, Queens street. Darwin</span>*/}
+                    <span className="footer-phone"><i className="material-icons">email</i><a href="/contact">Contact Us</a></span>
                 </div>
                 <div className="copy">
                     &copy;{ year } FIRE MATTERS - Fire Safety Compliance - All rights reserved.

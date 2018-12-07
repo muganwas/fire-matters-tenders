@@ -68,7 +68,6 @@ class PersonnelTab extends React.Component{
         let userlen = Object.keys(userInfo).length;
         userInfo = userlen > 0?userInfo:JSON.parse(sessionStorage.getItem('profileInfo'));
         let userType = userInfo.userType,
-        companyName = userInfo.companyName,
         userName = userInfo.fullName,
         phoneNumber = userInfo.phoneNumber?(userInfo.phoneNumber).toString():undefined,
         mobileNumber = userInfo.mobileNumber?(userInfo.mobileNumber).toString():undefined,
@@ -123,7 +122,7 @@ class PersonnelTab extends React.Component{
                 <div className="half left">
                     <div className="heading">Basic Information <div className="bottom-border"></div></div>
                     <div className="information">
-                        <div className="el">
+                        {/*<div className="el">
                             <DropDown 
                                 label="Account Type" 
                                 id="profile-userType" 
@@ -135,7 +134,7 @@ class PersonnelTab extends React.Component{
                                 onChange={ save }
                                 onBlur={ upload }
                             />
-                        </div>
+                        </div>*/}
                         <div className="el">
                             <Textfield 
                                 id="profile-fullName"
@@ -201,7 +200,7 @@ class PersonnelTab extends React.Component{
                                 onChange = { save }
                             />
                         </div>
-                        <div className="el">
+                        {/*<div className="el">
                             <Textfield 
                                 id="profile-companyName"
                                 label="Company Name"
@@ -213,7 +212,7 @@ class PersonnelTab extends React.Component{
                                 onBlur={ upload }
                                 onChange = { save }
                             />
-                        </div>
+                        </div>*/}
                     </div>
                 </div>
                 <div className="half left">

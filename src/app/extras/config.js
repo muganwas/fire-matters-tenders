@@ -98,12 +98,12 @@ export const equipmentCategoriesFull = {
     portableFireFightingEquipment: {
         hoseReels: "Hose Reels",
         extinguishers: "Extinguishers",
-        totalPortableFireFighting: "Total Portable FireFighting"
+        totalPortableFireFighting: "Total Portable Fire-Fighting"
     },
     passiveFireProtection: {
         fireDoors: "Fire Doors",
         servicePenetrations: "Service Penetrations",
-        totalPassiveFireProtection: "Total PassiveFire Protection"
+        totalPassiveFireProtection: "Total Passive Fire Protection"
     },
     emergencyExitLighting: {
         totalEmergencyExitLighting: "Total Emergency Exit Lighting"

@@ -23,10 +23,16 @@
 }
 .equipment .close{
     cursor: pointer;
-    font-size: 12px;
+    font-size: 10px;
     color: #ED2431;
 }
 .equipment .close:hover{
     transition: 4ms linear;
     color: #F79A50;
+}
+.equipListed{
+    display: block;
+    position: relative;
+    height: 15px;
+    padding: 2px;
 }

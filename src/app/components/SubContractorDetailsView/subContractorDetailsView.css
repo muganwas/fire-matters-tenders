@@ -8,6 +8,7 @@
     background-color: rgba(0,0,0, 0.6);
     padding: 20px;
 }
+
 .subcontractors-container .sub-container{
     box-sizing: border-box;
     border: thin solid rgb(172, 172, 172);
@@ -17,7 +18,8 @@
 
 .subcontractors-container .close {
     color: #F79A50;
-    margin: 10px;
+    font-size: 10px;
+    margin: 2px 5px;
     cursor: pointer;
 
 }

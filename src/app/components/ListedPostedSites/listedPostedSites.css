@@ -1,0 +1,43 @@
+.equipCount{
+    float: right;
+    margin: 0 10%;
+    padding: 0 5px;
+    border: 0.5px solid #e1e1e1;
+    border-radius: 2px;
+}
+.equipCount.title{
+    border: none;
+}
+.equip-title-bar{
+    padding: 3px 0;
+    font-weight: bold;
+}
+.successfulPost{
+    background-color: #96c499;
+}
+.unSuccessfulPost{
+    background-color: #fdaaaa;
+}
+.decriment, .increment{
+    font-size: 16px;
+    cursor: pointer;
+}
+.decriment:hover, .increment:hover {
+    color: #ED2431;
+    -webkit-transition: all 0.2s ease-in;
+    -moz-transition: all 0.2s ease-in;
+    -ms-transition: all 0.2s ease-in;
+    -o-transition: all 0.2s ease-in;
+    transition: all 0.2s ease-in; 
+}
+.decriment:active, .increment:active {
+    color: #F79A50;
+    -webkit-transition: all 0.2s ease-in;
+    -moz-transition: all 0.2s ease-in;
+    -ms-transition: all 0.2s ease-in;
+    -o-transition: all 0.2s ease-in;
+    transition: all 0.2s ease-in; 
+}
+.countDigit{
+    padding: 0 5px;
+}

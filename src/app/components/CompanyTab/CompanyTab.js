@@ -131,6 +131,7 @@ class CompanyTab extends React.Component{
         physicalAddress = companyInformation.companyPhysicalAddress,
         postCode = companyInformation.companyPostCode,
         acn_abn = companyInformation.company_acn_abn,
+        companyName = companyInformation.companyName,
         contactName = companyInformation.companyRepFullName,
         contactEmail = companyInformation.companyRepEmailAddress,
         contactPhone = companyInformation.companyRepPhoneNumber,
@@ -177,6 +178,19 @@ class CompanyTab extends React.Component{
                 <div className="half left">
                     <div className="heading">Company Information(Optional) <div className="bottom-border"></div></div>
                     <div className="information">
+                        <div className="el">
+                            <Textfield 
+                                id="profile-companyName"
+                                label="Company Name"
+                                value={ companyName } 
+                                type="text" 
+                                placeholder="J & J Doe" 
+                                root="inner-textfield" 
+                                fieldClass="textfield"
+                                onBlur={ upload }
+                                onChange = { save }
+                            />
+                        </div>
                         <div className="el">
                             <Textfield 
                                 id="profile-companyEmailAddress" 

@@ -181,7 +181,7 @@ class ListedPostedTenders extends Component {
                         >
                             &#x2716;
                         </span>
-                        <ListedPostedSiteDetails />
+                        <ListedPostedSiteDetails siteKey= {key} />
                     </div>
                     :null
                 }

@@ -19,7 +19,7 @@ const RenderEquipment = props => {
             Object.keys(currCat).map(key=>{
                 if(currCat[key] === true){
                     return (
-                        <div key={key}>
+                        <div className="equipListed" key={key}>
                             { key }
                             <span 
                                 className="close right" 

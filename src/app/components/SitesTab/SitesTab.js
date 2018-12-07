@@ -3,15 +3,17 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { dispatchedSitesInfo, dispatchedListingsInfo, dispatchedGenInfo, dispatchedUserInfo } from 'extras/dispatchers';
-import './sitesTab.css'
+import './sitesTab.css';
 import { SearchInput, FmButton, ListedPostedSites } from 'components';
 import { SitesForm } from 'forms';
-import {  
+/*import {  
+    equipmentCategories,
+    equipmentCategoriesFull,
     detectionAndWarningSystems,
     portableEquipment,
     passiveProtection,
     emergencyExitLighting,
-} from 'extras/config';
+} from 'extras/config';*/
 import  { styles, submit_styles } from './styles';
 
 
@@ -141,6 +143,7 @@ class SitesTab extends React.Component {
     dummy= ()=>{
         return Promise.resolve("Nassing");
     }
+
     save=(e)=>{
         e.persist();
         return new Promise((resolve, reject)=>{
@@ -162,17 +165,18 @@ class SitesTab extends React.Component {
             else
                 reject({message: "No data"});
         });
-    };
+    }
 
 
     render(){
-        const listingsInfo = this.props.listingsInfo,
+        const listingsInfo = {...this.props.listingsInfo},
         showListingsForm = listingsInfo.createForm.show,
         listingAttributes = this.props.user.submitSite,
         errors = listingsInfo.createForm.errors,
         userType = this.props.profileInfo.userType,
         feedback = listingAttributes.feedback,
         feedbackClass = listingAttributes.feedbackClass;
+       
         return(
             <div className="tenders main-content">
 
