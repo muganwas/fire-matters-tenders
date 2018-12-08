@@ -39,9 +39,6 @@ const ListingForm = props=>{
     isActive = submitButton.isActive,
     key= userInfo.createListing.listingEquipmentCategory_key,
     equipment = equipmentCollection[key];
-
-    console.log(equipmentCollection)
-    console.log(key)
     return(
         <div className="listing-form-container">
             <div className="listing-form-subcontainer">

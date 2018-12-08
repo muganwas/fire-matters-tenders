@@ -4,6 +4,9 @@ const defaultState = {
         errors: {},
         show: false
       },
+      listedJobDetails: {
+        show: false
+      },
       tenderForm: {
         errors:{},
         show: false

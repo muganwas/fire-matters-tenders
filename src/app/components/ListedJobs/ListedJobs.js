@@ -4,6 +4,7 @@ import  { Loader, FmButton, MoreHoriz } from 'components';
 import { TenderForm, MessageForm } from 'forms';
 import axios from 'axios';
 import { dispatchedGenInfo, dispatchedUserInfo, dispatchedListingsInfo, dispatchedMessagesInfo } from 'extras/dispatchers';
+import ListedJobDetails from './ListedJobDetails';
 import './listedJobs.css';
 import { PropTypes } from 'prop-types';
 import { styles, submit_styles } from './styles';
@@ -240,13 +241,19 @@ class ListedJobs extends Component {
         })  
     }
 
-    renderListingDetails = ()=>{
-
+    renderListingDetails = (e)=>{
+        let id = e.target.id,
+        //console.log(id);
+        listingsInfo = {...this.props.listingsInfo};
+        listingsInfo.listedJobDetails.show = !listingsInfo.listedJobDetails.show;
+        listingsInfo.listedJobDetails.currListingId = id;
+        this.props.dispatch(dispatchedListingsInfo(listingsInfo));
     }
 
     displayListings = (key)=>{
         let listings = this.props.genInfo.generalListings,
         listingsInfo = {...this.props.listingsInfo},
+        showJobDetails = listingsInfo.listedJobDetails.show,
         errors = listingsInfo.tenderForm.errors,
         tenderAttributes = this.props.user.submitTender,
         feedback = tenderAttributes.feedback,
@@ -262,6 +269,20 @@ class ListedJobs extends Component {
         }
         return(
             <div className="list-row" key={key} id={ listings[key].id }>
+                {   
+                    showJobDetails?
+                    <div styles = {submit_styles.trans} className="listedJobsDetails-container">
+                        <span
+                            className="close right" 
+                            onClick={ this.renderListingDetails } 
+                            id="close"
+                        >
+                            &#x2716;
+                        </span>
+                        <ListedJobDetails />
+                    </div>
+                    :null
+                }
                 {
                     showTenderForm
                     ?<TenderForm
