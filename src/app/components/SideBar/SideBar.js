@@ -31,6 +31,7 @@ subContractorsEndPoint = process.env.SUB_CONTRACTORS_END_POINT;
         siteData: store.user.info.submitSite,
         listingsInfo: store.listingsInfo.info,
         sitesInfo: store.sites.info,
+        tendersInfo: store.tenders.info,
         messagesInfo: store.messages.info,
         messageData: store.user.info.submitMessage,
         subContractorData: store.user.info.addSubContractor,

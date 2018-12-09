@@ -2,30 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import  { Loader, FmButton } from 'components';
 import axios from 'axios';
-import { dispatchedGenInfo, dispatchedProfileInfo } from 'extras/dispatchers';
+import { dispatchedGenInfo, dispatchedTendersInfo, dispatchedProfileInfo } from 'extras/dispatchers';
 import './listedServiceProviders.css';
 import { PropTypes } from 'prop-types';
+import { InviteToTenderForm } from 'forms';
 import { NavLink, withRouter } from 'react-router-dom';
+import { styles } from './styles';
 
 const baseUrl = process.env.BACK_END_URL,
 usersEndPoint = process.env.USERS_END_POINT + "?userType=service_provider";
-
-const styles = {
-    button: {
-      margin: 2,
-      padding: '3px 10px',
-      fontSize: 10,
-      backgroundColor: "#F79A50",
-      '&:hover': {
-        background: '#F79A50',
-        boxShadow: '1px 2px 4px #BC2902',
-        transition: 'all 0.2s ease-in'
-      }
-    },
-    input: {
-      display: 'none',
-    },
-}
 
 @connect((store)=>{
     return {
@@ -33,6 +18,8 @@ const styles = {
         search: store.search,
         genInfo: store.genInfo,
         profileInfo: store.profile.info,
+        inviteToTender: store.tenders.info.inviteToTender,
+        tendersInfo: store.tenders.info,
         serviceProvidersInfo: store.serviceProviders.info
     }
 })
@@ -43,6 +30,9 @@ class ListedServiceProviders extends Component {
     
     componentWillReceiveProps(nextProps){
         this.props = {...nextProps};
+    }
+
+    componentWillMount(){
         if(!this.props.genInfo.info.serviceProviders)
             this.fetchServiceProviders();
     }
@@ -76,15 +66,49 @@ class ListedServiceProviders extends Component {
         this.props.dispatch(dispatchedProfileInfo(profileInfo));
     }
 
+    renderInviteForm = (serviceProviderKey)=>{
+        let tendersInfo = {...this.props.tendersInfo},
+        serviceProviders = {...this.props.genInfo.info.serviceProviders};
+        tendersInfo.inviteToTender.submitButton.text = "Send Invite";
+        if(typeof serviceProviderKey === "string"){
+            tendersInfo.inviteToTender.sender = "info@fire-matters.com.au";
+            tendersInfo.inviteToTender.recipient = serviceProviders[serviceProviderKey].emailAddress;
+        }
+        tendersInfo.inviteToTender.showForm = !tendersInfo.inviteToTender.showForm;
+        this.props.dispatch(dispatchedTendersInfo(tendersInfo));
+    }
+
+    dummy = ()=>{
+        return new Promise(resolve=>resolve());
+    }
+
+    saveInviteMessage = (e)=>{
+        let  id = e.target.id,
+        tendersInfo = {...this.props.tendersInfo},
+        message = e.target.value;
+        tendersInfo.inviteToTender.message = message;
+        this.props.dispatch(dispatchedTendersInfo(tendersInfo));
+    }
+
     displayServiceProviders = (key)=>{
-        let serviceProviders = this.props.genInfo.info.serviceProviders,
+        let serviceProviders = {...this.props.genInfo.info.serviceProviders},
+        tendersInfo = {...this.props.tendersInfo},
         profileInfo = sessionStorage.getItem('profileInfo'),
+        feedbackClass = tendersInfo?tendersInfo.inviteToTender.feedbackClass:"hidden",
         categories = this.props.genInfo.info.serviceProviders[key].profile.categoriesOfService,
         userType = profileInfo?JSON.parse(sessionStorage.getItem('profileInfo')).userType: null,
+        showInviteForm = tendersInfo.inviteToTender.showForm,
         serviceProviderId = serviceProviders[key].id;
 
         return(
             <div className="list-row" key={key} id={ serviceProviders[key].id }>
+            { showInviteForm
+            ?<InviteToTenderForm
+                dummy={ this.dummy } 
+                save = { this.saveInviteMessage } 
+                close = { this.renderInviteForm }
+             />
+            :null }
                 <div className="twenty clickable">
                     <NavLink id={ serviceProviders[key].id } onClick = { this.goToProfile } to={`/profilePage:${ serviceProviderId }`}>
                         { serviceProviders[key].companyName }
@@ -105,7 +129,7 @@ class ListedServiceProviders extends Component {
                 </div>
                 <div className="twenty">{
                     userType === "owner_occupier" || !userType
-                    ?<FmButton variant="contained" styles={ styles } text="Invite to Tender" />
+                    ?<FmButton variant="contained" styles={ styles } onClick={ ()=>this.renderInviteForm(key) } text="Invite to Tender" />
                     :null 
                     }
                 </div>
@@ -116,6 +140,7 @@ class ListedServiceProviders extends Component {
 
     render(){
         let serviceProviders = this.props.genInfo.info.serviceProviders,
+        tendersInfo = this.props.tendersInfo,
         filter = this.props.serviceProvidersInfo.filter.categoryTitle,
         serviceProviderInfo = this.props.serviceProvidersInfo,
         secondaryFilters = serviceProviderInfo?serviceProviderInfo.signupInfo:{},
@@ -197,7 +222,7 @@ class ListedServiceProviders extends Component {
                 { 
                     filter || keyWordsLen > 0 || secondaryFilterLen > 0
                     ?Object.keys(filteredNextNext).map(this.displayServiceProviders)
-                    :serviceProviders
+                    :serviceProviders && tendersInfo
                     ?Object.keys(serviceProviders).map(this.displayServiceProviders)
                     :<div className="loader">
                         <Loader />

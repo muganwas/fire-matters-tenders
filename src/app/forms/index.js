@@ -6,3 +6,4 @@ export { default as TenderForm } from 'forms/TenderForm/TenderForm';
 export { default as SitesForm } from 'forms/SitesForm/SitesForm';
 export { default as MessageForm } from 'forms/MessageForm/MessageForm';
 export { default as SubContractorForm } from 'forms/SubContractorForm/SubContractorForm';
+export { default as InviteToTenderForm } from 'forms/InviteToTenderForm/InviteToTenderForm';

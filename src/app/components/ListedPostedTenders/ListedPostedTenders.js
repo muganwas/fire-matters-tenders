@@ -144,11 +144,11 @@ class ListedPostedTenders extends Component {
                 this.forceUpdate();
             }else{
                 let tendererId = JSON.parse(sessionStorage.getItem('profileInfo')).id,
-                genInfo = {...this.props.genInfo.info},
-                tendersInfo = {...this.props.tendersInfo},
                 getInfoUrl = baseURL + tenderEndPoint + "?tendererId=" + tendererId;
                 axios.get(getInfoUrl).then(res=>{
                     if(res){
+                        let genInfo = {...this.props.genInfo.info},
+                        tendersInfo = {...this.props.tendersInfo};
                         tendersInfo.tenders = res.data;
                         Object.keys(tendersInfo.tenders).map((key)=>{
                             tendersInfo.tenders[key].moreMenuClassName = "hidden";

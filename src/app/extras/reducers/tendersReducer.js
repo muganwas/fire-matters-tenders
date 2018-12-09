@@ -1,6 +1,21 @@
 const defaultState = {
     info: {
       tenders: null,
+      inviteToTender: {
+        sender: null,
+        recipient: null,
+        message: "",
+        currTenderType: null,
+        currLister: null,
+        showForm: false,
+        error: false,
+        feedback: null,
+        feedbackClass: "hidden",
+        submitButton: {
+          text: "Send Invite",
+          isActive: true
+        }
+      },
       editTenderForm:{
         show: false,
         feedback: undefined,
