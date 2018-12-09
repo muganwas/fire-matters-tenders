@@ -67,16 +67,24 @@ class ListedServiceProviders extends Component {
     }
 
     renderInviteForm = (serviceProviderKey)=>{
-        let tendersInfo = {...this.props.tendersInfo},
-        serviceProviders = {...this.props.genInfo.info.serviceProviders};
-        tendersInfo.inviteToTender.submitButton.text = "Send Invite";
-        if(typeof serviceProviderKey === "string"){
-            tendersInfo.inviteToTender.sender = "info@fire-matters.com.au";
-            tendersInfo.inviteToTender.recipient = serviceProviders[serviceProviderKey].emailAddress;
-        }
-        tendersInfo.inviteToTender.showForm = !tendersInfo.inviteToTender.showForm;
-        this.props.dispatch(dispatchedTendersInfo(tendersInfo));
+        let profileInfo = JSON.parse(sessionStorage.getItem('profileInfo'));
+        if(profileInfo){
+            let tendersInfo = {...this.props.tendersInfo},
+            serviceProviders = {...this.props.genInfo.info.serviceProviders};
+            tendersInfo.inviteToTender.feedback = null,
+            tendersInfo.inviteToTender.message = "",
+            tendersInfo.inviteToTender.currLister = profileInfo.fullName;
+            tendersInfo.inviteToTender.submitButton.text = "Send Invite";
+            if(typeof serviceProviderKey === "string"){
+                tendersInfo.inviteToTender.sender = "info@fire-matters.com.au";
+                tendersInfo.inviteToTender.recipient = serviceProviders[serviceProviderKey].emailAddress;
+            }
+            tendersInfo.inviteToTender.showForm = !tendersInfo.inviteToTender.showForm;
+            this.props.dispatch(dispatchedTendersInfo(tendersInfo));
+        }else
+            window.location.replace(window.location.origin + "/login");
     }
+        
 
     dummy = ()=>{
         return new Promise(resolve=>resolve());

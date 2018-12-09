@@ -8,7 +8,7 @@ import { styles } from './styles';
 import { dispatchedTendersInfo } from 'extras/dispatchers';
 
 const baseUrl = process.env.BACK_END_URL,
-sendMessageEndPoint = process.env.MESSAGES_END_POINT;
+sendEmailEndPoint = process.env.SEND_EMAIL_END_POINT;
 
 class InviteToTenderForm extends React.Component { 
 
@@ -29,7 +29,7 @@ class InviteToTenderForm extends React.Component {
         subject = "INVITE TO SUBMIT TENDER BY " + currLister,
         message = tendersInfo.inviteToTender.message,
         body = "<span>" + message + "</span>",
-        url = baseUrl + sendMessageEndPoint;
+        url = baseUrl + sendEmailEndPoint;
         if(message === undefined || message.length === 0){
             tendersInfo.inviteToTender.error = true;
             this.props.dispatch(dispatchedTendersInfo(tendersInfo));
@@ -78,7 +78,15 @@ class InviteToTenderForm extends React.Component {
                     </div>
                     <div className="listing-form">
                         <div className="information" style={ styles.information }>
-                        <div className="el" style={ styles.el }><span className={ feedbackClass }>{ feedback }</span></div>
+                        <div className="el" style={ styles.el }>
+                            { 
+                                feedback?
+                                <span className={ feedbackClass }>
+                                    { feedback }
+                                </span>:
+                                null 
+                            }
+                        </div>
                             <div className="el" style={ styles.el }>
                                 <Textfield 
                                     id="tenders-inviteToTender"
