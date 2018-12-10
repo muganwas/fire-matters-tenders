@@ -8,6 +8,7 @@ import { PropTypes } from 'prop-types';
 import { TenderForm, MessageForm } from 'forms';
 import { listedPostedTendersOptions, tenderOptions } from 'extras/config';
 import { styles, submit_styles } from './styles';
+import ListedPostedTenderDetails from './ListedPostedTenderDetails';
 
 const baseURL = process.env.BACK_END_URL,
 listingsEndPoint = process.env.LISTING_END_POINT,
@@ -36,6 +37,15 @@ class ListedPostedTenders extends Component {
         this.props = {...nextProps};
         if(!this.props.genInfo.info.listings)
             this.fetchListings();
+    }
+
+    componentWillMount(){
+        if(!this.props.genInfo.info.listings)
+            this.fetchListings();
+    }
+
+    componentDidMount(){
+        this.forceUpdate();
     }
 
     checkForErrors=()=>{
@@ -84,7 +94,6 @@ class ListedPostedTenders extends Component {
             message
         };
 
-        console.log(postObject)
         this.checkForErrors().then(res=>{
             console.log(res)
             if(res === 0){
@@ -176,7 +185,7 @@ class ListedPostedTenders extends Component {
                         /**Set the more dropdown menu class to hidden for every row*/
                         Object.keys(listings).map((key)=>{
                             genInfo.listings[key].moreMenuClassName = "hidden";
-                        })
+                        });
                         this.props.dispatch(dispatchedGenInfo(genInfo));
                         resolve("fetched");
                     }).catch(err=>{
@@ -335,12 +344,23 @@ class ListedPostedTenders extends Component {
     };
 
     displayTenders = (e)=>{
-        let tenderId = e.target.id;
+        let Id = e.target.id,
+        autoId = e.target.getAttribute('autoId');
         let listingsInfo = {...this.props.listingsInfo},
+        tenderId = autoId?autoId:Id,
         show = listingsInfo.postedTenders.overLay.show;
         listingsInfo.postedTenders.overLay.show = !show;
         listingsInfo.postedTenders.overLay.active = tenderId;
         this.props.dispatch(dispatchedListingsInfo(listingsInfo));
+    }
+
+    togglePostedTendersDisplay = (e)=>{
+        let id = e.target.id,
+        tendersInfo = {...this.props.tendersInfo };
+        tendersInfo.selectedPostedTender.tenderInfo = tendersInfo.tenders[id];
+        tendersInfo.selectedPostedTender.show = !tendersInfo.selectedPostedTender.show;
+        this.props.dispatch(dispatchedTendersInfo(tendersInfo));
+        this.forceUpdate();
     }
 
     toggleMoreMenu = (id)=>{
@@ -357,35 +377,60 @@ class ListedPostedTenders extends Component {
     renderTenders = (key)=>{
         let listingsInfo = {...this.props.tendersInfo},
         listings = {...listingsInfo.tenders},
-        //showTenderForm = listingsInfo.editTenderForm.show,
-        //feedback = listingsInfo.editTenderForm.feedback,
+        selectedTenderInfo = {...this.props.tendersInfo.selectedPostedTender},
+        showTender = selectedTenderInfo.show,
         options = tenderOptions;
-        //feedbackClass = listingsInfo.editTenderForm.feedbackClass;
-        //currListingTenderCount = 0;
             
         return(
             <div className="list-row" key={key}>
-                { /*showPostedTendersOverlay
-                ?<PostedTendersOverlay toggleDisplay={ this.displayTenders } listingId = { listingId } />
-                : null */}
+                { 
+                    showTender
+                    ?<div className="subcontractors-container">
+                            <span 
+                                className="close right" 
+                                onClick={ this.togglePostedTendersDisplay } 
+                                id="close"
+                            >
+                                &#x2716;
+                            </span>
+                            <ListedPostedTenderDetails />
+                        </div>
+                    : null 
+                }
                 <div className="twenty">{ listings[key].companyName }</div>
                 <div className="thirty">{ listings[key].coverLetter }</div>
                 <div className="twenty">{ listings[key].startDate }</div>
                 <div className="twenty">{ listings[key].rate }</div>
                 <div className="ten">
-                    <MoreHoriz 
+                    {<MoreHoriz 
                         className={ listings[key].moreMenuClassName } 
                         id={ key }
                         toggle = { this.toggleMoreMenu }
+                        onClickAlt = { this.togglePostedTendersDisplay }
                         autoid = { listings[key].id }
                         listName = "tenders"
                         element={ listings[key] }
                         options={ options }
-                     />
+                     />}
                 </div>
                 <div className="bottom-border"></div>
             </div>
         )
+
+    }
+
+    countTendersPerListing = (postedTenders, listingId, currListingTenderCount=0)=>{
+
+        if(postedTenders && listingId){
+            Object.keys(postedTenders).map(key=>{
+                if(listingId === postedTenders[key].listingId){
+                    currListingTenderCount ++;
+                }
+            });
+            return currListingTenderCount;
+        }else{
+            return currListingTenderCount;
+        }
 
     }
 
@@ -402,15 +447,6 @@ class ListedPostedTenders extends Component {
         listingId = listings[key].id,
         showPostedTendersOverlay = listingsInfo.postedTenders.overLay.show,
         feedbackClass = tenderAttributes.feedbackClass;
-        let currListingTenderCount = 0;
-
-        if(postedTenders){
-            postedTenders.forEach((obj)=>{
-                if(listingId === obj.listingId){
-                    currListingTenderCount ++;
-                }
-            });
-        }
 
         if(userType !== "owner_occupier"){
             options = { ...options, sendMessage: "Send Message"};
@@ -454,7 +490,7 @@ class ListedPostedTenders extends Component {
                         text="Submit Tender" 
                     />
                     :<div id = { listings[key].id } onClick={ this.displayTenders }className="posted-count">
-                        { currListingTenderCount }
+                        { this.countTendersPerListing(postedTenders, listingId) }
                     </div> 
                 }
                 </div>
@@ -466,6 +502,7 @@ class ListedPostedTenders extends Component {
                         email = { listings[key].userEmail }
                         listName = "listings"
                         onClick = { this.renderMessageForm }
+                        onClickAlt = { this.displayTenders }
                         element={ listings[key] }
                         options={ options }
                      />
@@ -476,8 +513,9 @@ class ListedPostedTenders extends Component {
     }
 
     render(){
-        let listings = this.props.genInfo.info.listings,
-        tenders = this.props.tendersInfo.tenders,
+        let listings = {...this.props.genInfo.info.listings},
+        listingsCount = listings?Object.keys(listings).length:0,
+        tenders = {...this.props.tendersInfo.tenders},
         tendersCount = Object.keys(tenders).length,
         userType = this.props.profileInfo.userType,
         messagesInfo = {...this.props.messagesInfo},
@@ -504,8 +542,7 @@ class ListedPostedTenders extends Component {
                     :null
                 }
                 { 
-                    tendersCount > 0
-                    ?userType === "owner_occupier"
+                    listingsCount > 0 && userType === "owner_occupier"
                     ?<div className="list-row header">
                         <span className="twenty">Location</span>
                         <span className="thirty">Description</span>
@@ -514,7 +551,8 @@ class ListedPostedTenders extends Component {
                         <span className="ten"></span>
                         <div className="bottom-border"></div>
                     </div>
-                    :<div className="list-row header">
+                    : tendersCount > 0 && userType === "service_provider"
+                    ?<div className="list-row header">
                         <span className="twenty">Company Name</span>
                         <span className="thirty">Cover Letter</span>
                         <span className="twenty">starting Date</span>
@@ -527,7 +565,7 @@ class ListedPostedTenders extends Component {
                 { 
                     userType === "owner_occupier" && listings
                     ?Object.keys(listings).map(this.displayListings)
-                    :userType !== "owner_occupier" && tenders
+                    :userType === "service_provider" && tenders
                     ?Object.keys(tenders).map(this.renderTenders)
                     :<div className="loader"><Loader /></div>
                 }

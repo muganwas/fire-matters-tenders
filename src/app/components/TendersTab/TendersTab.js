@@ -95,6 +95,7 @@ tenderEndPoint = process.env.TENDERS_END_POINT;
     return {
         user: store.user.info,
         listingsData: store.user.info.createListing,
+        tendersInfo: store.tenders.info,
         profileInfo: store.user.info.profileInfo,
         search: store.search,
         genInfo: store.genInfo.info,

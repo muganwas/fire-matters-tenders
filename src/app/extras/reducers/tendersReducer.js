@@ -16,6 +16,10 @@ const defaultState = {
           isActive: true
         }
       },
+      selectedPostedTender: {
+        tenderInfo: {},
+        show: false
+      },
       editTenderForm:{
         show: false,
         feedback: undefined,
