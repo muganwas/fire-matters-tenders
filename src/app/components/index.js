@@ -45,3 +45,4 @@ export { default as SubContractorDetailsView } from 'components/SubContractorDet
 export { default as SecondarySelect } from 'components/SecondarySelect/SecondarySelect';
 export { default as ProfileInfo } from 'components/ProfileInfo/ProfileInfo';
 export { default as PublicProfileImage } from 'components/PublicProfileImage/PublicProfileImage';
+export { default as SearchDetail } from 'components/SearchDetail/SearchDetail';

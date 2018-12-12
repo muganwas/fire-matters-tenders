@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { dispatchedGenInfo } from 'extras/dispatchers';
 import './searchInput.css'
 
 
@@ -10,6 +10,7 @@ import './searchInput.css'
         searchInfo: store.search.info,
     }
 })
+
 class SearchInput extends React.Component {
     constructor(props) {
         super(props);
@@ -19,9 +20,33 @@ class SearchInput extends React.Component {
         this.props = {...nextProps};
     }
 
+    onPressEnter = (e)=>{
+        e.persist();
+        let keyCode = e.keyCode,
+        term = e.target.value;
+        if(keyCode === 13){
+            this.props.search(term).then(res=>{
+                this.goToSearchPage();
+            }); 
+        }
+    }
+
+    goToSearchPage = ()=> {
+        this.props.history.push('/search');
+    }
+
     render(){
+        let dispatchSearchTerm = this.props.search;
         return(
-            <div className={this.props.className}><input placeholder={ this.props.placeholder } type="text" onChange={this.props.search} /><i className="material-icons">search</i></div>
+            <div className={this.props.className}>
+                <input 
+                    placeholder={ this.props.placeholder } 
+                    onChange={ (e)=>{ dispatchSearchTerm(e.target.value) } } 
+                    onKeyDown = { this.onPressEnter }
+                    type="text"
+                 />
+                <i onClick = {this.goToSearchPage} className="material-icons searchIcon">search</i>
+            </div>
         )
     }
 }
@@ -37,4 +62,4 @@ SearchInput.propTypes = {
     placeholder: PropTypes.string.isRequired
 }
 
-export default SearchInput;
+export default withRouter(SearchInput);

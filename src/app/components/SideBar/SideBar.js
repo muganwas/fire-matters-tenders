@@ -223,8 +223,9 @@ class SideBar extends React.Component {
     fetchListings = ()=>{
         return new Promise(resolve=>{
             let genInfo = {...this.props.genInfo },
-            userType = (JSON.parse(sessionStorage.getItem('loginSession')).userType).toLowerCase(),
-            userEmail = JSON.parse(sessionStorage.getItem('loginSession')).emailAddress;
+            loginSession = sessionStorage.getItem('loginSession'),
+            userType = loginSession?JSON.parse(sessionStorage.getItem('loginSession')).userType:undefined,
+            userEmail = loginSession?JSON.parse(sessionStorage.getItem('loginSession')).emailAddress:undefined;
             if(userType){
                 if(userType !== "owner_occupier"){
                     axios.get(baseURL + listingsEndPoint).then((response)=>{
@@ -254,7 +255,20 @@ class SideBar extends React.Component {
                         console.log(err);
                     });            
                 }
-            } 
+            }else{
+                axios.get(baseURL + listingsEndPoint).then((response)=>{
+                    //console.log(response.data);
+                    let listings = genInfo.listings = {...response.data};
+                    /**Set the more dropdown menu class to hidden for every row*/
+                    Object.keys(listings).map((key)=>{
+                        genInfo.listings[key].moreMenuClassName = "hidden";
+                    })
+                    this.props.dispatch(dispatchedGenInfo(genInfo));
+                    resolve("fetched");
+                }).catch(err=>{
+                    console.log(err);
+                });
+            }
         });
     }
 

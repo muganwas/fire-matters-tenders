@@ -1,5 +1,10 @@
 const defaultState = {
-    info: {},
+    info: {
+      mainSearch: {
+        results: {},
+        noResults: "There are no results to display"
+      }
+    },
     fetching: false,
     fetched: false,
     error: null

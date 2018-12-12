@@ -2,10 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import './serviceProviders.css';
 import  { Footer, HeaderMain, SecondarySearch, ListedServiceProviders, ListFilter } from 'components';
-//import Image from 'react-image';
-//import firebase from 'firebase';
-//import helperFunctions from 'extras/helperFunctions';
-
 import { statesAustralia } from 'extras/config';
 import { PropTypes } from 'prop-types';
 import { dispatchedServiceProvidersInfo } from 'extras/dispatchers';

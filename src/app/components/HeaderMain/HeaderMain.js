@@ -3,11 +3,23 @@ import { connect } from 'react-redux';
 import Image from 'react-image';
 import { SocialIcon } from 'react-social-icons';
 import { NavLink, withRouter } from 'react-router-dom';
-import { dispatchedSearchInfo, dispatchedGenInfo } from 'extras/dispatchers';
+import { 
+    dispatchedSearchInfo, 
+    dispatchedGenInfo,
+    dispatchedSitesInfo, 
+    dispatchedTendersInfo,
+    dispatchedListingsInfo
+} from 'extras/dispatchers';
 import { SearchInput } from 'components';
 import { Lock } from '@material-ui/icons';
+import axios from 'axios';
 import './headerMain.css';
 import { PropTypes } from 'prop-types';
+
+const baseURL = process.env.BACK_END_URL,
+listingsEndPoint = process.env.LISTING_END_POINT,
+tenderEndPoint = process.env.TENDERS_END_POINT,
+sitesEndPoint = process.env.SITES_END_POINT;
 
 class HeaderMain extends Component {
     constructor(props){
@@ -29,13 +41,22 @@ class HeaderMain extends Component {
 
     componentWillMount(){
         if(sessionStorage.getItem('loginSession')){
-            let genInfo = {...this.props.genInfo.info},
+            let genInfo = {...this.props.genInfo},
             loginSession = JSON.parse(sessionStorage.getItem('loginSession')),
             userId = loginSession.userId;
             genInfo.alternatingNavigation.home = '/userPage:'+ userId;  
             this.props.dispatch(dispatchedGenInfo(genInfo));
         }
-        
+        let listings = this.props.genInfo.listings,
+        listingsLen = listings?Object.keys(listings).length:0;
+        if(!listings || listingsLen === 0){
+            this.fetchListings().then(res=>{
+                if(res){
+                    this.fetchTenders();
+                    this.fetchSites();
+                }
+            });
+        }
     }
 
     componentWillReceiveProps(nextProps){
@@ -44,7 +65,7 @@ class HeaderMain extends Component {
     
     updateDimensions = ()=>{
         let winWidth = window.innerWidth;
-        let info = {...this.props.genInfo.info};
+        let info = {...this.props.genInfo};
         if(winWidth >= 680){
             info['menu'] = "Main-Menu";
         }else{
@@ -55,14 +76,14 @@ class HeaderMain extends Component {
 
     search = (event)=>{
         let searchTerm = event.target.value;
-        let searchInfo = { ...this.props.searchInfo.info };
+        let searchInfo = { ...this.props.searchInfo };
         searchInfo['searchTerm'] = searchTerm;
         this.props.dispatch(dispatchedSearchInfo(searchInfo));
     }
 
     toggleMenu = ()=>{
-        let info = {...this.props.genInfo.info};
-        let currClassName = this.props.genInfo['info']['menu'];
+        let info = {...this.props.genInfo};
+        let currClassName = info.menu;
         if(currClassName === "Mobile-Menu"){
             info['menu'] = "Mobile-Menu shown";
         }else if(currClassName === "Mobile-Menu shown"){
@@ -74,7 +95,7 @@ class HeaderMain extends Component {
     }
 
     logOut = ()=>{
-        let info = {...this.props.genInfo.info};
+        let info = {...this.props.genInfo};
         info.alternatingNavigation.home = "/home";
         info.alternatingNavigation.headerClass = "App-header";
         sessionStorage.removeItem('profileInfo');
@@ -109,9 +130,217 @@ class HeaderMain extends Component {
         return false;       
     }
 
-    searchSite = ()=>{
-        
+    fetchSites = ()=>{
+        return new Promise(resolve=>{
+            let sitesInfo = {...this.props.sitesInfo },
+            genInfo = { ...this.props.genInfo },
+            loginSession = sessionStorage.getItem('loginSession'),
+            userType = loginSession?JSON.parse(sessionStorage.getItem('loginSession')).userType:undefined,
+            userEmail = loginSession?JSON.parse(sessionStorage.getItem('loginSession')).emailAddress:undefined,
+            url = baseURL + sitesEndPoint + "?emailAddress=" + userEmail;
+            if(userType){
+                if(userType === "owner_occupier"){
+                    axios.get(url).then((response)=>{
+                        //console.log(response.data);
+                        let sites = sitesInfo.sites = genInfo.sites = {...response.data};
+                        genInfo.sideBar.profilePage.listCount['sites'] = (response.data).length;
+                        /**Set the more dropdown menu class to hidden for every row*/
+                        Object.keys(sites).map((key)=>{
+                            sitesInfo.sites[key].moreMenuClassName = "hidden";
+                        })
+                        this.props.dispatch(dispatchedSitesInfo(sitesInfo));
+                        //this.props.dispatch(dispatchedGenInfo(genInfo));
+                        resolve("fetched");
+                    }).catch(err=>{
+                        console.log(err);
+                    });
+                }
+            }
+        });    
     }
+
+    fetchTenders = ()=>{
+        let postInfoUrl = baseURL + tenderEndPoint,
+        genInfo = {...this.props.genInfo },
+        loginSession = sessionStorage.getItem('loginSession'),
+        userType = loginSession?JSON.parse(sessionStorage.getItem('loginSession')).userType:undefined,
+        postedTendersComprehensive = [],
+        postedTenders = [];
+        if(userType){
+            if(userType === "owner_occupier"){
+                let listings = genInfo.listings;
+                axios.get(postInfoUrl).then(res=>{
+                    let tendersArr = res.data,
+                    tendersLen = tendersArr.length;
+                    for(let count = 0;count <tendersLen; count++){
+                        let currObj = tendersArr[count],
+                        listingId = currObj.listingId;
+                        Object.keys(listings).map(key=>{
+                            if(listingId === listings[key].id){
+                                let cO = {tenderId:currObj.id, listingId: listingId};
+                                postedTendersComprehensive.push(currObj);
+                                postedTenders.push(cO);
+                            }
+                        });
+                    }
+                });
+                let listingsInfo = {...this.props.listingsInfo},
+                tendersInfo = {...this.props.tendersInfo};
+                listingsInfo.postedTenders.tenders = postedTenders;
+                tendersInfo.tenders = postedTendersComprehensive;
+                this.props.dispatch(dispatchedTendersInfo(tendersInfo));
+                this.props.dispatch(dispatchedListingsInfo(listingsInfo));
+                this.forceUpdate();
+            }else{
+                let tendererId = JSON.parse(sessionStorage.getItem('profileInfo')).id,
+                genInfo = {...this.props.genInfo},
+                tendersInfo = {...this.props.tendersInfo},
+                getInfoUrl = baseURL + tenderEndPoint + "?tendererId=" + tendererId;
+                axios.get(getInfoUrl).then(res=>{
+                    if(res){
+                        tendersInfo.tenders = res.data;
+                        Object.keys(tendersInfo.tenders).map((key)=>{
+                            tendersInfo.tenders[key].moreMenuClassName = "hidden";
+                        });
+                        tendersInfo.tenders = res.data;
+                        genInfo.sideBar.profilePage.listCount['tenders'] = (res.data).length
+                        this.props.dispatch(dispatchedGenInfo(genInfo));
+                        this.props.dispatch(dispatchedTendersInfo(tendersInfo));
+                    }
+                }); 
+            }
+        }else{
+            let listings = genInfo.listings;
+            axios.get(postInfoUrl).then(res=>{
+                let tendersArr = res.data,
+                tendersLen = tendersArr.length;
+                for(let count = 0;count <tendersLen; count++){
+                    let currObj = tendersArr[count],
+                    listingId = currObj.listingId;
+                    Object.keys(listings).map(key=>{
+                        if(listingId === listings[key].id){
+                            let cO = {tenderId:currObj.id, listingId: listingId};
+                            postedTendersComprehensive.push(currObj);
+                            postedTenders.push(cO);
+                        }
+                    });
+                }
+            });
+            let listingsInfo = {...this.props.listingsInfo},
+            tendersInfo = {...this.props.tendersInfo};
+            listingsInfo.postedTenders.tenders = postedTenders;
+            tendersInfo.tenders = postedTendersComprehensive;
+            this.props.dispatch(dispatchedTendersInfo(tendersInfo));
+            this.props.dispatch(dispatchedListingsInfo(listingsInfo));
+            this.forceUpdate();
+        }
+    }
+
+    fetchListings = ()=>{
+        return new Promise(resolve=>{
+            let genInfo = {...this.props.genInfo },
+            loginSession = sessionStorage.getItem('loginSession'),
+            userType = loginSession?JSON.parse(sessionStorage.getItem('loginSession')).userType:undefined,
+            userEmail = loginSession?JSON.parse(sessionStorage.getItem('loginSession')).emailAddress:undefined;
+            if(userType){
+                if(userType !== "owner_occupier"){
+                    axios.get(baseURL + listingsEndPoint).then((response)=>{
+                        //console.log(response.data);
+                        let listings = genInfo.listings = {...response.data};
+                        /**Set the more dropdown menu class to hidden for every row*/
+                        Object.keys(listings).map((key)=>{
+                            genInfo.listings[key].moreMenuClassName = "hidden";
+                        })
+                        this.props.dispatch(dispatchedGenInfo(genInfo));
+                        resolve("fetched");
+                    }).catch(err=>{
+                        console.log(err);
+                    });
+                }else{
+                    axios.get(baseURL + listingsEndPoint + "?userEmail=" + userEmail).then((response)=>{
+                        //console.log(response.data);
+                        let listings = genInfo.listings = {...response.data};
+                        genInfo.sideBar.profilePage.listCount['tenders'] = (response.data).length;
+                        /**Set the more dropdown menu class to hidden for every row*/
+                        Object.keys(listings).map((key)=>{
+                            genInfo.listings[key].moreMenuClassName = "hidden";
+                        })
+                        this.props.dispatch(dispatchedGenInfo(genInfo));
+                        resolve("fetched");
+                    }).catch(err=>{
+                        console.log(err);
+                    });            
+                }
+            }else{
+                axios.get(baseURL + listingsEndPoint).then((response)=>{
+                    //console.log(response.data);
+                    let listings = genInfo.listings = {...response.data};
+                    /**Set the more dropdown menu class to hidden for every row*/
+                    Object.keys(listings).map((key)=>{
+                        genInfo.listings[key].moreMenuClassName = "hidden";
+                    })
+                    this.props.dispatch(dispatchedGenInfo(genInfo));
+                    resolve("fetched");
+                }).catch(err=>{
+                    console.log(err);
+                });
+            }
+        });
+    }
+
+    searchTenders=(searchTerm)=>{
+        let tendersInfo = {...this.props.tendersInfo},
+        includedInfo = {},
+        tenders = tendersInfo.tenders,
+        tendersLen = tenders?tenders.length:0;
+        return new Promise(resolve=>{
+            for(let count = 0; count < tendersLen; count++){
+                let currTender = tenders[count];
+                Object.keys(currTender).map(key=>{
+                    let currEl = (currTender[key]).toString();
+                    if(currEl.includes(searchTerm)){
+                        includedInfo[count] = currTender;
+                    } 
+                });
+            }
+            resolve(includedInfo);
+        });
+    }
+
+    searchListings=(searchTerm)=>{
+        return new Promise(resolve=>{
+            let genInfo = {...this.props.genInfo},
+            includedInfo = {},
+            listings = genInfo.listings,
+            listingsLen = listings !== undefined?Object.keys(listings).length:0;
+            for(let count = 0; count < listingsLen; count++){
+                let currListing = listings[count];
+                Object.keys(currListing).map(key=>{
+                    let currEl = (currListing[key]).toString();
+                    if(currEl.includes(searchTerm)){
+                        includedInfo[count] = currListing;
+                    } 
+                });
+            }
+            resolve(includedInfo);
+        });
+    }
+
+    searchSite = (term)=>{
+        return new Promise(resolve=>{
+            let searchInfo = {...this.props.searchInfo};
+            searchInfo.mainSearch.searchTerm = term;
+            this.props.dispatch(dispatchedSearchInfo(searchInfo));
+            this.searchTenders(term).then(res=>{
+                this.searchListings(term).then(res1=>{
+                    searchInfo.mainSearch.results = {...res, ...res1};
+                    this.props.dispatch(dispatchedSearchInfo(searchInfo));
+                });
+            });
+            resolve(term);
+        });                        
+    }
+
     render(){
         let home = this.props.navigation.home,
         profileInfo = sessionStorage.getItem('profileInfo'),
@@ -119,9 +348,13 @@ class HeaderMain extends Component {
         return(
             <div className={ this.props.navigation.headerClass }>
                 <Image className="App-logo" src={require('images/logo.jpg')} />
-                <SearchInput className="search" placeholder="search" search={ this.searchSite } />
+                <SearchInput 
+                    className="search" 
+                    placeholder="search" 
+                    search={ this.searchSite } 
+                />
                 <i class="material-icons menu-icon" onClick={ this.toggleMenu }>menu</i>
-                <div className={ this.props.genInfo['info']['menu'] }>
+                <div className={ this.props.genInfo.menu }>
                     <NavLink activeClassName="active" id="home" onClick={ this.toggleMenu } to={ home }>Home</NavLink>
                     { userType !== "owner_occupier" || userType === null
                     ?<NavLink activeClassName="active" id="listings" onClick={ this.toggleMenu } to={`/listings`}>Listings</NavLink>
@@ -129,10 +362,10 @@ class HeaderMain extends Component {
                     <NavLink activeClassName="active" id="service-providers" onClick={ this.toggleMenu } to={`/service-providers`}>Service Providers</NavLink>
                     <NavLink activeClassName="active" id="about" onClick={ this.toggleMenu } to={`/about`}>About</NavLink>
                     <NavLink activeClassName="active" id="contact" onClick={ this.toggleMenu } to={`/contact`}>Contact</NavLink>
-                <div className="login-social right">
-                    { /*this.socialIcons*/ }
-                    { sessionStorage.getItem('loginSession')?this.loggeInOptions:this.NotLoggedInOptions }
-                </div>                   
+                    <div className="login-social right">
+                        { /*this.socialIcons*/ }
+                        { sessionStorage.getItem('loginSession')?this.loggeInOptions:this.NotLoggedInOptions }
+                    </div>                   
                 </div>
             </div>
         )
@@ -155,10 +388,20 @@ HeaderMain.propTypes = {
 
 export default connect(store=>{
     return {
-        search: store.search,
+        searchInfo: store.search.info,
         user: store.user,
         profileInfo: store.user.info.profileInfo,
-        genInfo: store.genInfo,
-        navigation: store.genInfo.info.alternatingNavigation
+        tendersInfo: store.tenders.info,
+        navigation: store.genInfo.info.alternatingNavigation,
+        userInfo: store.user.info,
+        search: store.search,
+        genInfo: store.genInfo.info,
+        siteData: store.user.info.submitSite,
+        listingsInfo: store.listingsInfo.info,
+        sitesInfo: store.sites.info,
+        messagesInfo: store.messages.info,
+        messageData: store.user.info.submitMessage,
+        subContractorData: store.user.info.addSubContractor,
+        subContractorsInfo: store.subContractors.info
     }
 })(withRouter(HeaderMain));

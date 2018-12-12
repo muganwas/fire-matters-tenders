@@ -11,7 +11,8 @@ import {
 	Login, 
 	Signup, 
 	ServiceProviders, 
-	ContactPage, 
+	ContactPage,
+	SearchPage, 
 	ProfilePage, 
 	UserPage,
 	ConfirmCompanyUser
@@ -84,6 +85,13 @@ SignupComponent = ()=>{
 		</Provider>
 	)
 },
+SearchComponent = ()=>{
+	return( 
+		<Provider store={store}>
+			<SearchPage/>
+		</Provider>
+	)
+},
 NotFoundComponent = ()=>{
 	return(
 		<Provider store={store}>
@@ -105,6 +113,7 @@ Root = ()=>{
 					<Route exact path="/contact" component={ ContactComponent } />
 					<Route exact path="/login" component={ LoginComponent } />
 					<Route exact path="/signup" component={ SignupComponent } />
+					<Route exact path="/search" component = {SearchComponent} />
 					<Route exact path="/addUser" component={ ConfirmCompanyUserComponent } />
 					<Route component={ NotFoundComponent } />
 				</Switch>
