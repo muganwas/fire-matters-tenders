@@ -331,12 +331,16 @@ class HeaderMain extends Component {
             let searchInfo = {...this.props.searchInfo};
             searchInfo.mainSearch.searchTerm = term;
             this.props.dispatch(dispatchedSearchInfo(searchInfo));
-            this.searchTenders(term).then(res=>{
-                this.searchListings(term).then(res1=>{
-                    searchInfo.mainSearch.results = {...res, ...res1};
-                    this.props.dispatch(dispatchedSearchInfo(searchInfo));
+            if(term.length > 0){
+                this.searchTenders(term).then(res=>{
+                    this.searchListings(term).then(res1=>{
+                        searchInfo.mainSearch.results = {...res, ...res1};
+                    });
                 });
-            });
+            }else{
+                searchInfo.mainSearch.results = {};
+            }
+            this.props.dispatch(dispatchedSearchInfo(searchInfo));
             resolve(term);
         });                        
     }

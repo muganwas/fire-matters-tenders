@@ -20,6 +20,11 @@ class SearchInput extends React.Component {
         this.props = {...nextProps};
     }
 
+    componentWillMount(){
+        let term = this.props.searchInfo.mainSearch.searchTerm;
+        this.props.search(term);
+    }
+
     onPressEnter = (e)=>{
         e.persist();
         let keyCode = e.keyCode,
@@ -43,6 +48,7 @@ class SearchInput extends React.Component {
                     placeholder={ this.props.placeholder } 
                     onChange={ (e)=>{ dispatchSearchTerm(e.target.value) } } 
                     onKeyDown = { this.onPressEnter }
+                    defaultValue = { this.props.searchInfo.mainSearch.searchTerm }
                     type="text"
                  />
                 <i onClick = {this.goToSearchPage} className="material-icons searchIcon">search</i>

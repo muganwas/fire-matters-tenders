@@ -8,7 +8,7 @@ import { PropTypes } from 'prop-types';
     return {
         user: store.user,
         search: store.search,
-        genInfo: store.genInfo,
+        genInfo: store.genInfo.info,
         tendersInfo: store.tenders.info,
         serviceProvidersInfo: store.serviceProviders.info
     }
@@ -22,32 +22,11 @@ class SearchPage extends React.Component {
         this.props = {...nextProps};
     }
 
-    searchTenders=(searchTerm)=>{
-        let tendersInfo = {...this.props.tendersInfo},
-        includedInfo = {},
-        tenders = tendersInfo.tenders,
-        tendersLen = tenders?tenders.length:0;
-        return new Promise(resolve=>{
-            for(let count = 0; count < tendersLen; count++){
-                let currTender = tenders[count];
-                Object.keys(currTender).map(key=>{
-                    let currEl = (currTender[key]).toString();
-                    if(currEl.includes(searchTerm)){
-                        includedInfo[count] = currTender;
-                    }
-                });
-            }
-            resolve(includedInfo);
-        });
-    }
-
     render(){
         return(
             <div className="main">
                 <div className="top">
-                    <HeaderMain
-                        searchTenders = { this.searchTenders } 
-                    />
+                    <HeaderMain/>
                 </div>
                 <div className="mid listings">
                     <SearchDetail 

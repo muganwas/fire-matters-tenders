@@ -2,3 +2,12 @@
     display: block;
     padding: 10px 5px;
 }
+.searchResults span{
+    display: inline-block;
+    margin: 3px 5px;
+    padding: 3px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    min-width: 50px;
+    text-align: center;
+}

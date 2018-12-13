@@ -18,17 +18,6 @@ class SearchDetail extends React.Component {
         super(props)
     }
 
-    componentWillMount(){
-        let searchInfo = {...this.props.search},
-        searchTerm = searchInfo.mainSearch.searchTerm;
-        this.props.searchTenders(searchTerm).then(res=>{
-            if(res)
-                searchInfo.mainSearch.results = res;
-            
-            this.props.dispatch(dispatchedSearchInfo(searchInfo));
-        });    
-    }
-
     componentWillReceiveProps(nextProps){
         this.props = {...nextProps};
     }
@@ -41,7 +30,14 @@ class SearchDetail extends React.Component {
         return(
             <div className="list left hanad">
                 { resultLen>0?Object.keys(results).map(key=>{
-                    return <span className="searchResults" key={key}>{ results[key].id }</span>
+                    return (
+                        <div className="searchResults" key={key}>
+                            { results[key].serviceRequired?<span>{ results[key].serviceRequired }</span>:null}
+                            { results[key].city?<span>{ results[key].city }</span>:null}
+                            { results[key].state?<span>{ results[key].state }</span>:null}
+                            { results[key].equipment?<span>{ results[key].equipment }</span>:null}
+                        </div>
+                    )
                 })
                 :defaultText }
             </div>
