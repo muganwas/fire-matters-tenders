@@ -27,7 +27,7 @@ const MessageForm = props=>{
         <div className="listing-form-container">
             <div className="listing-form-subcontainer">
                 <div className="header">
-                    <span id="header-text">Send Message</span>
+                    <span id="header-text">Post Comment</span>
                     <span className="right" onClick={ close } id="close">&#x2716;</span>
                 </div>
                 <div className="listing-form">
@@ -36,11 +36,11 @@ const MessageForm = props=>{
                         <div className="el" style={ styles.el }>
                             <Textfield 
                                 id="messages-messageBody"
-                                label="Message Body"
+                                label="Comment Body"
                                 value={ messageBody } 
                                 type="text" 
                                 multiline
-                                placeholder="Compose Message" 
+                                placeholder="Compose comment" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
                                 onBlur = { onBlur }
@@ -54,7 +54,7 @@ const MessageForm = props=>{
                                 loaderFill = "#fff" 
                                 variant="contained" 
                                 styles = { styles } 
-                                text="Send Message"
+                                text="Submit Comment"
                                 onClick = { upload } 
                             />
                         </div>

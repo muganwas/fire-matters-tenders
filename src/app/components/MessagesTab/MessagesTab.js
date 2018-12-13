@@ -121,7 +121,7 @@ class MessagesTab extends React.Component {
         userInfo = {...this.props.user},
         sender = this.props.profileInfo.emailAddress,
         recipient = messageData.messageRecipient,
-        contractNumber = "ue",
+        listingId = this.props.messagesInfo.currListingId,
         message = messageData.messageBody,
         postInfoUrl = baseURL + messagesEndPoint;
 
@@ -129,7 +129,7 @@ class MessagesTab extends React.Component {
             sender,
             recipient, 
             message, 
-            contractNumber
+            listingId
         };
         this.checkForErrors().then(res=>{
             console.log(res)
@@ -139,7 +139,7 @@ class MessagesTab extends React.Component {
                 axios.post(postInfoUrl, postObject).
                 then(res=>{
                     userInfo.submitMessage.submitButton.isActive = true;
-                    userInfo.submitMessage.feedback = "Your Site was posted successfully.";
+                    userInfo.submitMessage.feedback = "Your comment was posted successfully.";
                     userInfo.submitMessage.feedbackClass="success";
                     this.props.dispatch(dispatchedUserInfo(userInfo));
                     this.forceUpdate();

@@ -15,7 +15,7 @@
 .listedJobsDetails-container .sub-container{
     padding: 10px;
     box-sizing: border-box;
-    border: thin solid rgb(172, 172, 172);
+    border: thin solid #acacac;
     background-color: #fff;
 }
 
@@ -24,4 +24,14 @@
     font-size: 10px;
     margin: 2px 5px;
     cursor: pointer;
+}
+.comment-container{
+    padding: 5px;
+    background-color: #dddddd;
+    border-radius: 5px;
+    margin: 5px 0;
+}
+.commenter, .comment{
+    display: block;
+    padding: 5px;
 }

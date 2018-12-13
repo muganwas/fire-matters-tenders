@@ -1,15 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import './listedJobs.css';
 
 const ListedJobDetails = props=>{
-    let { listingsInfo, genInfo } = props,
+    let { listingsInfo, genInfo, messagesInfo } = props,
+    messages = messagesInfo.messages,
     id = listingsInfo.listedJobDetails.currListingId,
     listings = genInfo.generalListings,
     currListing = listings[id];
     return(
         <div className="sub-container">
-            <div className="hanad left">
+            <div className="half left">
                 <div className="heading"><h3>Required Service: { currListing.serviceRequired } </h3><div className="bottom-border"></div></div>
                 <br />
                 <div className="information">
@@ -30,6 +32,21 @@ const ListedJobDetails = props=>{
                         <span className ="listingEl">{ currListing.contractType }</span>
                     </div>                      
                 </div>
+            </div>
+            <div className="half left">
+            <div className="heading"><h3>Comments</h3><div className="bottom-border"></div></div>
+                {
+                    messages?Object.keys(messages).map(key=>{
+                        if(messages[key].listingId === listings[id].id){
+                            return (
+                                <div key={key} className="comment-container">
+                                    <span className="commenter">Comment by : { messages[key].sender }</span>
+                                    <span className="comment">Comment : { messages[key].message }</span>
+                                </div>
+                            )
+                        }
+                    }):null
+                }
             </div>
             <div className="clear"></div>
         </div>
@@ -53,5 +70,6 @@ export default connect(store=>{
         user: store.user.info,
         listingsInfo: store.listingsInfo.info,
         genInfo: store.genInfo.info,
+        messagesInfo: store.messages.info
     }
 })(ListedJobDetails);

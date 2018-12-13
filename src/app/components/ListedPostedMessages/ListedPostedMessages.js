@@ -184,7 +184,7 @@ class ListedPostedMessages extends Component {
         let sentMessages = {...this.props.messagesInfo.sentMessages},
         listingId = sentMessages[key].listingId,
         sender = sentMessages[key].sender,
-        options = {delete: "Delete", sendMessage: "Send Message"};
+        options = {delete: "Delete", sendMessage: "Post Comment"};
         return(
             <div className="list-row" key={key}>
                 <div className="thirty">{ sentMessages[key].recipient }</div>
@@ -216,27 +216,27 @@ class ListedPostedMessages extends Component {
         return(
             <div className="messages">
                 <div className="list left hanad">
-                <h3>Recieved Messages</h3>
+                <h3>Received Comments</h3>
                     <div className="list-row header">
-                        <span className="thirty">Sender</span>
+                        <span className="thirty">Posted By</span>
                         <span className="thirty">Date Sent</span>
-                        <span className="thirty">Message</span>
+                        <span className="thirty">Comment</span>
                         <span className="ten"></span>
                         <div className="bottom-border"></div>
                     </div>
-                    { recievedCount === 0?<span className="no-messages">No Messages to show</span>:null}
+                    { recievedCount === 0?<span className="no-messages">No comments to show</span>:null}
                     { recievedMessages?Object.keys(recievedMessages).map(this.displayRecievedMessages):<div className="loader"><Loader /></div> }
                 </div>
                 <div className="list left hanad">
-                <h3>Sent Messages</h3>
+                <h3>Posted Comments</h3>
                     <div className="list-row header">
                         <span className="thirty">Recipient</span>
                         <span className="thirty">Date Sent</span>
-                        <span className="thirty">Message</span>
+                        <span className="thirty">Comment</span>
                         <span className="ten"></span>
                         <div className="bottom-border"></div>
                     </div>
-                    { recievedCount === 0?<span className="no-messages">No Messages to show</span>:null}
+                    { recievedCount === 0?<span className="no-messages">No comments to show</span>:null}
                     { sentMessages?Object.keys(sentMessages).map(this.displaySentMessages):<div className="loader"><Loader /></div> }
                 </div>
 

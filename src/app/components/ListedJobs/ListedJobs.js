@@ -34,12 +34,15 @@ class ListedJobs extends Component {
     
     componentWillReceiveProps(nextProps){
         this.props = {...nextProps};
-        //if(!this.props.genInfo.info.listings)
-            //this.fetchListings();
     }
 
     componentDidMount(){
-        this.fetchListings();
+        if(this.props.genInfo.generalListings === undefined)
+            this.fetchListings();
+    }
+
+    componentWillMount(){
+        this.fetchMessages();
     }
 
     checkForErrors=()=>{
@@ -59,6 +62,20 @@ class ListedJobs extends Component {
             let errCount = errored.length;
             resolve(errCount);
         }); 
+    }
+
+    fetchMessages(){
+        let URL = baseURL + messagesEndPoint,
+        messagesInfo = {...this.props.messagesInfo};
+        return new Promise(resolve=>{
+            axios.get(URL).then(res=>{
+                if(res){
+                    messagesInfo.messages = res.data;
+                    this.props.dispatch(dispatchedMessagesInfo(messagesInfo));
+                    resolve(res)
+                }
+            });
+        });
     }
 
     checkForListingErrors(){
@@ -171,7 +188,7 @@ class ListedJobs extends Component {
                 axios.post(postInfoUrl, postObject).
                 then(res=>{
                     userInfo.submitMessage.submitButton.isActive = true;
-                    userInfo.submitMessage.feedback = "Your message was posted successfully.";
+                    userInfo.submitMessage.feedback = "Your comment was posted successfully.";
                     userInfo.submitMessage.feedbackClass="success";
                     this.props.dispatch(dispatchedUserInfo(userInfo));
                     this.forceUpdate();
@@ -251,7 +268,7 @@ class ListedJobs extends Component {
     }
 
     displayListings = (key)=>{
-        let listings = this.props.genInfo.generalListings,
+        let listings = {...this.props.genInfo.generalListings},
         listingsInfo = {...this.props.listingsInfo},
         showJobDetails = listingsInfo.listedJobDetails.show,
         errors = listingsInfo.tenderForm.errors,
@@ -263,7 +280,7 @@ class ListedJobs extends Component {
         userType = profileInfo?JSON.parse(sessionStorage.getItem('profileInfo')).userType: null,
         options;
         if(userType && userType !== "owner_occupier"){
-            options = { more: "View More...", sendMessage: "Send Message"};
+            options = { more: "View More...", sendMessage: "Post Comment"};
         }else{
             options = { more: "View More..."};
         }

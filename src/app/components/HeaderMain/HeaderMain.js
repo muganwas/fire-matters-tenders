@@ -48,14 +48,24 @@ class HeaderMain extends Component {
             this.props.dispatch(dispatchedGenInfo(genInfo));
         }
         let listings = this.props.genInfo.listings,
+        genListings = this.props.genInfo.generalListings,
+        genListingsLen = genListings?Object.keys(genListings).length:0,
         listingsLen = listings?Object.keys(listings).length:0;
-        if(!listings || listingsLen === 0){
+        if(sessionStorage.getItem('loginSession') && (!listings || listingsLen === 0)){
             this.fetchListings().then(res=>{
                 if(res){
+                    genListingsLen ===0?this.fetchGenListings():null;
                     this.fetchTenders();
                     this.fetchSites();
                 }
             });
+        }else if(!genListings || genListingsLen === 0){
+            this.fetchGenListings().then(res=>{
+                if(res){
+                    this.fetchTenders();
+                    this.fetchSites();
+                }
+            })
         }
     }
 
@@ -288,6 +298,24 @@ class HeaderMain extends Component {
         });
     }
 
+    fetchGenListings = ()=>{
+        return new Promise(resolve=>{
+            let genInfo = {...this.props.genInfo };
+            axios.get(baseURL + listingsEndPoint).then((response)=>{
+                //console.log(response.data);
+                let listings = genInfo.generalListings = {...response.data};
+                /**Set the more dropdown menu class to hidden for every row*/
+                Object.keys(listings).map((key)=>{
+                    genInfo.generalListings[key].moreMenuClassName = "hidden";
+                })
+                this.props.dispatch(dispatchedGenInfo(genInfo));
+                resolve("fetched");
+            }).catch(err=>{
+                console.log(err);
+            });
+        }); 
+    }
+
     searchTenders=(searchTerm)=>{
         let tendersInfo = {...this.props.tendersInfo},
         includedInfo = {},
@@ -331,17 +359,19 @@ class HeaderMain extends Component {
             let searchInfo = {...this.props.searchInfo};
             searchInfo.mainSearch.searchTerm = term;
             this.props.dispatch(dispatchedSearchInfo(searchInfo));
-            if(term.length > 0){
+            if(term){
+                if(term.length > 0){
                 this.searchTenders(term).then(res=>{
                     this.searchListings(term).then(res1=>{
                         searchInfo.mainSearch.results = {...res, ...res1};
                     });
                 });
-            }else{
-                searchInfo.mainSearch.results = {};
-            }
-            this.props.dispatch(dispatchedSearchInfo(searchInfo));
-            resolve(term);
+                }else{
+                    searchInfo.mainSearch.results = {};
+                }
+                this.props.dispatch(dispatchedSearchInfo(searchInfo));
+                resolve(term);
+            }            
         });                        
     }
 

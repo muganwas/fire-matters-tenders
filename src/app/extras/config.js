@@ -48,7 +48,7 @@ export const ownerOccupierOptions = {
     Tenders: "Tenders",
     Contracts: "Contracts",
     Sites: "Sites",
-    Messages: "Messages"
+    Messages: "Comments"
 }
 
 export const tenderOptions = {
@@ -63,7 +63,7 @@ export const serviceProviderOptions = {
     Tenders: "Tenders",
     Contracts: "Contracts",
     Subcontractors: "Sub-Contractors",
-    Messages: "Messages"
+    Messages: "Comments"
 }
 
 export const menuIconTitles = {

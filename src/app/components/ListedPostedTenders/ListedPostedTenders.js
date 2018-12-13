@@ -36,12 +36,12 @@ class ListedPostedTenders extends Component {
     componentWillReceiveProps(nextProps){
         this.props = {...nextProps};
         if(!this.props.genInfo.info.listings)
-            this.fetchListings();
+           this.fetchListings();
     }
 
     componentWillMount(){
         if(!this.props.genInfo.info.listings)
-            this.fetchListings();
+           this.fetchListings();
     }
 
     componentDidMount(){
@@ -175,17 +175,19 @@ class ListedPostedTenders extends Component {
     fetchListings = ()=>{
         return new Promise(resolve=>{
             let genInfo = {...this.props.genInfo.info },
-            userType = (this.props.profileInfo.userType).toLowerCase(),
-            userEmail = this.props.profileInfo.emailAddress;
+            loginSession = sessionStorage.getItem('loginSession'),
+            userType = loginSession?JSON.parse(sessionStorage.getItem('loginSession')).userType:undefined,
+            userEmail = loginSession?JSON.parse(sessionStorage.getItem('loginSession')).emailAddress:undefined;
             if(userType){
                 if(userType !== "owner_occupier"){
                     axios.get(baseURL + listingsEndPoint).then((response)=>{
                         //console.log(response.data);
+                        genInfo = {...this.props.genInfo.info };
                         let listings = genInfo.listings = {...response.data};
                         /**Set the more dropdown menu class to hidden for every row*/
                         Object.keys(listings).map((key)=>{
                             genInfo.listings[key].moreMenuClassName = "hidden";
-                        });
+                        })
                         this.props.dispatch(dispatchedGenInfo(genInfo));
                         resolve("fetched");
                     }).catch(err=>{
@@ -194,6 +196,7 @@ class ListedPostedTenders extends Component {
                 }else{
                     axios.get(baseURL + listingsEndPoint + "?userEmail=" + userEmail).then((response)=>{
                         //console.log(response.data);
+                        genInfo = {...this.props.genInfo.info };
                         let listings = genInfo.listings = {...response.data};
                         genInfo.sideBar.profilePage.listCount['tenders'] = (response.data).length;
                         /**Set the more dropdown menu class to hidden for every row*/
@@ -206,8 +209,22 @@ class ListedPostedTenders extends Component {
                         console.log(err);
                     });            
                 }
+            }else{
+                axios.get(baseURL + listingsEndPoint).then((response)=>{
+                    //console.log(response.data);
+                    genInfo = {...this.props.genInfo.info };
+                    let listings = genInfo.listings = {...response.data};
+                    /**Set the more dropdown menu class to hidden for every row*/
+                    Object.keys(listings).map((key)=>{
+                        genInfo.listings[key].moreMenuClassName = "hidden";
+                    })
+                    this.props.dispatch(dispatchedGenInfo(genInfo));
+                    resolve("fetched");
+                }).catch(err=>{
+                    console.log(err);
+                });
             }
-        });    
+        });
     }
 
     postListingId = (id)=>{
@@ -449,7 +466,7 @@ class ListedPostedTenders extends Component {
         feedbackClass = tenderAttributes.feedbackClass;
 
         if(userType !== "owner_occupier"){
-            options = { ...options, sendMessage: "Send Message"};
+            options = { ...options, sendMessage: "Post Comment"};
         }
             
         return(
