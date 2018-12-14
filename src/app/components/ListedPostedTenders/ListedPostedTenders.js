@@ -1,8 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import  { Loader, FmButton, MoreHoriz, PostedTendersOverlay } from 'components';
+import  { 
+    Loader, 
+    FmButton, 
+    MoreHoriz 
+} from 'components';
+import PostedTendersOverlay from './PostedTendersOverlay';
 import axios from 'axios';
-import { dispatchedGenInfo, dispatchedListingsInfo, dispatchedUserInfo, dispatchedTendersInfo, dispatchedMessagesInfo } from 'extras/dispatchers';
+import { 
+    dispatchedGenInfo, 
+    dispatchedListingsInfo, 
+    dispatchedUserInfo, 
+    dispatchedTendersInfo, 
+    dispatchedMessagesInfo 
+} from 'extras/dispatchers';
 import './listedPostedTenders.css';
 import { PropTypes } from 'prop-types';
 import { TenderForm, MessageForm } from 'forms';

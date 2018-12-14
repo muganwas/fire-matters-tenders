@@ -45,7 +45,7 @@ export const statesAustralia = {
 
 export const ownerOccupierOptions = {
     Profile: "Profile",
-    Tenders: "Tenders",
+    Tenders: "My Listings",
     Contracts: "Contracts",
     Sites: "Sites",
     Messages: "Comments"

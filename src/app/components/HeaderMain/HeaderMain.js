@@ -185,9 +185,10 @@ class HeaderMain extends Component {
                     for(let count = 0;count <tendersLen; count++){
                         let currObj = tendersArr[count],
                         listingId = currObj.listingId;
+                        currObj.acceptTenderButton = { isActive: true };
                         Object.keys(listings).map(key=>{
                             if(listingId === listings[key].id){
-                                let cO = {tenderId:currObj.id, listingId: listingId};
+                                let cO = {tenderId:currObj.id, listingId: listingId, acceptTenderButton:{isActive:true}};
                                 postedTendersComprehensive.push(currObj);
                                 postedTenders.push(cO);
                             }

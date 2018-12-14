@@ -16,78 +16,9 @@ import {
     emergencyExitLighting,
     contractTypes
 } from 'extras/config';
+import { styles, alt_styles, submit_styles } from './styles';
 
-const styles = {
-    button: {
-        float: "right",
-        margin: 0,
-        padding: "3px 10px",
-        margin: "0 5px",
-        fontSize: 10,
-        backgroundColor: "#ED2431",
-        color: "#fff",
-        fontWeight: "bold",
-        '&:hover': {
-        background: '#ED2431',
-        boxShadow: '1px 2px 4px #BC2902',
-        transition: 'all 0.2s ease-in'
-        }
-    },
-    el:{
-        display: "inline-block",
-        margin: "0 20%"
-    },
-    information:{
-        textAlign: "center"
-    },
-},
-submit_styles = {
-    button: {
-        float: "right",
-        margin: 0,
-        padding: "3px 10px",
-        margin: "0 5px",
-        width: 330,
-        fontSize: 14,
-        backgroundColor: "#ED2431",
-        color: "#fff",
-        fontWeight: "bold",
-        '&:hover': {
-        background: '#ED2431',
-        boxShadow: '1px 2px 4px #BC2902',
-        transition: 'all 0.2s ease-in'
-        }
-    },
-    inputErr:{
-        width: 330,
-        display: "block",
-        margin: "3px",
-        padding: "5px"
-    },
-    el:{
-        display: "inline-block",
-        margin: "0 20%"
-    },
-    information:{
-        textAlign: "center"
-    },
-},
-alt_styles = {
-    button: {
-        float: "right",
-        margin: 0,
-        padding: "3px 10px",
-        margin: "0 0 0 5px",
-        fontSize: 10,
-        color: "#000",
-        fontWeight: "bold",
-        '&:hover': {
-        boxShadow: '1px 2px 4px #BC2902',
-        transition: 'all 0.2s ease-in'
-        }
-    },
-},
-baseURL = process.env.BACK_END_URL,
+let baseURL = process.env.BACK_END_URL,
 listingsEndPoint = process.env.LISTING_END_POINT,
 tenderEndPoint = process.env.TENDERS_END_POINT;
 
@@ -148,9 +79,10 @@ class TendersTab extends React.Component {
                     for(let count = 0;count <tendersLen; count++){
                         let currObj = tendersArr[count],
                         listingId = currObj.listingId;
+                        currObj.acceptTenderButton = { isActive: true };
                         Object.keys(listings).map(key=>{
                             if(listingId === listings[key].id){
-                                let cO = {tenderId:currObj.id, listingId: listingId};
+                                let cO = {tenderId:currObj.id, listingId: listingId, acceptTenderButton:{isActive:true}};
                                 postedTendersComprehensive.push(currObj);
                                 postedTenders.push(cO);
                             }
@@ -381,7 +313,7 @@ class TendersTab extends React.Component {
                 />
                 :null}
                 <div className="title-bar">
-                    <span id="title">Tenders</span>
+                    <span id="title">{userType === "service_provider"?"Tenders":"Listings"}</span>
                     {userType === "owner_occupier"?<span id="search">
                         <FmButton variant="contained" styles={ alt_styles } text="Rehire service provider" />
                         <FmButton variant="contained" onClick={ this.renderListingForm } styles={ styles } text="Post New Listing" />
