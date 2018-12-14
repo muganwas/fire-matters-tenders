@@ -1,10 +1,10 @@
 export const styles = {
     button: {
-    margin: 2,
-    padding: '3px 10px',
-    fontSize: 10,
-    minWidth: "70%",
-    backgroundColor: "#F79A50",
+        margin: 2,
+        padding: '3px 10px',
+        fontSize: 10,
+        minWidth: "70%",
+        backgroundColor: "#F79A50",
         '&:hover': {
             background: '#F79A50',
             boxShadow: '1px 2px 4px #BC2902',
