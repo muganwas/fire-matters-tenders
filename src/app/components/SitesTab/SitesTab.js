@@ -167,6 +167,9 @@ class SitesTab extends React.Component {
         });
     }
 
+    searchListings = ()=>{
+
+    }
 
     render(){
         const listingsInfo = {...this.props.listingsInfo},
