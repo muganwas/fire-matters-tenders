@@ -2,6 +2,12 @@ const defaultState = {
     info: {
       sites:{},
       activeSite: {},
+      forRemoval: {
+        confirmButton: {
+          isActive: true
+        },
+        confirmationDialog: false,
+      },
       addEquipment: {
         submitButton:{
           isActive: true

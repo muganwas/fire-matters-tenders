@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import  { Loader, MoreHoriz } from 'components';
+import  { Loader, MoreHoriz, FmButton } from 'components';
 import axios from 'axios';
 import { dispatchedListingsInfo, dispatchedUserInfo, dispatchedSitesInfo } from 'extras/dispatchers';
 import { ListedPostedSiteDetails } from 'components';
 import './listedPostedSites.css';
 import { PropTypes } from 'prop-types';
 import { listedPostedSitesOptions } from 'extras/config';
+import { alt_styles, alt_styles_neg } from './styles';
 
 const baseURL = process.env.BACK_END_URL,
+siteRemovalEndPoint = process.env.SITE_REMOVAL_END_POINT,
 tenderEndPoint = process.env.TENDERS_END_POINT;
 
 @connect((store)=>{
@@ -152,7 +154,7 @@ class ListedPostedTenders extends Component {
                 resolve(userInfo);
             }                        
             else
-                reject({message: "No data"});
+               reject({message: "No data"});
         });
     };
 
@@ -165,9 +167,38 @@ class ListedPostedTenders extends Component {
         this.props.dispatch(dispatchedListingsInfo(listingsInfo));
     }
 
+    renderConfirmationDialogue = (e)=>{
+        let sitesInfo = {...this.props.sitesInfo},
+        sites = {...sitesInfo.sites};
+        sitesInfo.forRemoval.confirmationDialog = !sitesInfo.forRemoval.confirmationDialog;
+
+        if(e){
+            let id = e.target.id,
+            siteId = sites[id].id;
+            sitesInfo.forRemoval.siteId = siteId;
+        }
+        this.props.dispatch(dispatchedSitesInfo(sitesInfo));   
+    }
+
+    removeSite = ()=>{
+        let sitesInfo = {...this.props.sitesInfo},
+        siteId = sitesInfo.forRemoval.siteId,
+        URL = baseURL + siteRemovalEndPoint;
+        sitesInfo.forRemoval.confirmButton.isActive = false;
+        this.props.dispatch(dispatchedSitesInfo(sitesInfo));
+        axios.post(URL, {siteId}).then(res=>{
+            if(res.data){
+                sitesInfo.forRemoval.confirmButton.isActive = true;
+                this.props.dispatch(dispatchedSitesInfo(sitesInfo));
+                this.renderConfirmationDialogue();
+                this.forceUpdate();
+            }
+        }); 
+    }
+
     displaySites = (key)=>{
-        let sites = {...this.props.sitesInfo.sites},
-        sitesInfo = this.props.sitesInfo,
+        let sitesInfo = {...this.props.sitesInfo},
+        sites = {...sitesInfo.sites},
         showDetailsView = sitesInfo.detailsView.show,
         options = listedPostedSitesOptions;
         return(
@@ -194,6 +225,7 @@ class ListedPostedTenders extends Component {
                     <MoreHoriz 
                         className={ sites[key].moreMenuClassName } 
                         id={ key }
+                        onDelete = { this.renderConfirmationDialogue }
                         onClickAlt = { this.renderSiteDetails }
                         listName = "sites" 
                         element={ sites[key] }
@@ -206,9 +238,36 @@ class ListedPostedTenders extends Component {
     }
 
     render(){
-        let sites = this.props.sitesInfo.sites;
+        let sitesInfo = {...this.props.sitesInfo},
+        sites = sitesInfo.sites,
+        isActive = sitesInfo.forRemoval.confirmButton.isActive,
+        removeDialog = sitesInfo.forRemoval.confirmationDialog;
         return(
             <div className="list left hanad">
+                {   removeDialog
+                    ?<div className="subcontractors-container">
+                        <div className="sub-container dialog">
+                            <span id="text">Are you sure you want to remove the site?</span>
+                            <FmButton
+                                id="yes"
+                                text = "Proceed"
+                                isActive={isActive}
+                                onClick={this.removeSite}
+                                variant="contained"
+                                styles={alt_styles}
+                            />
+                            <FmButton
+                                id="no"
+                                text="Cancel"
+                                isActive={true}
+                                onClick={ this.renderConfirmationDialogue }
+                                variant="contained"
+                                styles={alt_styles_neg}
+                            />
+                        </div>
+                    </div>
+                    :null
+                }
                 <div className="list-row header">
                     <span className="twenty">Site Name</span>
                     <span className="thirty">Location</span>

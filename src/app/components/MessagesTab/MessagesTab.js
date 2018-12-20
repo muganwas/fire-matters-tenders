@@ -210,7 +210,7 @@ class MessagesTab extends React.Component {
                     <span id="title">Messages</span>
                     <span id="search">
                         { /*<FmButton variant="contained" onClick={ this.renderListingForm } styles={ styles } text="Send New Message" /> */ }
-                        <SearchInput className="alt-search" placeholder="search your messages" search={ this.searchMessages } />
+                        <SearchInput className="alt-search" placeholder="search your comments" search={ this.searchMessages } />
                     </span>
                 </div>
                 <ListedPostedMessages />

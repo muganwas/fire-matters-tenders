@@ -63,7 +63,7 @@ class MoreHoriz extends React.Component {
 
     options = (key)=>{
         let options = this.props.options,
-        onClick = key === "sendMessage"?this.props.onClick:this.props.onClickAlt;
+        onClick = key === "sendMessage"?this.props.onClick: key === "delete"? this.props.onDelete : this.props.onClickAlt;
         return(
             <div className="more-li" id={ this.props.id } autoid = { this.props.autoid } email={ this.props.email } onClick={ onClick } key={key}>{ options[key] }</div>
         )

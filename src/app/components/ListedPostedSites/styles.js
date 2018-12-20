@@ -11,6 +11,37 @@ export const styles = {
       }
     },
 },
+alt_styles = {
+    button: {
+        margin: 2,
+        padding: '3px 10px',
+        fontSize: 10,
+        width: 200,
+        display: "inline-block",
+        backgroundColor: "#F79A50",
+        '&:hover': {
+          background: '#F79A50',
+          boxShadow: '1px 2px 4px #BC2902',
+          transition: 'all 0.2s ease-in'
+        }
+    },
+},
+alt_styles_neg = {
+    button: {
+        margin: 2,
+        padding: '3px 10px',
+        fontSize: 10,
+        width: 200,
+        display: "inline-block",
+        backgroundColor: "#ED2431",
+        color: "#fff",
+        '&:hover': {
+          background: '#ED2431',
+          boxShadow: '1px 2px 4px #BC2902',
+          transition: 'all 0.2s ease-in'
+        }
+    }
+},
 submit_styles = {
     button: {
         float: "right",
