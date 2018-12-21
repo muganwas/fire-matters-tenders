@@ -2,7 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { dispatchedSitesInfo, dispatchedListingsInfo, dispatchedGenInfo, dispatchedUserInfo } from 'extras/dispatchers';
+import { 
+    dispatchedSitesInfo,
+    dispatchedListingsInfo, 
+    dispatchedGenInfo, 
+    dispatchedUserInfo } from 'extras/dispatchers';
 import './sitesTab.css';
 import { SearchInput, FmButton, ListedPostedSites } from 'components';
 import { SitesForm } from 'forms';
@@ -174,7 +178,7 @@ class SitesTab extends React.Component {
     render(){
         const listingsInfo = {...this.props.listingsInfo},
         showListingsForm = listingsInfo.createForm.show,
-        listingAttributes = this.props.user.submitSite,
+        listingAttributes = this.props.siteData,
         errors = listingsInfo.createForm.errors,
         userType = this.props.profileInfo.userType,
         feedback = listingAttributes.feedback,

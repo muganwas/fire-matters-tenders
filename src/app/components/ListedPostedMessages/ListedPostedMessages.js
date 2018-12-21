@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import  { Loader, MoreHoriz } from 'components';
+import  { Loader, MoreHoriz, FmButton } from 'components';
 import axios from 'axios';
 import { dispatchedListingsInfo, dispatchedMessagesInfo, dispatchedUserInfo } from 'extras/dispatchers';
 import './listedPostedMessages.css';
 import { PropTypes } from 'prop-types';
+import { alt_styles, alt_styles_neg } from './styles';
 
 const baseURL = process.env.BACK_END_URL,
+messageDeletionEndPoint = process.env.DELETE_MESSAGE_END_POINT,
 tenderEndPoint = process.env.TENDERS_END_POINT;
 
 @connect((store)=>{
@@ -152,11 +154,40 @@ class ListedPostedMessages extends Component {
         });
     };
 
+    renderConfirmationDialogue = (e)=>{
+        console.log("clicked")
+        let messagesInfo = {...this.props.messagesInfo},
+        sentMessages = messagesInfo.sentMessages;
+        messagesInfo.forDeletion.confirmationDialog = !messagesInfo.forDeletion.confirmationDialog;
+        if(e){
+            let id = e.target.id,
+            messageId = sentMessages[id].id;
+            messagesInfo.forDeletion.messageId = messageId;
+        }
+        this.props.dispatch(dispatchedMessagesInfo(messagesInfo));   
+    }
+
+    deleteComment = ()=>{
+        let messagesInfo = {...this.props.messagesInfo},
+        messageId = messagesInfo.forDeletion.messageId,
+        URL = baseURL + messageDeletionEndPoint;
+        messagesInfo.forDeletion.confirmButton.isActive = false;
+        this.props.dispatch(dispatchedMessagesInfo(messagesInfo));
+        axios.post(URL, {messageId}).then(res=>{
+            if(res.data){
+                messagesInfo.forDeletion.confirmButton.isActive = true;
+                this.props.dispatch(dispatchedMessagesInfo(messagesInfo));
+                this.renderConfirmationDialogue();
+                this.forceUpdate();
+            }
+        }); 
+    }
+
     displayRecievedMessages = (key)=>{
         let recievedMessages = {...this.props.messagesInfo.recievedMessages},
         listingId = recievedMessages[key].listingId,
         sender = recievedMessages[key].sender,
-        options = {delete: "Delete", sendMessage: "Reply"};
+        options = {sendMessage: "Reply"};
         return(
             <div className="list-row" key={key}>
                 <div className="thirty">{ recievedMessages[key].sender }</div>
@@ -197,7 +228,7 @@ class ListedPostedMessages extends Component {
                         autoid = { listingId }
                         sender = { sender }
                         onClick = { this.renderMessageForm }
-                        onClickAlt = { this.deleteMessage }
+                        onDelete = { this.renderConfirmationDialogue }
                         listName = "sentMessages" 
                         element={ sentMessages[key] }
                         options={ options }
@@ -209,13 +240,40 @@ class ListedPostedMessages extends Component {
     }
 
     render(){
-        let recievedMessages = {...this.props.messagesInfo.recievedMessages},
+        let messagesInfo = {...this.props.messagesInfo},
+        recievedMessages = {...messagesInfo.recievedMessages},
         recievedCount = Object.keys(recievedMessages).length,
-        sentMessages = {...this.props.messagesInfo.sentMessages},
+        sentMessages = {...messagesInfo.sentMessages},
+        deleteDialog = messagesInfo.forDeletion.confirmationDialog,
+        isActive = messagesInfo.forDeletion.confirmButton.isActive,
         sentCount = Object.keys(sentMessages).length;
         return(
             <div className="messages">
                 <div className="list left hanad">
+                {   deleteDialog
+                    ?<div className="subcontractors-container">
+                        <div className="sub-container dialog">
+                            <span id="text">Are you sure you want to delete the comment?</span>
+                            <FmButton
+                                id="yes"
+                                text = "Proceed"
+                                isActive={isActive}
+                                onClick={this.deleteComment}
+                                variant="contained"
+                                styles={alt_styles}
+                            />
+                            <FmButton
+                                id="no"
+                                text="Cancel"
+                                isActive={true}
+                                onClick={ this.renderConfirmationDialogue }
+                                variant="contained"
+                                styles={alt_styles_neg}
+                            />
+                        </div>
+                    </div>
+                    :null
+                }
                 <h3>Received Comments</h3>
                     <div className="list-row header">
                         <span className="thirty">Posted By</span>
@@ -236,7 +294,7 @@ class ListedPostedMessages extends Component {
                         <span className="ten"></span>
                         <div className="bottom-border"></div>
                     </div>
-                    { recievedCount === 0?<span className="no-messages">No comments to show</span>:null}
+                    { sentCount === 0?<span className="no-messages">No comments to show</span>:null}
                     { sentMessages?Object.keys(sentMessages).map(this.displaySentMessages):<div className="loader"><Loader /></div> }
                 </div>
 

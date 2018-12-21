@@ -4,12 +4,20 @@ import PropTypes from 'prop-types';
 import './sitesForm.css';
 import { Textfield, DropDown, FmButton } from 'components';
 
+@connect(store=>{
+    return {
+        user: store.user.info,
+        userInfo: store.user.info,
+        listingsInfo: store.listingsInfo.info,
+        sitesInfo: store.sites.info
+    }
+})
 class SitesForm extends React.Component{
     constructor(props){
         super(props)
     }
 
-    componentWillMount(nextProps){
+    componentWillReceiveProps(nextProps){
         this.props = {...nextProps};
     }
 
@@ -33,9 +41,11 @@ class SitesForm extends React.Component{
             siteContractStatus, 
             submitButton 
         } = attributes,
-        mandatoryInput = "This field is mandatory.",     
+        mandatoryInput = "This field is mandatory.",   
         isActive = submitButton.isActive;
 
+        console.log(this.props)
+        
         return(
             <div className="listing-form-container">
                 <div className="listing-form-subcontainer">
@@ -133,11 +143,4 @@ SitesForm.propTypes = {
     save: PropTypes.func.isRequired
 }
 
-export default connect(store=>{
-    return {
-        user: store.user.info,
-        userInfo: store.user.info,
-        listingsInfo: store.listingsInfo.info,
-        sitesInfo: store.sites.info
-    }
-})(SitesForm);
+export default SitesForm;

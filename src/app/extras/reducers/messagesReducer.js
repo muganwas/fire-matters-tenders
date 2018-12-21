@@ -3,6 +3,12 @@ const defaultState = {
       messageForm:{
         errors: {},
         show:false
+      },
+      forDeletion:{
+        confirmButton: {
+          isActive: true
+        },
+        confirmationDialog: false,
       }
      },
     fetching: false,
