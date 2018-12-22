@@ -221,7 +221,7 @@ class HeaderMain extends Component {
                 }); 
             }
         }else{
-            let listings = genInfo.listings;
+            let listings = genInfo.generalListings;
             axios.get(postInfoUrl).then(res=>{
                 let tendersArr = res.data,
                 tendersLen = tendersArr.length;
