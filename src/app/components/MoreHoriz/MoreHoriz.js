@@ -30,12 +30,14 @@ class MoreHoriz extends React.Component {
                 subContractorsInfo[listName][this.props.id].moreMenuClassName = "dropDownMenu";
                 Object.keys(subContractorsInfo[listName]).map((key)=>{
                     if(key !== this.props.id)
-                    subContractorsInfo[listName][key].moreMenuClassName = "hidden";
+                        subContractorsInfo[listName][key].moreMenuClassName = "hidden";
                 })
-                this.props.dispatch(dispatchedSubContractorsInfo(subContractorsInfo));           
+                this.props.dispatch(dispatchedSubContractorsInfo(subContractorsInfo));  
+                this.forceUpdate();         
             }else{
                 subContractorsInfo[listName][this.props.id].moreMenuClassName = "hidden";
                 this.props.dispatch(dispatchedSubContractorsInfo(subContractorsInfo));
+                this.forceUpdate(); 
             }
         }else{
             if(this.props.className === "hidden"){
@@ -44,10 +46,12 @@ class MoreHoriz extends React.Component {
                     if(key !== this.props.id)
                         genInfo[listName][key].moreMenuClassName = "hidden";
                 })
-                this.props.dispatch(dispatchedGenInfo(genInfo));           
+                this.props.dispatch(dispatchedGenInfo(genInfo));
+                this.forceUpdate();           
             }else{
                 genInfo[listName][this.props.id].moreMenuClassName = "hidden";
                 this.props.dispatch(dispatchedGenInfo(genInfo));
+                this.forceUpdate(); 
             } 
         }           
     }

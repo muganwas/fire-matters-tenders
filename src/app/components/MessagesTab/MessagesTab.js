@@ -4,14 +4,14 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { dispatchedMessagesInfo, dispatchedGenInfo, dispatchedUserInfo } from 'extras/dispatchers';
 import './messagesTab.css'
-import { SearchInput, ListedPostedMessages } from 'components';
+import { ListedPostedMessages } from 'components';
 import { MessageForm } from 'forms';
+import { messagesTabs } from 'extras/config';
 import  { submit_styles } from './styles';
 
 
 const baseURL = process.env.BACK_END_URL,
-messagesEndPoint = process.env.MESSAGES_END_POINT,
-sitesEndPoint = process.env.SITES_END_POINT;
+messagesEndPoint = process.env.MESSAGES_END_POINT;
 
 @connect((store)=>{
     return {
@@ -21,7 +21,8 @@ sitesEndPoint = process.env.SITES_END_POINT;
         search: store.search,
         genInfo: store.genInfo.info,
         listingsInfo: store.listingsInfo.info,
-        messagesInfo: store.messages.info
+        messagesInfo: store.messages.info,
+        activeMessageTab: store.messages.info.commentTabs.active
     }
 })
 class MessagesTab extends React.Component {
@@ -186,6 +187,26 @@ class MessagesTab extends React.Component {
         });
     };
 
+    activateTab = ()=>{
+        let messagesInfo = this.props.messagesInfo,
+        selected = this.props.activeMessageTab;
+        if(selected === "posted"){
+            messagesInfo.commentTabs.active = "recieved";
+        }else{
+            messagesInfo.commentTabs.active = "posted";
+        }
+        this.props.dispatch(dispatchedMessagesInfo(messagesInfo));
+        this.forceUpdate();
+    }
+
+    tabTitle=(key)=>{
+        let tabs = messagesTabs,
+        selected = this.props.activeMessageTab;
+        return (
+            <span id={key} onClick={ this.activateTab } className={ key===selected?"active":null} key={ key }>{ tabs[key] }</span>
+        )
+    }
+
     render(){
         const messagesInfo = this.props.messagesInfo,
         showMessageForm = messagesInfo.messageForm.show,
@@ -194,29 +215,31 @@ class MessagesTab extends React.Component {
         feedback = messageAttributes.feedback,
         feedbackClass = messageAttributes.feedbackClass;
         return(
-            <div className="tenders main-content">
-                {showMessageForm
-                ?<MessageForm
-                    feedback = { feedback }
-                    feedbackClass = { feedbackClass }
-                    errors = { errors }
-                    styles = { submit_styles }
-                    attributes = { messageAttributes } 
-                    close={ this.renderListingForm } 
-                    onBlur={ this.dummy } 
-                    upload={ this.upload } 
-                    save={ this.save } 
-                />
-                :null}
-                <div className="title-bar">
-                    <span id="title">Messages</span>
-                    <span id="search">
-                        { /*<FmButton variant="contained" onClick={ this.renderListingForm } styles={ styles } text="Send New Message" /> */ }
-                        <SearchInput className="alt-search" placeholder="search your comments" search={ this.searchMessages } />
-                    </span>
+            <div>
+                <div className="tabs">{ Object.keys(messagesTabs).map(this.tabTitle) }</div>
+                <div className="tenders main-content">
+                    {showMessageForm
+                    ?<MessageForm
+                        feedback = { feedback }
+                        feedbackClass = { feedbackClass }
+                        errors = { errors }
+                        styles = { submit_styles }
+                        attributes = { messageAttributes } 
+                        close={ this.renderListingForm } 
+                        onBlur={ this.dummy } 
+                        upload={ this.upload } 
+                        save={ this.save } 
+                    />
+                    :null}
+                    {/*<div className="title-bar">
+                        <span id="title">Messages</span>
+                        <span id="search">
+                            <SearchInput className="alt-search" placeholder="search your comments" search={ this.searchMessages } />
+                        </span>
+                    </div>*/}
+                    <ListedPostedMessages />
+                    <div className = "clear"></div>
                 </div>
-                <ListedPostedMessages />
-                <div className = "clear"></div>
             </div>
         )
     }

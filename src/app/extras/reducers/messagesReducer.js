@@ -4,6 +4,9 @@ const defaultState = {
         errors: {},
         show:false
       },
+      commentTabs: {
+        active: "posted"
+      },
       forDeletion:{
         confirmButton: {
           isActive: true

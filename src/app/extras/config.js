@@ -55,6 +55,11 @@ export const tenderOptions = {
     more:"View More..."
 }
 
+export const messagesTabs = {
+    posted:"Posted Comments",
+    recieved:"Recieved Comments"
+}
+
 export const listedPostedTendersOptions = { more: "View More..." }
 export const listedPostedSitesOptions = { delete: "Delete", more: "View More..." }
 
