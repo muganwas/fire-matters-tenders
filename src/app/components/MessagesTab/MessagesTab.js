@@ -118,19 +118,21 @@ class MessagesTab extends React.Component {
 
     upload=()=>{
         let messageData = {...this.props.messageData},
+        messagesInfo = this.props.messagesInfo,
         userInfo = {...this.props.user},
-        sender = this.props.profileInfo.emailAddress,
-        recipient = messageData.messageRecipient,
-        listingId = this.props.messagesInfo.currListingId,
+        userEmail = JSON.parse(sessionStorage.getItem('profileInfo')).emailAddress,
+        recipientEmail = messagesInfo.currMessagRecipient,
+        listingId = messagesInfo.currListingId,
         message = messageData.messageBody,
-        postInfoUrl = baseURL + messagesEndPoint;
+        postInfoUrl = baseURL + messagesEndPoint,
 
-        let postObject = {
-            sender,
-            recipient, 
+        postObject = {
+            userEmail,
+            recipientEmail, 
             message, 
             listingId
         };
+
         this.checkForErrors().then(res=>{
             console.log(res)
             if(res === 0){

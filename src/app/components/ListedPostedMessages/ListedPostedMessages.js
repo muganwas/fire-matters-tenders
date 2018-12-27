@@ -63,10 +63,6 @@ class ListedPostedMessages extends Component {
         this.props.dispatch(dispatchedMessagesInfo(messagesInfo));               
     }
 
-    deleteMessage = (e)=>{
-
-    }
-
     dummy= ()=>{
         return Promise.resolve("Nassing");
     }
@@ -169,6 +165,7 @@ class ListedPostedMessages extends Component {
 
     deleteComment = ()=>{
         let messagesInfo = {...this.props.messagesInfo},
+        sentMessages = messagesInfo.sentMessages,
         messageId = messagesInfo.forDeletion.messageId,
         URL = baseURL + messageDeletionEndPoint;
         messagesInfo.forDeletion.confirmButton.isActive = false;
@@ -176,6 +173,13 @@ class ListedPostedMessages extends Component {
         axios.post(URL, {messageId}).then(res=>{
             if(res.data){
                 messagesInfo.forDeletion.confirmButton.isActive = true;
+                //delete locally
+                Object.keys(sentMessages).map(key=>{
+                    let currId = sentMessages[key].id;
+                    if(currId === messageId){
+                        delete messagesInfo.sentMessages[key];
+                    }
+                });
                 this.props.dispatch(dispatchedMessagesInfo(messagesInfo));
                 this.renderConfirmationDialogue();
                 this.forceUpdate();
@@ -201,7 +205,6 @@ class ListedPostedMessages extends Component {
                         autoid = { listingId }
                         email = { sender }
                         onClick = { this.renderMessageForm }
-                        onClickAlt = { this.deleteMessage }
                         element={ recievedMessages[key] }
                         options={ options }
                      />
@@ -215,7 +218,7 @@ class ListedPostedMessages extends Component {
         let sentMessages = {...this.props.messagesInfo.sentMessages},
         listingId = sentMessages[key].listingId,
         sender = sentMessages[key].sender,
-        options = {delete: "Delete", sendMessage: "Post Comment"};
+        options = {delete: "Delete"};
         return(
             <div className="list-row" key={key}>
                 <div className="thirty">{ sentMessages[key].recipient }</div>
@@ -227,7 +230,6 @@ class ListedPostedMessages extends Component {
                         id={ key }
                         autoid = { listingId }
                         sender = { sender }
-                        onClick = { this.renderMessageForm }
                         onDelete = { this.renderConfirmationDialogue }
                         listName = "sentMessages" 
                         element={ sentMessages[key] }
