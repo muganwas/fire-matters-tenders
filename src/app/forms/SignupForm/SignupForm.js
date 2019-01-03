@@ -52,9 +52,9 @@ class SignupForm extends React.Component {
     }
 
     inputValidate = ()=>{
-        return new Promise((resolve, reject)=>{
+        return new Promise((resolve)=>{
             let event = new MouseEvent('blur');
-            let fields = { fullName, companyName, phoneNumber, emailAddress, password, passwordConfirm };
+            let fields = { emailAddress, password, passwordConfirm };
             Object.keys(fields).map(key=>{
                 let name = document.getElementById(key);
                 setTimeout(()=>{
@@ -89,15 +89,12 @@ class SignupForm extends React.Component {
             let info = {...this.props.genInfo.info},
             userInfo = this.props.user.info.signupInfo,
             errors = info.errors,
-            fullName = userInfo.fullName,
-            companyName = userInfo.companyName,
-            phoneNumber = userInfo.phoneNumber,
             emailAddress = userInfo.emailAddress,
             password = (userInfo.password).trim(),
             passwordConfirm = userInfo.passwordConfirm,
             termsAndConditions = userInfo.termsAndConditions,
             third = info.signUpProgressBar.threeClass;
-            if(fullName && companyName && phoneNumber && emailAddress && password && passwordConfirm && termsAndConditions ){   
+            if(emailAddress && password && passwordConfirm && termsAndConditions ){   
                 //what to do after all the information is provided
                 let alert;
                 Object.keys(errors).map(key=>{
@@ -331,20 +328,20 @@ class SignupForm extends React.Component {
         createUser = baseUrl + usersEndPoint,
         userType = info.userType,
         message,
-        fullName = info.fullName,
+        /*fullName = info.fullName,
         companyName = info.companyName,
         phoneNumber = (info.phoneNumber).replace("(", "").replace(")", "").replace( new RegExp(" ", "g"), "").replace("-", ""),
-        mobileNumber = mobileNumber?(info.mobileNumber).replace("(", "").replace(")", "").replace( new RegExp(" ", "g"), "").replace("-", ""):undefined,
-        emailAddress = info.emailAddress,
+        mobileNumber = mobileNumber?(info.mobileNumber).replace("(", "").replace(")", "").replace( new RegExp(" ", "g"), "").replace("-", ""):undefined,*/
+        emailAddress = info.emailAddress,/*
         state = info.state,
         city = info.city,
-        physicalAddress = info.physicalAddress,
+        physicalAddress = info.physicalAddress,*/
         password = info.password;
 
         userInfo.signUpInfo.submitButton.isActive = false;
         this.props.dispatch(dispatchedUserInfo(userInfo));
 
-        axios.post(createUser, { userType, fullName, companyName, phoneNumber, mobileNumber, emailAddress, state, city, physicalAddress, password }).
+        axios.post(createUser, { userType, emailAddress, password }).
         then(res=>{
             message = res.data.message;
             if(message){
@@ -444,8 +441,13 @@ class SignupForm extends React.Component {
         
         return(
             <div>
-                <div className="signup-progress"><span onClick={ this.goTo } id={ 1 } className={ first }>1</span><span className="middle-line"></span><span onClick={ this.goTo } id={ 2 } className={ second }>2</span><span className="middle-line"></span><span onClick={ this.goTo } id={ 3 } className={ third }>3</span></div>
+               
                 <div className="form signup">
+                    <div className="signup-progress">
+                        <span onClick={ this.goTo } id={ 1 } className={ first }>1</span>
+                        <span className="middle-line"></span>
+                        <span onClick={ this.goTo } id={ 2 } className={ second }>2</span>
+                    </div>
                     { 
                         level === 1?
                         <PreSignup nextView={ this.nextView } />:
@@ -460,21 +462,10 @@ class SignupForm extends React.Component {
                             passwordMatchError={ passwordMatchError }
                             passwordError = { passwordError }
                             tmcError={ tmcError }
-                            toAddress={ this.toAddress }
-                        />:
-                        level===3?
-                        <AddressInformation
-                            messageClass = { messageClass }
-                            postSubmitMessage={ postSubmitMessage }
-                            statesAustralia={ statesAustralia }
-                            setErrorAlt = { this.ddSetError }
-                            setError={ this.setError }
-                            genInfo={ genInfo }
-                            userInfo={ userInfo }
-                            selected = { selected }
+                            signup={ this.signUp }
+                            messageClass={messageClass}
+                            postSubmitMessage={postSubmitMessage}
                             isActive = { isActive }
-                            setstate = { this.setstate }
-                            signup = { this.signUp }
                         />:undefined }
                 </div>
             </div> 

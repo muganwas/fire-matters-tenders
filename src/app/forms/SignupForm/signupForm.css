@@ -95,26 +95,24 @@ a {
     width: 50%;
     cursor: pointer;
 }
-.pre-signup #service_provider{
-    color: #fff;
-    background-color: #ED2431;
-    box-shadow: -2px 0 2px rgb(172, 138, 109);
-}
-.pre-signup #service_provider:hover{
-    box-shadow: -2px 1px 3px rgb(172, 138, 109);
-}
-.pre-signup #service_provider:active{
-    box-shadow: -2px 0 2px rgb(172, 138, 109);
-}
 .pre-signup #owner_occupier{
     color: #fff;
-    background-color: #F79A50;
-    box-shadow: 2px 0 2px #c4989b;
+    background-color: #ED2431;
 }
 .pre-signup #owner_occupier:hover{
-    box-shadow: 2px 1px 4px #c4989b;
+    box-shadow: -2px 1px 3px rgb(172, 138, 109);
 }
 .pre-signup #owner_occupier:active{
+    box-shadow: -2px 0 2px rgb(172, 138, 109);
+}
+.pre-signup #service_provider{
+    color: #fff;
+    background-color: #F79A50;
+}
+.pre-signup #service_provider:hover{
+    box-shadow: 2px 1px 4px #c4989b;
+}
+.pre-signup #service_provider:active{
     box-shadow: 2px 0 2px #c4989b;
 }
 .postSubmitError{
@@ -155,7 +153,7 @@ a {
     box-sizing: border-box;
     position: relative;
     display: block;
-    width:40%;
+    width:100%;
     margin: 10px auto;
 }
 
@@ -165,7 +163,7 @@ a {
     height: 2px;
     margin-bottom: 5px;
     background-color: #F79A50;
-    width: 44.5%;
+    width: 80%;
 }
 
 .signup-progress .one, .signup-progress .two, .signup-progress .three{
@@ -185,18 +183,18 @@ a {
 }
 @media only screen and (max-width: 1350px){
     .middle-line{
-        width: 43%;
+        width: 90%;
     }
 }
 
 @media only screen and (max-width: 1080px){
     .middle-line{
-        width: 42%;
+        width: 90%;
     }
 }
 
 @media only screen and (max-width: 950px){
     .middle-line{
-        width: 40%;
+        width: 90%;
     }
 }

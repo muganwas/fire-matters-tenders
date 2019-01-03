@@ -245,17 +245,22 @@ class ListedJobs extends Component {
     }
 
     renderTenderForm = (e)=>{
-        let id = e.target.id;
-        let name = e.target.getAttribute('name');
-        id = !id?name:id;
-        let listingsInfo = {...this.props.listingsInfo};
-        listingsInfo.tenderForm.show = !listingsInfo.tenderForm.show;
-        this.postListingId(id).then(res=>{
-            if(res === "id posted")
-                this.props.dispatch(dispatchedListingsInfo(listingsInfo));
-            else
-                console.log('There was a troblem posting listing id');
-        })  
+        let profileInfo = sessionStorage.getItem('profileInfo'),
+        id = e.target.id,
+        name = e.target.getAttribute('name');
+        if(profileInfo){
+            id = !id?name:id;
+            let listingsInfo = {...this.props.listingsInfo};
+            listingsInfo.tenderForm.show = !listingsInfo.tenderForm.show;
+            this.postListingId(id).then(res=>{
+                if(res === "id posted")
+                    this.props.dispatch(dispatchedListingsInfo(listingsInfo));
+                else
+                    console.log('There was a troblem posting listing id');
+            });  
+        }else{
+            window.location.replace(window.location.origin + '/login');
+        }
     }
 
     renderListingDetails = (e)=>{
@@ -319,7 +324,7 @@ class ListedJobs extends Component {
                 <div className="twenty">{ listings[key].startDate}</div>
                 <div className="twenty">
                 { 
-                    userType !== "owner_occupier"
+                    userType !== "owner_occupier" 
                     ?<FmButton
                         id = { listings[key].id }
                         onClick = { this.renderTenderForm }

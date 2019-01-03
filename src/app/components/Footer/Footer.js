@@ -17,12 +17,18 @@ export default class Footer extends Component {
         super(props)
     }
     render(){
+        let profileInfo = sessionStorage.getItem('profileInfo');
         return(
             <div className="footer">
                 <div className="footer-links">
                     <Link to={`/home`}>Home</Link>
-                    <Link to={`/listings`}>Listings</Link>
-                    <Link to={`/service-providers`}>Service Providers</Link>
+                    { profileInfo?
+                        <span>
+                            <Link to={`/listings`}>Listings</Link>
+                            <Link to={`/service-providers`}>Service Providers</Link>
+                        </span>:
+                        null
+                    }
                     <Link to={`/about`}>About</Link>
                     <Link to={`/contact`}>Contact</Link>
                 </div>
