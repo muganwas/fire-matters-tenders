@@ -98,6 +98,7 @@ class Textfield extends React.Component {
                         <TextField
                             id={ this.props.id }
                             style={{width: "100%"}}
+                            className={this.props.color}
                             InputProps={{
                                 disableUnderline: true,
                                 classes: {

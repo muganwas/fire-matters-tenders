@@ -188,7 +188,25 @@ class InsuranceTab extends React.Component{
         expiryDate = insurance[key].expiryDate,
         name = insurance[key].name,
         certURL = insurance[key].certURL,
-        value = insurance[key].checked;
+        value = insurance[key].checked,
+        date = new Date(),
+        month = parseInt(date.getMonth()),
+        year = parseInt(date.getFullYear()),
+        storedDateArr = expiryDate.split("-"),
+        storedYear = parseInt(storedDateArr[0]),
+        storedMonth = parseInt(storedDateArr[1]),
+        colorCode;
+        if(storedYear > year){
+            colorCode = "valid";
+        }else if(storedYear === year){
+            if(storedMonth >= month){
+                colorCode = "almost";
+            }else{
+                colorCode = "invalid"
+            }
+        }else{
+            colorCode = "invalid"
+        }  
         if(key !== "other"){
             return(
                 <div key={ key } className="el">
@@ -221,6 +239,7 @@ class InsuranceTab extends React.Component{
                             id={ key + "-expiryDate"}
                             label="Expiry Date"
                             value={ expiryDate }
+                            color={colorCode}
                             subCategory={"insurance"}  
                             type="date" 
                             placeholder={ expiryDate }
@@ -239,7 +258,25 @@ class InsuranceTab extends React.Component{
 
     render(){
         let { insurance }= this.props,
-        other = insurance?insurance.other:{};
+        other = insurance?insurance.other:{},
+        date = new Date(),
+        month = parseInt(date.getMonth()),
+        year = parseInt(date.getFullYear()),
+        storedDateArr = other.expiryDate.split("-"),
+        storedYear = parseInt(storedDateArr[0]),
+        storedMonth = parseInt(storedDateArr[1]),
+        colorCode;
+        if(storedYear > year){
+            colorCode = "valid";
+        }else if(storedYear === year){
+            if(storedMonth >= month){
+                colorCode = "almost";
+            }else{
+                colorCode = "invalid"
+            }
+        }else{
+            colorCode = "invalid"
+        }
 
         return(
             <div className="main-content">
@@ -281,6 +318,7 @@ class InsuranceTab extends React.Component{
                                         <Textfield 
                                             id="other-expiryDate"
                                             label="Expiry Date"
+                                            color={colorCode}
                                             value={ other.expiryDate } 
                                             type="date" 
                                             placeholder={ other.expiryDate }

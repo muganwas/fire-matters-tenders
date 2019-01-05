@@ -1,0 +1,22 @@
+.invalid{
+    background-color: #ff5757;
+    display: block;
+    color: #fff;
+    padding: 3px;
+    margin: 0;
+    border-radius: 3px;
+}
+.almost{
+    background-color: #ffb7a4;
+    display: block;
+    padding: 3px;
+    margin: 0;
+    border-radius: 3px;
+}
+.valid{
+    background-color: #d1fbd3;
+    display: block;
+    padding: 3px;
+    margin: 0;
+    border-radius: 3px;
+}

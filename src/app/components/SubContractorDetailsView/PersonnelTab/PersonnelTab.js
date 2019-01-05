@@ -73,6 +73,9 @@ class PersonnelTab extends React.Component {
         website = userInfo.website,
         state = userInfo.state,
         city = userInfo.city,
+        area = userInfo.area,
+        suburb = userInfo.suburb,
+        street = userInfo.street,
         emailAddress = userInfo.emailAddress;
         return(
             <div className="main-content">
@@ -179,9 +182,48 @@ class PersonnelTab extends React.Component {
                                 <Textfield 
                                     id="profile-city" 
                                     value={ city }
-                                    label="City/Suburb"
+                                    label="City"
                                     type="text" 
                                     placeholder="ie.Your city or suburb" 
+                                    root="inner-textfield" 
+                                    fieldClass="textfield"
+                                    upload={ this.upload }
+                                    save= { this.save } 
+                                />
+                            </div>
+                            <div className="el">
+                                <Textfield 
+                                    id="profile-area" 
+                                    value={ area }
+                                    label="Area"
+                                    type="text" 
+                                    placeholder="ie.Sub-contractors' area" 
+                                    root="inner-textfield" 
+                                    fieldClass="textfield"
+                                    upload={ this.upload }
+                                    save= { this.save } 
+                                />
+                            </div>
+                            <div className="el">
+                                <Textfield 
+                                    id="profile-suburb" 
+                                    value={ suburb }
+                                    label="Suburb"
+                                    type="text" 
+                                    placeholder="ie.Sub-contractors' suburb" 
+                                    root="inner-textfield" 
+                                    fieldClass="textfield"
+                                    upload={ this.upload }
+                                    save= { this.save } 
+                                />
+                            </div>
+                            <div className="el">
+                                <Textfield 
+                                    id="profile-street" 
+                                    value={ street }
+                                    label="Street"
+                                    type="text" 
+                                    placeholder="ie.Sub-contractors' suburb" 
                                     root="inner-textfield" 
                                     fieldClass="textfield"
                                     upload={ this.upload }

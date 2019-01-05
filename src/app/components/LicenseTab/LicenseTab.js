@@ -170,7 +170,25 @@ class LicenseTab extends React.Component{
         expiryDate = licenses[key].expiryDate,
         name = licenses[key].name,
         certURL = licenses[key].certURL,
-        value = licenses[key].checked;
+        date = new Date(),
+        month = parseInt(date.getMonth()),
+        year = parseInt(date.getFullYear()),
+        value = licenses[key].checked,
+        storedDateArr = expiryDate.split("-"),
+        storedYear = parseInt(storedDateArr[0]),
+        storedMonth = parseInt(storedDateArr[1]),
+        colorCode;
+        if(storedYear > year){
+            colorCode = "valid";
+        }else if(storedYear === year){
+            if(storedMonth >= month){
+                colorCode = "almost";
+            }else{
+                colorCode = "invalid"
+            }
+        }else{
+            colorCode = "invalid"
+        }   
         if(key !== "other"){
             return(
                 <div key={ key } className="el">
@@ -215,6 +233,7 @@ class LicenseTab extends React.Component{
                             id={ key + "-expiryDate"}
                             label="Expiry Date"
                             value={ expiryDate }
+                            color={colorCode}
                             subCategory={"licenses"}  
                             type="date" 
                             placeholder={ expiryDate }

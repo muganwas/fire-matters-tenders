@@ -107,43 +107,47 @@ class ListedServiceProviders extends Component {
         userType = profileInfo?JSON.parse(sessionStorage.getItem('profileInfo')).userType: null,
         showInviteForm = tendersInfo.inviteToTender.showForm,
         serviceProviderId = serviceProviders[key].id;
-
-        return(
-            <div className="list-row" key={key} id={ serviceProviders[key].id }>
-            { showInviteForm
-            ?<InviteToTenderForm
-                dummy={ this.dummy } 
-                save = { this.saveInviteMessage } 
-                close = { this.renderInviteForm }
-             />
-            :null }
-                <div className="twenty clickable">
-                    <NavLink id={ serviceProviders[key].id } onClick = { this.goToProfile } to={`/profilePage:${ serviceProviderId }`}>
-                        { serviceProviders[key].companyName }
-                    </NavLink>
-                </div>
-                <div className="thirty">{ serviceProviders[key].city }, { serviceProviders[key].state }</div>
-                <div className="thirty">
-                    { categories?Object.keys(categories).map((newKey)=>{
-                        if(categories[newKey]){
-                            return(
-                                <div key={ newKey }>
-                                    <span className="service">{ newKey }</span>
-                                </div>
-                            )
+        if(serviceProviders[key].companyName){
+            return(
+                <div className="list-row" key={key} id={ serviceProviders[key].id }>
+                { showInviteForm
+                ?<InviteToTenderForm
+                    dummy={ this.dummy } 
+                    save = { this.saveInviteMessage } 
+                    close = { this.renderInviteForm }
+                />
+                :null }
+                    <div className="twenty clickable">
+                        <NavLink id={ serviceProviders[key].id } onClick = { this.goToProfile } to={`/profilePage:${ serviceProviderId }`}>
+                            { serviceProviders[key].companyName }
+                        </NavLink>
+                    </div>
+                    <div className="thirty">{ serviceProviders[key].city }, { serviceProviders[key].state }</div>
+                    <div className="thirty">
+                        { categories?Object.keys(categories).map((newKey)=>{
+                            if(categories[newKey]){
+                                return(
+                                    <div key={ newKey }>
+                                        <span className="service">{ newKey }</span>
+                                    </div>
+                                )
+                            }
+                            
+                        }):null }
+                    </div>
+                    <div className="twenty">{
+                        userType === "owner_occupier" || !userType
+                        ?<FmButton variant="contained" styles={ styles } onClick={ ()=>this.renderInviteForm(key) } text="Invite to Tender" />
+                        :null 
                         }
-                        
-                    }):null }
+                    </div>
+                    <div className="bottom-border"></div>
                 </div>
-                <div className="twenty">{
-                    userType === "owner_occupier" || !userType
-                    ?<FmButton variant="contained" styles={ styles } onClick={ ()=>this.renderInviteForm(key) } text="Invite to Tender" />
-                    :null 
-                    }
-                </div>
-                <div className="bottom-border"></div>
-            </div>
-        )
+            )
+        }else{
+            return;
+        }
+        
     }
 
     render(){
@@ -167,9 +171,7 @@ class ListedServiceProviders extends Component {
         let secondaryFilterLen = secondaryFilterLenArr.length;
         if(serviceProviders){
             Object.keys(serviceProviders).map(key=>{
-                if(
-                    serviceProviders[key].state === filter                  
-                ){
+                if( serviceProviders[key].state === filter ){
                     filtered[key] = serviceProviders[key];
                 }
             });
@@ -177,16 +179,18 @@ class ListedServiceProviders extends Component {
             let filteredLen = Object.keys(filtered).length;
             filtered = filteredLen > 0?filtered:serviceProviders;
             Object.keys(filtered).map(key=>{
-                let companyName = (serviceProviders[key].companyName).toLowerCase(),
-                fullName = (serviceProviders[key].fullName).toLowerCase(),
-                city = (serviceProviders[key].city).toLowerCase();
-                if(
-                    companyName.includes(keyWords)
-                    || fullName.includes(keyWords) 
-                    || city.includes(keyWords) 
-                ){
-                    filteredNext[key] = filtered[key];
-                }
+                if(serviceProviders[key].companyName){
+                    let companyName = (serviceProviders[key].companyName).toLowerCase(),
+                    fullName = (serviceProviders[key].fullName).toLowerCase(),
+                    city = (serviceProviders[key].city).toLowerCase();
+                    if(
+                        companyName.includes(keyWords)
+                        || fullName.includes(keyWords) 
+                        || city.includes(keyWords) 
+                    ){
+                        filteredNext[key] = filtered[key];
+                    }
+                } 
             });
             filteredNext = keyWordsLen > 0?filteredNext:filtered;
             if(secondaryFilterLen > 0){

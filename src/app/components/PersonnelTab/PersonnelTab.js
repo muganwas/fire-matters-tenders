@@ -73,6 +73,9 @@ class PersonnelTab extends React.Component{
         mobileNumber = userInfo.mobileNumber?(userInfo.mobileNumber).toString():undefined,
         website = userInfo.website,
         state = userInfo.state,
+        area = userInfo.area,
+        suburb = userInfo.suburb,
+        street = userInfo.street,
         serviceCategory = userInfo.serviceCategory,
         categoriesOfService = profile.categoriesOfService || {},
         city = userInfo.city,
@@ -235,15 +238,57 @@ class PersonnelTab extends React.Component{
                                 <Textfield 
                                     id="profile-city" 
                                     value={ city }
-                                    label="City/Suburb"
+                                    label="City"
                                     type="text" 
-                                    placeholder="ie.Your city or suburb" 
+                                    placeholder="ie.Your city" 
                                     root="inner-textfield" 
                                     fieldClass="textfield"
                                     onBlur={ upload }
                                     onChange = { save }  
                                 />
                             </div>
+                            {userType === "service_provider"?
+                            <div>
+                            <div className="el">
+                                <Textfield 
+                                    id="profile-area" 
+                                    value={ area }
+                                    label="Area"
+                                    type="text" 
+                                    placeholder="ie.Your Area" 
+                                    root="inner-textfield" 
+                                    fieldClass="textfield"
+                                    onBlur={ upload }
+                                    onChange = { save }  
+                                />
+                            </div>
+                            <div className="el">
+                                <Textfield 
+                                    id="profile-suburb" 
+                                    value={ suburb }
+                                    label="Suburb"
+                                    type="text" 
+                                    placeholder="ie.Your suburb" 
+                                    root="inner-textfield" 
+                                    fieldClass="textfield"
+                                    onBlur={ upload }
+                                    onChange = { save }  
+                                />
+                            </div>
+                            <div className="el">
+                                <Textfield 
+                                    id="profile-street" 
+                                    value={ street }
+                                    label="Street"
+                                    type="text" 
+                                    placeholder="ie.Your street" 
+                                    root="inner-textfield" 
+                                    fieldClass="textfield"
+                                    onBlur={ upload }
+                                    onChange = { save }  
+                                />
+                            </div>
+                            </div>:null}
                         </div>
                     </div>
                     {userType === "service_provider"?
