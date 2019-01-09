@@ -98,20 +98,20 @@ export const equipmentCategoriesFull = {
         fireDetectionAndWarningSystem: "Fire Detection & Warning System",
         smokeAndHeatAlarms: "Smoke & Heat Alarms",
         smokeExhaustSystem: "Smoke Exhaust System",
-        totalDetectionAndAlarmSystem: "Total Detection & AlarmSystem"
+        totalDetectionAndAlarmSystem: "Detection & AlarmSystem"
     },
     portableFireFightingEquipment: {
         hoseReels: "Hose Reels",
         extinguishers: "Extinguishers",
-        totalPortableFireFighting: "Total Portable Fire-Fighting"
+        totalPortableFireFighting: "Portable Fire-Fighting"
     },
     passiveFireProtection: {
         fireDoors: "Fire Doors",
         servicePenetrations: "Service Penetrations",
-        totalPassiveFireProtection: "Total Passive Fire Protection"
+        totalPassiveFireProtection: "Passive Fire Protection"
     },
     emergencyExitLighting: {
-        totalEmergencyExitLighting: "Total Emergency Exit Lighting"
+        totalEmergencyExitLighting: "Emergency Exit Lighting"
     }
 }
 
@@ -119,23 +119,23 @@ export const detectionAndWarningSystem = {
     fireDetectionAndWarningSystem: "Fire Detection & Warning System",
     smokeAndHeatAlarms: "Smoke & Heat Alarms",
     smokeExhaustSystem: "Smoke Exhaust System",
-    totalDetectionAndAlarmSystem: "Total Detection & AlarmSystem"
+    totalDetectionAndAlarmSystem: "Detection & AlarmSystem"
 }
 
 export const portableFireFightingEquipment = {
     hoseReels: "Hose Reels",
     extinguishers: "Extinguishers",
-    totalPortableFireFighting: "Total Portable FireFighting"
+    totalPortableFireFighting: "Portable Fire Fighting"
 }
 
 export const passiveFireProtection = {
     fireDoorsCA: "Fire Doors",
     servicePenetrations: "Service Penetrations",
-    totalPassiveFireProtection: "Total PassiveFire Protection"
+    totalPassiveFireProtection: "PassiveFire Protection"
 }
 
 export const emergencyExitLighting = {
-    totalEmergencyExitLighting: "Total Emergency Exit Lighting"
+    totalEmergencyExitLighting: "Emergency Exit Lighting"
 }
 
 export const contractTypes = {
@@ -147,12 +147,12 @@ export const contractTypes = {
 }
 
 export const ownerOccupierProfileTabs = {
-    personnel: "Personnel",
+    personnel: "Profile",
     company: "Company"
 }
 
 export const serviceProviderProfileTabs = {
-    personnel: "Personnel",
+    personnel: "Profile",
     company: "Company",
     insurance: "Insurance",
     license: "License",
@@ -160,7 +160,7 @@ export const serviceProviderProfileTabs = {
 }
 
 export const subContractorProfileTabs = {
-    personnel: "Personnel",
+    personnel: "Profile",
     company: "Company",
     insurance: "Insurance",
     license: "License",

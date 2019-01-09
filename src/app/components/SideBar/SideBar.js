@@ -171,6 +171,8 @@ class SideBar extends React.Component {
     fetchTenders = ()=>{
         let postInfoUrl = baseURL + tenderEndPoint,
         genInfo = {...this.props.genInfo },
+        contractCountArr = [],
+        contractCount = 0,
         userType = (JSON.parse(sessionStorage.getItem("profileInfo")).userType).toLowerCase(),
         postedTendersComprehensive = [],
         postedTenders = [];
@@ -184,31 +186,45 @@ class SideBar extends React.Component {
                         let currObj = tendersArr[count],
                         listingId = currObj.listingId;
                         currObj.acceptTenderButton = { isActive: true };
+                        currObj.moreMenuClassName = "hidden";
                         Object.keys(listings).map(key=>{
                             if(listingId === listings[key].id){
                                 let cO = {tenderId:currObj.id, listingId: listingId, acceptTenderButton:{isActive:true}};
                                 postedTendersComprehensive.push(currObj);
                                 postedTenders.push(cO);
+                                if(tendersArr[count].accepted){
+                                    contractCountArr.push(count);
+                                }
                             }
                         });
                     }
                 });
                 let listingsInfo = {...this.props.listingsInfo},
                 tendersInfo = {...this.props.tendersInfo};
+                genInfo.sideBar.profilePage.listCount.contracts = contractCountArr.length;
+                Object.keys(contractCountArr).map(key=>{
+                    contractCount + 1;
+                })
+                console.log(contractCount);
                 listingsInfo.postedTenders.tenders = postedTenders;
                 tendersInfo.tenders = postedTendersComprehensive;
+                this.props.dispatch(dispatchedGenInfo(genInfo));
                 this.props.dispatch(dispatchedTendersInfo(tendersInfo));
                 this.props.dispatch(dispatchedListingsInfo(listingsInfo));
                 this.forceUpdate();
             }else{
                 let tendererId = JSON.parse(sessionStorage.getItem('profileInfo')).id,
                 genInfo = {...this.props.genInfo},
+                tendersCount = 0,
                 tendersInfo = {...this.props.tendersInfo},
                 getInfoUrl = baseURL + tenderEndPoint + "?tendererId=" + tendererId;
                 axios.get(getInfoUrl).then(res=>{
                     if(res){
                         tendersInfo.tenders = res.data;
                         Object.keys(tendersInfo.tenders).map((key)=>{
+                            if(tendersInfo.tenders[key].accepted){
+                                console.log("accepted")
+                            }
                             tendersInfo.tenders[key].moreMenuClassName = "hidden";
                         });
                         tendersInfo.tenders = res.data;

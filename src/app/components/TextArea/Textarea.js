@@ -38,9 +38,6 @@ class Textarea extends React.Component {
                 className={this.props.fieldClass}
                 InputProps={{
                     disableUnderline: true,
-                    classes: {
-                        root: this.props.fieldClass,
-                    },
                 }}
                 multiline
                 rows={ this.props.rows }

@@ -5,6 +5,7 @@ import axios from 'axios';
 import { dispatchedGenInfo, dispatchedListingsInfo, dispatchedUserInfo, dispatchedTendersInfo } from 'extras/dispatchers';
 import './listedContracts.css';
 import { PropTypes } from 'prop-types';
+import { styles, submit_styles } from './styles';
 import { TenderForm } from 'forms';
 import { listedPostedTendersOptions } from 'extras/config';
 
@@ -12,62 +13,12 @@ const baseURL = process.env.BACK_END_URL,
 listingsEndPoint = process.env.LISTING_END_POINT,
 tenderEndPoint = process.env.TENDERS_END_POINT;
 
-const styles = {
-    button: {
-      margin: 2,
-      padding: '3px 10px',
-      fontSize: 10,
-      backgroundColor: "#F79A50",
-      '&:hover': {
-        background: '#F79A50',
-        boxShadow: '1px 2px 4px #BC2902',
-        transition: 'all 0.2s ease-in'
-      }
-    },
-},
-submit_styles = {
-    button: {
-        float: "right",
-        margin: 0,
-        padding: "3px 10px",
-        margin: "0 5px",
-        width: 330,
-        fontSize: 14,
-        backgroundColor: "#ED2431",
-        color: "#fff",
-        fontWeight: "bold",
-        '&:hover': {
-        background: '#ED2431',
-        boxShadow: '1px 2px 4px #BC2902',
-        transition: 'all 0.2s ease-in'
-        }
-    },
-    inputErr:{
-        width: 330,
-        display: "block",
-        margin: "3px",
-        padding: "5px"
-    },
-    el:{
-        display: "inline-block",
-        margin: "0 20%"
-    },
-    information:{
-        textAlign: "center"
-    },
-    trans: {
-        backgroundColor: "rgba(0,0,0,0.1)"
-    }
-};
-
 @connect((store)=>{
     return {
         user: store.user,
         search: store.search,
-        genInfo: store.genInfo,
         profileInfo: store.user.info.profileInfo,
-        listingsInfo: store.listingsInfo.info,
-        listingsData: store.user.info.submitTender,
+        genInfo: store.genInfo,
         tendersInfo: store.tenders.info,
         contractsInfo: store.contracts.info
     }
@@ -79,8 +30,6 @@ class ListedContracts extends Component {
     
     componentWillReceiveProps(nextProps){
         this.props = {...nextProps};
-        if(!this.props.genInfo.info.listings)
-            this.fetchListings();
     }
 
     componentWillMount(){
@@ -91,278 +40,64 @@ class ListedContracts extends Component {
         });*/
     }
 
-    fetchTenders = ()=>{
-        let postInfoUrl = baseURL + tenderEndPoint,
-        genInfo = {...this.props.genInfo.info },
-        userType = (this.props.profileInfo.userType).toLowerCase(),
-        postedTendersComprehensive = [],
-        postedTenders = [];
-        if(userType){
-            if(userType === "owner_occupier"){
-                let listings = genInfo.listings;
-                axios.get(postInfoUrl).then(res=>{
-                    let tendersArr = res.data,
-                    tendersLen = tendersArr.length;
-                    for(let count = 0;count <tendersLen; count++){
-                        let currObj = tendersArr[count],
-                        listingId = currObj.listingId;
-                        Object.keys(listings).map(key=>{
-                            if(listingId === listings[key].id){
-                                let cO = {tenderId:currObj.id, listingId: listingId};
-                                postedTendersComprehensive.push(currObj);
-                                postedTenders.push(cO);
-                            }
-                        });
+    renderContractDetails = ()=>{
+
+    }
+
+    displayContracts = (key)=>{
+        let listings = {...this.props.genInfo.generalListings},
+        contractInfo = {...this.props.contractsInfo},
+        tenders = this.props.tendersInfo.tenders,
+        showContractDetails = contractInfo.currentContract.show,
+        profileInfo = sessionStorage.getItem('profileInfo'),
+        userType = profileInfo?JSON.parse(sessionStorage.getItem('profileInfo')).userType: null,
+        options = { more: "View More..."};
+
+        if(tenders[key].accepted){
+            return(
+                <div className="list-row" key={key} id={ tenders[key].id }>
+                    {   
+                        showContractDetails?
+                        <div styles = {submit_styles.trans} className="listedJobsDetails-container">
+                            <span
+                                className="close right" 
+                                onClick={ this.renderListingDetails } 
+                                id="close"
+                            >
+                                &#x2716;
+                            </span>
+                            <ListedJobDetails />
+                        </div>
+                        :null
                     }
-                });
-                let listingsInfo = {...this.props.listingsInfo},
-                tendersInfo = {...this.props.tendersInfo};
-                listingsInfo.postedTenders.tenders = postedTenders;
-                tendersInfo.tenders = postedTendersComprehensive;
-                this.props.dispatch(dispatchedTendersInfo(tendersInfo));
-                this.props.dispatch(dispatchedListingsInfo(listingsInfo));
-                this.forceUpdate();
-            }
-        }
-    }
-
-    fetchListings = ()=>{
-        return new Promise(resolve=>{
-            let genInfo = {...this.props.genInfo.info },
-            userType = (this.props.profileInfo.userType).toLowerCase(),
-            userEmail = this.props.profileInfo.emailAddress;
-            if(userType){
-                if(userType !== "owner_occupier"){
-                    axios.get(baseURL + listingsEndPoint).then((response)=>{
-                        //console.log(response.data);
-                        let listings = genInfo.listings = {...response.data};
-                        genInfo.sideBar.profilePage.listCount['tenders'] = (response.data).length;
-                        /**Set the more dropdown menu class to hidden for every row*/
-                        Object.keys(listings).map((key)=>{
-                            genInfo.listings[key].moreMenuClassName = "hidden";
-                        })
-                        this.props.dispatch(dispatchedGenInfo(genInfo));
-                        resolve("fetched");
-                    }).catch(err=>{
-                        console.log(err);
-                    });
-                }else{
-                    axios.get(baseURL + listingsEndPoint + "?userEmail=" + userEmail).then((response)=>{
-                        //console.log(response.data);
-                        let listings = genInfo.listings = {...response.data};
-                        genInfo.sideBar.profilePage.listCount['tenders'] = (response.data).length;
-                        /**Set the more dropdown menu class to hidden for every row*/
-                        Object.keys(listings).map((key)=>{
-                            genInfo.listings[key].moreMenuClassName = "hidden";
-                        })
-                        this.props.dispatch(dispatchedGenInfo(genInfo));
-                        resolve("fetched");
-                    }).catch(err=>{
-                        console.log(err);
-                    });            
-                }
-            }
-        });    
-    }
-
-    postListingId = (id)=>{
-        return new Promise(resolve=>{
-            let userInfo = {...this.props.user.info};
-            userInfo.submitTender.tenderListingId = id;
-            this.props.dispatch(dispatchedUserInfo(userInfo));
-            resolve('id posted');
-        });
-    }
-
-    renderTenderForm = (e)=>{
-        let id = e.target.id;
-        let name = e.target.getAttribute('name');
-        id = !id?name:id;
-        let listingsInfo = {...this.props.listingsInfo};
-        listingsInfo.tenderForm.show = !listingsInfo.tenderForm.show;
-        this.postListingId(id).then(res=>{
-            if(res === "id posted")
-                this.props.dispatch(dispatchedListingsInfo(listingsInfo));
-            else
-                console.log('There was a troblem posting listing id');
-        })  
-    }
-
-    dummy= ()=>{
-        return Promise.resolve("Nassing");
-    }
-
-    checkForErrors(){
-        let errored = [];
-        return new Promise(resolve=>{
-            let listingsData = {...this.props.listingsData},
-            listingsInfo = {...this.props.listingsInfo};
-            Object.keys(listingsData).map(key=>{
-                if(!listingsData[key] && key !== "feedback" && key !== "feedbackClass" && key !== "submitButton"){
-                    listingsInfo.tenderForm.errors[key] = true;
-                    errored.push(listingsInfo.tenderForm.errors[key]);
-                }else if(listingsData[key] && key !== "feedback" && key !== "feedbackClass" && key !== "submitButton"){
-                    listingsInfo.tenderForm.errors[key] = null;
-                }
-            });
-            this.props.dispatch(dispatchedListingsInfo(listingsInfo));
-            let errCount = errored.length;
-            resolve(errCount);
-        }); 
-    }
-
-    upload=()=>{
-        let listingsData = {...this.props.listingsData},
-        userInfo = {...this.props.user.info},
-        companyName = listingsData.tenderCompanyName,
-        rate = listingsData.tenderRate,
-        startDate = listingsData.tenderStartDate,
-        endDate = listingsData.tenderEndDate,
-        coverLetter = listingsData.tenderCoverLetter,
-        listingId = listingsData.tenderListingId,
-        postInfoUrl = baseURL + tenderEndPoint;
-
-        let postObject = {
-            listingId,
-            companyName, 
-            rate, 
-            coverLetter, 
-            startDate, 
-            endDate
-        };
-        this.checkForErrors().then(res=>{
-            if(res === 0){
-                userInfo.submitTender.submitButton.isActive = false;
-                this.props.dispatch(dispatchedUserInfo(userInfo));
-                axios.post(postInfoUrl, postObject).
-                then(res=>{
-                    userInfo.submitTender.submitButton.isActive = true;
-                    userInfo.submitTender.feedback = "You successfully posted your tender.";
-                    userInfo.submitTender.feedbackClass="success";
-                    this.props.dispatch(dispatchedUserInfo(userInfo));
-                    this.forceUpdate();
-                }).
-                catch(err=>{
-                    userInfo.submitTender.submitButton.isActive = true;
-                    userInfo.submitTender.feedbackClass="error-feedback";
-                    userInfo.submitTender.feedback = "Something went wrong, try again later.";
-                    this.props.dispatch(dispatchedUserInfo(userInfo));
-                    this.forceUpdate();
-                    console.log(err);
-                });
-            }
-        });
-    };
-
-    save=(e)=>{
-        e.persist();
-        return new Promise((resolve, reject)=>{
-            let userInfo = {...this.props.user.info},
-            id = e.target.id,
-            type = e.target.getAttribute('type'),
-            origName = e.target.getAttribute("category");
-            console.log(type)
-            origName = origName?origName:id;
-            let nameArr = origName.split("-"),
-            name = nameArr[1],
-            value = e.target.getAttribute('value');
-            value = value?value:e.target.value;
-            userInfo.submitTender[name] = value;
-            userInfo.submitTender[name + "_key"] = id;
-            if(userInfo){
-                resolve(userInfo);
-            }                        
-            else
-                reject({message: "No data"});
-        });
-    };
-
-    displayTenders = (e)=>{
-        let tenderId = e.target.id;
-        let listingsInfo = {...this.props.listingsInfo},
-        show = listingsInfo.postedTenders.overLay.show;
-        listingsInfo.postedTenders.overLay.show = !show;
-        listingsInfo.postedTenders.overLay.active = tenderId;
-        this.props.dispatch(dispatchedListingsInfo(listingsInfo));
-    }
-
-    displayListings = (key)=>{
-        let listings = {...this.props.genInfo.info.listings},
-        listingsInfo = {...this.props.listingsInfo},
-        postedTenders = listingsInfo.postedTenders.tenders,
-        showTenderForm = listingsInfo.tenderForm.show,
-        userType = this.props.profileInfo.userType,
-        tenderAttributes = this.props.user.info.submitTender,
-        errors = listingsInfo.tenderForm.errors,
-        feedback = tenderAttributes.feedback,
-        options = listedPostedTendersOptions,
-        listingId = listings[key].id,
-        showPostedTendersOverlay = listingsInfo.postedTenders.overLay.show,
-        feedbackClass = tenderAttributes.feedbackClass;
-        let currListingTenderCount = 0;
-
-        if(postedTenders){
-            postedTenders.forEach((obj)=>{
-                if(listingId === obj.listingId){
-                    currListingTenderCount ++;
-                }
-            });
-        }
-            
-        return(
-            <div className="list-row" key={key}>
-                {showTenderForm
-                ?<TenderForm
-                    feedback = { feedback }
-                    feedbackClass = { feedbackClass }
-                    errors = { errors }
-                    styles = { submit_styles }
-                    attributes = { tenderAttributes } 
-                    close={ this.renderTenderForm } 
-                    onBlur={ this.dummy } 
-                    upload={ this.upload } 
-                    save={ this.save } 
-                />:null}
-                { showPostedTendersOverlay
-                ?<PostedTendersOverlay toggleDisplay={ this.displayTenders } listingId = { listingId } />
-                : null }
-                <div className="twenty">{ listings[key].city }, { listings[key].state }</div>
-                <div className="thirty">{ listings[key].serviceRequired }, { listings[key].equipment }</div>
-                <div className="twenty">{ listings[key].startDate}</div>
-                <div className="twenty">
-                { 
-                    userType !== "owner_occupier"
-                    ?<FmButton 
-                        id={ listings[key].id } 
-                        onClick={ this.renderTenderForm } 
-                        variant="contained" 
-                        styles = { styles } 
-                        text="Submit Tender" 
-                    />
-                    :<div id = { listings[key].id } onClick={ this.displayTenders }className="posted-count">
-                        { currListingTenderCount }
-                    </div> 
-                }
+                    <div className="twenty">{ tenders[key].companyName }</div>
+                    <div className="thirty">{ tenders[key].rate }</div>
+                    <div className="twenty">{ tenders[key].startDate}</div>
+                    <div className="twenty">
+                    </div>
+                    <div className="ten">
+                        <MoreHoriz 
+                            className={ tenders[key].moreMenuClassName } 
+                            id={ key }
+                            autoid = { tenders[key].id }
+                            onClick = { this.renderContractDetails}
+                            listName = "tenders" 
+                            element={ tenders[key] }
+                            options={ options }
+                        />
+                    </div>
+                    <div className="bottom-border"></div>
                 </div>
-                <div className="ten">
-                    <MoreHoriz 
-                        className={ listings[key].moreMenuClassName } 
-                        id={ key } 
-                        listName = "listings" 
-                        element={ listings[key] }
-                        options={ options }
-                     />
-                </div>
-                <div className="bottom-border"></div>
-            </div>
-        )
+            )
+        }
     }
 
     render(){
         let listings = {...this.props.genInfo.info.listings},
         contractsInfo = {...this.props.contractsInfo},
         contracts = {...contractsInfo.contracts},
-        contractsCount = Object.keys(contracts).length,
+        tenders = this.props.tendersInfo.tenders,
+        contractsCount = Object.keys(tenders).length,
         userType = this.props.profileInfo.userType;
         return(
             <div className="list left hanad">
@@ -377,7 +112,7 @@ class ListedContracts extends Component {
                 </div>
                 :<div className="list-row header">There is no contract information to display</div>
             }
-                
+            { Object.keys(tenders).map(this.displayContracts) }
             </div>
         )
     }

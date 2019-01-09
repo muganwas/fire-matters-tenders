@@ -16,10 +16,10 @@ const RenderEquipment = props => {
     return (
         <div>{
             Object.keys(currCat).map(key=>{
-                if(currCat[key] === true){
+                if(currCat[key]){
                     return (
                         <div key={key}>
-                            { key }
+                            { equipmentCategoriesFull[id][key] }
                             <span 
                                 className="close right" 
                                 category={ id } 

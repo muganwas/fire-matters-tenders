@@ -28,17 +28,17 @@ class ContactForm extends React.Component {
                 <div className="heading hanad">Contact Form</div>
             
                 <div className="contactForm hanad">
-                    <div className="inputRow athird">
+                    <div className="inputRow hanad">
                         <Textfield id="fullName" type="text" placeholder="John Doe" fieldClass="textfield" />
                     </div>
-                    <div className="inputRow athird">
+                    <div className="inputRow hanad">
                         <Textfield id="emailAddress" type="email" placeholder="JohnDoe@email.com" fieldClass="textfield" />
                     </div>
-                    <div className="inputRow athird">
+                    <div className="inputRow hanad">
                         <Textfield id="phoneNumber" type="number" placeholder="Phone Number" fieldClass="textfield" />
                     </div>
                     <div className="inputRow hanad">
-                        <Textarea id = "message" rows={5}  placeholder="Message" fieldClass="textfield" />
+                        <Textarea id = "message" rows={5}  placeholder="Message" fieldClass="textArea" />
                     </div>
                     <div className="inputRow left athird">
                         <Button variant="outlined" style={ submitbutton } className="login-button hanad" >

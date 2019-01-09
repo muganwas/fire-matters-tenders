@@ -172,6 +172,7 @@ class HeaderMain extends Component {
     fetchTenders = ()=>{
         let postInfoUrl = baseURL + tenderEndPoint,
         genInfo = {...this.props.genInfo },
+        contractCount = [],
         loginSession = sessionStorage.getItem('loginSession'),
         userType = loginSession?JSON.parse(sessionStorage.getItem('loginSession')).userType:undefined,
         postedTendersComprehensive = [],
@@ -186,19 +187,25 @@ class HeaderMain extends Component {
                         let currObj = tendersArr[count],
                         listingId = currObj.listingId;
                         currObj.acceptTenderButton = { isActive: true };
+                        currObj.moreMenuClassName = "hidden";
                         Object.keys(listings).map(key=>{
                             if(listingId === listings[key].id){
                                 let cO = {tenderId:currObj.id, listingId: listingId, acceptTenderButton:{isActive:true}};
                                 postedTendersComprehensive.push(currObj);
                                 postedTenders.push(cO);
+                                if(tendersArr[count].accepted){
+                                    contractCount.push(count);
+                                }
                             }
                         });
                     }
                 });
                 let listingsInfo = {...this.props.listingsInfo},
                 tendersInfo = {...this.props.tendersInfo};
+                genInfo.sideBar.profilePage.listCount.contracts = contractCount.length;
                 listingsInfo.postedTenders.tenders = postedTenders;
                 tendersInfo.tenders = postedTendersComprehensive;
+                this.props.dispatch(dispatchedGenInfo(genInfo));
                 this.props.dispatch(dispatchedTendersInfo(tendersInfo));
                 this.props.dispatch(dispatchedListingsInfo(listingsInfo));
                 this.forceUpdate();
@@ -211,6 +218,9 @@ class HeaderMain extends Component {
                     if(res){
                         tendersInfo.tenders = res.data;
                         Object.keys(tendersInfo.tenders).map((key)=>{
+                            if(tendersInfo.tenders[key].accepted){
+                                console.log("accepted")
+                            }
                             tendersInfo.tenders[key].moreMenuClassName = "hidden";
                         });
                         tendersInfo.tenders = res.data;
@@ -394,7 +404,10 @@ class HeaderMain extends Component {
                     { userType !== "owner_occupier" || userType === null
                     ?<NavLink activeClassName="active" id="listings" onClick={ this.toggleMenu } to={`/listings`}>Listings</NavLink>
                     :null }
+                    { userType === "owner_occupier" || userType === null?
                     <NavLink activeClassName="active" id="service-providers" onClick={ this.toggleMenu } to={`/service-providers`}>Service Providers</NavLink>
+                    :null
+                    }
                     <NavLink activeClassName="active" id="about" onClick={ this.toggleMenu } to={`/about`}>About</NavLink>
                     <NavLink activeClassName="active" id="contact" onClick={ this.toggleMenu } to={`/contact`}>Contact</NavLink>
                     <div className="login-social right">

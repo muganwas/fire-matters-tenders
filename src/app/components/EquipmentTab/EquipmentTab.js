@@ -17,10 +17,10 @@ const RenderEquipment = props => {
     return (
         <div>{
             Object.keys(currCat).map(key=>{
-                if(currCat[key] === true){
+                if(currCat[key]){
                     return (
                         <div className="equipListed" key={key}>
-                            { key }
+                            { equipmentCategoriesFull[id][key] }
                             <span 
                                 className="close right" 
                                 category={ id } 
@@ -129,22 +129,24 @@ class EquipmentTab extends React.Component{
         equipmentCategory = selectInfo.searchEquipmentSelectedCategoriesKey,
         url = baseURL + userUpdateEndPoint,
         equipmentName = selectInfo.searchEquipmentSelectedSubCategoriesKey;
-        equipment[equipmentCategory][equipmentName] = true;
-        userInfo.addEquipment.submitButton.isActive = false;
-        this.props.dispatch(dispatchedUserInfo(userInfo));
-        axios.post(url, {userId, sectTitle: "equipment", updateData: equipment}).then(res=>{
-            if(res){
+        if(equipment[equipmentCategory]){            
+            equipment[equipmentCategory][equipmentName] = true;
+            userInfo.addEquipment.submitButton.isActive = false;
+            this.props.dispatch(dispatchedUserInfo(userInfo));
+            axios.post(url, {userId, sectTitle: "equipment", updateData: equipment}).then(res=>{
+                if(res){
+                    userInfo.addEquipment.submitButton.isActive = true;
+                    this.props.dispatch(dispatchedUserInfo(userInfo));
+                    this.forceUpdate();
+                }   
+            }).
+            catch(err=>{
                 userInfo.addEquipment.submitButton.isActive = true;
                 this.props.dispatch(dispatchedUserInfo(userInfo));
                 this.forceUpdate();
-            }   
-        }).
-        catch(err=>{
-            userInfo.addEquipment.submitButton.isActive = true;
-            this.props.dispatch(dispatchedUserInfo(userInfo));
-            this.forceUpdate();
-            throw err;
-        });
+                throw err;
+            });
+        }  
     }
 
     render(){

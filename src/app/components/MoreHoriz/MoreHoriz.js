@@ -2,12 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import './moreHoriz.css';
-import { dispatchedGenInfo, dispatchedSubContractorsInfo } from 'extras/dispatchers';
+import { dispatchedGenInfo, dispatchedSubContractorsInfo, dispatchedTendersInfo } from 'extras/dispatchers';
 
 @connect((store)=>{
     return {
         user: store.user,
         genInfo: store.genInfo,
+        tendersInfo: store.tenders.info,
         subContractorsInfo: store.subContractors.info
     }
 })
@@ -23,6 +24,7 @@ class MoreHoriz extends React.Component {
     toggleMenu = ()=>{
         let genInfo = { ...this.props.genInfo.info },
         subContractorsInfo = { ...this.props.subContractorsInfo},
+        tendersInfo = { ...this.props.tendersInfo },
         listName = this.props.listName;
         //dispatch issues let to duplication
         if(listName === "subContractors"){
@@ -37,6 +39,20 @@ class MoreHoriz extends React.Component {
             }else{
                 subContractorsInfo[listName][this.props.id].moreMenuClassName = "hidden";
                 this.props.dispatch(dispatchedSubContractorsInfo(subContractorsInfo));
+                this.forceUpdate(); 
+            }
+        }else if(listName === "tenders"){
+            if(this.props.className === "hidden"){
+                tendersInfo[listName][this.props.id].moreMenuClassName = "dropDownMenu";
+                Object.keys(tendersInfo[listName]).map((key)=>{
+                    if(key !== this.props.id)
+                        tendersInfo[listName][key].moreMenuClassName = "hidden";
+                })
+                this.props.dispatch(dispatchedTendersInfo(tendersInfo));  
+                this.forceUpdate();         
+            }else{
+                tendersInfo[listName][this.props.id].moreMenuClassName = "hidden";
+                this.props.dispatch(dispatchedTendersInfo(tendersInfo));
                 this.forceUpdate(); 
             }
         }else{

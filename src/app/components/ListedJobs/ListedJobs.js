@@ -245,10 +245,10 @@ class ListedJobs extends Component {
     }
 
     renderTenderForm = (e)=>{
-        let profileInfo = sessionStorage.getItem('profileInfo'),
+        let loginSession = sessionStorage.getItem('loginSession'),
         id = e.target.id,
         name = e.target.getAttribute('name');
-        if(profileInfo){
+        if(loginSession){
             id = !id?name:id;
             let listingsInfo = {...this.props.listingsInfo};
             listingsInfo.tenderForm.show = !listingsInfo.tenderForm.show;

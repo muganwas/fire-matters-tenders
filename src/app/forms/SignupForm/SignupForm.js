@@ -332,68 +332,86 @@ class SignupForm extends React.Component {
         companyName = info.companyName,
         phoneNumber = (info.phoneNumber).replace("(", "").replace(")", "").replace( new RegExp(" ", "g"), "").replace("-", ""),
         mobileNumber = mobileNumber?(info.mobileNumber).replace("(", "").replace(")", "").replace( new RegExp(" ", "g"), "").replace("-", ""):undefined,*/
-        emailAddress = info.emailAddress,/*
+        emailAddress = info.emailAddress,
+        errors = info.errors,
+        password = info.password,
+        passwordConfirm = info.passwordConfirm,
+        termsAndConditions = info.termsAndConditions;
+        /*
         state = info.state,
         city = info.city,
         physicalAddress = info.physicalAddress,*/
-        password = info.password;
+        if(emailAddress && password && passwordConfirm && termsAndConditions){
+            userInfo.signUpInfo.submitButton.isActive = false;
+            this.props.dispatch(dispatchedUserInfo(userInfo));
+            axios.post(createUser, { userType, emailAddress, password }).
+            then(res=>{
+                message = res.data.message;
+                if(message){
+                    genInfo.messages.postSubmitMessage = message;
+                    genInfo.errors.tmcError = undefined;
+                    genInfo.messages.messageClass = "postSubmitError";
+                    userInfo.signUpInfo.submitButton.isActive = true;
+                    this.props.dispatch(dispatchedUserInfo(userInfo));
+                }else{
+                    genInfo.messages.postSubmitMessage = undefined;
+                    genInfo.errors.tmcError = undefined;
+                    auth.createUserWithEmailAndPassword(emailAddress, password).
+                    then((res)=>{
+                        if(res.additionalUserInfo.isNewUser){
 
-        userInfo.signUpInfo.submitButton.isActive = false;
-        this.props.dispatch(dispatchedUserInfo(userInfo));
+                            auth.currentUser.sendEmailVerification().then(res=>{
+                                sessionStorage.removeItem('signup');
+                                genInfo.messages.postSubmitMessage = "You signed up successfully, check your " + emailAddress + " inbox for a confirmation email.";
+                                genInfo.messages.messageClass = "postSubmitMessage";
+                                userInfo.signUpInfo.submitButton.isActive = true;
+                                this.props.dispatch(dispatchedUserInfo(userInfo));
+                                this.props.dispatch(dispatchedGenInfo(genInfo));
+                            }).
+                            catch(err=>{
+                                message = err.message;
+                                genInfo.messages.postSubmitMessage = message;
+                                genInfo.messages.messageClass = "postSubmitError";
+                                userInfo.signUpInfo.submitButton.isActive = true;
+                                this.props.dispatch(dispatchedUserInfo(userInfo));
+                                this.props.dispatch(dispatchedGenInfo(genInfo));
+                            }); 
 
-        axios.post(createUser, { userType, emailAddress, password }).
-        then(res=>{
-            message = res.data.message;
-            if(message){
-                genInfo.messages.postSubmitMessage = message;
-                genInfo.messages.messageClass = "postSubmitError";
-                userInfo.signUpInfo.submitButton.isActive = true;
-                this.props.dispatch(dispatchedUserInfo(userInfo));
-            }else{
-                genInfo.messages.postSubmitMessage = undefined;
-                auth.createUserWithEmailAndPassword(emailAddress, password).
-                then((res)=>{
-                    if(res.additionalUserInfo.isNewUser){
-
-                        auth.currentUser.sendEmailVerification().then(res=>{
-                            sessionStorage.removeItem('signup');
-                            genInfo.messages.postSubmitMessage = "You signed up successfully, check your " + emailAddress + " inbox for a confirmation email.";
-                            genInfo.messages.messageClass = "postSubmitMessage";
-                            userInfo.signUpInfo.submitButton.isActive = true;
-                            this.props.dispatch(dispatchedUserInfo(userInfo));
-                            this.props.dispatch(dispatchedGenInfo(genInfo));
-                        }).
-                        catch(err=>{
-                            message = err.message;
+                        }else{
+                            message = "Something went wrong, please try again";
                             genInfo.messages.postSubmitMessage = message;
                             genInfo.messages.messageClass = "postSubmitError";
                             userInfo.signUpInfo.submitButton.isActive = true;
                             this.props.dispatch(dispatchedUserInfo(userInfo));
-                            this.props.dispatch(dispatchedGenInfo(genInfo));
-                        }); 
-
-                    }else{
-                        message = "Something went wrong, please try again";
+                        }         
+                    }).
+                    catch(err=>{
+                        console.log(err)
+                        message = err.message;
                         genInfo.messages.postSubmitMessage = message;
                         genInfo.messages.messageClass = "postSubmitError";
                         userInfo.signUpInfo.submitButton.isActive = true;
                         this.props.dispatch(dispatchedUserInfo(userInfo));
-                    }         
-                }).
-                catch(err=>{
-                    console.log(err)
-                    message = err.message;
-                    genInfo.messages.postSubmitMessage = message;
-                    genInfo.messages.messageClass = "postSubmitError";
-                    userInfo.signUpInfo.submitButton.isActive = true;
-                    this.props.dispatch(dispatchedUserInfo(userInfo));
-                    this.props.dispatch(dispatchedGenInfo(genInfo));
-                });
-            }
-            userInfo.signUpInfo.submitButton.isActive = true;
-            this.props.dispatch(dispatchedUserInfo(userInfo));
-            this.props.dispatch(dispatchedGenInfo(genInfo));
-        });        
+                        this.props.dispatch(dispatchedGenInfo(genInfo));
+                    });
+                }
+                userInfo.signUpInfo.submitButton.isActive = true;
+                this.props.dispatch(dispatchedUserInfo(userInfo));
+                this.props.dispatch(dispatchedGenInfo(genInfo));
+            });
+        }else{
+            if(!emailAddress || !password || !passwordConfirm){
+                genInfo.messages.postSubmitMessage  = "Fill all the required fields";
+                genInfo.messages.messageClass = "postSubmitError";
+            }else
+                genInfo.messages.postSubmitMessage  = undefined;
+
+            if(!termsAndConditions)
+                genInfo.errors.tmcError = "You have to agree with the TC to continue"; 
+            else
+                genInfo.errors.tmcError = undefined;
+        }
+        this.props.dispatch(dispatchedGenInfo(genInfo));         
     }
 
     setstate = (e)=>{

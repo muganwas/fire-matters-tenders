@@ -1,6 +1,11 @@
 const defaultState = {
     info: {
-        contracts: {}
+      contracts: {
+        count: 0
+      },
+      currentContract: {
+        show: false
+      }
     },
     fetching: false,
     fetched: false,

@@ -305,7 +305,7 @@ class PersonnelTab extends React.Component{
                                     label="Add service" 
                                     id="profile-serviceCategory" 
                                     className="select" 
-                                    init={ serviceCategory || "Select Service Category" } 
+                                    init={ serviceCategory || "Add Service" } 
                                     width="330px" 
                                     options={ serviceCategories } 
                                     selected={ serviceCategory } 
