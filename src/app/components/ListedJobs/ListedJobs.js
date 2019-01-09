@@ -105,28 +105,40 @@ class ListedJobs extends Component {
         startDate = listingsData.tenderStartDate,
         endDate = listingsData.tenderEndDate,
         coverLetter = listingsData.tenderCoverLetter,
+        tendererId = JSON.parse(sessionStorage.getItem('loginSession')).userId,
         listingId = listingsData.tenderListingId,
         postInfoUrl = baseURL + tenderEndPoint;
 
         let postObject = {
             listingId,
+            tendererId,
             companyName, 
             rate, 
             coverLetter, 
             startDate, 
             endDate
         };
+
         this.checkForListingErrors().then(res=>{
             if(res === 0){
                 userInfo.submitTender.submitButton.isActive = false;
                 this.props.dispatch(dispatchedUserInfo(userInfo));
                 axios.post(postInfoUrl, postObject).
                 then(res=>{
-                    userInfo.submitTender.submitButton.isActive = true;
-                    userInfo.submitTender.feedback = "You successfully posted your tender.";
-                    userInfo.submitTender.feedbackClass="success";
-                    this.props.dispatch(dispatchedUserInfo(userInfo));
-                    this.forceUpdate();
+                    console.log(res.data)
+                    if(!res.data.errors){
+                        userInfo.submitTender.submitButton.isActive = true;
+                        userInfo.submitTender.feedback = "You successfully posted your tender.";
+                        userInfo.submitTender.feedbackClass="success";
+                        this.props.dispatch(dispatchedUserInfo(userInfo));
+                        this.forceUpdate();
+                    }else{
+                        userInfo.submitTender.submitButton.isActive = true;
+                        userInfo.submitTender.feedback = "There was an error, try again later.";
+                        userInfo.submitTender.feedbackClass="error-feedback";
+                        this.props.dispatch(dispatchedUserInfo(userInfo));
+                        this.forceUpdate();
+                    }  
                 }).
                 catch(err=>{
                     userInfo.submitTender.submitButton.isActive = true;
@@ -151,8 +163,29 @@ class ListedJobs extends Component {
             origName = origName?origName:id;
             let nameArr = origName.split("-"),
             name = nameArr[1],
-            value = e.target.getAttribute('value');
-            value = value?value:e.target.value;
+            value = e.target.value;
+            value = value?value:e.target.getAttribute('value');
+            userInfo.submitTender[name] = value;
+            userInfo.submitTender[name + "_key"] = id;
+            if(userInfo){
+                resolve(userInfo);
+            }                        
+            else
+                reject({message: "No data"});
+        });
+    };
+
+    saveMessage=(e)=>{
+        e.persist();
+        return new Promise((resolve, reject)=>{
+            let userInfo = {...this.props.user},
+            id = e.target.id,
+            origName = e.target.getAttribute("category");
+            origName = origName?origName:id;
+            let nameArr = origName.split("-"),
+            name = nameArr[1],
+            value = e.target.value;
+            value = value?value:e.target.getAttribute('value');
             userInfo.submitMessage[name] = value;
             userInfo.submitMessage[name + "_key"] = id;
             if(userInfo){
@@ -393,7 +426,7 @@ class ListedJobs extends Component {
                         close={ this.renderMessageForm } 
                         onBlur={ this.dummy } 
                         upload={ this.sendMessage } 
-                        save={ this.save } 
+                        save={ this.saveMessage } 
                     />
                     :null
                 }

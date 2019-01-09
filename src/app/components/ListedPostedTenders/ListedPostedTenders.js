@@ -293,10 +293,12 @@ class ListedPostedTenders extends Component {
         endDate = listingsData.tenderEndDate,
         coverLetter = listingsData.tenderCoverLetter,
         listingId = listingsData.tenderListingId,
+        tendererId = JSON.parse(sessionStorage.getItem('loginSession')).userId,
         postInfoUrl = baseURL + tenderEndPoint;
 
         let postObject = {
             listingId,
+            tendererId,
             companyName, 
             rate, 
             coverLetter, 
@@ -338,8 +340,8 @@ class ListedPostedTenders extends Component {
             origName = origName?origName:id;
             let nameArr = origName.split("-"),
             name = nameArr[1],
-            value = e.target.getAttribute('value');
-            value = value?value:e.target.value;
+            value = e.target.value;
+            value = value?value:e.target.getAttribute('value');
             userInfo.submitTender[name] = value;
             userInfo.submitTender[name + "_key"] = id;
             if(userInfo){
@@ -359,8 +361,8 @@ class ListedPostedTenders extends Component {
             origName = origName?origName:id;
             let nameArr = origName.split("-"),
             name = nameArr[1],
-            value = e.target.getAttribute('value');
-            value = value?value:e.target.value;
+            value = e.target.value;
+            value = value?value:e.target.getAttribute('value');
             userInfo.submitMessage[name] = value;
             userInfo.submitMessage[name + "_key"] = id;
             if(userInfo){

@@ -202,10 +202,8 @@ class HeaderMain extends Component {
                 });
                 let listingsInfo = {...this.props.listingsInfo},
                 tendersInfo = {...this.props.tendersInfo};
-                genInfo.sideBar.profilePage.listCount.contracts = contractCount.length;
                 listingsInfo.postedTenders.tenders = postedTenders;
                 tendersInfo.tenders = postedTendersComprehensive;
-                this.props.dispatch(dispatchedGenInfo(genInfo));
                 this.props.dispatch(dispatchedTendersInfo(tendersInfo));
                 this.props.dispatch(dispatchedListingsInfo(listingsInfo));
                 this.forceUpdate();

@@ -171,8 +171,6 @@ class SideBar extends React.Component {
     fetchTenders = ()=>{
         let postInfoUrl = baseURL + tenderEndPoint,
         genInfo = {...this.props.genInfo },
-        contractCountArr = [],
-        contractCount = 0,
         userType = (JSON.parse(sessionStorage.getItem("profileInfo")).userType).toLowerCase(),
         postedTendersComprehensive = [],
         postedTenders = [];
@@ -192,23 +190,14 @@ class SideBar extends React.Component {
                                 let cO = {tenderId:currObj.id, listingId: listingId, acceptTenderButton:{isActive:true}};
                                 postedTendersComprehensive.push(currObj);
                                 postedTenders.push(cO);
-                                if(tendersArr[count].accepted){
-                                    contractCountArr.push(count);
-                                }
                             }
                         });
                     }
                 });
                 let listingsInfo = {...this.props.listingsInfo},
                 tendersInfo = {...this.props.tendersInfo};
-                genInfo.sideBar.profilePage.listCount.contracts = contractCountArr.length;
-                Object.keys(contractCountArr).map(key=>{
-                    contractCount + 1;
-                })
-                console.log(contractCount);
                 listingsInfo.postedTenders.tenders = postedTenders;
                 tendersInfo.tenders = postedTendersComprehensive;
-                this.props.dispatch(dispatchedGenInfo(genInfo));
                 this.props.dispatch(dispatchedTendersInfo(tendersInfo));
                 this.props.dispatch(dispatchedListingsInfo(listingsInfo));
                 this.forceUpdate();
@@ -325,12 +314,21 @@ class SideBar extends React.Component {
 
     menuItems = (key)=>{
         let sideBarOptions = this.props.genInfo.defaultProps.sideBarOptions,
+        contractCount = 0,
+        tenders = this.props.tendersInfo.tenders || [],
         selected = this.props.genInfo.sideBar.currentTab,
         tendersCount = this.props.genInfo.sideBar.profilePage.listCount.tenders || 0,
-        contractCount = this.props.genInfo.sideBar.profilePage.listCount.contracts || 0,
         sitesCount = this.props.genInfo.sideBar.profilePage.listCount.sites || 0,
         messagesCount = (parseInt(this.props.genInfo.sideBar.profilePage.listCount.sentMessages) + parseInt(this.props.genInfo.sideBar.profilePage.listCount.recievedMessages)) || 0,
         subContractorCount = this.props.genInfo.sideBar.profilePage.listCount.subContractors || 0;
+
+        Object.keys(tenders).map(key=>{
+            if(tenders[key].accepted){
+                //console.log("yeah")
+                contractCount ++;
+            }
+        });
+
         return(
             <span name="menuItems" className = { key===selected?"selected":""} id={ key } onClick={ this.select } key={ key }>
                 <div name={ key} onClick={ this.clickParent }>
