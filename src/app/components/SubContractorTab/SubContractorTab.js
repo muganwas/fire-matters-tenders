@@ -71,43 +71,57 @@ class SubContractorTab extends React.Component {
     addSubContractor=()=>{
         let subContractorData = {...this.props.subContractorData},
         userInfo = {...this.props.user.info},
-        mainUserId = this.props.profileInfo.id,
-        companyName = subContractorData.contractorCompanyName,
-        fullName = subContractorData.contractorFullName,
-        phoneNumber = (subContractorData.contractorPhoneNumber).replace("(", "").replace(")", "").replace( new RegExp(" ", "g"), "").replace("-", ""),
-        mobileNumber = subContractorData.contractorMobileNumber,
-        emailAddress = subContractorData.contractorEmailAddress,
-        state = subContractorData.contractorState,
-        city = subContractorData.contractorCity,
-        physicalAddress = subContractorData.contractorPhysicalAddress,
-        postInfoUrl = baseURL + subContractorsEndPoint;
-
-        mobileNumber = mobileNumber?mobileNumber.replace("(", "").replace(")", "").replace( new RegExp(" ", "g"), "").replace("-", ""): undefined;
-
-        let postObject = {
-            mainUserId,
-            companyName,
-            fullName, 
-            phoneNumber,
-            mobileNumber,
-            emailAddress,
-            state,
-            city,
-            physicalAddress
-        };
+        mainUserId = this.props.profileInfo.id;
+        
         this.checkForErrors().then(res=>{
-            userInfo.addSubContractor.submitButton.isActive = false;
-            this.props.dispatch(dispatchedUserInfo(userInfo));
             if(res === 0){
+                userInfo.addSubContractor.submitButton.isActive = false;
+                this.props.dispatch(dispatchedUserInfo(userInfo));
+                let companyName = subContractorData.contractorCompanyName,
+                fullName = subContractorData.contractorFullName,
+                phoneNumber = (subContractorData.contractorPhoneNumber).replace("(", "").replace(")", "").replace( new RegExp(" ", "g"), "").replace("-", ""),
+                mobileNumber = subContractorData.contractorMobileNumber,
+                emailAddress = subContractorData.contractorEmailAddress,
+                state = subContractorData.contractorState,
+                city = subContractorData.contractorCity,
+                suburb = subContractorData.contractorSuburb,
+                area = subContractorData.contractorArea,
+                street = subContractorData.contractorStreet,
+                postInfoUrl = baseURL + subContractorsEndPoint;
+                mobileNumber = mobileNumber?mobileNumber.replace("(", "").replace(")", "").replace( new RegExp(" ", "g"), "").replace("-", ""): undefined;
+        
+                let postObject = {
+                    mainUserId,
+                    companyName,
+                    fullName, 
+                    phoneNumber,
+                    mobileNumber,
+                    emailAddress,
+                    state,
+                    city,
+                    suburb,
+                    area,
+                    street
+                };
                 userInfo.addSubContractor.submitButton.isActive = false;
                 this.props.dispatch(dispatchedUserInfo(userInfo));
                 axios.post(postInfoUrl, postObject).
                 then(res=>{
-                    userInfo.addSubContractor.submitButton.isActive = true;
-                    userInfo.addSubContractor.feedback = fullName + "was added successfully.";
-                    userInfo.addSubContractor.feedbackClass="success";
-                    this.props.dispatch(dispatchedUserInfo(userInfo));
-                    this.forceUpdate();
+                    console.log(res.data)
+                    if(!res.data.errors){
+                        userInfo.addSubContractor.submitButton.isActive = true;
+                        userInfo.addSubContractor.feedback = fullName + " was added successfully.";
+                        userInfo.addSubContractor.feedbackClass="success";
+                        this.props.dispatch(dispatchedUserInfo(userInfo));
+                        this.forceUpdate();
+                    }else{
+                        userInfo.addSubContractor.submitButton.isActive = true;
+                        userInfo.addSubContractor.feedback = "Something went wrong, try again later.";
+                        userInfo.addSubContractor.feedbackClass="error-feedback";
+                        this.props.dispatch(dispatchedUserInfo(userInfo));
+                        this.forceUpdate();
+                    }
+                    
                 }).
                 catch(err=>{
                     userInfo.addSubContractor.submitButton.isActive = true;
@@ -159,7 +173,7 @@ class SubContractorTab extends React.Component {
         return(
             <div className="list-row" key={key}>
                 <div className="twenty">{ subContractors[key].companyName }</div>
-                <div className="thirty">{ subContractors[key].physicalAddress }</div>
+                <div className="thirty">{ subContractors[key].city }</div>
                 <div className="thirty">{ subContractors[key].categoriesOfService}</div>
                 <div className="twenty">
                     <MoreHoriz 
@@ -188,6 +202,7 @@ class SubContractorTab extends React.Component {
         showSubContractorForm = subContractorsInfo.subContractorForm.show,
         subContractorAttributes = this.props.user.info.addSubContractor,
         errors = subContractorsInfo.subContractorForm.errors,
+        userType = this.props.profileInfo.userType,
         feedback = subContractorAttributes.feedback,
         feedbackClass = subContractorAttributes.feedbackClass,
         showDetailsView = subContractorsInfo.detailsView.show;
@@ -225,6 +240,10 @@ class SubContractorTab extends React.Component {
                 }
                 <div className="title-bar">
                     <span id="title">Sub-Contractors</span>
+                    {userType === "service_provider"?<span id="search">
+                        <FmButton variant="contained" onClick={ this.renderSubContractorForm } styles={ styles } text="New Sub-contractor" />
+                        <SearchInput className="alt-search" placeholder="search for sub-contractors" search={ this.searchSubContractors } />
+                    </span>:null}
                 </div>
                 <div className="list left hanad">
                     {   subContractorsCount > 0

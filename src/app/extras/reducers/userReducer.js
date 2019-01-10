@@ -66,7 +66,9 @@ const defaultState = {
         contractorEmailAddress: null,
         contractorState: null,
         contractorCity: null,
-        contractorPhysicalAddress: null,
+        contractorSuburb: null,
+        contractorArea: null,
+        contractorStreet: null,
         feedback: undefined,
         feedbackClass: "hidden",
         submitButton: {
@@ -126,6 +128,11 @@ const defaultState = {
               fetching: false,
               error: false,
               info: action.payload.info
+            }
+          }
+          case "USER_LOGOUT":{
+            return {
+               state
             }
           }
           default:

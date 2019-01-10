@@ -67,6 +67,11 @@ const defaultState = {
               info: action.payload.info
             }
           }
+          case "USER_LOGOUT":{
+            return {
+               state
+            }
+          }
           default:
             return state;
       }  

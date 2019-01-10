@@ -35,7 +35,9 @@ class SubContractorForm extends React.Component {
             contractorEmailAddress,
             contractorState,
             contractorCity,
-            contractorPhysicalAddress,
+            contractorSuburb,
+            contractorArea,
+            contractorStreet,
             submitButton 
         } = attributes,
         mandatoryInput = "This field is mandatory.",
@@ -137,10 +139,10 @@ class SubContractorForm extends React.Component {
                             <div className="el" style={ styles.el }>
                                 <Textfield 
                                     id="subcontractor-contractorCity"
-                                    label="City/Suburb"
+                                    label="City"
                                     value={ contractorCity } 
                                     type="text" 
-                                    placeholder="sub-contractor's city/suburb" 
+                                    placeholder="sub-contractor's city" 
                                     root="inner-textfield" 
                                     fieldClass="textfield"
                                     onBlur = { onBlur }
@@ -150,18 +152,45 @@ class SubContractorForm extends React.Component {
                             </div>
                             <div className="el" style={ styles.el }>
                                 <Textfield 
-                                    id="subcontractor-contractorPhysicalAddress"
-                                    label="Physical Address"
-                                    value={ contractorPhysicalAddress } 
+                                    id="subcontractor-contractorSuburb"
+                                    label="Suburb"
+                                    value={ contractorSuburb } 
                                     type="text"
-                                    multiline
-                                    placeholder="sub-contractor's physical address" 
+                                    placeholder="sub-contractor's suburb" 
                                     root="inner-textfield" 
                                     fieldClass="textfield"
                                     onBlur = { onBlur }
                                     onChange = { save } 
                                 />
-                                { errors.contractorPhysicalAddress?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
+                                { errors.contractorSuburb?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
+                            </div>
+                            <div className="el" style={ styles.el }>
+                                <Textfield 
+                                    id="subcontractor-contractorArea"
+                                    label="Area"
+                                    value={ contractorArea } 
+                                    type="text"
+                                    placeholder="sub-contractor's area" 
+                                    root="inner-textfield" 
+                                    fieldClass="textfield"
+                                    onBlur = { onBlur }
+                                    onChange = { save } 
+                                />
+                                { errors.contractorArea?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
+                            </div>
+                            <div className="el" style={ styles.el }>
+                                <Textfield 
+                                    id="subcontractor-contractorStreet"
+                                    label="Street"
+                                    value={ contractorStreet } 
+                                    type="text"
+                                    placeholder="sub-contractor's street" 
+                                    root="inner-textfield" 
+                                    fieldClass="textfield"
+                                    onBlur = { onBlur }
+                                    onChange = { save } 
+                                />
+                                { errors.contractorStreet?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
                             </div>
                             <div className="el" style={ styles.el }>
                                 <FmButton
