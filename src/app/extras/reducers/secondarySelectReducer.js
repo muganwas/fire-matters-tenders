@@ -1,5 +1,6 @@
 const defaultState = {
     info: {
+      selectedOptions:[]
     },
     fetching: false,
     fetched: false,

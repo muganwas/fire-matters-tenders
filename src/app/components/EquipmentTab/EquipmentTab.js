@@ -96,6 +96,7 @@ class EquipmentTab extends React.Component{
             selectInfo[categoryTitleKey] = id;
             selectInfo[categoryTitleAlt] = null;
             selectInfo[categoryTitleAltKey] = null;
+            selectInfo.selectedOptions = [];
             resolve(selectInfo);
         });
     }
@@ -111,10 +112,20 @@ class EquipmentTab extends React.Component{
                 selectedKey = key;
         });
         let secondaryOptions = equipmentCategoriesFull[selectedKey];
-        return new Promise((resolve, reject)=>{
+        return new Promise(resolve=>{
             let id = e.target.id,
             searchCategories = secondaryOptions,
             selectInfo = {...this.props.secondarySelect};
+            //check if equipment already selected
+            Object.keys(selectInfo.selectedOptions).map(key=>{
+                Object.keys(selectInfo.selectedOptions[key]).map(key1=>{
+                    let equipment = selectInfo.selectedOptions[key][key1];
+                    if(equipment === id){
+                        delete selectInfo.selectedOptions[key][key1];
+                    }
+                });
+            });
+            selectInfo.selectedOptions.push({[selectedKey]:id});
             selectInfo[categoryTitleAlt] = searchCategories[id];
             selectInfo[categoryTitleAltKey] = id;
             resolve(selectInfo);
@@ -127,11 +138,21 @@ class EquipmentTab extends React.Component{
         userId = userInfo.profileInfo.id,
         equipment = {...userInfo.profileInfo.equipment},
         equipmentCategory = selectInfo.searchEquipmentSelectedCategoriesKey,
-        url = baseURL + userUpdateEndPoint,
-        equipmentName = selectInfo.searchEquipmentSelectedSubCategoriesKey;
-        if(equipment[equipmentCategory]){            
-            equipment[equipmentCategory][equipmentName] = true;
+        url = baseURL + userUpdateEndPoint;
+        //equipmentName = selectInfo.searchEquipmentSelectedSubCategoriesKey;
+        if(equipment[equipmentCategory]){
+            //update equipment object according to selected options
+            Object.keys(selectInfo.selectedOptions).map(key=>{
+                Object.keys(selectInfo.selectedOptions[key]).map(key1=>{
+                    let equipmentAlt = selectInfo.selectedOptions[key][key1];
+                    equipment[key1][equipmentAlt] = true;
+                });
+            });
+                
+            //equipment[equipmentCategory][equipmentName] = true;
+            selectInfo.selectedOptions = [];
             userInfo.addEquipment.submitButton.isActive = false;
+            this.props.dispatch(dispatchedSecondarySelectInfo(selectInfo));
             this.props.dispatch(dispatchedUserInfo(userInfo));
             axios.post(url, {userId, sectTitle: "equipment", updateData: equipment}).then(res=>{
                 if(res){
@@ -151,6 +172,7 @@ class EquipmentTab extends React.Component{
 
     render(){
         let { equipment }= this.props,
+        selectedArr = this.props.secondarySelect.selectedOptions,
         detectionCount = [],
         portableCount = [],
         passiveCount = [],
@@ -227,9 +249,30 @@ class EquipmentTab extends React.Component{
                                 </div>
                             </div>
                             :null}
+                            
                         </div>
                         <div className="add">
                                 <div className="heading">Add licensed Equipment <div className="bottom-border"></div></div>
+                                { selectedArr.length > 0?<div className="subCategories">
+                                    <h4>Selected Equipment</h4>
+                                    <div className="body">
+                                        { Object.keys(selectedArr).map(key=>{
+                                            let selectedArr = this.props.secondarySelect.selectedOptions,
+                                            selected = selectedArr[key];
+                                            return(
+                                                <div key={key}>
+                                                    { Object.keys(selected).map(key=>{
+                                                        return (
+                                                            <div key={key}>
+                                                                { equipmentCategoriesFull[key][selected[key]] }
+                                                            </div>
+                                                        )
+                                                    }) }
+                                                </div>
+                                            )
+                                        }) }
+                                    </div>
+                                </div>: null }
                                 <div className="body">
                                     <SecondarySelect 
                                         categories = { equipmentCategories }
