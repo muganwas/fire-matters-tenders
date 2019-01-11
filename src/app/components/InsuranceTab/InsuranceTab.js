@@ -99,8 +99,9 @@ class InsuranceTab extends React.Component{
         else{
             userInfo.profileInfo.insurance[insurancePolicy].className = "hidden"
             userInfo.profileInfo.insurance[insurancePolicy].checked = false;
-        } 
-        this.props.dispatch(dispatchedUserInfo(userInfo)); 
+        }
+        this.props.dispatch(dispatchedUserInfo(userInfo));
+        this.upload();
     }
 
     showLoader=(e)=>{
@@ -196,7 +197,13 @@ class InsuranceTab extends React.Component{
         storedDateArr = expiryDate.split("-"),
         storedYear = parseInt(storedDateArr[0]),
         storedMonth = parseInt(storedDateArr[1]),
+        percentage = value && policyNumber && expiryDate && certURL? "100%": value && policyNumber || certURL? "75%": "25%",
+        completion = value && policyNumber && expiryDate && certURL?
+        "complete":
+        !value?"empty":
+        "incomplete",
         colorCode;
+        //determining validity of insurance
         if(storedYear > year){
             colorCode = "valid";
         }else if(storedYear === year){
@@ -210,9 +217,11 @@ class InsuranceTab extends React.Component{
         }  
         if(key !== "other"){
             return(
-                <div key={ key } className="el">
-                    <ChckBox handleChange={ this.toggleDisplay } dispatcher = { dispatchedUserInfo } value={ value } id={ key } />
-                    <span>{name}</span>
+                <div key={ key } className={ " insurance"}>
+                    <div className = { completion }>
+                        <ChckBox handleChange={ this.toggleDisplay } dispatcher = { dispatchedUserInfo } value={ value } id={ key } />
+                        <span>{name} <span className="completion">{value?percentage + " completed":null}</span></span>
+                    </div>
                     <div className={ className }>
                         <Textfield 
                             id={ key + "-policyNumber" }
@@ -260,6 +269,12 @@ class InsuranceTab extends React.Component{
     render(){
         let { insurance }= this.props,
         other = insurance?insurance.other:{},
+        percentage = other.checked && other.policyNumber && other.expiryDate && other.certURL? "100%": other.checked && other.policyNumber || other.certURL? "75%": "25%",
+        completion = other.checked && other.policyNumber && other.expiryDate && other.certURL?
+        "complete":
+        !other.checked?
+        "empty":
+        "incomplete",
         date = new Date(),
         month = parseInt(date.getMonth()),
         year = parseInt(date.getFullYear()),
@@ -283,17 +298,19 @@ class InsuranceTab extends React.Component{
             <div className="main-content">
                 <div className="half left">
                     <div className="heading">Insurance Policies<div className="bottom-border"></div></div>
-                    <div className="information">
+                    <div className="el">
                         {Object.keys(insurance).map(this.renderInsurance)}
                     </div>
                 </div>
                 <div className="half left">
                     <div className="heading">Specify Other insurance Policy if any<div className="bottom-border"></div></div>
-                        <div className="information">
-                            <div className="el">
-                                <div className="el">
-                                    <ChckBox handleChange={ this.toggleDisplay } dispatcher = { dispatchedUserInfo } value={ other.checked } id="other" />
-                                    <span>{other.name}</span>
+                        <div className="el">
+                            <div className="information">
+                                <div className={ " insurance"}>
+                                    <div className = { completion }>
+                                        <ChckBox handleChange={ this.toggleDisplay } dispatcher = { dispatchedUserInfo } value={ other.checked } id="other" />
+                                        <span>{other.name} <span className="completion">{ other.checked?percentage + " completed":null}</span></span>
+                                    </div>
                                     <div className={ other.className }>
                                         <Textfield 
                                             id="other-policyNumber"

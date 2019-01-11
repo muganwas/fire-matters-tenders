@@ -17,3 +17,25 @@
     height: 25px;
     width: auto;
 }
+.insurance{
+    display: inline-block;
+    padding: 10px 10px;
+    border-radius: 3px;
+    margin: 5px;
+}
+.empty{
+    background: #fff;
+}
+.complete{
+    background: #ceebd9;
+}
+.incomplete{
+    background: #facbb6
+}
+.completion{
+    float: right;
+    background: #fff;
+    font-size: 13px;
+    margin-top: 5px;
+    font-weight: bold;
+}

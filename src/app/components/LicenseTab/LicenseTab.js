@@ -80,7 +80,8 @@ class LicenseTab extends React.Component{
             userInfo.profileInfo.licenses[insurancePolicy].className = "hidden"
             userInfo.profileInfo.licenses[insurancePolicy].checked = false;
         } 
-        this.props.dispatch(dispatchedUserInfo(userInfo)); 
+        this.props.dispatch(dispatchedUserInfo(userInfo));
+        this.upload();
     }
 
     showLoader=(e)=>{
@@ -177,6 +178,17 @@ class LicenseTab extends React.Component{
         storedDateArr = expiryDate.split("-"),
         storedYear = parseInt(storedDateArr[0]),
         storedMonth = parseInt(storedDateArr[1]),
+        completion = value && licenseNumber && expiryDate && certURL && licenseType?
+        "complete":
+        !value?"empty":
+        "incomplete",
+        percentage = value && licenseNumber && expiryDate && certURL && licenseType? "100%":
+        value && (licenseNumber && certURL) || (licenseNumber && licenseType) || (licenseType && certURL)?
+        "75%":
+        value && licenseNumber || certURL || licenseType?
+        "50%":
+        "25%",
+        colorCode;
         colorCode;
         if(storedYear > year){
             colorCode = "valid";
@@ -191,9 +203,11 @@ class LicenseTab extends React.Component{
         }   
         if(key !== "other"){
             return(
-                <div key={ key } className="el">
-                    <ChckBox handleChange={ this.toggleDisplay } dispatcher = { dispatchedUserInfo } value={ value } id={ key } />
-                    <span>{name}</span>
+                <div key={ key } className="insurance">
+                    <div className = { completion }>
+                        <ChckBox handleChange={ this.toggleDisplay } dispatcher = { dispatchedUserInfo } value={ value } id={ key } />
+                        <span>{name} <span className="completion">{value?percentage + " completed":null}</span></span>
+                    </div>
                     <div className={ className }>
                         <Textfield 
                             id={ key + "-type" }

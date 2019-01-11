@@ -93,7 +93,7 @@ const defaultState = {
           text: "Invite User"
         }
       },
-      profileInfo:{ },
+      profileInfo:{},
       avatarProps: {
         feedback: undefined,
         levelId: "nkkt",

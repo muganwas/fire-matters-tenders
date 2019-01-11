@@ -1,6 +1,6 @@
 const defaultState = {
     info: {
-      activeProfile:{},
+      activeProfile:{}
      },
     fetching: false,
     fetched: false,
