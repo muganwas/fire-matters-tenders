@@ -89,43 +89,90 @@ export const userTypes = {
 export const equipmentCategories = {
     detectionAndWarningSystem: "Detection & Warning Systems",
     portableFireFightingEquipment: "Portable Equipment",
+    mechanicalEquipment: "Mechanical Equipment",
+    specialHazard: "Special Hazard",
+    emergencyPlanning: "Emergency Planning",
     passiveFireProtection: "Passive Protection Equipment",
     emergencyExitLighting: "Emergency Exit Lighting"
 }
 
 export const equipmentCategoriesFull = {
     detectionAndWarningSystem: {
-        fireDetectionAndWarningSystem: "Fire Detection & Warning System",
-        smokeAndHeatAlarms: "Smoke & Heat Alarms",
-        smokeExhaustSystem: "Smoke Exhaust System",
-        totalDetectionAndAlarmSystem: "Detection & AlarmSystem"
+        firePanel: "Fire Panel",
+        specialHazardSystem: "Special Hazard System",
+        emergencyWarningSystem: "Emergency Warning System",
+        intercomSystem: "Intercom System"
+    },
+    mechanicalEquipment: {
+        pump: "Pump",
+        sprinklerSystem: "Sprinkler System",
+        hydrantSystem: "Hydrant System",
+        combinedSprinkler: "Combined Sprinkler",
+        waterStorageTank: "Water Storage Tank"
+    },
+    specialHazard: {
+        vehicleSuppressionSystem: "Vehicle Suppression System",
+        gaseousFireExtinguishingSystem:"Gaseous Fire Extinguishing System"
+    },
+    emergencyPlanning: {
+        evacTraining: "Evacuation Training",
+        fireSafetyAudit: "Fire Safety Audit",
+        fireSafetyAdvisor: "Fire Safety Advisor",
+        warden: "Warden/Deputy",
+        generalOccupancyTraining: "General Occupancy Training",
+        firstResponseTraining: "First Response Training",
+        evacuationExercise: "Evacuation Exercise"
     },
     portableFireFightingEquipment: {
-        hoseReels: "Hose Reels",
-        extinguishers: "Extinguishers",
-        totalPortableFireFighting: "Portable Fire-Fighting"
+        hoseReel: "Hose Reel",
+        extinguisher: "Extinguisher",
+        fireBlanket: "Fire Blanket",
+        deliveryLayFlatHose: "Delivery Lay Flat Hose"
     },
     passiveFireProtection: {
         fireDoors: "Fire Doors",
-        servicePenetrations: "Service Penetrations",
-        totalPassiveFireProtection: "Passive Fire Protection"
+        servicePenetrations: "Service Penetrations"
     },
     emergencyExitLighting: {
-        totalEmergencyExitLighting: "Emergency Exit Lighting"
+        emergencyLight: "Emergency/Exit Light"
     }
 }
 
 export const detectionAndWarningSystem = {
-    fireDetectionAndWarningSystem: "Fire Detection & Warning System",
-    smokeAndHeatAlarms: "Smoke & Heat Alarms",
-    smokeExhaustSystem: "Smoke Exhaust System",
-    totalDetectionAndAlarmSystem: "Detection & AlarmSystem"
+    firePanel: "Fire Panel",
+    specialHazardSystem: "Special Hazard System",
+    emergencyWarningSystem: "Emergency Warning System",
+    intercomSystem: "Intercom System"
+}
+
+export const mechanicalEquipment = {
+    pump: "Pump",
+    sprinklerSystem: "Sprinkler System",
+    hydrantSystem: "Hydrant System",
+    combinedSprinkler: "Combined Sprinkler",
+    waterStorageTank: "Water Storage Tank"
+}
+
+export const specialHazard = {
+    vehicleSuppressionSystem: "Vehicle Suppression System",
+    gaseousFireExtinguishingSystem:"Gaseous Fire Extinguishing System"
+}
+
+export const emergencyPlanning = {
+    evacTraining: "Evacuation Training",
+    fireSafetyAudit: "Fire Safety Audit",
+    fireSafetyAdvisor: "Fire Safety Advisor",
+    warden: "Warden/Deputy",
+    generalOccupancyTraining: "General Occupancy Training",
+    firstResponseTraining: "First Response Training",
+    evacuationExercise: "Evacuation Exercise"
 }
 
 export const portableFireFightingEquipment = {
-    hoseReels: "Hose Reels",
-    extinguishers: "Extinguishers",
-    totalPortableFireFighting: "Portable Fire Fighting"
+    hoseReel: "Hose Reels",
+    extinguisher: "Extinguishers",
+    fireBlanket: "Fire Blanket",
+    deliveryLayFlatHose: "Delivery Lay Flat Hose"
 }
 
 export const passiveFireProtection = {
@@ -135,7 +182,7 @@ export const passiveFireProtection = {
 }
 
 export const emergencyExitLighting = {
-    totalEmergencyExitLighting: "Emergency Exit Lighting"
+    emergencyLight: "Emergency/Exit Light"
 }
 
 export const contractTypes = {

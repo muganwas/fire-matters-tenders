@@ -26,13 +26,14 @@ class CompanyTab extends React.Component{
         companyInformation = userInfo,
         recipient = companyInformation.companyAddUser,
         companyName = companyInformation.companyName,
+        emailAddress = companyInformation.emailAddress,
         companyId = companyInformation.id,
         sender  = companyInformation.emailAddress,
         currAddress = window.location.hostname,
         addAddress = currAddress + "/addUser?companyId=" + companyId + "&email=" + recipient,
         subject = "INVITATION TO FIRE-MATTERS TENDERS",
         body = "<p> You have been invited by " 
-        + companyName 
+        + emailAddress 
         + " to subscribe as a company user.<br/> Click the link below to accept the invitation. <br/> <a href='"
         + addAddress 
         +"'>"

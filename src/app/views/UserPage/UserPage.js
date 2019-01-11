@@ -42,6 +42,7 @@ class UserPage extends React.Component {
                 info.alternatingNavigation.headerClass = "App-header";
                 this.props.dispatch(dispatchedGenInfo(info));
                 sessionStorage.removeItem('loginSession');
+                sessionStorage.removeItem('profileInfo');
                 this.props.history.push('/login');
             }
             info.alternatingNavigation.headerClass = "App-header-loggedin";

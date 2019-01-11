@@ -170,10 +170,21 @@ class EquipmentTab extends React.Component{
         }  
     }
 
+    removeSelectedEquipment = (e)=>{
+        let position = e.target.getAttribute('pos'),
+        secondarySelect = {...this.props.secondarySelect};
+        secondarySelect.selectedOptions.splice(position,1);
+        this.props.dispatch(dispatchedSecondarySelectInfo(secondarySelect));
+        this.forceUpdate();
+    }
+
     render(){
         let { equipment }= this.props,
         selectedArr = this.props.secondarySelect.selectedOptions,
         detectionCount = [],
+        mechanicalCount = [],
+        hazardCount = [],
+        planningCount = [],
         portableCount = [],
         passiveCount = [],
         emergencyCount = [],
@@ -181,12 +192,33 @@ class EquipmentTab extends React.Component{
             detectionAndWarningSystem,
             portableFireFightingEquipment,
             passiveFireProtection,
+            mechanicalEquipment,
+            specialHazard,
+            emergencyPlanning,
             emergencyExitLighting
         } = equipment;
 
         Object.keys(detectionAndWarningSystem).map(key=>{
             if(detectionAndWarningSystem[key]){
                 detectionCount.push(key);
+            }
+        });
+
+        Object.keys(mechanicalEquipment).map(key=>{
+            if(mechanicalEquipment[key]){
+                mechanicalCount.push(key);
+            }
+        });
+
+        Object.keys(specialHazard).map(key=>{
+            if(specialHazard[key]){
+                hazardCount.push(key);
+            }
+        });
+
+        Object.keys(emergencyPlanning).map(key=>{
+            if(emergencyPlanning[key]){
+                planningCount.push(key);
             }
         });
 
@@ -241,11 +273,35 @@ class EquipmentTab extends React.Component{
                                 </div>
                             </div>
                             :null}
-                            {emergencyCount.length>0
+                            {mechanicalCount.length>0
                             ?<div className="subCategories">
-                                <h3>Emergency Exit Lighting</h3>
+                                <h3>Mechanical Equipment</h3>
                                 <div className="body">
-                                    <RenderEquipment id="emergencyExitLighting" currCat={emergencyExitLighting} onClose={ this.removeSubCategory } />
+                                    <RenderEquipment id="mechanicalEquipment" currCat={mechanicalEquipment} onClose={ this.removeSubCategory } />
+                                </div>
+                            </div>
+                            :null}
+                            {mechanicalCount.length>0
+                            ?<div className="subCategories">
+                                <h3>Mechanical Equipment</h3>
+                                <div className="body">
+                                    <RenderEquipment id="mechanicalEquipment" currCat={mechanicalEquipment} onClose={ this.removeSubCategory } />
+                                </div>
+                            </div>
+                            :null}
+                            {hazardCount.length>0
+                            ?<div className="subCategories">
+                                <h3>Special Hazard Equipment</h3>
+                                <div className="body">
+                                    <RenderEquipment id="specialHazard" currCat={specialHazard} onClose={ this.removeSubCategory } />
+                                </div>
+                            </div>
+                            :null}
+                            {planningCount.length>0
+                            ?<div className="subCategories">
+                                <h3>Emergency Planning</h3>
+                                <div className="body">
+                                    <RenderEquipment id="emergencyPlanning" currCat={emergencyPlanning} onClose={ this.removeSubCategory } />
                                 </div>
                             </div>
                             :null}
@@ -261,10 +317,18 @@ class EquipmentTab extends React.Component{
                                             selected = selectedArr[key];
                                             return(
                                                 <div key={key}>
-                                                    { Object.keys(selected).map(key=>{
+                                                    { Object.keys(selected).map(key1=>{
                                                         return (
-                                                            <div key={key}>
-                                                                { equipmentCategoriesFull[key][selected[key]] }
+                                                            <div key={key1}>
+                                                                { equipmentCategoriesFull[key1][selected[key1]] }
+                                                                <span 
+                                                                    className="close right" 
+                                                                    pos={ key }  
+                                                                    onClick={ this.removeSelectedEquipment } 
+                                                                    id="close"
+                                                                >
+                                                                    &#x2716;
+                                                                </span>
                                                             </div>
                                                         )
                                                     }) }
