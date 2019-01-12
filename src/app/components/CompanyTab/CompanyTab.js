@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { DropDown, Textfield, PhoneNumber, FmButton } from 'components';
-import { dispatchedUserInfo } from 'extras/dispatchers';
+import { dispatchedUserInfo, dispatchedProfileInfo  } from 'extras/dispatchers';
 import {  statesAustralia } from 'extras/config';
 import { submit_styles } from './styles';
 import axios from 'axios';
@@ -117,12 +117,29 @@ class CompanyTab extends React.Component{
 
     }
 
-    render(){
+    toggleEdit = (e)=>{
+        let { activeProfile } = this.props,
+        id = e.target.id;
+        if(id === "enable-edit"){
+            activeProfile.editing.company.edit = "disabled";
+            activeProfile.editing.company.disabled = false;
+        }else if(id === "disable-edit" && activeProfile.editing.company.edit === "disabled"){
+            activeProfile.editing.company.edit = "enabled";
+            activeProfile.editing.company.disabled = true;
+        }
+        this.props.dispatch(dispatchedProfileInfo(activeProfile));
+        this.forceUpdate();
+    }
 
+
+    render(){
         let { userInfo, user } = this.props;
         userInfo = userInfo?userInfo:JSON.parse(sessionStorage.getItem('profileInfo'));
         let companyInformation = userInfo || {},
         emailAddress = companyInformation.companyEmailAddress,
+        activeProfile = this.props.activeProfile || { activeProfile: {}, editing: { company:{}}},
+        disabled = activeProfile.editing.company.disabled,
+        edit = activeProfile.editing.company.edit,
         companyUsers = companyInformation.companyUsers || {},
         companyUsersCount = Object.keys(companyUsers).length,
         phoneNumber = companyInformation.companyPhoneNumber?(companyInformation.companyPhoneNumber).toString():undefined,
@@ -174,8 +191,20 @@ class CompanyTab extends React.Component{
             });
         };
 
+        
+        const create = edit === "enabled"?" enabled":" disabled",
+        disable = edit !== "enabled"?" enabled":" disabled";
+
         return(
             <div className="main-content">
+                <div id="edit">
+                    <i id="enable-edit" onClick={ this.toggleEdit } class={"material-icons edit" + create}>
+                        create
+                    </i>
+                    <i id ="disable-edit" onClick={ this.toggleEdit } class={"material-icons save" + disable}>
+                        save
+                    </i>
+                </div>
                 <div className="half left">
                     <div className="heading">Company Information(Optional) <div className="bottom-border"></div></div>
                     <div className="information">
@@ -184,7 +213,8 @@ class CompanyTab extends React.Component{
                                 id="profile-companyName"
                                 label="Company Name"
                                 value={ companyName } 
-                                type="text" 
+                                type="text"
+                                disabled = { disabled }
                                 placeholder="J & J Doe" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
@@ -197,7 +227,8 @@ class CompanyTab extends React.Component{
                                 id="profile-companyEmailAddress" 
                                 value={ emailAddress }
                                 label="Email Address"
-                                type="email" 
+                                type="email"
+                                disabled = { disabled }
                                 placeholder="Johndoe@email.com" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
@@ -212,6 +243,7 @@ class CompanyTab extends React.Component{
                                 value={ phoneNumber }  
                                 mask= {['(', [0], /\d/,')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
                                 placeholder="(07) 9999-9999"
+                                disabled = { disabled }
                                 root="inner-textfield" 
                                 fieldClass="textfield"
                                 onBlur={ upload }
@@ -225,7 +257,8 @@ class CompanyTab extends React.Component{
                                 label="Website"
                                 type="text" 
                                 placeholder="www.website.com" 
-                                root="inner-textfield" 
+                                root="inner-textfield"
+                                disabled = { disabled } 
                                 fieldClass="textfield"
                                 onBlur={ upload }
                                 onChange = { save }  
@@ -251,7 +284,8 @@ class CompanyTab extends React.Component{
                                 label="City/Suburb"
                                 value={ city } 
                                 type="text" 
-                                placeholder="City/Suburb" 
+                                placeholder="City/Suburb"
+                                disabled = { disabled }
                                 root="inner-textfield" 
                                 fieldClass="textfield"
                                 onBlur={ upload }
@@ -264,7 +298,8 @@ class CompanyTab extends React.Component{
                                 label="Physical Address"
                                 value={ physicalAddress } 
                                 type="text" 
-                                placeholder="Street Address" 
+                                placeholder="Street Address"
+                                disabled = { disabled } 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
                                 onBlur={ upload }
@@ -277,7 +312,8 @@ class CompanyTab extends React.Component{
                                 label="Post Code"
                                 value={ postCode } 
                                 type="text" 
-                                placeholder="POST/ZIP CODE" 
+                                placeholder="POST/ZIP CODE"
+                                disabled = { disabled } 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
                                 onBlur={ upload }
@@ -290,6 +326,7 @@ class CompanyTab extends React.Component{
                                 label="ACN/ABN"
                                 value={ acn_abn } 
                                 type="text" 
+                                disabled = { disabled }
                                 placeholder="Bank Account Number" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
@@ -308,7 +345,8 @@ class CompanyTab extends React.Component{
                                     id="profile-companyRepFullName"
                                     label="Full Name"
                                     value={ contactName } 
-                                    type="text" 
+                                    type="text"
+                                    disabled = { disabled } 
                                     placeholder="John Doe" 
                                     root="inner-textfield" 
                                     fieldClass="textfield"
@@ -321,7 +359,8 @@ class CompanyTab extends React.Component{
                                     id="profile-companyRepEmailAddress" 
                                     value={ contactEmail }
                                     label="Email Address"
-                                    type="email" 
+                                    type="email"
+                                    disabled = { disabled } 
                                     placeholder="Johndoe@email.com" 
                                     root="inner-textfield" 
                                     fieldClass="textfield"
@@ -336,6 +375,7 @@ class CompanyTab extends React.Component{
                                     value={ contactPhone }  
                                     mask= {['(', [0], /\d/,')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
                                     placeholder="(07) 9999-9999"
+                                    disabled = { disabled }
                                     root="inner-textfield" 
                                     fieldClass="textfield"
                                     onBlur={ upload }
@@ -347,7 +387,8 @@ class CompanyTab extends React.Component{
                                     id="profile-companyRepPosition" 
                                     value={ contactPosition }
                                     label="Contact Position"
-                                    type="text" 
+                                    type="text"
+                                    disabled = { disabled }
                                     placeholder="eg. Head of sales" 
                                     root="inner-textfield" 
                                     fieldClass="textfield"
@@ -372,7 +413,8 @@ class CompanyTab extends React.Component{
                                     id="profile-companyAddUser" 
                                     value={ userToBeAdded }
                                     label="Persons Email Address"
-                                    type="email" 
+                                    type="email"
+                                    disabled = { disabled }
                                     placeholder="example@email.com" 
                                     root="inner-textfield" 
                                     fieldClass="textfield"
@@ -415,6 +457,7 @@ export default connect(store=>{
     return {
         user: store.user.info,
         userInfo: store.user.info.profileInfo,
+        activeProfile: store.profile.info,
         currentHorizontalTab: store.genInfo.info.sideBar.currenthorizontalTab,
     }
 })(CompanyTab);

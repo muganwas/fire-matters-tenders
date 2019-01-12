@@ -11,7 +11,7 @@ export const listingCategories = {
 export const serviceCategories = {
     maintenance: "Maintenance",
     repair: "Repair",
-    evacTraining: "EvacTraining",
+    evacTraining: "Evac-Training",
     other: "Other"
 }
 

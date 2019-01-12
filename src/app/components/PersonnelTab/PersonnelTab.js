@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { DropDown, Textfield, PhoneNumber, FmButton } from 'components';
 import { userTypes, statesAustralia, serviceCategories } from 'extras/config';
-import { dispatchedUserInfo } from 'extras/dispatchers';
+import { dispatchedUserInfo, dispatchedProfileInfo } from 'extras/dispatchers';
 import axios from 'axios';
 import { submit_styles } from './styles';
 import './personnelTab.css'
@@ -63,11 +63,27 @@ class PersonnelTab extends React.Component{
         
     }
 
+    toggleEdit = (e)=>{
+        let { activeProfile } = this.props,
+        id = e.target.id;
+        if(id === "enable-edit"){
+            activeProfile.editing.personnel.edit = "disabled";
+            activeProfile.editing.personnel.disabled = false;
+        }else if(id === "disable-edit" && activeProfile.editing.personnel.edit === "disabled"){
+            activeProfile.editing.personnel.edit = "enabled";
+            activeProfile.editing.personnel.disabled = true;
+        }
+        this.props.dispatch(dispatchedProfileInfo(activeProfile));
+        this.forceUpdate();
+    }
+
     render(){
-        let { userInfo, user, profile } = this.props;
+        let { userInfo, user, profile, activeProfile } = this.props;
         let userlen = Object.keys(userInfo).length;
         userInfo = userlen > 0?userInfo:JSON.parse(sessionStorage.getItem('profileInfo'));
         let userType = userInfo.userType,
+        disabled = activeProfile.editing.personnel.disabled,
+        edit = activeProfile.editing.personnel.edit,
         userName = userInfo.fullName,
         phoneNumber = userInfo.phoneNumber?(userInfo.phoneNumber).toString():undefined,
         mobileNumber = userInfo.mobileNumber?(userInfo.mobileNumber).toString():undefined,
@@ -120,8 +136,19 @@ class PersonnelTab extends React.Component{
             return new Promise(resolve=>resolve())
         }
 
+        const create = edit === "enabled"?" enabled":" disabled",
+        disable = edit !== "enabled"?" enabled":" disabled";
+
         return(
             <div className="main-content">
+                <div id="edit">
+                    <i id="enable-edit" onClick={ this.toggleEdit } class={"material-icons edit" + create}>
+                        create
+                    </i>
+                    <i id ="disable-edit" onClick={ this.toggleEdit } class={"material-icons save" + disable}>
+                        save
+                    </i>
+                </div>
                 <div className="half left">
                     <div className="heading">Basic Information <div className="bottom-border"></div></div>
                     <div className="information">
@@ -143,7 +170,8 @@ class PersonnelTab extends React.Component{
                                 id="profile-fullName"
                                 label="Full Name"
                                 value={ userName } 
-                                type="text" 
+                                type="text"
+                                disabled = { disabled }
                                 placeholder="John Doe" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
@@ -156,7 +184,8 @@ class PersonnelTab extends React.Component{
                                 id="profile-emailAddress" 
                                 value={ emailAddress }
                                 label="Email Address"
-                                type="email" 
+                                type="email"
+                                disabled = { disabled }
                                 placeholder="Johndoe@email.com" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
@@ -168,7 +197,8 @@ class PersonnelTab extends React.Component{
                             <PhoneNumber 
                                 id="profile-phoneNumber"
                                 label = "Phone Number"
-                                value={ phoneNumber }  
+                                value={ phoneNumber }
+                                disabled = { disabled }
                                 mask= {['(', [0], /\d/,')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
                                 placeholder="(07) 9999-9999"
                                 root="inner-textfield" 
@@ -181,7 +211,8 @@ class PersonnelTab extends React.Component{
                             <PhoneNumber 
                                 id="profile-mobileNumber"
                                 label = "Mobile Number"
-                                value={ mobileNumber }  
+                                value={ mobileNumber }
+                                disabled = { disabled } 
                                 mask={['(', [0], /\d/, /\d/, /\d/,')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/,]}
                                 root="inner-textfield"
                                 placeholder="(0799) 999 999"
@@ -195,7 +226,8 @@ class PersonnelTab extends React.Component{
                                 id="profile-website" 
                                 value={ website }
                                 label="Website"
-                                type="text" 
+                                type="text"
+                                disabled = { disabled }
                                 placeholder="www.website.com" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
@@ -239,6 +271,7 @@ class PersonnelTab extends React.Component{
                                     id="profile-city" 
                                     value={ city }
                                     label="City"
+                                    disabled = { disabled }
                                     type="text" 
                                     placeholder="ie.Your city" 
                                     root="inner-textfield" 
@@ -255,6 +288,7 @@ class PersonnelTab extends React.Component{
                                     value={ area }
                                     label="Area"
                                     type="text" 
+                                    disabled = { disabled }
                                     placeholder="ie.Your Area" 
                                     root="inner-textfield" 
                                     fieldClass="textfield"
@@ -267,7 +301,8 @@ class PersonnelTab extends React.Component{
                                     id="profile-suburb" 
                                     value={ suburb }
                                     label="Suburb"
-                                    type="text" 
+                                    type="text"
+                                    disabled = { disabled } 
                                     placeholder="ie.Your suburb" 
                                     root="inner-textfield" 
                                     fieldClass="textfield"
@@ -281,6 +316,7 @@ class PersonnelTab extends React.Component{
                                     value={ street }
                                     label="Street"
                                     type="text" 
+                                    disabled = { disabled }
                                     placeholder="ie.Your street" 
                                     root="inner-textfield" 
                                     fieldClass="textfield"
@@ -348,6 +384,7 @@ export default connect(store=>{
         user: store.user.info,
         userInfo: store.user.info.profileInfo,
         profile: store.user.info.profileInfo.profile,
+        activeProfile: store.profile.info,
         currentHorizontalTab: store.genInfo.info.sideBar.currenthorizontalTab,
     }
 })(PersonnelTab);

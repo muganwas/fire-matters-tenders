@@ -80,6 +80,7 @@ class Textfield extends React.Component {
                             multiline
                             rowsMax = "30"
                             rows="4"
+                            disabled = { this.props.disabled }
                             defaultValue={this.props.value}
                             onChange={ this.props.save || this.handleText}
                             onBlur={ this.props.upload || this.upload }
@@ -105,6 +106,7 @@ class Textfield extends React.Component {
                                     root: this.props.root,
                                 },
                             }}
+                            disabled = { this.props.disabled }
                             defaultValue={this.props.value}
                             onChange={ this.props.save || this.handleText}
                             onBlur={ this.props.upload || this.upload }

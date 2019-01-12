@@ -10,3 +10,26 @@
     font-size: 13px;
     cursor: pointer;
 }
+#edit{
+    display: block;
+    padding: 5px 10px;
+}
+.edit{
+    padding: 3px;
+    border-radius: 3px;
+    display: inline-block;
+    margin: 2px;
+}
+.save{
+    padding: 3px;
+    border-radius: 3px;
+    display: inline-block;
+    margin: 2px;
+}
+.enabled{
+    background: #F79A50;
+    cursor: pointer;
+}
+.disabled{
+    background: #e9e9e9;
+}

@@ -71,6 +71,7 @@ class PhoneNumber extends React.Component {
                         onBlur = { this.props.upload || this.upload }
                         defaultValue={ this.props.value }
                         onChange={ this.props.save || this.handleText }
+                        disabled = { this.props.disabled }
                         placeholder={this.props.placeholder}
                         mask={this.props.mask}
                         placeholderChar={'\u2000'}

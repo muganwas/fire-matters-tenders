@@ -1,6 +1,25 @@
 const defaultState = {
     info: {
-      activeProfile:{}
+      activeProfile:{},
+      editing:{
+        personnel: { 
+          disabled: true,
+          edit: "enabled"
+        },
+        company: { 
+          disabled: true,
+          edit: "enabled"
+        },
+        insurance: { 
+          disabled: true,
+          edit: "enabled"
+        }
+        ,
+        license: { 
+          disabled: true,
+          edit: "enabled"
+        } 
+      }
      },
     fetching: false,
     fetched: false,
