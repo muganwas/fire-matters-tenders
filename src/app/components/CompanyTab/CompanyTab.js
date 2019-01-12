@@ -192,16 +192,16 @@ class CompanyTab extends React.Component{
         };
 
         
-        const create = edit === "enabled"?" enabled":" disabled",
-        disable = edit !== "enabled"?" enabled":" disabled";
+        const createClass = edit === "enabled"?" enabled":" disabled",
+        disableClass = edit !== "enabled"?" enabled":" disabled";
 
         return(
             <div className="main-content">
                 <div id="edit">
-                    <i id="enable-edit" onClick={ this.toggleEdit } class={"material-icons edit" + create}>
+                    <i id="enable-edit" onClick={ this.toggleEdit } class={"material-icons edit" + createClass}>
                         create
                     </i>
-                    <i id ="disable-edit" onClick={ this.toggleEdit } class={"material-icons save" + disable}>
+                    <i id ="disable-edit" onClick={ this.toggleEdit } class={"material-icons save" + disableClass}>
                         save
                     </i>
                 </div>

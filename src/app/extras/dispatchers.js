@@ -114,6 +114,11 @@ export function dispatchedProfileInfo(Info) {
                 info: Info
             }   
         }
+    }else if(info === "reset"){
+        return {
+            type: "RESET",
+            payload: {}
+        }
     }else{
         return {
             type: "FETCH_PROFILE_REJECTED",

@@ -82,7 +82,8 @@ class InsuranceTab extends React.Component{
             userInfo.currentSub.insurance[insurancePolicy].className = "hidden"
             userInfo.currentSub.insurance[insurancePolicy].checked = false;
         } 
-        this.props.dispatch(dispatchedSubContractorsInfo(userInfo)); 
+        this.props.dispatch(dispatchedSubContractorsInfo(userInfo));
+        this.upload();
     }
 
     showLoader=(e)=>{
@@ -173,24 +174,51 @@ class InsuranceTab extends React.Component{
         expiryDate = insurance[key].expiryDate,
         name = insurance[key].name,
         certURL = insurance[key].certURL,
-        value = insurance[key].checked;
+        value = insurance[key].checked,
+        date = new Date(),
+        month = parseInt(date.getMonth()),
+        year = parseInt(date.getFullYear()),
+        storedDateArr = expiryDate.split("-"),
+        storedYear = parseInt(storedDateArr[0]),
+        storedMonth = parseInt(storedDateArr[1]),
+        percentage = value && policyNumber && expiryDate && certURL? "100%": value && policyNumber || certURL? "75%": "25%",
+        completion = value && policyNumber && expiryDate && certURL?
+        "complete":
+        !value?"empty":
+        "incomplete",
+        colorCode;
+        //determining validity of insurance
+        if(storedYear > year){
+            colorCode = "valid";
+        }else if(storedYear === year){
+            if(storedMonth >= month){
+                colorCode = "almost";
+            }else{
+                colorCode = "invalid"
+            }
+        }else{
+            colorCode = "invalid"
+        }
         if(key !== "other"){
             return(
-                <div key={ key } className="el">
-                    <ChckBox handleChange={ this.toggleDisplay } dispatcher = { dispatchedSubContractorsInfo } value={ value } id={ key } />
-                    <span>{name}</span>
+                <div key={ key } className={ " insurance"}>
+                    <div className = { completion }>
+                        <ChckBox handleChange={ this.toggleDisplay } dispatcher = { dispatchedSubContractorsInfo } value={ value } id={ key } />
+                        <span>{name} <span className="completion">{value?percentage + " completed":null}</span> </span>
+                    </div>
                     <div className={ className }>
                         <Textfield 
                             id={ key + "-policyNumber" }
                             label="Policy Number"
                             value={ policyNumber }
                             subCategory={"insurance"} 
-                            type="text" 
+                            type="text"
+                            level = "sub"
                             placeholder="Policy Number" 
                             root="inner-textfield" 
                             fieldClass="textfield"
-                            upload={ this.upload }
-                            save = { this.save } 
+                            onBlur={ this.upload }
+                            onChange = { this.save } 
                         />
                         <form method="POST" encType="multipart/form-data">
                             <input className="hidden" type="file" id={`upload_` + key } name="certificate" onChange={ this.showLoader } ></input>
@@ -206,13 +234,15 @@ class InsuranceTab extends React.Component{
                             id={ key + "-expiryDate"}
                             label="Expiry Date"
                             value={ expiryDate }
+                            color = { colorCode }
+                            level = "sub"
                             subCategory={"insurance"}  
                             type="date" 
                             placeholder={ expiryDate }
                             root="inner-textfield" 
                             fieldClass="textfield"
-                            upload={ this.upload }
-                            save = { this.save } 
+                            onBlur={ this.upload }
+                            onChange = { this.save } 
                         />
                     </div>
                 </div>
@@ -224,7 +254,32 @@ class InsuranceTab extends React.Component{
 
     render(){
         let { insurance }= this.props,
-        other = insurance?insurance.other:{};
+        other = insurance?insurance.other:{},
+        percentage = other.checked && other.policyNumber && other.expiryDate && other.certURL? "100%": other.checked && other.policyNumber || other.certURL? "75%": "25%",
+        completion = other.checked && other.policyNumber && other.expiryDate && other.certURL?
+        "complete":
+        !other.checked?
+        "empty":
+        "incomplete",
+        date = new Date(),
+        month = parseInt(date.getMonth()),
+        year = parseInt(date.getFullYear()),
+        storedDateArr = other.expiryDate.split("-"),
+        storedYear = parseInt(storedDateArr[0]),
+        storedMonth = parseInt(storedDateArr[1]),
+        colorCode;
+        //determining validity of insurance
+        if(storedYear > year){
+            colorCode = "valid";
+        }else if(storedYear === year){
+            if(storedMonth >= month){
+                colorCode = "almost";
+            }else{
+                colorCode = "invalid"
+            }
+        }else{
+            colorCode = "invalid"
+        }
 
         return(
             <div className="main-content">
@@ -238,9 +293,11 @@ class InsuranceTab extends React.Component{
                     <div className="heading">Specify Other insurance Policy if any<div className="bottom-border"></div></div>
                         <div className="information">
                             <div className="el">
-                                <div className="el">
-                                    <ChckBox handleChange={ this.toggleDisplay } dispatcher = { dispatchedSubContractorsInfo } value={ other.checked } id="other" />
-                                    <span>{other.name}</span>
+                                <div className={ " insurance"}>
+                                    <div className = { completion }>
+                                        <ChckBox handleChange={ this.toggleDisplay } dispatcher = { dispatchedSubContractorsInfo } value={ other.checked } id="other" />
+                                        <span>{other.name} <span className="completion">{ other.checked?percentage + " completed":null}</span></span>
+                                    </div>
                                     <div className={ other.className }>
                                         <Textfield 
                                             id="other-policyNumber"
@@ -250,8 +307,8 @@ class InsuranceTab extends React.Component{
                                             placeholder="Policy Number" 
                                             root="inner-textfield" 
                                             fieldClass="textfield"
-                                            upload={ this.upload }
-                                            save = { this.save } 
+                                            onBlur={ this.upload }
+                                            onChange = { this.save } 
                                         />
                                         <form method="POST" encType="multipart/form-data">
                                             <input className="hidden" type="file" id="upload_other" name="certificate" onChange={ this.showLoader } ></input>
@@ -266,13 +323,14 @@ class InsuranceTab extends React.Component{
                                         <Textfield 
                                             id="other-expiryDate"
                                             label="Expiry Date"
+                                            color={colorCode}
                                             value={ other.expiryDate } 
                                             type="date" 
                                             placeholder={ other.expiryDate }
                                             root="inner-textfield" 
                                             fieldClass="textfield"
-                                            upload={ this.upload }
-                                            save = { this.save } 
+                                            onBlur={ this.upload }
+                                            onChange = { this.save } 
                                         />
                                     </div>
                                 </div>

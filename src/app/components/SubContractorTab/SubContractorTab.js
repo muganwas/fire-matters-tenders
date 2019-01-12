@@ -202,7 +202,7 @@ class SubContractorTab extends React.Component {
         showSubContractorForm = subContractorsInfo.subContractorForm.show,
         subContractorAttributes = this.props.user.info.addSubContractor,
         errors = subContractorsInfo.subContractorForm.errors,
-        userType = this.props.profileInfo.userType,
+        userType = JSON.parse(sessionStorage.getItem('profileInfo')).userType,
         feedback = subContractorAttributes.feedback,
         feedbackClass = subContractorAttributes.feedbackClass,
         showDetailsView = subContractorsInfo.detailsView.show;

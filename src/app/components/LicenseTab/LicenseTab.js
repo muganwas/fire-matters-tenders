@@ -189,7 +189,6 @@ class LicenseTab extends React.Component{
         "50%":
         "25%",
         colorCode;
-        colorCode;
         if(storedYear > year){
             colorCode = "valid";
         }else if(storedYear === year){

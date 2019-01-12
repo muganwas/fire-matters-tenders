@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { DropDown, Textfield, PhoneNumber } from 'components';
 import { statesAustralia } from 'extras/config';
 import axios from 'axios';
-import { dispatchedSubContractorsInfo } from 'extras/dispatchers';
+import { dispatchedSubContractorsInfo, dispatchedProfileInfo } from 'extras/dispatchers';
 
 const baseURL = process.env.BACK_END_URL,
 userUpdateEndPoint = process.env.SUB_CONTRACTORS_UPDATE_END_POINT;
@@ -42,6 +42,10 @@ class PersonnelTab extends React.Component {
         });
     }
 
+    resetProfileEditing = ()=>{
+        this.props.dispatch(dispatchedProfileInfo("reset"));
+    }
+
     save=(e)=>{
         e.persist();
         let { subContractorsInfo } = this.props;
@@ -63,10 +67,27 @@ class PersonnelTab extends React.Component {
         }); 
     }
 
+    toggleEdit = (e)=>{
+        let { activeProfile } = this.props,
+        id = e.target.id;
+        if(id === "enable-edit"){
+            activeProfile.editing.personnel.edit = "disabled";
+            activeProfile.editing.personnel.disabled = false;
+        }else if(id === "disable-edit" && activeProfile.editing.personnel.edit === "disabled"){
+            activeProfile.editing.personnel.edit = "enabled";
+            activeProfile.editing.personnel.disabled = true;
+        }
+        this.props.dispatch(dispatchedProfileInfo(activeProfile));
+        this.forceUpdate();
+    }
+
     render(){
         let { currSub } = this.props,
         userInfo = currSub,
+        activeProfile = this.props.activeProfile || { activeProfile: {}, editing: { personnel:{}}},
         companyName = userInfo.companyName,
+        disabled = activeProfile.editing.personnel.disabled,
+        edit = activeProfile.editing.personnel.edit,
         userName = userInfo.fullName,
         phoneNumber = userInfo.phoneNumber?(userInfo.phoneNumber).toString():undefined,
         mobileNumber = userInfo.mobileNumber?(userInfo.mobileNumber).toString():undefined,
@@ -77,8 +98,19 @@ class PersonnelTab extends React.Component {
         suburb = userInfo.suburb,
         street = userInfo.street,
         emailAddress = userInfo.emailAddress;
+
+        const createClass = edit === "enabled"?" enabled":" disabled",
+        disableClass = edit !== "enabled"?" enabled":" disabled";
         return(
             <div className="main-content">
+                <div id="edit">
+                    <i id="enable-edit" onClick={ this.toggleEdit } class={"material-icons edit" + createClass}>
+                        create
+                    </i>
+                    <i id ="disable-edit" onClick={ this.toggleEdit } class={"material-icons save" + disableClass}>
+                        save
+                    </i>
+                </div>
                 <div className="half left">
                     <div className="heading">Basic Information <div className="bottom-border"></div></div>
                     <div className="information">
@@ -87,7 +119,8 @@ class PersonnelTab extends React.Component {
                                 id="profile-fullName"
                                 label="Full Name"
                                 value={ userName } 
-                                type="text" 
+                                type="text"
+                                disabled = { disabled }
                                 placeholder="John Doe" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
@@ -100,7 +133,8 @@ class PersonnelTab extends React.Component {
                                 id="profile-emailAddress" 
                                 value={ emailAddress }
                                 label="Email Address"
-                                type="email" 
+                                type="email"
+                                disabled = { disabled }
                                 placeholder="Johndoe@email.com" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
@@ -115,6 +149,7 @@ class PersonnelTab extends React.Component {
                                 value={ phoneNumber }  
                                 mask= {['(', [0], /\d/,')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
                                 placeholder="(07) 9999-9999"
+                                disabled = { disabled }
                                 root="inner-textfield" 
                                 fieldClass="textfield"
                                 upload={ this.upload }
@@ -125,7 +160,8 @@ class PersonnelTab extends React.Component {
                             <PhoneNumber 
                                 id="profile-mobileNumber"
                                 label = "Mobile Number"
-                                value={ mobileNumber }  
+                                value={ mobileNumber }
+                                disabled = { disabled }  
                                 mask={['(', [0], /\d/, /\d/, /\d/,')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/,]}
                                 root="inner-textfield"
                                 placeholder="(0799) 999 999"
@@ -139,6 +175,7 @@ class PersonnelTab extends React.Component {
                                 id="profile-website" 
                                 value={ website }
                                 label="Website"
+                                disabled = { disabled }
                                 type="text" 
                                 placeholder="www.website.com" 
                                 root="inner-textfield" 
@@ -151,7 +188,8 @@ class PersonnelTab extends React.Component {
                             <Textfield 
                                 id="profile-companyName"
                                 label="Company Name"
-                                value={ companyName } 
+                                value={ companyName }
+                                disabled = { disabled }
                                 type="text" 
                                 placeholder="John Doe" 
                                 root="inner-textfield" 
@@ -182,6 +220,7 @@ class PersonnelTab extends React.Component {
                                 <Textfield 
                                     id="profile-city" 
                                     value={ city }
+                                    disabled = { disabled }
                                     label="City"
                                     type="text" 
                                     placeholder="ie.Your city or suburb" 
@@ -196,7 +235,8 @@ class PersonnelTab extends React.Component {
                                     id="profile-area" 
                                     value={ area }
                                     label="Area"
-                                    type="text" 
+                                    type="text"
+                                    disabled = { disabled }
                                     placeholder="ie.Sub-contractors' area" 
                                     root="inner-textfield" 
                                     fieldClass="textfield"
@@ -209,7 +249,8 @@ class PersonnelTab extends React.Component {
                                     id="profile-suburb" 
                                     value={ suburb }
                                     label="Suburb"
-                                    type="text" 
+                                    type="text"
+                                    disabled = { disabled }
                                     placeholder="ie.Sub-contractors' suburb" 
                                     root="inner-textfield" 
                                     fieldClass="textfield"
@@ -222,7 +263,8 @@ class PersonnelTab extends React.Component {
                                     id="profile-street" 
                                     value={ street }
                                     label="Street"
-                                    type="text" 
+                                    type="text"
+                                    disabled = { disabled }
                                     placeholder="ie.Sub-contractors' suburb" 
                                     root="inner-textfield" 
                                     fieldClass="textfield"
@@ -255,6 +297,7 @@ export default connect(store=>{
     return {
         user: store.user.info,
         subContractorsInfo: store.subContractors.info,
+        activeProfile: store.profile.info,
         currSub: store.subContractors.info.currentSub
     }
 })(PersonnelTab);

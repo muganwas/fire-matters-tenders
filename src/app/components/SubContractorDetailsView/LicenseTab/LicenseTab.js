@@ -79,7 +79,8 @@ class LicenseTab extends React.Component{
             userInfo.currentSub.licenses[insurancePolicy].className = "hidden"
             userInfo.currentSub.licenses[insurancePolicy].checked = false;
         } 
-        this.props.dispatch(dispatchedSubContractorsInfo(userInfo)); 
+        this.props.dispatch(dispatchedSubContractorsInfo(userInfo));
+        this.upload();
     }
 
     showLoader=(e)=>{
@@ -171,12 +172,44 @@ class LicenseTab extends React.Component{
         expiryDate = licenses[key].expiryDate,
         name = licenses[key].name,
         certURL = licenses[key].certURL,
-        value = licenses[key].checked;
+        value = licenses[key].checked,
+        date = new Date(),
+        month = parseInt(date.getMonth()),
+        year = parseInt(date.getFullYear()),
+        storedDateArr = expiryDate.split("-"),
+        storedYear = parseInt(storedDateArr[0]),
+        storedMonth = parseInt(storedDateArr[1]),
+        completion = value && licenseNumber && expiryDate && certURL && licenseType?
+        "complete":
+        !value?"empty":
+        "incomplete",
+        percentage = value && licenseNumber && expiryDate && certURL && licenseType? "100%":
+        value && (licenseNumber && certURL) || (licenseNumber && licenseType) || (licenseType && certURL)?
+        "75%":
+        value && licenseNumber || certURL || licenseType?
+        "50%":
+        "25%",
+        colorCode;
+
+        if(storedYear > year){
+            colorCode = "valid";
+        }else if(storedYear === year){
+            if(storedMonth >= month){
+                colorCode = "almost";
+            }else{
+                colorCode = "invalid"
+            }
+        }else{
+            colorCode = "invalid"
+        }
+
         if(key !== "other"){
             return(
                 <div key={ key } className="el">
-                    <ChckBox handleChange={ this.toggleDisplay } dispatcher = { dispatchedSubContractorsInfo } value={ value } id={ key } />
-                    <span>{name}</span>
+                    <div className = { completion }>
+                        <ChckBox handleChange={ this.toggleDisplay } dispatcher = { dispatchedSubContractorsInfo } value={ value } id={ key } />
+                        <span>{name} <span className="completion">{value?percentage + " completed":null}</span></span>
+                    </div>
                     <div className={ className }>
                         <Textfield 
                             id={ key + "-type" }
@@ -216,7 +249,8 @@ class LicenseTab extends React.Component{
                             id={ key + "-expiryDate"}
                             label="Expiry Date"
                             value={ expiryDate }
-                            subCategory={"licenses"}  
+                            subCategory={"licenses"}
+                            color = { colorCode }  
                             type="date" 
                             placeholder={ expiryDate }
                             root="inner-textfield" 
