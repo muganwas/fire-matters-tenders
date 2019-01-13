@@ -281,11 +281,11 @@ class EquipmentTab extends React.Component{
                                 </div>
                             </div>
                             :null}
-                            {mechanicalCount.length>0
+                            {emergencyCount.length>0
                             ?<div className="subCategories">
-                                <h3>Mechanical Equipment</h3>
+                                <h3>Emergency Exit Lighting</h3>
                                 <div className="body">
-                                    <RenderEquipment id="mechanicalEquipment" currCat={mechanicalEquipment} onClose={ this.removeSubCategory } />
+                                    <RenderEquipment id="emergencyExitLighting" currCat={emergencyExitLighting} onClose={ this.removeSubCategory } />
                                 </div>
                             </div>
                             :null}
