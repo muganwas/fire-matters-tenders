@@ -2,15 +2,17 @@ import React from 'react';
 import './dropDown.css';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
-import { dispatchedGenInfo, dispatchedUserInfo } from 'extras/dispatchers';
-
+import { dispatchedGenInfo, dispatchedUserInfo, dispatchedSubContractorsInfo } from 'extras/dispatchers';
 @connect((store)=>{
     return {
         user: store.user,
         userInfo: store.user.info,
         genInfo: store.genInfo.info,
         dropDown: store.genInfo.info.dropDown,
-        dropDownClass: store.genInfo.info.dropDown.dropDownClass
+        dropDownClass: store.genInfo.info.dropDown.dropDownClass,
+        subContractorsInfo: store.subContractors.info,
+        activeProfile: store.profile.info,
+        currSub: store.subContractors.info.currentSub
     }
 })
 class DropDown extends React.Component {
@@ -41,11 +43,14 @@ class DropDown extends React.Component {
                 origName = origName?origName:id;
                 let nameArr = origName.split("-"),
                 name = nameArr[1],
+                userCategory = nameArr[2],
                 value = e.target.getAttribute('value');
                 let dbValue = sessionStorage.getItem('profileInfo')?(JSON.parse(sessionStorage.getItem('profileInfo')))[name]:null;
+                if(userCategory === "subContractor")
+                    dbValue = this.props.currSub[name];
                 //update fiel in db
-                if(dbValue !== value && this.props.onBlur){
-                    this.props.onBlur(origName, value).
+                if(userCategory === "subContractor" || !userCategory && (dbValue !== value && this.props.onBlur)){
+                    this.props.onBlur(name, value).
                     then(res=>{
                         if(res)
                             console.log(name + " updated");
@@ -72,7 +77,7 @@ class DropDown extends React.Component {
         else{
             return(   
                 <span 
-                    onClick={ 
+                    onClick={
                         this.props.upload?(e)=>{
                         e.persist();
                         this.props.save(e);

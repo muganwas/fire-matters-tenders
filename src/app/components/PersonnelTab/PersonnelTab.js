@@ -122,8 +122,8 @@ class PersonnelTab extends React.Component{
                 origName = origName?origName:id;
                 let nameArr = origName.split("-"),
                 name = nameArr[1],
-                value = e.target.getAttribute('value');
-                value = value?value:e.target.value;
+                value = e.target.value;
+                value = value?value:e.target.getAttribute('value');
                 userInfo.profileInfo[name] = value;
                 if(userInfo)                     
                     resolve(userInfo);

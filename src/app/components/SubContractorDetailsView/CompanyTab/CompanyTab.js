@@ -14,23 +14,13 @@ class CompanyTab extends React.Component {
         super(props)
     }
 
-    upload=(e)=>{
-        e.persist();
-        let { currSub } = this.props,
-        id = e.target.id,
-        value = e.target.getAttribute('value'),
-        origName = e.target.getAttribute("category");
-        id = origName?origName:id;
-        let idArr = id.split("-"),
-        sectTitle = idArr[1],
-        userInfo = currSub;
+    upload=(sectTitle, updateData)=>{
+        let userInfo = {...this.props.currSub};
         return new Promise((resolve, reject)=>{
-
             let userId = userInfo.id,
-            updateData = value?value:currSub[sectTitle],
             updateInfoUrl = baseURL + userUpdateEndPoint,
             updateObject = {userId, sectTitle, updateData};
-
+            console.log(updateObject)
             axios.post(updateInfoUrl, updateObject).
             then(res=>{
                 console.log(res);
@@ -47,6 +37,7 @@ class CompanyTab extends React.Component {
         let { subContractorsInfo } = this.props;
         return new Promise(resolve=>{
             let userInfo = {...subContractorsInfo},
+            origUser = {...this.props.user},
             id = e.target.id,
             origName = e.target.getAttribute("category");
             origName = origName?origName:id;
@@ -57,13 +48,14 @@ class CompanyTab extends React.Component {
             userInfo.currentSub[name] = value;
             this.props.dispatch(dispatchedSubContractorsInfo(userInfo));
             if(userInfo)                     
-                resolve(userInfo);
+                resolve(origUser);
             else
                 reject({message: "No data"});
         }); 
     }
 
     toggleEdit = (e)=>{
+        e.persist();
         let { activeProfile } = this.props,
         id = e.target.id;
         if(id === "enable-edit"){
@@ -114,7 +106,7 @@ class CompanyTab extends React.Component {
                     <div className="information">
                         <div className="el">
                             <Textfield 
-                                id="profile-companyEmailAddress" 
+                                id="profile-companyEmailAddress-subContractor" 
                                 value={ emailAddress }
                                 label="Email Address"
                                 type="email"
@@ -122,8 +114,8 @@ class CompanyTab extends React.Component {
                                 placeholder="Johndoe@email.com" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
-                                upload={ this.upload }
-                                save={ this.save } 
+                                onBlur={ this.upload }
+                                onChange= { this.save } 
                             />
                         </div>
                         <div className="el">
@@ -136,13 +128,13 @@ class CompanyTab extends React.Component {
                                 disabled = { disabled }
                                 root="inner-textfield" 
                                 fieldClass="textfield"
-                                upload={ this.upload }
-                                save={ this.save } 
+                                onBlur={ this.upload }
+                                onChange= { this.save } 
                             />
                         </div>
                         <div className="el">
                             <Textfield 
-                                id="profile-companyWebsite" 
+                                id="profile-companyWebsite-subContractor" 
                                 value={ website }
                                 label="Website"
                                 type="text" 
@@ -150,41 +142,41 @@ class CompanyTab extends React.Component {
                                 disabled = { disabled } 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
-                                upload={ this.upload }
-                                save={ this.save }  
+                                onBlur={ this.upload }
+                                onChange= { this.save }  
                             />
                         </div>
                         <div className="el">
                                 <DropDown 
                                     label="State" 
-                                    id="profile-companyState" 
+                                    id="profile-companyState-subContractor" 
                                     className="select" 
                                     init={ state }
                                     disabled = { disabled }
                                     width="330px" 
                                     options={ statesAustralia } 
                                     selected={ state || "Qld" } 
-                                    upload={ this.upload }
-                                    save={ this.save }
+                                    onBlur={ this.upload }
+                                    onChange= { this.save }
                                 />
                         </div>
                         <div className="el">
                             <Textfield 
                                 id="profile-companyCity"
-                                label="City/Suburb"
+                                label="City"
                                 value={ city } 
                                 type="text"
                                 disabled = { disabled }
-                                placeholder="City/Suburb" 
+                                placeholder="City" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
-                                upload={ this.upload }
-                                save={ this.save }
+                                onBlur={ this.upload }
+                                onChange= { this.save }
                             />
                         </div>
                         <div className="el">
                             <Textfield 
-                                id="profile-companyStreet"
+                                id="profile-companyPhysicalAddress-subContractor"
                                 label="Physical Address"
                                 value={ physicalAddress } 
                                 type="text" 
@@ -192,13 +184,13 @@ class CompanyTab extends React.Component {
                                 disabled = { disabled }
                                 root="inner-textfield" 
                                 fieldClass="textfield"
-                                upload={ this.upload }
-                                save={ this.save }  
+                                onBlur={ this.upload }
+                                onChange= { this.save } 
                             />
                         </div>
                         <div className="el">
                             <Textfield 
-                                id="profile-companyPostCode"
+                                id="profile-companyPostCode-subContractor"
                                 label="Post Code"
                                 value={ postCode } 
                                 type="text"
@@ -206,13 +198,13 @@ class CompanyTab extends React.Component {
                                 placeholder="POST/ZIP CODE" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
-                                upload={ this.upload }
-                                save={ this.save }  
+                                onBlur={ this.upload }
+                                onChange= { this.save }  
                             />
                         </div>
                         <div className="el">
                             <Textfield 
-                                id="profile-company_acn_abn"
+                                id="profile-company_acn_abn-subContractor"
                                 label="ACN/ABN"
                                 value={ acn_abn }
                                 disabled = { disabled }
@@ -220,8 +212,8 @@ class CompanyTab extends React.Component {
                                 placeholder="Bank Account Number" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
-                                upload={ this.upload }
-                                save={ this.save } 
+                                onBlur={ this.upload }
+                                onChange= { this.save }
                             />
                         </div>
                         
@@ -232,7 +224,7 @@ class CompanyTab extends React.Component {
                         <div className="information">
                             <div className="el">
                                 <Textfield 
-                                    id="profile-companyRepFullName"
+                                    id="profile-companyRepFullName-subContractor"
                                     label="Full Name"
                                     value={ contactName } 
                                     type="text" 
@@ -240,13 +232,13 @@ class CompanyTab extends React.Component {
                                     disabled = { disabled } 
                                     root="inner-textfield" 
                                     fieldClass="textfield"
-                                    upload={ this.upload }
-                                    save={ this.save }  
+                                    onBlur={ this.upload }
+                                    onChange= { this.save } 
                                 />
                             </div>
                             <div className="el">
                                 <Textfield 
-                                    id="profile-companyRepEmailAddress" 
+                                    id="profile-companyRepEmailAddress-subContractor" 
                                     value={ contactEmail }
                                     label="Email Address"
                                     type="email"
@@ -254,8 +246,8 @@ class CompanyTab extends React.Component {
                                     placeholder="Johndoe@email.com" 
                                     root="inner-textfield" 
                                     fieldClass="textfield"
-                                    upload={ this.upload }
-                                    save={ this.save }  
+                                    onBlur={ this.upload }
+                                    onChange= { this.save }  
                                 />
                             </div>
                             <div className="el">
@@ -268,13 +260,13 @@ class CompanyTab extends React.Component {
                                     disabled = { disabled }
                                     root="inner-textfield" 
                                     fieldClass="textfield"
-                                    upload={ this.upload }
-                                    save={ this.save } 
+                                    onBlur={ this.upload }
+                                    onChange= { this.save } 
                                 />
                             </div>
                             <div className="el">
                                 <Textfield 
-                                    id="profile-companyRepPosition" 
+                                    id="profile-companyRepPosition-subContractor" 
                                     value={ contactPosition }
                                     label="Contact Position"
                                     type="text"
@@ -282,8 +274,8 @@ class CompanyTab extends React.Component {
                                     placeholder="eg. Head of sales" 
                                     root="inner-textfield" 
                                     fieldClass="textfield"
-                                    upload={ this.upload }
-                                    save={ this.save } 
+                                    onBlur={ this.upload }
+                                    onChange= { this.save } 
                                 />
                             </div>
                         </div>

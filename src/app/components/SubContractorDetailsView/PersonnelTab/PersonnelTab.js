@@ -14,23 +14,12 @@ class PersonnelTab extends React.Component {
         super(props)
     }
 
-    upload=(e)=>{
-        e.persist();
-        let { currSub } = this.props,
-        id = e.target.id,
-        value = e.target.getAttribute('value'),
-        origName = e.target.getAttribute("category");
-        id = origName?origName:id;
-        let idArr = id.split("-"),
-        sectTitle = idArr[1],
-        userInfo = currSub;
+    upload=(sectTitle, updateData)=>{
+        let userInfo = {...this.props.currSub};
         return new Promise((resolve, reject)=>{
-
             let userId = userInfo.id,
-            updateData = value?value:currSub[sectTitle],
-            updateInfoUrl = baseURL + userUpdateEndPoint,
-            updateObject = {userId, sectTitle, updateData};
-
+            updateInfoUrl = baseURL + userUpdateEndPoint;
+            let updateObject = {userId, sectTitle, updateData};
             axios.post(updateInfoUrl, updateObject).
             then(res=>{
                 console.log(res);
@@ -46,11 +35,16 @@ class PersonnelTab extends React.Component {
         this.props.dispatch(dispatchedProfileInfo("reset"));
     }
 
+    dummy = ()=>{
+        return new Promise(resolve=>resolve())
+    }
+
     save=(e)=>{
         e.persist();
         let { subContractorsInfo } = this.props;
         return new Promise(resolve=>{
             let userInfo = {...subContractorsInfo},
+            origUser = {...this.props.user},
             id = e.target.id,
             origName = e.target.getAttribute("category");
             origName = origName?origName:id;
@@ -61,7 +55,7 @@ class PersonnelTab extends React.Component {
             userInfo.currentSub[name] = value;
             this.props.dispatch(dispatchedSubContractorsInfo(userInfo));
             if(userInfo)                     
-                resolve(userInfo);
+                resolve(origUser);
             else
                 reject({message: "No data"});
         }); 
@@ -116,7 +110,7 @@ class PersonnelTab extends React.Component {
                     <div className="information">
                         <div className="el">
                             <Textfield 
-                                id="profile-fullName"
+                                id="profile-fullName-subContractor"
                                 label="Full Name"
                                 value={ userName } 
                                 type="text"
@@ -124,13 +118,13 @@ class PersonnelTab extends React.Component {
                                 placeholder="John Doe" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
-                                upload={ this.upload }
-                                save= { this.save } 
+                                onBlur={ this.upload }
+                                onChange= { this.save } 
                             />
                         </div>
                         <div className="el">
                             <Textfield 
-                                id="profile-emailAddress" 
+                                id="profile-emailAddress-subContractor" 
                                 value={ emailAddress }
                                 label="Email Address"
                                 type="email"
@@ -138,8 +132,8 @@ class PersonnelTab extends React.Component {
                                 placeholder="Johndoe@email.com" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
-                                upload={ this.upload }
-                                save= { this.save } 
+                                onBlur={ this.upload }
+                                onChange= { this.save } 
                             />
                         </div>
                         <div className="el">
@@ -152,8 +146,8 @@ class PersonnelTab extends React.Component {
                                 disabled = { disabled }
                                 root="inner-textfield" 
                                 fieldClass="textfield"
-                                upload={ this.upload }
-                                save= { this.save } 
+                                onBlur={ this.upload }
+                                onChange= { this.save } 
                             />
                         </div>
                         <div className="el">
@@ -166,13 +160,13 @@ class PersonnelTab extends React.Component {
                                 root="inner-textfield"
                                 placeholder="(0799) 999 999"
                                 fieldClass="textfield"
-                                upload={ this.upload }
-                                save= { this.save }
+                                onBlur={ this.upload }
+                                onChange= { this.save }
                             />
                         </div>
                         <div className="el">
                             <Textfield 
-                                id="profile-website" 
+                                id="profile-website-subContractor" 
                                 value={ website }
                                 label="Website"
                                 disabled = { disabled }
@@ -180,13 +174,13 @@ class PersonnelTab extends React.Component {
                                 placeholder="www.website.com" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
-                                upload={ this.upload }
-                                save= { this.save }
+                                onBlur={ this.upload }
+                                onChange= { this.save }
                             />
                         </div>
                         <div className="el">
                             <Textfield 
-                                id="profile-companyName"
+                                id="profile-companyName-subContractor"
                                 label="Company Name"
                                 value={ companyName }
                                 disabled = { disabled }
@@ -194,8 +188,8 @@ class PersonnelTab extends React.Component {
                                 placeholder="John Doe" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
-                                upload={ this.upload }
-                                save= { this.save }
+                                onBlur={ this.upload }
+                                onChange= { this.save }
                             />
                         </div>
                     </div>
@@ -205,20 +199,20 @@ class PersonnelTab extends React.Component {
                         <div className="information">
                             <div className="el">
                                 <DropDown 
-                                    upload={ this.upload }
-                                    save={this.save}
+                                    onBlur={ this.upload }
                                     label="State" 
-                                    id="profile-state" 
+                                    id="profile-state-subContractor" 
                                     className="select" 
                                     init={ state } 
                                     width="330px" 
                                     options={ statesAustralia } 
                                     selected={ state } 
+                                    onChange={ this.save } 
                                 />
                             </div>
                             <div className="el">
                                 <Textfield 
-                                    id="profile-city" 
+                                    id="profile-city-subContractor" 
                                     value={ city }
                                     disabled = { disabled }
                                     label="City"
@@ -226,13 +220,13 @@ class PersonnelTab extends React.Component {
                                     placeholder="ie.Your city or suburb" 
                                     root="inner-textfield" 
                                     fieldClass="textfield"
-                                    upload={ this.upload }
-                                    save= { this.save } 
+                                    onBlur={ this.upload }
+                                    onChange= { this.save } 
                                 />
                             </div>
                             <div className="el">
                                 <Textfield 
-                                    id="profile-area" 
+                                    id="profile-area-subContractor" 
                                     value={ area }
                                     label="Area"
                                     type="text"
@@ -240,13 +234,13 @@ class PersonnelTab extends React.Component {
                                     placeholder="ie.Sub-contractors' area" 
                                     root="inner-textfield" 
                                     fieldClass="textfield"
-                                    upload={ this.upload }
-                                    save= { this.save } 
+                                    onBlur={ this.upload }
+                                    onChange= { this.save } 
                                 />
                             </div>
                             <div className="el">
                                 <Textfield 
-                                    id="profile-suburb" 
+                                    id="profile-suburb-subContractor" 
                                     value={ suburb }
                                     label="Suburb"
                                     type="text"
@@ -254,13 +248,13 @@ class PersonnelTab extends React.Component {
                                     placeholder="ie.Sub-contractors' suburb" 
                                     root="inner-textfield" 
                                     fieldClass="textfield"
-                                    upload={ this.upload }
-                                    save= { this.save } 
+                                    onBlur={ this.upload }
+                                    onChange= { this.save } 
                                 />
                             </div>
                             <div className="el">
                                 <Textfield 
-                                    id="profile-street" 
+                                    id="profile-street-subContractor" 
                                     value={ street }
                                     label="Street"
                                     type="text"
@@ -268,8 +262,8 @@ class PersonnelTab extends React.Component {
                                     placeholder="ie.Sub-contractors' suburb" 
                                     root="inner-textfield" 
                                     fieldClass="textfield"
-                                    upload={ this.upload }
-                                    save= { this.save } 
+                                    onBlur={ this.upload }
+                                    onChange= { this.save } 
                                 />
                             </div>
                         </div>

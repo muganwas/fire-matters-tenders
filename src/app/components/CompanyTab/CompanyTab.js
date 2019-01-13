@@ -294,7 +294,7 @@ class CompanyTab extends React.Component{
                         </div>
                         <div className="el">
                             <Textfield 
-                                id="profile-companyStreet"
+                                id="profile-companyPhysicalAddress"
                                 label="Physical Address"
                                 value={ physicalAddress } 
                                 type="text" 

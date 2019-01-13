@@ -16,6 +16,7 @@ userUpdateEndPoint = process.env.SUB_CONTRACTORS_UPDATE_END_POINT;
 
 @connect(store=>{
     return {
+        origUser: store.user.info,
         user: store.subContractors.info,
         subContractorsInfo: store.subContractors.info,
         currSub: store.subContractors.info.currentSub,
@@ -51,6 +52,7 @@ class LicenseTab extends React.Component{
     save=(e)=>{
         return new Promise((resolve, reject)=>{
             let userInfo = {...this.props.user},
+            origUser = {...this.props.origUser},
             id = e.target.id,
             origName = id;
             let nameArr = origName.split("-"),
@@ -61,7 +63,7 @@ class LicenseTab extends React.Component{
             userInfo.currentSub.licenses[key][name] = value;
             this.props.dispatch(dispatchedSubContractorsInfo(userInfo));
             if(userInfo)                     
-                resolve(userInfo);
+                resolve(origUser);
             else
                 reject({message: "No data"});
         });
@@ -205,7 +207,7 @@ class LicenseTab extends React.Component{
 
         if(key !== "other"){
             return(
-                <div key={ key } className="el">
+                <div key={ key } className={ " insurance"}>
                     <div className = { completion }>
                         <ChckBox handleChange={ this.toggleDisplay } dispatcher = { dispatchedSubContractorsInfo } value={ value } id={ key } />
                         <span>{name} <span className="completion">{value?percentage + " completed":null}</span></span>

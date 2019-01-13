@@ -235,6 +235,7 @@ class EquipmentTab extends React.Component{
                                         selectWidth = "240px"
                                         selectWidthAlt = "240px"
                                         dropDownWidth = "260px"
+                                        double = { true }
                                         dropDownWidthAlt = "260px"
                                         categoryTitle = "subEquipmentSelectedCategories"
                                         categoryTitleAlt = "subEquipmentSelectedSubCategories"
