@@ -20,13 +20,6 @@ import contractsReducer from './extras/reducers/contractsReducer';
 
 
 const middleware = applyMiddleware(promise(), thunk, logger);
-const rootReducer = (state, action)=>{
-    if(action.type === "USER_LOGOUT"){
-        return {
-            undefined
-        }
-    }
-}
 const allReducers = combineReducers({
     user: userReducer,
     search: searchReducer,

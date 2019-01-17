@@ -49,12 +49,12 @@ const defaultState = {
               info: action.payload.info
             }
           }
-          case "RESET":{
+          case "USER_LOGOUT":{
             return {...state,
               fetched: true,
               fetching: false,
               error: false,
-              info: defaultState.info
+              info: state.info
             }
           }
           default:

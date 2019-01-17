@@ -288,7 +288,7 @@ class SideBar extends React.Component {
     select = (e)=>{
         let id = e.target.id,
         genInfo = {...this.props.genInfo},
-        sideBarOptions = this.props.genInfo.defaultProps.sideBarOptions;
+        sideBarOptions = {...this.props.genInfo.defaultProps.sideBarOptions};
         id = !id?e.target.getAttribute('name'):id;
         document.getElementById(id).className="selected";
         setTimeout(()=>{

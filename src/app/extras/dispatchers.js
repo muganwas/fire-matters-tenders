@@ -1,12 +1,18 @@
 export function dispatchedUserInfo(userInfo) {
-    if(userInfo !== undefined && userInfo !== null){   
+    if(userInfo !== "logout" && userInfo !== undefined && userInfo !== null){   
       return {
             type: "FETCH_USER_FULFILLED",
             payload: {
                 info: userInfo
             }
         }
-    }else{
+    }else if(userInfo === "logout"){
+        return {
+            type: "USER_LOGOUT",
+            payload: {}
+        }
+    }
+    else{
         return {
             type: "FETCH_USER_REJECTED",
             payload: {
@@ -17,12 +23,17 @@ export function dispatchedUserInfo(userInfo) {
 }
 
 export function dispatchedSearchInfo(searchInfo) {
-    if(searchInfo !== undefined && searchInfo !== null){   
+    if(searchInfo !== "logout" && searchInfo !== undefined && searchInfo !== null){   
       return {
             type: "FETCH_SEARCH_FULFILLED",
             payload: {
                 info: searchInfo
             }
+        }
+    }else if(searchInfo === "logout"){
+        return {
+            type: "USER_LOGOUT",
+            payload: {}
         }
     }else{
         return {
@@ -35,12 +46,17 @@ export function dispatchedSearchInfo(searchInfo) {
 }
 
 export function dispatchedSecondarySearchInfo(searchInfo) {
-    if(searchInfo !== undefined && searchInfo !== null){   
+    if(searchInfo !== "logout" && searchInfo !== undefined && searchInfo !== null){   
       return {
             type: "FETCH_SECONDARY_SEARCH_FULFILLED",
             payload: {
                 info: searchInfo
             }   
+        }
+    }else if(searchInfo === "logout"){
+        return {
+            type: "USER_LOGOUT",
+            payload: {}
         }
     }else{
         return {
@@ -53,12 +69,17 @@ export function dispatchedSecondarySearchInfo(searchInfo) {
 }
 
 export function dispatchedSecondarySelectInfo(selectInfo) {
-    if(selectInfo !== undefined && selectInfo !== null){   
+    if(selectInfo !== "logout" && selectInfo !== undefined && selectInfo !== null){   
       return {
             type: "FETCH_SECONDARY_SELECT_FULFILLED",
             payload: {
                 info: selectInfo
             }   
+        }
+    }else if(selectInfo === "logout"){
+        return {
+            type: "USER_LOGOUT",
+            payload: {}
         }
     }else{
         return {
@@ -71,12 +92,17 @@ export function dispatchedSecondarySelectInfo(selectInfo) {
 }
 
 export function dispatchedTextFieldInfo(Info) {
-    if(Info !== undefined && Info !== null){   
+    if(info !== "logout" && Info !== undefined && Info !== null){   
       return {
             type: "FETCH_TEXFIELD_INFO_FULFILLED",
             payload: {
                 info: Info
             }   
+        }
+    }else if(info === "logout"){
+        return {
+            type: "USER_LOGOUT",
+            payload: {}
         }
     }else{
         return {
@@ -89,12 +115,17 @@ export function dispatchedTextFieldInfo(Info) {
 }
 
 export function dispatchedButtonInfo(Info) {
-    if(Info !== undefined && Info !== null){   
+    if(Info !== "logout" && Info !== undefined && Info !== null){   
       return {
             type: "FETCH_BUTTON_INFO_FULFILLED",
             payload: {
                 info: Info
             }   
+        }
+    }else if(Info === "logout"){
+        return {
+            type: "USER_LOGOUT",
+            payload: {}
         }
     }else{
         return {
@@ -107,16 +138,16 @@ export function dispatchedButtonInfo(Info) {
 }
 
 export function dispatchedProfileInfo(Info) {
-    if(Info !== undefined && Info !== null){   
+    if(Info !== "logout" && Info !== undefined && Info !== null){   
       return {
             type: "FETCH_PROFILE_FULFILLED",
             payload: {
                 info: Info
             }   
         }
-    }else if(info === "reset"){
+    }else if(Info === "logout"){
         return {
-            type: "RESET",
+            type: "USER_LOGOUT",
             payload: {}
         }
     }else{
@@ -130,12 +161,17 @@ export function dispatchedProfileInfo(Info) {
 }
 
 export function dispatchedContractsInfo(Info) {
-    if(Info !== undefined && Info !== null){   
+    if(Info !== "logout" && Info !== undefined && Info !== null){   
       return {
             type: "FETCH_CONTRACTS_FULFILLED",
             payload: {
                 info: Info
             }   
+        }
+    }else if(Info === "logout"){
+        return {
+            type: "USER_LOGOUT",
+            payload: {}
         }
     }else{
         return {
@@ -148,10 +184,15 @@ export function dispatchedContractsInfo(Info) {
 }
 
 export function dispatchedListingsInfo(info) {
-    if(info !== undefined && info !== null){   
+    if(info !== "logout" && info !== undefined && info !== null){   
       return {
             type: "FETCH_LISTINGS_FULFILLED",
             payload: { info }
+        }
+    }else if(info === "logout"){
+        return {
+            type: "USER_LOGOUT",
+            payload: {}
         }
     }else{
         return {
@@ -164,10 +205,15 @@ export function dispatchedListingsInfo(info) {
 }
 
 export function dispatchedServiceProvidersInfo(info) {
-    if(info !== undefined && info !== null){   
+    if(info !== "logou" && info !== undefined && info !== null){   
       return {
             type: "FETCH_SERVICE_PROVIDERS_FULFILLED",
             payload: { info }
+        }
+    }else if(info === "logout"){
+        return {
+            type: "USER_LOGOUT",
+            payload: {}
         }
     }else{
         return {
@@ -180,10 +226,15 @@ export function dispatchedServiceProvidersInfo(info) {
 }
 
 export function dispatchedTendersInfo(info) {
-    if(info !== undefined && info !== null){   
+    if(info !== "logout" && info !== undefined && info !== null){   
       return {
             type: "FETCH_TENDERS_FULFILLED",
             payload: { info }
+        }
+    }else if(info === "logout"){
+        return {
+            type: "USER_LOGOUT",
+            payload: {}
         }
     }else{
         return {
@@ -196,10 +247,15 @@ export function dispatchedTendersInfo(info) {
 }
 
 export function dispatchedSubContractorsInfo(info) {
-    if(info !== undefined && info !== null){   
+    if(info !== "logout" && info !== undefined && info !== null){   
       return {
             type: "FETCH_SUBCONTRACTOR_FULFILLED",
             payload: { info }
+        }
+    }else if(info === "logout"){
+        return {
+            type: "USER_LOGOUT",
+            payload: {}
         }
     }else{
         return {
@@ -212,10 +268,15 @@ export function dispatchedSubContractorsInfo(info) {
 }
 
 export function dispatchedSitesInfo(info) {
-    if(info !== undefined && info !== null){   
+    if(info !== "logout" && info !== undefined && info !== null){   
       return {
             type: "FETCH_SITES_FULFILLED",
             payload: { info }
+        }
+    }else if(info === "logout"){
+        return {
+            type: "USER_LOGOUT",
+            payload: {}
         }
     }else{
         return {
@@ -228,10 +289,15 @@ export function dispatchedSitesInfo(info) {
 }
 
 export function dispatchedMessagesInfo(info) {
-    if(info !== undefined && info !== null){   
+    if(info !== "logout" && info !== undefined && info !== null){   
       return {
             type: "FETCH_MESSAGES_FULFILLED",
             payload: { info }
+        }
+    }else if(info === "logout"){
+        return {
+            type: "USER_LOGOUT",
+            payload: {}
         }
     }else{
         return {
@@ -244,10 +310,15 @@ export function dispatchedMessagesInfo(info) {
 }
 
 export function dispatchedGenInfo(info) {
-    if(info !== undefined && info !== null){   
+    if(info !== "logout" && info !== undefined && info !== null){   
       return {
             type: "FETCH_GEN_FULFILLED",
             payload: { info }
+        }
+    }else if(info === "logout"){
+        return {
+            type: "USER_LOGOUT",
+            payload: {}
         }
     }else{
         return {

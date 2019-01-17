@@ -36,8 +36,8 @@ const defaultState = {
             }
           }
           case "USER_LOGOUT":{
-            return {
-               state
+            return {...state,
+              info: state.info
             }
           }
           default:

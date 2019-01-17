@@ -69,7 +69,49 @@ const defaultState = {
           }
           case "USER_LOGOUT":{
             return {
-               state
+              fetched: true,
+              fetching: false,
+              error: false,
+              info: {
+                menu: "Main-Menu",
+                signupFormLevel: 1,
+                textfieldClass: "textfield",
+                defaultProps:{
+                  sideBarOptions: undefined,
+                  leftMenuClass: "left-menu",
+                  SideBarClass: "side-bar"
+                },
+                sideBar:{
+                  currentTab: "Profile",
+                  currentHorizontalTab: "personnel",
+                  profilePage:{
+                    tabs: {},
+                    listCount: {}
+                  }
+                },
+                errors: {
+                  tmcError: undefined,
+                  phoneNumberError: undefined,
+                  emailFormatError: undefined,
+                  passwordMatchError: undefined,
+                  usernameError: undefined
+                },
+                alternatingNavigation: {
+                  home: "/home",
+                  headerClass: "App-header"
+                },
+                messages: {
+                  messageClass: "postSubmitMessage",
+                },
+                signUpProgressBar: {
+                  oneClass: "one current",
+                  twoClass: "two",
+                  threeClass: "three"
+                },
+                dropDown:{
+                  dropDownClass: "hidden options-list"
+                }
+              }
             }
           }
           default:

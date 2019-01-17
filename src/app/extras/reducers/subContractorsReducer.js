@@ -48,8 +48,11 @@ const defaultState = {
             }
           }
           case "USER_LOGOUT":{
-            return {
-               state
+            return {...state,
+              fetched: true,
+              fetching: false,
+              error: false,
+              info: defaultState.info
             }
           }
           default:

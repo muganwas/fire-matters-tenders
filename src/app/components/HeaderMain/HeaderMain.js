@@ -8,7 +8,10 @@ import {
     dispatchedGenInfo,
     dispatchedSitesInfo, 
     dispatchedTendersInfo,
-    dispatchedListingsInfo
+    dispatchedListingsInfo,
+    dispatchedSubContractorsInfo,
+    dispatchedContractsInfo,
+    dispatchedUserInfo
 } from 'extras/dispatchers';
 import { SearchInput } from 'components';
 import { Lock } from '@material-ui/icons';
@@ -110,9 +113,26 @@ class HeaderMain extends Component {
         info.alternatingNavigation.headerClass = "App-header";
         sessionStorage.removeItem('profileInfo');
         sessionStorage.removeItem('loginSession');
-        this.props.dispatch(dispatchedGenInfo(info));
-        sessionStorage.removeItem('loginSession');
-        this.props.history.push('/login');
+        //this.props.dispatch(dispatchedGenInfo(info));
+        let dispatchers = {
+            dispatchedSearchInfo, 
+            dispatchedGenInfo,
+            dispatchedSitesInfo, 
+            dispatchedTendersInfo,
+            dispatchedContractsInfo,
+            dispatchedSubContractorsInfo,
+            dispatchedListingsInfo,
+            dispatchedUserInfo
+        };
+        Object.keys(dispatchers).map(key=>{
+            setTimeout(()=>{
+                this.props.dispatch(dispatchers[key]('logout'));
+            }, 50);
+        });
+        this.forceUpdate();
+        //this.props.dispatch(dispatchedUserInfo("logout"));
+        //this.props.dispatch(dispatchedGenInfo("logout"));
+        this.props.history.push('/');
     }
 
     socialIcons = 
