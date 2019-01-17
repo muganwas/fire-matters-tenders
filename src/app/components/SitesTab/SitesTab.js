@@ -83,6 +83,12 @@ class SitesTab extends React.Component {
         this.props.dispatch(dispatchedListingsInfo(listingsInfo));               
     }
 
+    renderSitesForm = ()=>{
+        let sitesInfo = {...this.props.sitesInfo};
+        sitesInfo.createSite.show = ! sitesInfo.createSite.show;
+        this.props.dispatch(dispatchedSitesInfo(sitesInfo));               
+    }
+
     checkForErrors(){
         let errored = [];
         return new Promise((resolve, reject)=>{
@@ -177,7 +183,8 @@ class SitesTab extends React.Component {
 
     render(){
         const listingsInfo = {...this.props.listingsInfo},
-        showListingsForm = listingsInfo.createForm.show,
+        sitesInfo = { ...this.props.sitesInfo},
+        showSitesForm = sitesInfo.createSite.show,
         listingAttributes = this.props.siteData,
         errors = listingsInfo.createForm.errors,
         userType = this.props.profileInfo.userType,
@@ -187,7 +194,7 @@ class SitesTab extends React.Component {
         return(
             <div className="tenders main-content">
 
-                {showListingsForm
+                {showSitesForm
                 ?<SitesForm
                     feedback = { feedback }
                     feedbackClass = { feedbackClass }
@@ -195,7 +202,7 @@ class SitesTab extends React.Component {
                     contractStatusOptions = {{inactive: "Not Active", active: "Active"}}
                     styles = { submit_styles }
                     attributes = { listingAttributes } 
-                    close={ this.renderListingForm } 
+                    close={ this.renderSitesForm } 
                     onBlur={ this.dummy } 
                     upload={ this.upload } 
                     save={ this.save } 
@@ -204,7 +211,7 @@ class SitesTab extends React.Component {
                 <div className="title-bar">
                     <span id="title">Sites</span>
                     {userType === "owner_occupier"?<span id="search">
-                        <FmButton variant="contained" onClick={ this.renderListingForm } styles={ styles } text="Register New Site" />
+                        <FmButton variant="contained" onClick={ this.renderSitesForm } styles={ styles } text="Register New Site" />
                         <SearchInput className="alt-search" placeholder="search for your sites" search={ this.searchListings } />
                     </span>:null}
                 </div>

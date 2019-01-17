@@ -10,14 +10,19 @@ const Load = props=>{
   )
 } 
 const FmButton = (props)=>{
-  const { id, inactive, styles, variant, text, onClick, isActive, loaderFill } = props;
+  var { id, inactive, disabled, styles, variant, text, onClick, isActive, loaderFill } = props;
+  const clickButton = (e)=>{
+    e.persist();
+    e.preventDefault();
+  }
+  disabled = disabled?disabled:!isActive;
   return(
     <div>
-      <Button id = { id } disabled={ !isActive } onClick={ onClick } variant={ variant } style={styles.button}>
+      <Button id = { id } disabled={ disabled || !isActive } onClick={ onClick } variant={ variant } style={styles.button}>
         { isActive && !inactive?
-          <span name={ id }>{ text }</span>:
+          <span id={ id } onClick = { clickButton }>{ text }</span>:
           inactive?
-          <span name={ id }>{ text }</span>:
+          <span id={ id } onClick = { clickButton }>{ text }</span>:
           <Load loaderFill={ loaderFill } />
         }
       </Button>

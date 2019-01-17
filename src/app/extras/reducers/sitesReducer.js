@@ -16,6 +16,15 @@ const defaultState = {
       detailsView: {
         show: false
       },
+      createListing:{
+        show: false
+      },
+      createSite:{
+        submitButton: {
+          isActive: true
+        },
+        show: false
+      }
      },
     fetching: false,
     fetched: false,

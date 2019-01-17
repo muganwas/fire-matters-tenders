@@ -72,7 +72,4 @@ submit_styles = {
     information:{
         textAlign: "center"
     },
-    trans: {
-        backgroundColor: "rgba(0,0,0,0.1)"
-    }
 };

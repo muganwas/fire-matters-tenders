@@ -5,18 +5,14 @@ import axios from 'axios';
 import { dispatchedGenInfo, dispatchedTendersInfo, dispatchedListingsInfo, dispatchedUserInfo } from 'extras/dispatchers';
 import './tendersTab.css'
 import { SearchInput, FmButton, ListedPostedTenders} from 'components';
-import { ListingForm } from 'forms';
+//import { ListingForm } from 'forms';
 import {  
-    statesAustralia, 
-    listingCategories, 
-    equipmentCategories,
     detectionAndWarningSystem,
     portableFireFightingEquipment,
     passiveFireProtection,
-    emergencyExitLighting,
-    contractTypes
+    emergencyExitLighting
 } from 'extras/config';
-import { styles, alt_styles, submit_styles } from './styles';
+//import { styles, alt_styles, submit_styles } from './styles';
 
 let baseURL = process.env.BACK_END_URL,
 listingsEndPoint = process.env.LISTING_END_POINT,
@@ -284,17 +280,17 @@ class TendersTab extends React.Component {
 
 
     render(){
-        const listingsInfo = this.props.listingsInfo,
-        showListingsForm = listingsInfo.createForm.show,
-        listingAttributes = this.props.user.createListing,
-        errors = listingsInfo.createForm.errors,
-        userType = this.props.profileInfo.userType,
-        feedback = listingAttributes.feedback,
-        feedbackClass = listingAttributes.feedbackClass,
-        equipment = { detectionAndWarningSystem, portableFireFightingEquipment, passiveFireProtection, emergencyExitLighting };
+        //const listingsInfo = this.props.listingsInfo,
+        //showListingsForm = listingsInfo.createForm.show,
+        //listingAttributes = this.props.user.createListing,
+       // errors = listingsInfo.createForm.errors,
+        const userType = this.props.profileInfo.userType;
+        //feedback = listingAttributes.feedback,
+        //feedbackClass = listingAttributes.feedbackClass,
+        //equipment = { detectionAndWarningSystem, portableFireFightingEquipment, passiveFireProtection, emergencyExitLighting };
         return(
             <div className="tenders main-content">
-                {showListingsForm
+                {/*showListingsForm
                 ?<ListingForm
                     feedback = { feedback }
                     feedbackClass = { feedbackClass }
@@ -311,12 +307,12 @@ class TendersTab extends React.Component {
                     upload={ this.upload } 
                     save={ this.save } 
                 />
-                :null}
+                :null*/}
                 <div className="title-bar">
                     <span id="title">{userType === "service_provider"?"Tenders":"Listings"}</span>
                     {userType === "owner_occupier"?<span id="search">
-                        <FmButton variant="contained" styles={ alt_styles } text="Rehire service provider" />
-                        <FmButton variant="contained" onClick={ this.renderListingForm } styles={ styles } text="Post New Listing" />
+                        { /*<FmButton variant="contained" styles={ alt_styles } text="Rehire service provider" />
+                        <FmButton variant="contained" onClick={ this.renderListingForm } styles={ styles } text="Post New Listing" />*/ }
                         <SearchInput className="alt-search" placeholder="search for your listings" search={ this.searchListings } />
                     </span>:null}
                 </div>

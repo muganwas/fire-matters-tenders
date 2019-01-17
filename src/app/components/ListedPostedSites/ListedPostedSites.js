@@ -2,15 +2,26 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import  { Loader, MoreHoriz, FmButton } from 'components';
 import axios from 'axios';
-import { dispatchedListingsInfo, dispatchedUserInfo, dispatchedSitesInfo } from 'extras/dispatchers';
-import { ListedPostedSiteDetails } from 'components';
+import { dispatchedListingsInfo, dispatchedUserInfo, dispatchedSitesInfo, ListedPostedSiteDetails } from 'extras/dispatchers';
+import { ListingForm } from 'forms';
 import './listedPostedSites.css';
 import { PropTypes } from 'prop-types';
 import { listedPostedSitesOptions } from 'extras/config';
-import { alt_styles, alt_styles_neg } from './styles';
+import { styles, submit_styles, alt_styles, alt_styles_neg } from './styles';
+import {
+    statesAustralia, 
+    listingCategories, 
+    equipmentCategories,
+    detectionAndWarningSystem,
+    portableFireFightingEquipment,
+    passiveFireProtection,
+    emergencyExitLighting,
+    contractTypes
+} from 'extras/config';
 
 const baseURL = process.env.BACK_END_URL,
 siteRemovalEndPoint = process.env.SITE_REMOVAL_END_POINT,
+siteUpdateEndPoint = process.env.SITE_UPDATE_END_POINT,
 tenderEndPoint = process.env.TENDERS_END_POINT;
 
 @connect((store)=>{
@@ -65,7 +76,7 @@ class ListedPostedTenders extends Component {
         
         if(id !== "close"){
             let currSite = sitesInfo.sites[id];
-            sitesInfo.activeSite = currSite;
+            sitesInfo.activeSite = currSite; 
         }
         this.props.dispatch(dispatchedSitesInfo(sitesInfo));
         this.forceUpdate();
@@ -196,10 +207,126 @@ class ListedPostedTenders extends Component {
         }); 
     }
 
+    createListing=e=>{
+        e.persist();
+        let id = e.target.id,
+        sitesInfo = { ...this.props.sitesInfo},
+        sites = sitesInfo.sites,
+        URL = baseURL + siteUpdateEndPoint,
+        currListed;
+        Object.keys(sites).map(key=>{
+            let currId = sites[key].id;
+            if(currId === id){
+                currListed = sites[key].listed;
+            }
+        });
+
+        let listed = !currListed;
+
+        if(id){ 
+            sitesInfo.createListing[id + 'isActive'] = false;
+            this.props.dispatch(dispatchedSitesInfo(sitesInfo));
+            axios.post(URL, {sectTitle: "listed", siteId: id, updateData: listed }).then(res=>{
+                console.log(res.data);
+                sitesInfo.createListing[id + 'isActive'] = true;
+                this.props.dispatch(dispatchedSitesInfo(sitesInfo));
+                this.forceUpdate();
+            });
+        }
+        
+        /*let listingsData = {...this.props.listingsData},
+        userInfo = {...this.props.user.info},
+        companyName = listingsData.listingCompanyName,
+        state = listingsData.listingState,
+        city = listingsData.listingCity,
+        serviceRequired = listingsData.listingCategory,
+        otherServiceType = listingsData.listingCategoryOther,
+        equipmentType = listingsData.listingEquipmentCategory,
+        equipment = listingsData.listingEquipment,
+        equipmentQuantity = listingsData.listingEquipmentQuantity,
+        contractType = listingsData.listingContractType,
+        startDate = listingsData.listingStartDate,
+        userEmail = this.props.profileInfo.emailAddress,
+        postInfoUrl = baseURL + listingsEndPoint;
+        serviceRequired = serviceRequired === "Other"?otherServiceType:serviceRequired;
+
+        let postObject = {
+            userEmail,
+            companyName, 
+            state, 
+            city, 
+            serviceRequired, 
+            equipmentType, 
+            equipment, 
+            equipmentQuantity, 
+            contractType, 
+            startDate
+        };
+        this.checkForErrors().then(res=>{
+            console.log(serviceRequired)
+            console.log(res)
+            if(serviceRequired &&  res <= 1){
+                userInfo.createListing.submitButton.isActive = false;
+                this.props.dispatch(dispatchedUserInfo(userInfo));
+                axios.post(postInfoUrl, postObject).
+                then(res=>{
+                    userInfo.createListing.submitButton.isActive = true;
+                    userInfo.createListing.feedback = "Your listing was posted successfully";
+                    userInfo.createListing.feedbackClass="success";
+                    this.props.dispatch(dispatchedUserInfo(userInfo));
+                    this.forceUpdate();
+                    console.log(res);
+                }).
+                catch(err=>{
+                    userInfo.createListing.submitButton.isActive = true;
+                    userInfo.createListing.feedback = "Something went wrong, try again later.";
+                    userInfo.createListing.feedbackClass="error-feedback";
+                    this.props.dispatch(dispatchedUserInfo(userInfo));
+                    this.forceUpdate();
+                    console.log(err);
+                });
+            }else if(!serviceRequired &&  res === 0){
+                userInfo.createListing.submitButton.isActive = false;
+                this.props.dispatch(dispatchedUserInfo(userInfo));
+                axios.post(postInfoUrl, postObject).
+                then(res=>{
+                    userInfo.createListing.submitButton.isActive = true;
+                    userInfo.createListing.feedback = "Your listing was posted successfully.";
+                    userInfo.createListing.feedbackClass="success";
+                    this.props.dispatch(dispatchedUserInfo(userInfo));
+                    this.forceUpdate();
+                    console.log(res);
+                }).
+                catch(err=>{
+                    userInfo.createListing.submitButton.isActive = true;
+                    userInfo.createListing.feedbackClass="error-feedback";
+                    userInfo.createListing.feedback = "Something went wrong, try again later.";
+                    this.props.dispatch(dispatchedUserInfo(userInfo));
+                    this.forceUpdate();
+                    console.log(err);
+                });
+            }
+        });*/
+    };
+
+    renderListingForm = ()=>{
+        let listingsInfo = {...this.props.listingsInfo};
+        listingsInfo.createForm.show = !listingsInfo.createForm.show;
+        this.props.dispatch(dispatchedListingsInfo(listingsInfo));               
+    }
+
+    dummy= ()=>{
+        return Promise.resolve("Nassing");
+    }
+
     displaySites = (key)=>{
         let sitesInfo = {...this.props.sitesInfo},
         sites = {...sitesInfo.sites},
+        isActive = sitesInfo.createListing[sites[key].id + 'isActive'] === undefined?true:
+        sitesInfo.createListing[sites[key].id + 'isActive']?true:false,
         showDetailsView = sitesInfo.detailsView.show,
+        listed = sites[key].listed,
+        createListingButtonText = listed?"Unbulish Listing":"Publish Listing",
         options = listedPostedSitesOptions;
         return(
             <div className="list-row" key={key}>
@@ -217,10 +344,20 @@ class ListedPostedTenders extends Component {
                     :null
                 }
 
-                <div className="twenty">{ sites[key].siteName }</div>
-                <div className="thirty">{ sites[key].siteLocation }</div>
+                <div className="ten">{ sites[key].siteName }</div>
+                <div className="twenty">{ sites[key].siteLocation }</div>
                 <div className="twenty">{ sites[key].currentContractor }</div>
                 <div className="twenty">{ sites[key].contractStatus }</div>
+                <div className="twenty">
+                    <FmButton 
+                        variant="contained" 
+                        id={sites[key].id}
+                        isActive = { isActive }
+                        onClick={ this.createListing } 
+                        styles={ styles }
+                        text={ createListingButtonText } 
+                    />
+                </div>
                 <div className="ten">
                     <MoreHoriz 
                         className={ sites[key].moreMenuClassName } 
@@ -237,13 +374,62 @@ class ListedPostedTenders extends Component {
         )
     }
 
+    save=(e)=>{
+        e.persist();
+        return new Promise((resolve, reject)=>{
+            let userInfo = {...this.props.user},
+            id = e.target.id,
+            type = e.target.getAttribute('type'),
+            origName = e.target.getAttribute("category");
+            console.log(type)
+            origName = origName?origName:id;
+            let nameArr = origName.split("-"),
+            name = nameArr[1],
+            value = e.target.getAttribute('value');
+            value = value?value:e.target.value;
+            userInfo.createListing[name] = value;
+            userInfo.createListing[name + "_key"] = id;
+            if(userInfo){
+                resolve(userInfo);
+            }                        
+            else
+                reject({message: "No data"});
+        });
+    };
+
     render(){
         let sitesInfo = {...this.props.sitesInfo},
+        listingsInfo = {...this.props.listingsInfo},
+        showListingsForm = listingsInfo.createForm.show,
         sites = sitesInfo.sites,
         isActive = sitesInfo.forRemoval.confirmButton.isActive,
-        removeDialog = sitesInfo.forRemoval.confirmationDialog;
+        removeDialog = sitesInfo.forRemoval.confirmationDialog,
+        listingAttributes = this.props.user.info.createListing,
+        errors = listingsInfo.createForm.errors,
+        feedback = listingAttributes.feedback,
+        feedbackClass = listingAttributes.feedbackClass,
+        equipment = { detectionAndWarningSystem, portableFireFightingEquipment, passiveFireProtection, emergencyExitLighting };
+
         return(
             <div className="list left hanad">
+                {showListingsForm
+                    ?<ListingForm
+                        feedback = { feedback }
+                        feedbackClass = { feedbackClass }
+                        errors = { errors }
+                        contractTypes = { contractTypes }
+                        equipmentCollection = { equipment }
+                        listingCategories = { listingCategories }
+                        equipCategories = { equipmentCategories }
+                        styles = { submit_styles }
+                        states= { statesAustralia } 
+                        attributes = { listingAttributes } 
+                        close={ this.renderListingForm } 
+                        onBlur={ this.dummy } 
+                        upload={ this.createListing } 
+                        save={ this.save } 
+                    />
+                :null}
                 {   removeDialog
                     ?<div className="subcontractors-container">
                         <div className="sub-container dialog">
@@ -269,10 +455,11 @@ class ListedPostedTenders extends Component {
                     :null
                 }
                 <div className="list-row header">
-                    <span className="twenty">Site Name</span>
-                    <span className="thirty">Location</span>
+                    <span className="ten">Site Name</span>
+                    <span className="twenty">Location</span>
                     <span className="twenty">Current Contractor</span>
                     <span className="twenty">Contract Status</span>
+                    <span className="twenty"></span>
                     <span className="ten"></span>
                     <div className="bottom-border"></div>
                 </div>
