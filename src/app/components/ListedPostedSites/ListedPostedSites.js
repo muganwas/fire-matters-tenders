@@ -2,26 +2,21 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import  { Loader, MoreHoriz, FmButton } from 'components';
 import axios from 'axios';
-import { dispatchedListingsInfo, dispatchedUserInfo, dispatchedSitesInfo, ListedPostedSiteDetails } from 'extras/dispatchers';
-import { ListingForm } from 'forms';
+import { 
+    dispatchedListingsInfo,
+    dispatchedUserInfo,
+    dispatchedSitesInfo
+} from 'extras/dispatchers';
+import ListedPostedSiteDetails from './ListedPostedSiteDetails';
 import './listedPostedSites.css';
 import { PropTypes } from 'prop-types';
 import { listedPostedSitesOptions } from 'extras/config';
 import { styles, submit_styles, alt_styles, alt_styles_neg } from './styles';
-import {
-    statesAustralia, 
-    listingCategories, 
-    equipmentCategories,
-    detectionAndWarningSystem,
-    portableFireFightingEquipment,
-    passiveFireProtection,
-    emergencyExitLighting,
-    contractTypes
-} from 'extras/config';
 
 const baseURL = process.env.BACK_END_URL,
 siteRemovalEndPoint = process.env.SITE_REMOVAL_END_POINT,
 siteUpdateEndPoint = process.env.SITE_UPDATE_END_POINT,
+listingsEndPoint = process.env.LISTING_END_POINT,
 tenderEndPoint = process.env.TENDERS_END_POINT;
 
 @connect((store)=>{
@@ -36,7 +31,7 @@ tenderEndPoint = process.env.TENDERS_END_POINT;
         sitesInfo: store.sites.info
     }
 })
-class ListedPostedTenders extends Component {
+class ListedPostedSites extends Component {
     constructor(props){
         super(props)
     }
@@ -54,23 +49,9 @@ class ListedPostedTenders extends Component {
         });
     }
 
-    renderTenderForm = (e)=>{
-        let id = e.target.id;
-        let name = e.target.getAttribute('name');
-        id = !id?name:id;
-        let listingsInfo = {...this.props.listingsInfo};
-        listingsInfo.tenderForm.show = !listingsInfo.tenderForm.show;
-        this.postListingId(id).then(res=>{
-            if(res === "id posted")
-                this.props.dispatch(dispatchedListingsInfo(listingsInfo));
-            else
-                console.log('There was a troblem posting listing id');
-        })  
-    }
-
     renderSiteDetails = (e) =>{
         e.persist();
-        let sitesInfo = this.props.sitesInfo,
+        let sitesInfo = {...this.props.sitesInfo},
         id = e.target.id;
         sitesInfo.detailsView.show = !sitesInfo.detailsView.show;
         
@@ -169,21 +150,12 @@ class ListedPostedTenders extends Component {
         });
     };
 
-    displayTenders = (e)=>{
-        let tenderId = e.target.id;
-        let listingsInfo = {...this.props.listingsInfo},
-        show = listingsInfo.postedTenders.overLay.show;
-        listingsInfo.postedTenders.overLay.show = !show;
-        listingsInfo.postedTenders.overLay.active = tenderId;
-        this.props.dispatch(dispatchedListingsInfo(listingsInfo));
-    }
-
     renderConfirmationDialogue = (e)=>{
         let sitesInfo = {...this.props.sitesInfo},
         sites = {...sitesInfo.sites};
         sitesInfo.forRemoval.confirmationDialog = !sitesInfo.forRemoval.confirmationDialog;
-
-        if(e){
+        console.log(e.target.id)
+        if(e.target && e.target.id !== "no"){
             let id = e.target.id,
             siteId = sites[id].id;
             sitesInfo.forRemoval.siteId = siteId;
@@ -207,35 +179,9 @@ class ListedPostedTenders extends Component {
         }); 
     }
 
-    createListing=e=>{
-        e.persist();
-        let id = e.target.id,
-        sitesInfo = { ...this.props.sitesInfo},
-        sites = sitesInfo.sites,
-        URL = baseURL + siteUpdateEndPoint,
-        currListed;
-        Object.keys(sites).map(key=>{
-            let currId = sites[key].id;
-            if(currId === id){
-                currListed = sites[key].listed;
-            }
-        });
-
-        let listed = !currListed;
-
-        if(id){ 
-            sitesInfo.createListing[id + 'isActive'] = false;
-            this.props.dispatch(dispatchedSitesInfo(sitesInfo));
-            axios.post(URL, {sectTitle: "listed", siteId: id, updateData: listed }).then(res=>{
-                console.log(res.data);
-                sitesInfo.createListing[id + 'isActive'] = true;
-                this.props.dispatch(dispatchedSitesInfo(sitesInfo));
-                this.forceUpdate();
-            });
-        }
-        
-        /*let listingsData = {...this.props.listingsData},
-        userInfo = {...this.props.user.info},
+    postListingData = ()=>{
+        let listingsData = {...this.props.listingsData},
+        userInfo = {...this.props.user},
         companyName = listingsData.listingCompanyName,
         state = listingsData.listingState,
         city = listingsData.listingCity,
@@ -306,7 +252,35 @@ class ListedPostedTenders extends Component {
                     console.log(err);
                 });
             }
-        });*/
+        });
+    }
+
+    createListing=e=>{
+        e.persist();
+        let id = e.target.id,
+        sitesInfo = { ...this.props.sitesInfo},
+        sites = sitesInfo.sites,
+        URL = baseURL + siteUpdateEndPoint,
+        currListed;
+        Object.keys(sites).map(key=>{
+            let currId = sites[key].id;
+            if(currId === id){
+                currListed = sites[key].listed;
+            }
+        });
+
+        let listed = !currListed;
+
+        if(id){ 
+            sitesInfo.createListing[id + 'isActive'] = false;
+            this.props.dispatch(dispatchedSitesInfo(sitesInfo));
+            axios.post(URL, {sectTitle: "listed", siteId: id, updateData: listed }).then(res=>{
+                console.log(res.data);
+                sitesInfo.createListing[id + 'isActive'] = true;
+                this.props.dispatch(dispatchedSitesInfo(sitesInfo));
+                this.forceUpdate();
+            });
+        }
     };
 
     renderListingForm = ()=>{
@@ -328,9 +302,11 @@ class ListedPostedTenders extends Component {
         listed = sites[key].listed,
         createListingButtonText = listed?"Unbulish Listing":"Publish Listing",
         options = listedPostedSitesOptions;
+
         return(
             <div className="list-row" key={key}>
-                {showDetailsView
+                {
+                    showDetailsView
                     ?<div className="subcontractors-container">
                         <span 
                             className="close right" 
@@ -399,37 +375,12 @@ class ListedPostedTenders extends Component {
 
     render(){
         let sitesInfo = {...this.props.sitesInfo},
-        listingsInfo = {...this.props.listingsInfo},
-        showListingsForm = listingsInfo.createForm.show,
         sites = sitesInfo.sites,
         isActive = sitesInfo.forRemoval.confirmButton.isActive,
-        removeDialog = sitesInfo.forRemoval.confirmationDialog,
-        listingAttributes = this.props.user.info.createListing,
-        errors = listingsInfo.createForm.errors,
-        feedback = listingAttributes.feedback,
-        feedbackClass = listingAttributes.feedbackClass,
-        equipment = { detectionAndWarningSystem, portableFireFightingEquipment, passiveFireProtection, emergencyExitLighting };
+        removeDialog = sitesInfo.forRemoval.confirmationDialog;
 
         return(
             <div className="list left hanad">
-                {showListingsForm
-                    ?<ListingForm
-                        feedback = { feedback }
-                        feedbackClass = { feedbackClass }
-                        errors = { errors }
-                        contractTypes = { contractTypes }
-                        equipmentCollection = { equipment }
-                        listingCategories = { listingCategories }
-                        equipCategories = { equipmentCategories }
-                        styles = { submit_styles }
-                        states= { statesAustralia } 
-                        attributes = { listingAttributes } 
-                        close={ this.renderListingForm } 
-                        onBlur={ this.dummy } 
-                        upload={ this.createListing } 
-                        save={ this.save } 
-                    />
-                :null}
                 {   removeDialog
                     ?<div className="subcontractors-container">
                         <div className="sub-container dialog">
@@ -469,16 +420,16 @@ class ListedPostedTenders extends Component {
     }
 }
 
-ListedPostedTenders.defaultProps = {
+ListedPostedSites.defaultProps = {
     user: {},
     search: {},
     genInfo: {}
 }
 
-ListedPostedTenders.PropTypes = {
+ListedPostedSites.PropTypes = {
     user: PropTypes.object.isRequired,
     search: PropTypes.object.isRequired,
     genInfo: PropTypes.object.isRequired
 }
 
-export default ListedPostedTenders;
+export default ListedPostedSites;

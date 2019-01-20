@@ -554,6 +554,7 @@ class ListedPostedTenders extends Component {
         errors = messagesInfo.messageForm.errors,
         feedback = messageAttributes.feedback,
         feedbackClass = messageAttributes.feedbackClass;
+        
         return(
             <div className="list left hanad">
                 {   

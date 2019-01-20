@@ -280,7 +280,7 @@ class PersonnelTab extends React.Component{
                                     onChange = { save }  
                                 />
                             </div>
-                            {userType === "service_provider"?
+                            
                             <div>
                             <div className="el">
                                 <Textfield 
@@ -324,7 +324,7 @@ class PersonnelTab extends React.Component{
                                     onChange = { save }  
                                 />
                             </div>
-                            </div>:null}
+                            </div>
                         </div>
                     </div>
                     {userType === "service_provider"?

@@ -22,16 +22,38 @@ class SecondarySelect extends Component {
     }
 
     render(){
-        let selected = this.props.secondarySelect[this.props.categoryTitle],
+        let secondarySelect = {...this.props.secondarySelect},
+        selected = this.props.secondarySelect[this.props.categoryTitle],
         selectedAlt = this.props.secondarySelect[this.props.categoryTitleAlt],
+        selectedArr = secondarySelect.selectedOptions,
+        selectedArrLength = selectedArr.length,
+        selectedEquip = {},
         selectedKey ="";
+
+        for(let count = 0; count < selectedArrLength; count++ ){
+            Object.keys(selectedArr[count]).map(key=>{
+                selectedEquip[selectedArr[count][key]] = selectedArr[count][key];                        
+            });
+        }
 
         Object.keys(this.props.categories).map(key=>{
             if(this.props.categories[key] === selected)
                 selectedKey = key;
-        }); 
+        });
         
-        let secondaryOptions = this.props.categoriesFull[selectedKey];
+        let secondaryOptions = {...this.props.categoriesFull[selectedKey]};
+        if(secondaryOptions){
+            Object.keys(secondaryOptions).map(key=>{
+                let currOption = key;
+                Object.keys(selectedEquip).map(key1=>{
+                    let currSelectedEquip = selectedEquip[key1];
+                    if(currOption === currSelectedEquip){
+                        delete secondaryOptions[key];
+                    }
+                });
+
+            });
+        }
         
         return(
             <div className={ this.props.double?"secondary-select search-main":"secondary-selectAlt search-main"}>

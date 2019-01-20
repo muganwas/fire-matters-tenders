@@ -146,6 +146,9 @@ class CompanyTab extends React.Component{
         website = companyInformation.companyWebsite,
         state = companyInformation.companyState,
         city = companyInformation.companyCity,
+        area = companyInformation.companyArea,
+        suburb = companyInformation.companySuburb,
+        street = companyInformation.companyStreet,
         physicalAddress = companyInformation.companyPhysicalAddress,
         postCode = companyInformation.companyPostCode,
         acn_abn = companyInformation.company_acn_abn,
@@ -281,10 +284,10 @@ class CompanyTab extends React.Component{
                         <div className="el">
                             <Textfield 
                                 id="profile-companyCity"
-                                label="City/Suburb"
+                                label="City"
                                 value={ city } 
                                 type="text" 
-                                placeholder="City/Suburb"
+                                placeholder="Fill in city name"
                                 disabled = { disabled }
                                 root="inner-textfield" 
                                 fieldClass="textfield"
@@ -294,11 +297,39 @@ class CompanyTab extends React.Component{
                         </div>
                         <div className="el">
                             <Textfield 
-                                id="profile-companyPhysicalAddress"
-                                label="Physical Address"
-                                value={ physicalAddress } 
+                                id="profile-companyArea"
+                                label="Area"
+                                value={ area } 
                                 type="text" 
-                                placeholder="Street Address"
+                                placeholder="Fill in area name"
+                                disabled = { disabled } 
+                                root="inner-textfield" 
+                                fieldClass="textfield"
+                                onBlur={ upload }
+                                onChange = { save }  
+                            />
+                        </div>
+                        <div className="el">
+                            <Textfield 
+                                id="profile-companySuburb"
+                                label="Suburb"
+                                value={ suburb } 
+                                type="text" 
+                                placeholder="Fill in suburb name"
+                                disabled = { disabled } 
+                                root="inner-textfield" 
+                                fieldClass="textfield"
+                                onBlur={ upload }
+                                onChange = { save }  
+                            />
+                        </div>
+                        <div className="el">
+                            <Textfield 
+                                id="profile-companyStreet"
+                                label="Street"
+                                value={ street } 
+                                type="text" 
+                                placeholder="Fill in street name"
                                 disabled = { disabled } 
                                 root="inner-textfield" 
                                 fieldClass="textfield"

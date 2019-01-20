@@ -10,14 +10,9 @@ import {
 import './sitesTab.css';
 import { SearchInput, FmButton, ListedPostedSites } from 'components';
 import { SitesForm } from 'forms';
-/*import {  
-    equipmentCategories,
-    equipmentCategoriesFull,
-    detectionAndWarningSystems,
-    portableEquipment,
-    passiveProtection,
-    emergencyExitLighting,
-} from 'extras/config';*/
+import {  
+    statesAustralia
+} from 'extras/config';
 import  { styles, submit_styles } from './styles';
 
 
@@ -199,6 +194,7 @@ class SitesTab extends React.Component {
                     feedback = { feedback }
                     feedbackClass = { feedbackClass }
                     errors = { errors }
+                    states = {statesAustralia}
                     contractStatusOptions = {{inactive: "Not Active", active: "Active"}}
                     styles = { submit_styles }
                     attributes = { listingAttributes } 

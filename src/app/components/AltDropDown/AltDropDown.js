@@ -33,11 +33,36 @@ class AltDropDown extends React.Component {
     afterSelect = (e)=>{
         e.persist();
         this.props.onChange(e).then(res=>{
+            let id = e.target.id,
+            altId = this.props.id;
+            console.log(altId);
             this.props.dispatch(this.props.dispatcher(res));
-            this.toggleDisplayDropDown().
-            then(()=>{
-                let id = e.target.id,
-                origName = e.target.getAttribute("category");
+            if(altId === "mainCategories"){
+                this.toggleDisplayDropDown().
+                then(()=>{
+                    let origName = e.target.getAttribute("category");
+                    origName = origName?origName:id;
+                    let nameArr = origName.split("-"),
+                    name = nameArr[1],
+                    value = e.target.getAttribute('value');
+                    let dbValue = sessionStorage.getItem('profileInfo')?(JSON.parse(sessionStorage.getItem('profileInfo')))[name]:null;
+                    //update fiel in db
+                    if(dbValue !== value && this.props.onBlur){
+                        this.props.onBlur(origName, value).
+                        then(res=>{
+                            if(res)
+                                console.log(name + " updated");
+                        }).
+                        catch(err=>{
+                            console.log(err)
+                        });
+                    }
+                }).
+                catch(err=>{
+                    console.log(err)
+                });
+            }else{
+                let origName = e.target.getAttribute("category");
                 origName = origName?origName:id;
                 let nameArr = origName.split("-"),
                 name = nameArr[1],
@@ -54,10 +79,7 @@ class AltDropDown extends React.Component {
                         console.log(err)
                     });
                 }
-            }).
-            catch(err=>{
-                console.log(err)
-            });
+            }
         }).
         catch(error=>{
             console.log(error);
@@ -67,22 +89,18 @@ class AltDropDown extends React.Component {
 
     mapOptions = (key)=>{
         let options = this.props.options;
-        if(options[key] === this.props.selected)
-            return;
-        else{
-            return(   
-                <span 
-                    onClick={ this.afterSelect } 
-                    category={ this.props.id } 
-                    className="option" 
-                    id={ key } 
-                    key={ key } 
-                    value={options[key]}
-                >
-                {options[key]}
-                </span>   
-            )
-        }
+        return(   
+            <span 
+                onClick={ this.afterSelect } 
+                category={ this.props.id } 
+                className="option" 
+                id={ key } 
+                key={ key } 
+                value={options[key]}
+            >
+            {options[key]}
+            </span>   
+        )
     }
 
     toggleDisplayDropDown = ()=>{

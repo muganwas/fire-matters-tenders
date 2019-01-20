@@ -523,8 +523,6 @@ class ListedPostedSiteDetails extends React.Component {
             </div>
         )
     }
-    
-
 }
 
 ListedPostedSiteDetails.defaultProps = {
