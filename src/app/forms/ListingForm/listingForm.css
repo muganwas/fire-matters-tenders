@@ -17,6 +17,13 @@
     font-weight: bold;
     border-bottom: 2px solid #F79A50; 
 }
+.listing-form-container .headerAlt{
+    display: block;
+    text-align: left;
+    padding: 10px;
+    color: #000;
+    font-weight: bold;
+}
 .listing-form-container #header-text{
     display: inline-block;
     margin: 20px 20px 0;

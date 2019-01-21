@@ -1,0 +1,8 @@
+.middle-lineAlt{
+    box-sizing: border-box;
+    display: inline-block;
+    height: 2px;
+    margin-bottom: 5px;
+    background-color: #F79A50;
+    width: 40%;
+}

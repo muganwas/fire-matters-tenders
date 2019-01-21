@@ -35,6 +35,12 @@ const defaultState = {
         twoClass: "two",
         threeClass: "three"
       },
+      createSiteProgress: {
+        createSiteFormLevel: 1,
+        oneClass: "one current",
+        twoClass: "two",
+        threeClass: "three"
+      },
       dropDown:{
         dropDownClass: "hidden options-list"
       }

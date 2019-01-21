@@ -178,8 +178,9 @@ class ListedServiceProviders extends Component {
             keyWords = (keyWords).toLowerCase();
             let filteredLen = Object.keys(filtered).length;
             filtered = filteredLen > 0?filtered:serviceProviders;
+            console.log(serviceProviders)
             Object.keys(filtered).map(key=>{
-                if(serviceProviders[key].companyName){
+                if(serviceProviders[key].companyName && serviceProviders[key].fullName){
                     let companyName = (serviceProviders[key].companyName).toLowerCase(),
                     fullName = (serviceProviders[key].fullName).toLowerCase(),
                     city = (serviceProviders[key].city).toLowerCase();
