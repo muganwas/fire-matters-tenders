@@ -176,9 +176,8 @@ export const portableFireFightingEquipment = {
 }
 
 export const passiveFireProtection = {
-    fireDoorsCA: "Fire Doors",
-    servicePenetrations: "Service Penetrations",
-    totalPassiveFireProtection: "PassiveFire Protection"
+    fireDoors: "Fire Doors",
+    servicePenetrations: "Service Penetrations"
 }
 
 export const emergencyExitLighting = {

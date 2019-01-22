@@ -69,6 +69,10 @@ submit_styles = {
         display: "inline-block",
         margin: "0 20%"
     },
+    elAlt: {
+        display: "inline-block",
+        textAlign: "center"
+    },
     information:{
         textAlign: "center"
     },

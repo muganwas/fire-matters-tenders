@@ -12,22 +12,24 @@ import {
 
 const baseURL = process.env.BACK_END_URL,
 userUpdateEndPoint = process.env.SITE_UPDATE_END_POINT;
-
+ 
 const RenderEquipment = props => {
     let { currCat, onClose, id, onIncrease, onDecrease, currSite } = props;
     return (
         <div>{
             Object.keys(currCat).map(key=>{
-                let currCount = currCat.equipCount[key],
-                postedClass = currSite.postedClass,
-                currExClass = postedClass?
-                postedClass[id]?
-                postedClass[id][key]:
-                undefined:
-                undefined,
-                equipCountContainerClass = currExClass?"equipCount " + currExClass:"equipCount",
-                properName = equipmentCategoriesFull[id][key];
-                if(currCat[key] === true){
+                if(currCat[key] === true && key !== "equipCount"){
+                    let currCount = currCat.equipCount[key],
+                    postedClass = currSite.postedClass,
+                    currExClass = postedClass?
+                    postedClass[id]?
+                    postedClass[id][key]:
+                    undefined:
+                    undefined,
+                    equipCountContainerClass = currExClass?"equipCount " + currExClass:"equipCount",
+                    properName = equipmentCategoriesFull[id][key];
+                    console.log(key)
+                    console.log(id)
                     return (
                         <div key={key}>
                             <div className="equipListed">
@@ -272,16 +274,32 @@ class ListedPostedSiteDetails extends React.Component {
         let { currSite } = this.props,
         { siteName, siteLocation, currentContractor, contractStatus, equipment } = currSite,
         detectionCount = [],
+        specialCount = [],
         portableCount = [],
         passiveCount = [],
+        mechanicalCount = [],
         emergencyCount = [],
         sitesInfo = {...this.props.sitesInfo},
         {
             detectionAndWarningSystem,
             portableFireFightingEquipment,
             passiveFireProtection,
-            emergencyExitLighting
+            emergencyExitLighting,
+            specialHazard,
+            mechanicalEquipment
         } = equipment;
+
+        Object.keys(specialHazard).map(key=>{
+            if(specialHazard[key]){
+                specialCount.push(key);
+            }
+        });
+
+        Object.keys(mechanicalEquipment).map(key=>{
+            if(mechanicalEquipment[key]){
+                mechanicalCount.push(key);
+            }
+        });
 
         Object.keys(detectionAndWarningSystem).map(key=>{
             if(detectionAndWarningSystem[key]){
@@ -321,7 +339,7 @@ class ListedPostedSiteDetails extends React.Component {
                                 value={ siteName }
                                 label="Site Name"
                                 type="text" 
-                                placeholder="Input site name" 
+                                placeholder="Input site name"
                                 root="inner-textfield" 
                                 fieldClass="textfield"
                                 upload={ this.upload }
@@ -395,6 +413,62 @@ class ListedPostedSiteDetails extends React.Component {
                                         onDecrease={ this.onDecrease } 
                                         id="detectionAndWarningSystem" 
                                         currCat={detectionAndWarningSystem}
+                                        currSite={this.props.currSite}
+                                        onClose={ this.removeSubCategory } 
+                                    />
+                                </div>
+                            </div>
+                            :null}
+                            {mechanicalCount.length>1
+                            ?<div className="subCategories">
+                                <h3>Mechanical Equipment</h3>
+                                <div className="body">
+                                    <div className="equip-title-bar">
+                                        <div className="equipListed">
+                                            Equipment
+                                            <span className="equipCount title">
+                                                <span className="countAlter">
+                                                    <span className="decriment"></span>
+                                                    <span className="countDigit">Quantity</span>
+                                                    <span  className="increment"></span>
+                                                </span>
+                                            </span>
+                                        </div>
+                                        <div className="clear"></div>
+                                    </div>
+                                    <RenderEquipment 
+                                        onIncrease={ this.onIncrease } 
+                                        onDecrease={ this.onDecrease } 
+                                        id="mechanicalEquipment" 
+                                        currCat={ mechanicalEquipment }
+                                        currSite={this.props.currSite}
+                                        onClose={ this.removeSubCategory } 
+                                    />
+                                </div>
+                            </div>
+                            :null}
+                            {specialCount.length>1
+                            ?<div className="subCategories">
+                                <h3>Special Hazard</h3>
+                                <div className="body">
+                                    <div className="equip-title-bar">
+                                        <div className="equipListed">
+                                            Equipment
+                                            <span className="equipCount title">
+                                                <span className="countAlter">
+                                                    <span className="decriment"></span>
+                                                    <span className="countDigit">Quantity</span>
+                                                    <span  className="increment"></span>
+                                                </span>
+                                            </span>
+                                        </div>
+                                        <div className="clear"></div>
+                                    </div>
+                                    <RenderEquipment 
+                                        onIncrease={ this.onIncrease } 
+                                        onDecrease={ this.onDecrease } 
+                                        id="specialHazard" 
+                                        currCat={ specialHazard }
                                         currSite={this.props.currSite}
                                         onClose={ this.removeSubCategory } 
                                     />

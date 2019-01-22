@@ -1,33 +1,48 @@
 import React from 'react';
-import { TickBox, TextSpace, Textfield, DropDown, UserPhoneNumber, FmButton } from 'components'; 
+import { TickBox, TextSpace, Textfield, DropDown, SecondarySelect, FmButton } from 'components'; 
 import { Link } from 'react-router-dom';
-import { dispatchedUserInfo } from 'extras/dispatchers';
+import { dispatchedUserInfo, dispatchedSecondarySelectInfo } from 'extras/dispatchers';
 import { Info } from '@material-ui/icons';
+import { equipmentCategories, equipmentCategoriesFull } from 'extras/config';
 import PropTypes from 'prop-types';
 
-const styles = {
-    button: {
-      margin: 2,
-      padding: '3px 10px',
-      fontSize: 14,
-      width: "300px",
-      backgroundColor: "#ED2431",
-      color: "#fff",
-      fontWeight: "bold",
-      '&:hover': {
-        background: '#ED2431',
-        boxShadow: '1px 2px 4px #BC2902',
-        transition: 'all 0.2s ease-in'
-      }
-    }
-},
-mandatoryInput = "This field is mandatory.";
+const mandatoryInput = "This field is mandatory.";
 
 export const AddressInformation = props=>{
-    const { nextView, styles, states, attributes, onBlur, save, upload, errors, isActive } = props,
-    { siteName, siteState } = attributes;
+    const { 
+        nextView, 
+        styles, 
+        states, 
+        attributes, 
+        onBlur, 
+        onChange, 
+        errors, 
+        isActive 
+    } = props,
+    { 
+        siteName, 
+        siteState, 
+        siteCity, 
+        siteArea, 
+        siteSuburb, 
+        siteStreet 
+    } = attributes;
     return(
         <div>
+            <div className="el" style={ styles.el }>
+                <Textfield 
+                    id="sites-siteName"
+                    label="Site Name"
+                    value={ siteName } 
+                    type="text" 
+                    placeholder="Sites' name" 
+                    root="inner-textfield" 
+                    fieldClass="textfield"
+                    upload = { onBlur }
+                    onChange = { onChange } 
+                />
+                { errors.siteName?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
+            </div>
             <div className="el" style={ styles.el }>
                 <DropDown 
                     id="sites-siteState"
@@ -38,23 +53,65 @@ export const AddressInformation = props=>{
                     options={ states } 
                     selected={ siteState }
                     onBlur = { onBlur } 
-                    onChange={ save }
+                    onChange={ onChange }
                 />
-                { errors.siteContractStatus?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
+                { errors.siteState?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
             </div>
             <div className="el" style={ styles.el }>
                 <Textfield 
-                    id="sites-siteName"
-                    label="Site Name"
-                    value={ siteName } 
+                    id="sites-siteCity"
+                    label="Site City"
+                    value={ siteCity } 
                     type="text" 
-                    placeholder="Your buildings name" 
+                    placeholder="City where site is located" 
                     root="inner-textfield" 
                     fieldClass="textfield"
                     onBlur = { onBlur }
-                    onChange = { save } 
+                    onChange = { onChange } 
                 />
-                { errors.siteName?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
+                { errors.siteCity?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
+            </div>
+            <div className="el" style={ styles.el }>
+                <Textfield 
+                    id="sites-siteArea"
+                    label="Site Area"
+                    value={ siteArea } 
+                    type="text" 
+                    placeholder="Area where site is located" 
+                    root="inner-textfield" 
+                    fieldClass="textfield"
+                    onBlur = { onBlur }
+                    onChange = { onChange } 
+                />
+                { errors.siteArea?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
+            </div>
+            <div className="el" style={ styles.el }>
+                <Textfield 
+                    id="sites-siteSuburb"
+                    label="Site Suburb"
+                    value={ siteSuburb } 
+                    type="text" 
+                    placeholder="Suburb where site is located" 
+                    root="inner-textfield" 
+                    fieldClass="textfield"
+                    onBlur = { onBlur }
+                    onChange = { onChange } 
+                />
+                { errors.siteSuburb?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
+            </div>
+            <div className="el" style={ styles.el }>
+                <Textfield 
+                    id="sites-siteStreet"
+                    label="Site Street"
+                    value={ siteStreet } 
+                    type="text" 
+                    placeholder="Street where site is located" 
+                    root="inner-textfield" 
+                    fieldClass="textfield"
+                    onBlur = { onBlur }
+                    onChange = { onChange } 
+                />
+                { errors.siteStreet?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
             </div>
             <div className="el" style={ styles.el }>
                 <FmButton
@@ -78,76 +135,67 @@ AddressInformation.propTypes = {
 }
 
 export const EquipmentInformation = props=>{
-    const { setError, 
-        genInfo, 
-        phoneNumberError, 
-        emailFormatError, 
-        passwordError, 
-        passwordMatchError, 
-        tmcError, 
-        toAddress, 
-        userInfo, 
-        signup, 
-        isActive,
-        postSubmitMessage, 
-        messageClass,
-        mobileNumberError } = props;
+    const { 
+        nextView, 
+        styles, 
+        states, 
+        attributes, 
+        onBlur, 
+        save, 
+        upload, 
+        errors, 
+        isActive, 
+        addEquipment, 
+        getCategory, 
+        getCategoryAlt 
+    } = props;
     return(
-        <div className = "basic-information">
-            { postSubmitMessage?<span className={ messageClass }> <Info className="icon" /> { postSubmitMessage } </span>: null }
-            {/*<div className="inputRow">
-                <TextSpace onBlur={ setError } id="fullName" value={ userInfo.fullName } adornment="person" type="text" placeholder="Full Name" fieldClass={ genInfo.fullNameClass || genInfo.textfieldClass } />
+        <div>
+            <div className="el" style={ styles.elAlt }>
+                <SecondarySelect 
+                    categories = { equipmentCategories }
+                    categoriesFull = { equipmentCategoriesFull }
+                    selectWidth = "240px"
+                    selectWidthAlt = "240px"
+                    double = { true }
+                    dropDownWidth = "255px"
+                    dropDownWidthAlt = "255px"
+                    categoryTitle = "searchEquipmentSelectedCategories"
+                    categoryTitleAlt = "searchEquipmentSelectedSubCategories"
+                    onChange = { getCategory }
+                    onChangeAlt = { getCategoryAlt }
+                    dispatcher = { dispatchedSecondarySelectInfo }
+                    dispatcherAlt =  { dispatchedSecondarySelectInfo }
+                    
+                />
             </div>
-            <div className="inputRow">
-                <TextSpace onBlur={ setError } id="companyName" value={ userInfo.companyName} adornment="company" type="text" placeholder="Company Name" fieldClass = { genInfo.companyNameClass || genInfo.textfieldClass } />
+            <div className="el" style={ styles.el }>
+                <FmButton 
+                    id="addCategory" 
+                    text="Add" 
+                    onClick = { addEquipment } 
+                    isActive = { isActive }  
+                    styles={ styles }
+                    variant = "contained"
+                />
             </div>
-            <div className="inputRow">
-                <UserPhoneNumber onBlur={ setError } id="phoneNumber" value={ userInfo.phoneNumber } mask= {['(', [0], /\d/,')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]} placeholder="Phone Number" fieldClass={ genInfo.phoneNumberClass || genInfo.textfieldClass } />
-                { phoneNumberError?<span className="error-feedback">{ phoneNumberError }</span>:null }
-            </div>
-            <div className="inputRow">
-                <UserPhoneNumber onBlur={ setError } id="mobileNumber" value={ userInfo.mobileNumber } mask={['(', [0], /\d/, /\d/, /\d/,')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/,]} placeholder="Mobile Number" fieldClass={ genInfo.mobileNumberClass || genInfo.textfieldClass } />
-                { mobileNumberError?<span className="error-feedback">{ mobileNumberError }</span>:null }
-            </div>*/}
-            <div className="inputRow">
-                <TextSpace onBlur={ setError } id="emailAddress" value={ userInfo.emailAddress } adornment="email" type="email" placeholder="example@email.com" fieldClass={ genInfo.emailAddressClass || genInfo.textfieldClass } />
-                { emailFormatError?<span className="error-feedback">{ emailFormatError }</span>:null }
-            </div> 
-            <div className="inputRow">
-                <TextSpace onBlur={ setError } id = "password" value={ userInfo.password } type="password" adornment="lock" placeholder="Password" fieldClass={ genInfo.passwordClass || genInfo.textfieldClass } />
-                { passwordError?<span className="error-feedback">{ passwordError }</span>:null }
-            </div>
-            <div className="inputRow">
-                <TextSpace onBlur={ setError } id = "passwordConfirm" value={ userInfo.passwordConfirm } type="password" adornment="lock" placeholder="Confirm password" fieldClass={ genInfo.passwordConfirmClass || genInfo.textfieldClass } />
-                { passwordMatchError?<span className="error-feedback">{ passwordMatchError }</span>:null }
-            </div>
-            <div className="inputRow">
-                <TickBox dispatcher = { dispatchedUserInfo } value={ userInfo.termsAndConditions} placement={ userInfo } id="termsAndConditions" /><span>I accept the <Link to={`/`}>Terms and Conditions</Link></span>
-                { tmcError?<span className="error-feedback">{ tmcError }</span>:null }
-            </div>
-            <div className="inputRow">
-                <FmButton isActive={ isActive } variant="contained" onClick={ signup } styles = { styles } text="Sign Up" /> 
+            <div className="el" style={ styles.el }>
+                <FmButton
+                    loaderFill = "#fff" 
+                    variant="contained" 
+                    styles = { styles } 
+                    text="Next"
+                    onClick = { nextView } 
+                />
             </div>
         </div>
     ) 
 }
 
-EquipmentInformation.defaultProps = {
-    genInfo: {},
-    userInfo: {}
-}
-
 EquipmentInformation.propTypes = {
-    setError: PropTypes.func,
-    genInfo: PropTypes.object.isRequired,
-    phoneNumberError: PropTypes.string,
-    emailFormatError: PropTypes.string,
-    passwordMatchError: PropTypes.string,
-    tmcError: PropTypes.string,
-    signup: PropTypes.func.isRequired,
-    signupbutton: PropTypes.object,
-    userInfo: PropTypes.object,
-    mobileNumberError: PropTypes.string
+    nextView: PropTypes.func,
+    getCategory: PropTypes.func,
+    getCategoryAlt: PropTypes.func,
 }
 
 export const ContractInformation = props=>{

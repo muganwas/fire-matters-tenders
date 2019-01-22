@@ -20,6 +20,9 @@ const defaultState = {
         show: false
       },
       createSite:{
+        addEquipmentButton: {
+          isActive: true
+        },
         submitButton: {
           isActive: true
         },

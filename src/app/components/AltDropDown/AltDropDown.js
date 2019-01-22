@@ -123,7 +123,7 @@ class AltDropDown extends React.Component {
         selected = this.props.selected,
         newClassLabel = id + "dropDownClass";
         return(
-            <div>
+            <div className="txt-left">
                 { this.props.label?<span className="label">{ this.props.label }</span>: null }
                 <div style={{width:this.props.selectWidth}} className={ this.props.className }>
                     <span id={ this.props.id } onClick = { this.toggleDisplayDropDown } className="options-selected">{ options[selected] || this.props.init }</span>
