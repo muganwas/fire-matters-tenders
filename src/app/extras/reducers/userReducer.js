@@ -40,10 +40,19 @@ const defaultState = {
         }
       },
       submitSite: {
-        siteName: null,
-        siteLocation: null,
-        currentContractor: null,
-        siteContractStatus: null,
+        errors: {},
+        siteDits: {
+          siteName: null,
+          siteState: null,
+          siteCity: null,
+          siteArea: null,
+          siteSuburb: null,
+          siteStreet: null,
+          siteEquipment: null,
+          siteContact:null,
+          offerValidity: null,
+          contractPeriod: null,
+        },
         feedback: undefined,
         feedbackClass: "hidden",
         submitButton: {

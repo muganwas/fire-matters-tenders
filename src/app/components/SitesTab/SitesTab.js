@@ -22,8 +22,10 @@ sitesEndPoint = process.env.SITES_END_POINT;
 @connect((store)=>{
     return {
         user: store.user.info,
-        siteData: store.user.info.submitSite,
+        siteData: store.user.info.submitSite.siteDits,
         profileInfo: store.user.info.profileInfo,
+        equipment: store.user.info.profileInfo.equipment,
+        secondarySelect: store.secondarySelect.info,
         search: store.search,
         genInfo: store.genInfo.info,
         listingsInfo: store.listingsInfo.info,
@@ -85,20 +87,10 @@ class SitesTab extends React.Component {
     }
 
     checkForErrors(){
-        let errored = [];
-        return new Promise((resolve, reject)=>{
-            let siteData = {...this.props.siteData},
-            listingsInfo = {...this.props.listingsInfo};
-            Object.keys(siteData).map(key=>{
-                if(!siteData[key] && key !== "feedback" && key !== "feedbackClass" && key !== "submitButton"){
-                    listingsInfo.createForm.errors[key] = true;
-                    errored.push(listingsInfo.createForm.errors[key]);
-                }else if(siteData[key] && key !== "feedback" && key !== "feedbackClass" && key !== "submitButton"){
-                    listingsInfo.createForm.errors[key] = null;
-                }
-            });
-            this.props.dispatch(dispatchedListingsInfo(listingsInfo));
-            let errCount = errored.length;
+        return new Promise((resolve)=>{
+            let userInfo = {...this.props.user},
+            errors = userInfo.submitSite.errors,
+            errCount = Object.keys(errors).length;          
             resolve(errCount);
         }); 
     }
@@ -106,28 +98,56 @@ class SitesTab extends React.Component {
     upload=()=>{
         let siteData = {...this.props.siteData},
         userInfo = {...this.props.user},
-        siteOwner = this.props.profileInfo.emailAddress,
-        siteName = siteData.siteName,
-        siteLocation = siteData.siteLocation,
-        currentContractor = siteData.currentContractor,
-        siteContractStatus = siteData.siteContractStatus,
-        postInfoUrl = baseURL + sitesEndPoint;
+        origEquipment = {...this.props.equipment},
+        selectedEquip = {...this.props.user.submitSite.selectedEquip},
+        postInfoUrl = baseURL + sitesEndPoint,
+        siteOwner = JSON.parse(sessionStorage.getItem('profileInfo')).emailAddress,
+        siteName = siteData.siteName, 
+        siteState = siteData.siteState, 
+        siteCity = siteData.siteCity, 
+        siteArea = siteData.siteArea,
+        siteSuburb = siteData.siteSuburb,
+        siteStreet = siteData.siteStreet,
+        siteContact = siteData.siteContact,
+        offerValidity = siteData.offerValidity,
+        contractPeriod = siteData.contractPeriod;
+
+        Object.keys(origEquipment).map(key=>{
+            let currCat = origEquipment[key];
+            Object.keys(currCat).map(key1=>{
+                Object.keys(selectedEquip).map(key2=>{
+                    if(key1 === key2){
+                        origEquipment[key][key2] = true;
+                    }
+                })
+            })
+        });
+        
+        console.log(origEquipment);
 
         let postObject = {
             siteOwner,
             siteName, 
-            siteLocation, 
-            currentContractor, 
-            siteContractStatus
+            siteState, 
+            siteCity,  
+            siteArea, 
+            siteSuburb,
+            siteStreet,
+            siteContact,
+            offerValidity,
+            contractPeriod,
+            equipment: origEquipment
         };
+
+        console.log(postObject)
         this.checkForErrors().then(res=>{
             if(res === 0){
                 userInfo.submitSite.submitButton.isActive = false;
                 this.props.dispatch(dispatchedUserInfo(userInfo));
-                axios.post(postInfoUrl, postObject).
+                axios.post(postInfoUrl, { submitData: postObject }).
                 then(res=>{
                     userInfo.submitSite.submitButton.isActive = true;
-                    userInfo.submitSite.feedback = "Your Site was posted successfully.";
+                    userInfo.submitSite.feedback = "Site posted successfully!";
                     userInfo.submitSite.feedbackClass="success";
                     this.props.dispatch(dispatchedUserInfo(userInfo));
                     this.forceUpdate();
@@ -162,8 +182,8 @@ class SitesTab extends React.Component {
             name = nameArr[1],
             value = e.target.getAttribute('value');
             value = value?value:e.target.value;
-            userInfo.submitSite[name] = value;
-            userInfo.submitSite[name + "_key"] = id;
+            userInfo.submitSite.siteDits[name] = value;
+            userInfo.submitSite.siteDits[name + "_key"] = id;
             if(userInfo){
                 resolve(userInfo);
             }                        
@@ -177,14 +197,14 @@ class SitesTab extends React.Component {
     }
 
     render(){
-        const listingsInfo = {...this.props.listingsInfo},
+        const submitSite = {...this.props.user.submitSite},
         sitesInfo = { ...this.props.sitesInfo},
         showSitesForm = sitesInfo.createSite.show,
         listingAttributes = this.props.siteData,
-        errors = listingsInfo.createForm.errors,
+        errors = {...this.props.user.submitSite.errors},
         userType = this.props.profileInfo.userType,
-        feedback = listingAttributes.feedback,
-        feedbackClass = listingAttributes.feedbackClass;
+        feedback = submitSite.feedback,
+        feedbackClass = submitSite.feedbackClass;
        
         return(
             <div className="tenders main-content">
@@ -198,7 +218,8 @@ class SitesTab extends React.Component {
                     contractStatusOptions = {{inactive: "Not Active", active: "Active"}}
                     styles = { submit_styles }
                     attributes = { listingAttributes } 
-                    close={ this.renderSitesForm } 
+                    close={ this.renderSitesForm }
+                    submitButton = { this.props.user.submitSite.submitButton }
                     onBlur={ this.dummy } 
                     upload={ this.upload } 
                     save={ this.save } 

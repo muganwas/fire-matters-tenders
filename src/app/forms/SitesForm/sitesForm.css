@@ -6,3 +6,11 @@
     background-color: #F79A50;
     width: 40%;
 }
+.equipment .site.subCategories{
+    display: inline-block!important;
+    border-radius: 0px!important;
+    width: 500px!important;
+}
+.equipment .site.subCategories h4{
+    border-radius: 0px!important;
+}

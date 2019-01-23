@@ -1,8 +1,6 @@
 import React from 'react';
-import { TickBox, TextSpace, Textfield, DropDown, SecondarySelect, FmButton } from 'components'; 
-import { Link } from 'react-router-dom';
-import { dispatchedUserInfo, dispatchedSecondarySelectInfo } from 'extras/dispatchers';
-import { Info } from '@material-ui/icons';
+import { Textfield, DropDown, SecondarySelect, FmButton } from 'components'; 
+import { dispatchedSecondarySelectInfo } from 'extras/dispatchers';
 import { equipmentCategories, equipmentCategoriesFull } from 'extras/config';
 import PropTypes from 'prop-types';
 
@@ -52,8 +50,8 @@ export const AddressInformation = props=>{
                     width="330px" 
                     options={ states } 
                     selected={ siteState }
-                    onBlur = { onBlur } 
-                    onChange={ onChange }
+                    upload = { onBlur } 
+                    save={ onChange }
                 />
                 { errors.siteState?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
             </div>
@@ -66,7 +64,7 @@ export const AddressInformation = props=>{
                     placeholder="City where site is located" 
                     root="inner-textfield" 
                     fieldClass="textfield"
-                    onBlur = { onBlur }
+                    upload = { onBlur }
                     onChange = { onChange } 
                 />
                 { errors.siteCity?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
@@ -80,7 +78,7 @@ export const AddressInformation = props=>{
                     placeholder="Area where site is located" 
                     root="inner-textfield" 
                     fieldClass="textfield"
-                    onBlur = { onBlur }
+                    upload = { onBlur }
                     onChange = { onChange } 
                 />
                 { errors.siteArea?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
@@ -94,7 +92,7 @@ export const AddressInformation = props=>{
                     placeholder="Suburb where site is located" 
                     root="inner-textfield" 
                     fieldClass="textfield"
-                    onBlur = { onBlur }
+                    upload = { onBlur }
                     onChange = { onChange } 
                 />
                 { errors.siteSuburb?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
@@ -108,7 +106,7 @@ export const AddressInformation = props=>{
                     placeholder="Street where site is located" 
                     root="inner-textfield" 
                     fieldClass="textfield"
-                    onBlur = { onBlur }
+                    upload = { onBlur }
                     onChange = { onChange } 
                 />
                 { errors.siteStreet?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
@@ -135,22 +133,48 @@ AddressInformation.propTypes = {
 }
 
 export const EquipmentInformation = props=>{
-    const { 
+    var { 
         nextView, 
-        styles, 
-        states, 
-        attributes, 
-        onBlur, 
-        save, 
-        upload, 
-        errors, 
-        isActive, 
-        addEquipment, 
+        styles,
+        removeSelectedEquipment,
+        secondarySelect,
         getCategory, 
         getCategoryAlt 
-    } = props;
+    } = props,
+    selectedArr = secondarySelect.selectedOptions;
     return(
         <div>
+            <div className="equipment">
+                <div className="add">
+                    { selectedArr.length > 0?<div className="site subCategories">
+                        <h4>Selected Equipment</h4>
+                        <div className="body">
+                            { Object.keys(selectedArr).map(key=>{
+                                let selectedArr = secondarySelect.selectedOptions,
+                                selected = selectedArr[key];
+                                return(
+                                    <div key={key}>
+                                        { Object.keys(selected).map(key1=>{
+                                            return (
+                                                <div key={key1}>
+                                                    { equipmentCategoriesFull[key1][selected[key1]] }
+                                                    <span 
+                                                        className="close right" 
+                                                        pos={ key }  
+                                                        onClick={ removeSelectedEquipment } 
+                                                        id="close"
+                                                    >
+                                                        &#x2716;
+                                                    </span>
+                                                </div>
+                                            )
+                                        }) }
+                                    </div>
+                                )
+                            }) }
+                        </div>
+                    </div>: null }
+                </div>
             <div className="el" style={ styles.elAlt }>
                 <SecondarySelect 
                     categories = { equipmentCategories }
@@ -170,16 +194,6 @@ export const EquipmentInformation = props=>{
                 />
             </div>
             <div className="el" style={ styles.el }>
-                <FmButton 
-                    id="addCategory" 
-                    text="Add" 
-                    onClick = { addEquipment } 
-                    isActive = { isActive }  
-                    styles={ styles }
-                    variant = "contained"
-                />
-            </div>
-            <div className="el" style={ styles.el }>
                 <FmButton
                     loaderFill = "#fff" 
                     variant="contained" 
@@ -189,6 +203,7 @@ export const EquipmentInformation = props=>{
                 />
             </div>
         </div>
+    </div>
     ) 
 }
 
@@ -199,19 +214,88 @@ EquipmentInformation.propTypes = {
 }
 
 export const ContractInformation = props=>{
-    const { nextView } = props;
+    const { 
+        styles, 
+        attributes, 
+        onBlur, 
+        save, 
+        upload,
+        feedback,
+        isActive,
+        errors 
+    } = props,
+    {
+        contractPeriod, 
+        offerValidity, 
+        siteContact 
+    } = attributes;
     return(
-        <div className="pre-signup">
-            <div id="service_provider" onClick = { nextView } className="service-provider">I'm a Service Provider</div>
-            <div id="owner_occupier" onClick = { nextView } className="owner-occupier">I'm an Owner/Occupier</div>
+        <div>
+            <div className="el" style={ styles.el }>
+                <Textfield 
+                    id="sites-siteContact"
+                    label="Site Contact"
+                    value={ siteContact } 
+                    type="text"
+                    multiline
+                    placeholder= "Site contact" 
+                    root="inner-textfield" 
+                    fieldClass="textfield"
+                    upload = { onBlur }
+                    onChange = { save } 
+                />
+                { errors.siteContact?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
+            </div>
+            <div className="el" style={ styles.el }>
+                <Textfield 
+                    id="sites-offerValidity"
+                    label="Offer Validity(Days)"
+                    value={ offerValidity } 
+                    type="number" 
+                    placeholder="Offer validity" 
+                    root="inner-textfield" 
+                    fieldClass="textfield"
+                    upload = { onBlur }
+                    onChange = { save } 
+                />
+                { errors.offerValidity?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
+            </div>
+            <div className="el" style={ styles.el }>
+                <Textfield 
+                    id="sites-contractPeriod"
+                    label="Contract Period(Years)"
+                    value={ contractPeriod } 
+                    type="number"
+                    placeholder="Period of contract duration" 
+                    root="inner-textfield" 
+                    fieldClass="textfield"
+                    upload = { onBlur }
+                    onChange = { save } 
+                />
+                { errors.contractPeriod?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
+            </div>
+            <div className="el" style={ styles.el }>
+                <FmButton
+                    loaderFill = "#fff" 
+                    variant="contained" 
+                    styles = { styles } 
+                    text={ feedback?feedback:"Register Site" }
+                    isActive = { isActive }
+                    onClick = { upload } 
+                />
+            </div>
         </div>
     )
 }
 
 ContractInformation.defaultProps = {
-    nextView: null
+    upload: null,
+    attributes: {}
 }
 
 ContractInformation.propTypes = {
-    nextView: PropTypes.func.isRequired
+    upload: PropTypes.func.isRequired,
+    attributes: PropTypes.object,
+    onBlur: PropTypes.func,
+    save: PropTypes.func
 }

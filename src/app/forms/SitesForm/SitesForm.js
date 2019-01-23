@@ -4,19 +4,21 @@ import PropTypes from 'prop-types';
 import { 
     dispatchedGenInfo, 
     dispatchedSitesInfo, 
-    dispatchedUserInfo 
+    dispatchedUserInfo,
+    dispatchedSecondarySelectInfo
 } from 'extras/dispatchers';
 import './sitesForm.css';
 import { submit_styles } from './styles';
 import { AddressInformation, EquipmentInformation, ContractInformation } from './SitesFormViews';
-import { equipmentCategories, equipmentCategoriesFull } from 'extras/config';
-import { statesAustralia } from 'extras/config';
+import { equipmentCategories, equipmentCategoriesFull, statesAustralia} from 'extras/config';
 
 @connect(store=>{
     return {
         user: store.user.info,
         userInfo: store.user.info,
         listingsInfo: store.listingsInfo.info,
+        secondarySelect: store.secondarySelect.info,
+        equipment: store.user.info.profileInfo.equipment,
         genInfo: store.genInfo.info,
         sitesInfo: store.sites.info
     }
@@ -68,7 +70,8 @@ class SitesForm extends React.Component{
             selectInfo[categoryTitleKey] = id;
             selectInfo[categoryTitleAlt] = null;
             selectInfo[categoryTitleAltKey] = null;
-            selectInfo.selectedOptions = [];
+            /*Theres no need to reset selectedOptions*/
+            //selectInfo.selectedOptions = [];
             resolve(selectInfo);
         });
     }
@@ -152,14 +155,64 @@ class SitesForm extends React.Component{
 
     inputValidate = (e)=>{
         return new Promise((resolve)=>{
-            let id = e.target.id,
-            
-            value = e.target.value;
-            value = value?value: e.target.getAttribute('value');
-            if(value.length>0){
-                console.log("there")
+            let genInfo = {...this.props.genInfo},
+            userInfo = {...this.props.user},
+            level = genInfo.createSiteProgress.createSiteFormLevel,
+            siteDits = userInfo.submitSite.siteDits,
+            errors = userInfo.submitSite.errors;
+            if(e){
+                let id = e.target.getAttribute('category');
+                id = id?id:e.target.id;
+                let sIdArr = id.split("-"),
+                value = e.target.value;
+                value = value?value: e.target.getAttribute('value');
+                let sId = sIdArr[1]?sIdArr[1]:sIdArr[0];
+                console.log(value)
+                console.log(sId)
+                if(!value || value.length === 0)
+                    errors[sId] = true;
+                else
+                    delete errors[sId];
+
+                this.props.dispatch(dispatchedUserInfo(userInfo));
+                this.forceUpdate();
+                resolve("one checked");
+            }else{
+                let addressFields = [
+                    "siteName", 
+                    "siteState", 
+                    "siteCity", 
+                    "siteArea",
+                    "siteSuburb",
+                    "siteStreet"
+                ],
+                contractInfoFields = [
+                    "siteContact",
+                    "offerValidity",
+                    "contractPeriod"
+                ];
+                if(level === 1){
+                    Object.keys(addressFields).map(key=>{
+                        let currDit = siteDits[addressFields[key]];
+                        if(!currDit){
+                            errors[addressFields[key]] = true;
+                        }else
+                            delete errors[addressFields[key]];
+                    });
+                    this.props.dispatch(dispatchedUserInfo(userInfo));
+                }
+                else if(level === 3){
+                    Object.keys(contractInfoFields).map(key=>{
+                        let currDit = siteDits[contractInfoFields[key]];
+                        if(!currDit){
+                            errors[contractInfoFields[key]] = true;
+                        }else
+                            delete errors[contractInfoFields[key]];
+                    });
+                    this.props.dispatch(dispatchedUserInfo(userInfo));
+                }
+                resolve("all checked");
             }
-            resolve("all checked");
         });
     }
 
@@ -167,27 +220,41 @@ class SitesForm extends React.Component{
         return new Promise((resolve, reject)=>{
             let id = e.target.id,
             info = {...this.props.genInfo},
-            level = info.createSiteProgress.createSiteFormLevel,
-            first = info.createSiteProgress.oneClass,
-            second = info.createSiteProgress.twoClass,
-            third = info.createSiteProgress.threetwoClass,
-            newLevel = level+1;
-            info.createSiteProgress.createSiteFormLevel = newLevel;
+            selectedEquip = this.props.secondarySelect.selectedOptions,
+            selectedEquipObj= {},
+            userInfo = {...this.props.userInfo},
+            errors = userInfo.submitSite.errors,
+            level = info.createSiteProgress.createSiteFormLevel;
+
+            for(let count =0; count < selectedEquip.length; count++){
+                Object.keys(selectedEquip[count]).map(key=>{
+                      selectedEquipObj[selectedEquip[count][key]] = selectedEquip[count][key];
+                });
+            }
+
+            userInfo.submitSite.selectedEquip = {...selectedEquipObj};
             if(level === 1){
-                info.signUpProgressBar.twoClass = second + " current";
-                info.signUpProgressBar.oneClass = "one";
-                info.signUpProgressBar.threeClass = "three";
+                this.inputValidate().then(res=>{
+                    if(res === "all checked"){
+                        let presErrorsCount = Object.keys(errors).length;
+                        if(presErrorsCount === 0){
+                            let newLevel = level+1;
+                            info.createSiteProgress.createSiteFormLevel = newLevel;
+                            info.createSiteProgress.twoClass = "two current";
+                            this.props.dispatch(dispatchedGenInfo(info));
+                            this.forceUpdate();
+                        }
+                    }
+                });
             }
             else if(level === 2){
-                info.signUpProgressBar.threeClass = third + " current";
-                info.signUpProgressBar.twoClass = "two";
-                info.signUpProgressBar.oneClass = "one";
-            }else{
-                info.signUpProgressBar.threeClass = "three";
-                info.signUpProgressBar.twoClass = "two";
-                info.signUpProgressBar.oneClass = first + " current";
+                let newLevel = level+1;
+                info.createSiteProgress.createSiteFormLevel = newLevel;
+                info.createSiteProgress.threeClass = "three current";
+                this.props.dispatch(dispatchedUserInfo(userInfo));
+                this.props.dispatch(dispatchedGenInfo(info));
+                this.forceUpdate();
             }
-            this.props.dispatch(dispatchedGenInfo(info));
             resolve("pre-signup props set");
         });
     }
@@ -211,11 +278,10 @@ class SitesForm extends React.Component{
             close, 
             attributes,
             upload, 
-            save, 
-            contractStatusOptions, 
-            onBlur,  
+            save,  
             errors,
             genInfo,
+            submitButton,
             sitesInfo
         } = this.props,
         { 
@@ -223,16 +289,16 @@ class SitesForm extends React.Component{
             siteState,
             siteCity,
             siteArea,
-            siteStreet, 
-            currentContractor, 
-            siteContractStatus, 
-            submitButton 
+            siteSuburb,
+            siteStreet,
+            siteContact,
+            offerValidity,
+            contractPeriod
         } = attributes,
         first = genInfo.createSiteProgress.oneClass,
         second = genInfo.createSiteProgress.twoClass,
         third = genInfo.createSiteProgress.threeClass,
         level = genInfo.createSiteProgress.createSiteFormLevel,
-        mandatoryInput = "This field is mandatory.",   
         isActive = submitButton.isActive,
         addEquipmentButton =  sitesInfo.createSite.addEquipmentButton.isActive;
         
@@ -261,19 +327,35 @@ class SitesForm extends React.Component{
                                 onBlur = { this.inputValidate }
                                 onChange = { save }
                                 errors = { errors }
-                                attributes = { {siteName, siteState} }
+                                attributes = { { siteName, siteState, siteCity, siteArea, siteSuburb, siteArea, siteStreet } }
                                 nextView = { this.nextView }
                             />
                         : level === 2?
                             <EquipmentInformation 
                                 styles = { submit_styles }
                                 getCategory = { this.getCategory }
+                                save = { save }
+                                secondarySelect = { this.props.secondarySelect}
+                                removeSelectedEquipment = { this.removeSelectedEquipment }
+                                removeSubCategory = { this.removeSubCategory }
                                 getCategoryAlt = { this.getCategoryAlt }
                                 addEquipment = { this.addEquipment }
                                 isActive = { addEquipmentButton }
+                                equipment = { this.props.equipment }
                                 nextView = { this.nextView }
                             />
-                        :null }
+                        : level === 3?
+                            <ContractInformation
+                                onBlur = { this.inputValidate }
+                                save = { save }
+                                upload = { upload }
+                                feedback = { feedback }
+                                errors = { errors }
+                                styles = { submit_styles }
+                                isActive = { isActive }
+                                attributes = { { siteContact, offerValidity, contractPeriod } }
+                            />
+                        : null }
                         </div>
                     </div>
                 </div>
