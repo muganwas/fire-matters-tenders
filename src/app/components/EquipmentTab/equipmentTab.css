@@ -40,8 +40,10 @@
     color: #F79A50;
 }
 .equipListed{
-    display: block;
     position: relative;
     height: 15px;
     padding: 2px;
+}
+.equipQ{
+    width: 50px;
 }

@@ -5,6 +5,7 @@ import { SecondarySelect, FmButton, DropDown, Textfield } from 'components';
 import { dispatchedSitesInfo, dispatchedSecondarySelectInfo } from 'extras/dispatchers';
 import axios from 'axios';
 import { submit_styles } from './styles';
+import './listedPostedSites.css';
 import {  
     equipmentCategories,
     equipmentCategoriesFull
@@ -14,7 +15,7 @@ const baseURL = process.env.BACK_END_URL,
 userUpdateEndPoint = process.env.SITE_UPDATE_END_POINT;
  
 const RenderEquipment = props => {
-    let { currCat, onClose, id, onIncrease, onDecrease, currSite } = props;
+    let { currCat, onClose, id, onIncrease, onDecrease, currSite, uploadEquipQuantity } = props;
     return (
         <div>{
             Object.keys(currCat).map(key=>{
@@ -26,10 +27,10 @@ const RenderEquipment = props => {
                     postedClass[id][key]:
                     undefined:
                     undefined,
-                    equipCountContainerClass = currExClass?"equipCount " + currExClass:"equipCount",
+                    equipCountContainerClass ="equipCount ",
                     properName = equipmentCategoriesFull[id][key];
-                    console.log(key)
-                    console.log(id)
+                    //console.log(key)
+                    //console.log(id)
                     return (
                         <div key={key}>
                             <div className="equipListed">
@@ -45,9 +46,19 @@ const RenderEquipment = props => {
                                 </span>
                                 <span className={equipCountContainerClass}>
                                     <span className="countAlter">
-                                        <span category = { id } equipment={ key } className="decriment" onClick={ onDecrease }>&lsaquo;</span>
-                                        <span className="countDigit">{ currCount }</span>
-                                        <span category = { id } equipment={ key }  className="increment" onClick={ onIncrease }>&rsaquo;</span>
+                                        {/*<span category = { id } equipment={ key } className="decriment" onClick={ onDecrease }>&lsaquo;</span>*/}
+                                            <span className="countDigit">
+                                                <input
+                                                    id = { id }
+                                                    className = "equipQ"
+                                                    type="number"
+                                                    category = { id }
+                                                    equipment = { key }
+                                                    value={ currCount }
+                                                    onChange={ uploadEquipQuantity}
+                                                />
+                                            </span>
+                                        {/*<span category = { id } equipment={ key }  className="increment" onClick={ onIncrease }>&rsaquo;</span>*/}
                                     </span>
                                 </span>
                             </div>
@@ -203,6 +214,37 @@ class ListedPostedSiteDetails extends React.Component {
             this.forceUpdate();
             throw err;
         });
+    }
+
+    uploadEquipQuantity = (e)=>{
+        let equipment = e.target.getAttribute('equipment'),
+        category = e.target.getAttribute('category'),
+        value = e.target.value,
+        sitesInfo = {...this.props.sitesInfo},
+        currSite = {...this.props.currSite},
+        siteId = currSite.id,
+        url = baseURL + userUpdateEndPoint,
+        siteKey = this.props.siteKey;
+        sitesInfo.sites[siteKey].equipment[category].equipCount[equipment] = value;
+        let equipmentObj = sitesInfo.sites[siteKey].equipment;
+        this.props.dispatch(dispatchedSitesInfo(sitesInfo));
+        axios.post(url, { siteId, sectTitle: "equipment", updateData: equipmentObj }).then(res=>{
+            if(res){
+                sitesInfo.sites[siteKey].postedClass = {};
+                sitesInfo.sites[siteKey].postedClass[category] = {};
+                sitesInfo.sites[siteKey].postedClass[category][equipment] = "successfulPost";
+                this.props.dispatch(dispatchedSitesInfo(sitesInfo));
+                this.forceUpdate();
+            }   
+        }).
+        catch(err=>{
+            sitesInfo.sites[siteKey].postedClass = {};
+            sitesInfo.sites[siteKey].postedClass[category] = {};
+            sitesInfo.sites[siteKey].postedClass[category][equipment] = "successfulPost";
+            this.props.dispatch(dispatchedSitesInfo(sitesInfo));
+            this.forceUpdate();
+            throw err;
+        });  
     }
 
     onIncrease = (e)=>{
@@ -410,7 +452,8 @@ class ListedPostedSiteDetails extends React.Component {
                                     </div>
                                     <RenderEquipment 
                                         onIncrease={ this.onIncrease } 
-                                        onDecrease={ this.onDecrease } 
+                                        onDecrease={ this.onDecrease }
+                                        uploadEquipQuantity = { this.uploadEquipQuantity }
                                         id="detectionAndWarningSystem" 
                                         currCat={detectionAndWarningSystem}
                                         currSite={this.props.currSite}
@@ -439,6 +482,7 @@ class ListedPostedSiteDetails extends React.Component {
                                     <RenderEquipment 
                                         onIncrease={ this.onIncrease } 
                                         onDecrease={ this.onDecrease } 
+                                        uploadEquipQuantity = { this.uploadEquipQuantity }
                                         id="mechanicalEquipment" 
                                         currCat={ mechanicalEquipment }
                                         currSite={this.props.currSite}
@@ -466,7 +510,8 @@ class ListedPostedSiteDetails extends React.Component {
                                     </div>
                                     <RenderEquipment 
                                         onIncrease={ this.onIncrease } 
-                                        onDecrease={ this.onDecrease } 
+                                        onDecrease={ this.onDecrease }
+                                        uploadEquipQuantity = { this.uploadEquipQuantity }
                                         id="specialHazard" 
                                         currCat={ specialHazard }
                                         currSite={this.props.currSite}
@@ -494,7 +539,8 @@ class ListedPostedSiteDetails extends React.Component {
                                     </div>
                                     <RenderEquipment
                                         onIncrease={ this.onIncrease } 
-                                        onDecrease={ this.onDecrease } 
+                                        onDecrease={ this.onDecrease }
+                                        uploadEquipQuantity = { this.uploadEquipQuantity }
                                         id="portableFireFightingEquipment" 
                                         currCat={portableFireFightingEquipment}
                                         currSite={this.props.currSite}
@@ -522,7 +568,8 @@ class ListedPostedSiteDetails extends React.Component {
                                     </div>
                                     <RenderEquipment
                                         onIncrease={ this.onIncrease } 
-                                        onDecrease={ this.onDecrease } 
+                                        onDecrease={ this.onDecrease }
+                                        uploadEquipQuantity = { this.uploadEquipQuantity } 
                                         id="passiveFireProtection" 
                                         currCat={passiveFireProtection}
                                         currSite={this.props.currSite}
@@ -550,7 +597,8 @@ class ListedPostedSiteDetails extends React.Component {
                                     </div>
                                     <RenderEquipment
                                         onIncrease={ this.onIncrease } 
-                                        onDecrease={ this.onDecrease } 
+                                        onDecrease={ this.onDecrease }
+                                        uploadEquipQuantity = { this.uploadEquipQuantity } 
                                         id="emergencyExitLighting" 
                                         currCat={emergencyExitLighting}
                                         currSite={this.props.currSite}

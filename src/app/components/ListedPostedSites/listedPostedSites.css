@@ -1,15 +1,13 @@
 .equipCount{
     float: right;
-    margin: 0 10%;
-    padding: 0 5px;
-    border: 0.5px solid #e1e1e1;
+    margin: 0 5px;
     border-radius: 2px;
 }
 .equipCount.title{
     border: none;
 }
 .equip-title-bar{
-    padding: 3px 0;
+    padding: 3px 30px 3px 0;
     font-weight: bold;
 }
 .successfulPost{
