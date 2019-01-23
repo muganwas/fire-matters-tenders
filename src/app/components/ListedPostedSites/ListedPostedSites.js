@@ -154,8 +154,7 @@ class ListedPostedSites extends Component {
         let sitesInfo = {...this.props.sitesInfo},
         sites = {...sitesInfo.sites};
         sitesInfo.forRemoval.confirmationDialog = !sitesInfo.forRemoval.confirmationDialog;
-        console.log(e.target.id)
-        if(e.target && e.target.id !== "no"){
+        if(e && e.target.id !== "no"){
             let id = e.target.id,
             siteId = sites[id].id;
             sitesInfo.forRemoval.siteId = siteId;
