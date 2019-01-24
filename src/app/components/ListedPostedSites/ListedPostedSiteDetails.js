@@ -8,7 +8,8 @@ import { submit_styles } from './styles';
 import './listedPostedSites.css';
 import {  
     equipmentCategories,
-    equipmentCategoriesFull
+    equipmentCategoriesFull,
+    statesAustralia
 } from 'extras/config';
 
 const baseURL = process.env.BACK_END_URL,
@@ -314,7 +315,19 @@ class ListedPostedSiteDetails extends React.Component {
 
     render(){
         let { currSite } = this.props,
-        { siteName, siteLocation, currentContractor, contractStatus, equipment } = currSite,
+        { 
+            siteName, 
+            siteState, 
+            siteCity, 
+            siteArea, 
+            siteSuburb, 
+            siteStreet,
+            siteContact,
+            offerValidity, 
+            contractPeriod, 
+            currentContractor, 
+            equipment 
+        } = currSite,
         detectionCount = [],
         specialCount = [],
         portableCount = [],
@@ -389,12 +402,25 @@ class ListedPostedSiteDetails extends React.Component {
                             />
                         </div>
                         <div className="el">
+                            <DropDown 
+                                label="Site State" 
+                                id="sites-siteState" 
+                                className="select" 
+                                init={ siteState } 
+                                width="330px" 
+                                options={ statesAustralia } 
+                                selected={ siteState || "Select State" } 
+                                upload={ this.upload }
+                                save={ this.save }
+                            />
+                        </div>  
+                        <div className="el">
                             <Textfield
-                                id="sites-siteLocation"
-                                label = "Site Location"
-                                value={ siteLocation } 
+                                id="sites-siteCity"
+                                label = "Site City"
+                                value={ siteCity } 
                                 type = "text"
-                                placeholder="Input site location"
+                                placeholder="Input site city"
                                 root="inner-textfield" 
                                 fieldClass="textfield"
                                 upload={ this.upload }
@@ -403,11 +429,11 @@ class ListedPostedSiteDetails extends React.Component {
                         </div>
                         <div className="el">
                             <Textfield 
-                                id="sites-currentContractor" 
-                                value={ currentContractor }
-                                label="Contractor"
+                                id="sites-siteArea" 
+                                value={ siteArea }
+                                label="Site Area"
                                 type="text" 
-                                placeholder="Input current contractor" 
+                                placeholder="Input site Area" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
                                 upload={ this.upload }
@@ -415,18 +441,31 @@ class ListedPostedSiteDetails extends React.Component {
                             />
                         </div>
                         <div className="el">
-                                <DropDown 
-                                    label="Contract Status" 
-                                    id="sites-contractStatus" 
-                                    className="select" 
-                                    init={ contractStatus } 
-                                    width="330px" 
-                                    options={{inactive: "Not Active", active: "Active"}} 
-                                    selected={ contractStatus || "Not active" } 
-                                    upload={ this.upload }
-                                    save={ this.save }
-                                />
-                        </div>                        
+                            <Textfield 
+                                id="sites-siteSuburb" 
+                                value={ siteSuburb }
+                                label="Site Suburb"
+                                type="text" 
+                                placeholder="Input site suburb" 
+                                root="inner-textfield" 
+                                fieldClass="textfield"
+                                upload={ this.upload }
+                                save={ this.save }  
+                            />
+                        </div>
+                        <div className="el">
+                            <Textfield 
+                                id="sites-siteStreet" 
+                                value={ siteStreet }
+                                label="Site Street"
+                                type="text" 
+                                placeholder="Input site street" 
+                                root="inner-textfield" 
+                                fieldClass="textfield"
+                                upload={ this.upload }
+                                save={ this.save }  
+                            />
+                        </div>                       
                     </div>
                 </div>
                 <div className="half left">

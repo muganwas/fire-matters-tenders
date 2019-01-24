@@ -319,10 +319,9 @@ class ListedPostedSites extends Component {
                     :null
                 }
 
-                <div className="ten">{ sites[key].siteName }</div>
-                <div className="twenty">{ sites[key].siteLocation }</div>
-                <div className="twenty">{ sites[key].currentContractor }</div>
-                <div className="twenty">{ sites[key].contractStatus }</div>
+                <div className="twenty">{ sites[key].siteName }</div>
+                <div className="twenty">{ sites[key].siteCity }, { sites[key].siteState } </div>
+                <div className="thirty">{ sites[key].offerValidity }</div>
                 <div className="twenty">
                     <FmButton 
                         variant="contained" 
@@ -405,10 +404,9 @@ class ListedPostedSites extends Component {
                     :null
                 }
                 <div className="list-row header">
-                    <span className="ten">Site Name</span>
+                    <span className="twenty">Site Name</span>
                     <span className="twenty">Location</span>
-                    <span className="twenty">Current Contractor</span>
-                    <span className="twenty">Contract Status</span>
+                    <span className="thirty">Offer Validity(days)</span>
                     <span className="twenty"></span>
                     <span className="ten"></span>
                     <div className="bottom-border"></div>
