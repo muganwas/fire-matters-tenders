@@ -365,9 +365,9 @@ class EquipmentTab extends React.Component{
                                         />
                                     </div>
                                 </div>
+                            </div>
                         </div>
                     </div>
-                </div>
                 <div className="clear"></div>
             </div>
         )

@@ -152,6 +152,14 @@ class ListedPostedSiteDetails extends React.Component {
         });
     }
 
+    removeSelectedEquipment = (e)=>{
+        let position = e.target.getAttribute('pos'),
+        secondarySelect = {...this.props.secondarySelect};
+        secondarySelect.selectedOptions.splice(position,1);
+        this.props.dispatch(dispatchedSecondarySelectInfo(secondarySelect));
+        this.forceUpdate();
+    }
+
     getCategory = (e)=>{
         return new Promise(resolve=>{
             let id = e.target.id,
@@ -180,10 +188,20 @@ class ListedPostedSiteDetails extends React.Component {
                 selectedKey = key;
         });
         let secondaryOptions = equipmentCategoriesFull[selectedKey];
-        return new Promise((resolve, reject)=>{
+        return new Promise(resolve=>{
             let id = e.target.id,
             searchCategories = secondaryOptions,
             selectInfo = {...this.props.secondarySelect};
+            //check if equipment already selected
+            Object.keys(selectInfo.selectedOptions).map(key=>{
+                Object.keys(selectInfo.selectedOptions[key]).map(key1=>{
+                    let equipment = selectInfo.selectedOptions[key][key1];
+                    if(equipment === id){
+                        delete selectInfo.selectedOptions[key][key1];
+                    }
+                });
+            });
+            selectInfo.selectedOptions.push({[selectedKey]:id});
             selectInfo[categoryTitleAlt] = searchCategories[id];
             selectInfo[categoryTitleAltKey] = id;
             resolve(selectInfo);
@@ -197,24 +215,34 @@ class ListedPostedSiteDetails extends React.Component {
         siteId = currSite.id,
         equipment = {...currSite.equipment},
         equipmentCategory = selectInfo.searchEquipmentSelectedCategoriesKey,
-        url = baseURL + userUpdateEndPoint,
-        equipmentName = selectInfo.searchEquipmentSelectedSubCategoriesKey;
-        equipment[equipmentCategory][equipmentName] = true;
-        sitesInfo.addEquipment.submitButton.isActive = false;
-        this.props.dispatch(dispatchedSitesInfo(sitesInfo));
-        axios.post(url, { siteId, sectTitle: "equipment", updateData: equipment}).then(res=>{
-            if(res){
+        url = baseURL + userUpdateEndPoint;
+        
+        if(equipment[equipmentCategory]){
+            //update equipment object according to selected options
+            Object.keys(selectInfo.selectedOptions).map(key=>{
+                Object.keys(selectInfo.selectedOptions[key]).map(key1=>{
+                    let equipmentAlt = selectInfo.selectedOptions[key][key1];
+                    equipment[key1][equipmentAlt] = true;
+                });
+            });
+            selectInfo.selectedOptions = [];
+            sitesInfo.addEquipment.submitButton.isActive = false;
+            this.props.dispatch(dispatchedSecondarySelectInfo(selectInfo));
+            this.props.dispatch(dispatchedSitesInfo(sitesInfo));
+            axios.post(url, { siteId, sectTitle: "equipment", updateData: equipment}).then(res=>{
+                if(res){
+                    sitesInfo.addEquipment.submitButton.isActive = true;
+                    this.props.dispatch(dispatchedSitesInfo(sitesInfo));
+                    this.forceUpdate();
+                }   
+            }).
+            catch(err=>{
                 sitesInfo.addEquipment.submitButton.isActive = true;
                 this.props.dispatch(dispatchedSitesInfo(sitesInfo));
                 this.forceUpdate();
-            }   
-        }).
-        catch(err=>{
-            sitesInfo.addEquipment.submitButton.isActive = true;
-            this.props.dispatch(dispatchedSitesInfo(sitesInfo));
-            this.forceUpdate();
-            throw err;
-        });
+                throw err;
+            });
+        }
     }
 
     uploadEquipQuantity = (e)=>{
@@ -315,6 +343,7 @@ class ListedPostedSiteDetails extends React.Component {
 
     render(){
         let { currSite } = this.props,
+        selectedArr = this.props.secondarySelect.selectedOptions,
         { 
             siteName, 
             siteState, 
@@ -649,6 +678,35 @@ class ListedPostedSiteDetails extends React.Component {
                         </div>
                         <div className="add">
                             <div className="heading">Add licensed Equipment <div className="bottom-border"></div></div>
+                            { selectedArr.length > 0?<div className="subCategories">
+                                    <h4>Selected Equipment</h4>
+                                    <div className="body">
+                                        { Object.keys(selectedArr).map(key=>{
+                                            let selectedArr = this.props.secondarySelect.selectedOptions,
+                                            selected = selectedArr[key];
+                                            return(
+                                                <div key={key}>
+                                                    { Object.keys(selected).map(key1=>{
+                                                        return (
+                                                            <div key={key1}>
+                                                                { equipmentCategoriesFull[key1][selected[key1]] }
+                                                                <span 
+                                                                    className="close right" 
+                                                                    pos={ key }  
+                                                                    onClick={ this.removeSelectedEquipment } 
+                                                                    id="close"
+                                                                >
+                                                                    &#x2716;
+                                                                </span>
+                                                                <div className="clear"></div>
+                                                            </div>
+                                                        )
+                                                    }) }
+                                                </div>
+                                            )
+                                        }) }
+                                    </div>
+                                </div>: null }
                             <div className="body">
                                 <SecondarySelect 
                                     categories = { equipmentCategories }
