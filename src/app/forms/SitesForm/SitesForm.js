@@ -28,10 +28,6 @@ class SitesForm extends React.Component{
         super(props)
     }
 
-    componentWillMount(){
-        
-    }
-
     componentWillReceiveProps(nextProps){
         this.props = {...nextProps};
     }

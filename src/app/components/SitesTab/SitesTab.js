@@ -80,10 +80,92 @@ class SitesTab extends React.Component {
         this.props.dispatch(dispatchedListingsInfo(listingsInfo));               
     }
 
+    resetCreate = ()=>{
+
+        let genInfo = {...this.props.genInfo},
+        sitesInfo = {...this.props.sitesInfo},
+        createSiteProgress = {
+            createSiteFormLevel: 1,
+            oneClass: "one current",
+            twoClass: "two",
+            threeClass: "three"
+        },
+        createSite = {
+            detectionAndWarningSystem:{
+                firePanel: false,
+                specialHazardSystem: false,
+                emergencyWarningSystem: false,
+                intercomSystem: false,
+                equipCount: {
+                    firePanel: 1,
+                    specialHazardSystem: 1,
+                    emergencyWarningSystem: 1,
+                    intercomSystem: 1               
+                }
+            },
+            mechanicalEquipment: {
+                pump: false,
+                sprinklerSystem: false,
+                hydrantSystem: false,
+                combinedSprinkler: false,
+                waterStorageTank: false,
+                equipCount: {
+                    pump: 1,
+                    sprinklerSystem: 1,
+                    hydrantSystem: 1,
+                    combinedSprinkler: 1,
+                    waterStorageTank: 1,
+                }
+            },
+            specialHazard: {
+                vehicleSuppressionSystem: false,
+                gaseousFireExtinguishingSystem: false,
+                equipCount: {
+                    vehicleSuppressionSystem: 1,
+                    gaseousFireExtinguishingSystem: 1,
+                }
+            },
+            portableFireFightingEquipment: {
+                hoseReel: false,
+                extinguisher: false,
+                fireBlanket: false,
+                deliveryLayFlatHose: false,
+                equipCount: {
+                    hoseReel: 1,
+                    extinguisher: 1,
+                    fireBlanket: 1,
+                    deliveryLayFlatHose: 1
+                }
+            },
+            passiveFireProtection: {
+                fireDoors: false,
+                servicePenetration: false,
+                equipCount: {
+                    fireDoors: 1,
+                    servicePenetration: 1
+                }
+            },
+            emergencyExitLighting: {
+                emergencyLight: false,
+                equipCount: {
+                    emergencyLight: 1
+                }
+            }
+        };
+
+        genInfo.createSiteProgress = createSiteProgress;
+        sitesInfo.createSite.defaultEquipmentObject = createSite;
+
+        this.props.dispatch(dispatchedGenInfo(genInfo));
+        this.props.dispatch(dispatchedSitesInfo(sitesInfo));
+        this.forceUpdate();
+    }
+
     renderSitesForm = ()=>{
         let sitesInfo = {...this.props.sitesInfo};
         sitesInfo.createSite.show = ! sitesInfo.createSite.show;
-        this.props.dispatch(dispatchedSitesInfo(sitesInfo));               
+        this.props.dispatch(dispatchedSitesInfo(sitesInfo));
+        this.resetCreate();         
     }
 
     checkForErrors(){
@@ -138,6 +220,7 @@ class SitesTab extends React.Component {
                     userInfo.submitSite.feedback = "Site posted successfully!";
                     userInfo.submitSite.feedbackClass="success";
                     this.props.dispatch(dispatchedUserInfo(userInfo));
+                    this.resetCreate();
                     this.forceUpdate();
                     console.log(res);
                 }).
