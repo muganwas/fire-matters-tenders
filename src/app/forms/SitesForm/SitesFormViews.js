@@ -6,6 +6,33 @@ import PropTypes from 'prop-types';
 
 const mandatoryInput = "This field is mandatory.";
 
+const RenderEquipment = props => {
+    let { currCat, onClose, id } = props;
+    return (
+        <div>{
+            Object.keys(currCat).map(key=>{
+                if(currCat[key] && key !== "equipCount"){
+                    return (
+                        <div className="equipListed" key={key}>
+                            { equipmentCategoriesFull[id][key] }
+                            <span 
+                                className="close right" 
+                                category={ id } 
+                                subcategory={ key } 
+                                onClick={ onClose } 
+                                id="close"
+                            >
+                                &#x2716;
+                            </span>
+                        </div>
+                    );
+                }else
+                    return null;
+            })
+        }</div>  
+    ) 
+}
+
 export const AddressInformation = props=>{
     const { 
         nextView, 
@@ -137,17 +164,123 @@ export const EquipmentInformation = props=>{
         nextView, 
         styles,
         removeSelectedEquipment,
+        removeSubCategory,
         secondarySelect,
+        addEquipment,
+        equipment,
         getCategory, 
         getCategoryAlt 
     } = props,
-    selectedArr = secondarySelect.selectedOptions;
+    selectedArr = secondarySelect.selectedOptions,
+    detectionCount = [],
+    mechanicalCount = [],
+    hazardCount = [],
+    portableCount = [],
+    passiveCount = [],
+    emergencyCount = [],
+    {
+        detectionAndWarningSystem,
+        portableFireFightingEquipment,
+        passiveFireProtection,
+        mechanicalEquipment,
+        specialHazard,
+        emergencyExitLighting
+    } = equipment;
+
+    Object.keys(detectionAndWarningSystem).map(key=>{
+        if(detectionAndWarningSystem[key] && key !== "equipCount"){
+            detectionCount.push(key);
+        }
+    });
+
+    Object.keys(mechanicalEquipment).map(key=>{
+        if(mechanicalEquipment[key] && key !== "equipCount"){
+            mechanicalCount.push(key);
+        }
+    });
+
+    Object.keys(specialHazard).map(key=>{
+        if(specialHazard[key] && key !== "equipCount"){
+            hazardCount.push(key);
+        }
+    });
+
+    Object.keys(portableFireFightingEquipment).map(key=>{
+        if(portableFireFightingEquipment[key] && key !== "equipCount"){
+            portableCount.push(key);
+        }
+    });
+
+    Object.keys(passiveFireProtection).map(key=>{
+        if(passiveFireProtection[key] && key !== "equipCount"){
+            passiveCount.push(key);
+        }
+    });
+
+    Object.keys(emergencyExitLighting).map(key=>{
+        if(emergencyExitLighting[key] && key !== "equipCount"){
+            emergencyCount.push(key);
+        }
+    });
     return(
         <div>
             <div className="equipment">
+            <div className="heading">Equipment Available On-site<div className="bottom-border"></div></div>
+                    <div className="information equipment">
+                        <div className="site categories">
+                            {detectionCount.length>0
+                            ?<div className="subCategories">
+                                <h3>Detection and Warning System</h3>
+                                <div className="body">
+                                    <RenderEquipment id="detectionAndWarningSystem" currCat={detectionAndWarningSystem} onClose={ removeSubCategory } />
+                                </div>
+                            </div>
+                            :null}
+                            {portableCount.length>0
+                            ?<div className="subCategories">
+                                <h3>Portable Fire-Fighting Equipment</h3>
+                                <div className="body">
+                                    <RenderEquipment id="portableFireFightingEquipment" currCat={portableFireFightingEquipment} onClose={ removeSubCategory } />
+                                </div>
+                            </div>
+                            :null}
+                            {passiveCount.length>0
+                            ?<div className="subCategories">
+                                <h3>Passive Fire Protection</h3>
+                                <div className="body">
+                                    <RenderEquipment id="passiveFireProtection" currCat={passiveFireProtection} onClose={ removeSubCategory } />
+                                </div>
+                            </div>
+                            :null}
+                            {mechanicalCount.length>0
+                            ?<div className="subCategories">
+                                <h3>Mechanical Equipment</h3>
+                                <div className="body">
+                                    <RenderEquipment id="mechanicalEquipment" currCat={mechanicalEquipment} onClose={ removeSubCategory } />
+                                </div>
+                            </div>
+                            :null}
+                            {emergencyCount.length>0
+                            ?<div className="subCategories">
+                                <h3>Emergency Exit Lighting</h3>
+                                <div className="body">
+                                    <RenderEquipment id="emergencyExitLighting" currCat={emergencyExitLighting} onClose={ removeSubCategory } />
+                                </div>
+                            </div>
+                            :null}
+                            {hazardCount.length>0
+                            ?<div className="subCategories">
+                                <h3>Special Hazard Equipment</h3>
+                                <div className="body">
+                                    <RenderEquipment id="specialHazard" currCat={specialHazard} onClose={ removeSubCategory } />
+                                </div>
+                            </div>
+                            :null}
+                        </div>
+                    </div>
                 <div className="add">
                     { selectedArr.length > 0?<div className="site subCategories">
-                        <h4>Selected Equipment</h4>
+                    <div className="wizard-feedback">Click add equipment to add the equipment below to your site</div>
                         <div className="body">
                             { Object.keys(selectedArr).map(key=>{
                                 let selectedArr = secondarySelect.selectedOptions,
@@ -191,6 +324,15 @@ export const EquipmentInformation = props=>{
                     dispatcher = { dispatchedSecondarySelectInfo }
                     dispatcherAlt =  { dispatchedSecondarySelectInfo }
                     
+                />
+            </div>
+            <div className="el" style={ styles.el }>
+                <FmButton 
+                    id="addCategory" 
+                    text="Add Equipment" 
+                    onClick = { addEquipment } 
+                    styles={ styles }
+                    variant = "contained"
                 />
             </div>
             <div className="el" style={ styles.el }>

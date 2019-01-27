@@ -6,11 +6,29 @@
     background-color: #F79A50;
     width: 40%;
 }
-.equipment .site.subCategories{
+.information.equipment{
+    text-align: center;
+}
+.equipment .site.subCategories, .equipment .site.categories{
     display: inline-block!important;
+    text-align: left;
     border-radius: 0px!important;
     width: 500px!important;
 }
 .equipment .site.subCategories h4{
     border-radius: 0px!important;
+}
+.equipment .heading{
+    display: block;
+}
+.equipment .heading .bottom-border{
+    display: block!important;
+    width: 100%!important;
+}
+.wizard-feedback{
+    display:block;
+    padding: 4px;
+    font-weight: 11px;
+    color: #ffff;
+    background: #F79A50;
 }

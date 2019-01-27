@@ -96,6 +96,177 @@ export const equipmentCategories = {
     emergencyExitLighting: "Emergency Exit Lighting"
 }
 
+
+export const defaultEquipmentObject = {
+    detectionAndWarningSystem:{
+        firePanel: {
+            type: Boolean,
+            default: false
+        },
+        specialHazardSystem: {
+            type: Boolean,
+            default: false
+        },
+        emergencyWarningSystem: {
+            type: Boolean,
+            default: false
+        },
+        intercomSystem: {
+            type: Boolean,
+            default: false
+        },
+        equipCount: {
+            firePanel:{
+                type: Number,
+                default: 1
+            },
+            specialHazardSystem: {
+                type: Number,
+                default: 1
+            },
+            emergencyWarningSystem: {
+                type: Number,
+                default: 1
+            },
+            intercomSystem: {
+                type: Number,
+                default: 1
+            }               
+        }
+    },
+    mechanicalEquipment: {
+        pump: {
+            type: Boolean,
+            default: false
+        },
+        sprinklerSystem: {
+            type: Boolean,
+            default: false
+        },
+        hydrantSystem: {
+            type: Boolean,
+            default: false
+        },
+        combinedSprinkler: {
+            type: Boolean,
+            default: false
+        },
+        waterStorageTank: {
+            type: Boolean,
+            default: false
+        },
+        equipCount: {
+            pump: {
+                type: Number,
+                default: 1
+            },
+            sprinklerSystem: {
+                type: Number,
+                default: 1
+            },
+            hydrantSystem: {
+                type: Number,
+                default: 1
+            },
+            combinedSprinkler: {
+                type: Number,
+                default: 1
+            },
+            waterStorageTank: {
+                type: Number,
+                default: 1
+            },
+        }
+    },
+    specialHazard: {
+        vehicleSuppressionSystem: {
+            type: Boolean,
+            default: false
+        },
+        gaseousFireExtinguishingSystem:{
+            type: Boolean,
+            default: false
+        },
+        equipCount: {
+            vehicleSuppressionSystem: {
+                type: Number,
+                default: 1
+            },
+            gaseousFireExtinguishingSystem: {
+                type: Number,
+                default: 1
+            },
+        }
+    },
+    portableFireFightingEquipment: {
+        hoseReel: {
+            type: Boolean,
+            default: false
+        },
+        extinguisher: {
+            type: Boolean,
+            default: false
+        },
+        fireBlanket: {
+            type: Boolean,
+            default: false
+        },
+        deliveryLayFlatHose: {
+            type: Boolean,
+            default: false
+        },
+        equipCount: {
+            hoseReel: {
+                type: Number,
+                default: 1
+            },
+            extinguisher: {
+                type: Number,
+                default: 1
+            },
+            fireBlanket: {
+                type: Number,
+                default: 1
+            },
+            deliveryLayFlatHose: {
+                type: Number,
+                default: 1
+            }
+        }
+    },
+    passiveFireProtection: {
+        fireDoors: {
+            type: Boolean,
+            default: false
+        },
+        servicePenetration: {
+            type: Boolean,
+            default: false
+        },
+        equipCount: {
+            fireDoors: {
+                type: Number,
+                default: 1
+            },
+            servicePenetration: {
+                type: Number,
+                default: 1
+            }
+        }
+    },
+    emergencyExitLighting: {
+        emergencyLight: {
+            type: Boolean,
+            default: false
+        },
+        equipCount: {
+            emergencyLight: {
+                type: Number,
+                default: 1
+            }
+        }
+    }
+}
 export const equipmentCategoriesFull = {
     detectionAndWarningSystem: {
         firePanel: "Fire Panel",

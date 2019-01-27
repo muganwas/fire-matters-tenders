@@ -18,7 +18,7 @@ import { equipmentCategories, equipmentCategoriesFull, statesAustralia} from 'ex
         userInfo: store.user.info,
         listingsInfo: store.listingsInfo.info,
         secondarySelect: store.secondarySelect.info,
-        equipment: store.user.info.profileInfo.equipment,
+        equipment: store.sites.info.createSite.defaultEquipmentObject,
         genInfo: store.genInfo.info,
         sitesInfo: store.sites.info
     }
@@ -28,21 +28,24 @@ class SitesForm extends React.Component{
         super(props)
     }
 
+    componentWillMount(){
+        
+    }
+
     componentWillReceiveProps(nextProps){
         this.props = {...nextProps};
     }
 
     removeSubCategory = (e)=>{
         let userInfo = {...this.props.user},
-        userId = userInfo.profileInfo.id,
-        equipment = {...userInfo.profileInfo.equipment},
+        sitesInfo = {...this.props.sitesInfo},
+        equipment = sitesInfo.createSite.defaultEquipmentObject,
         equipmentCategory = e.target.getAttribute('category'),
-        url = baseURL + userUpdateEndPoint,
         equipmentName = e.target.getAttribute('subcategory');
         equipment[equipmentCategory][equipmentName] = false;
         userInfo.addEquipment.submitButton.isActive = false;
         this.props.dispatch(dispatchedUserInfo(userInfo));
-        axios.post(url, {userId, sectTitle: "equipment", updateData: equipment}).then(res=>{
+        /*axios.post(url, {userId, sectTitle: "equipment", updateData: equipment}).then(res=>{
             if(res){
                 userInfo.addEquipment.submitButton.isActive = true;
                 this.props.dispatch(dispatchedUserInfo(userInfo));
@@ -54,7 +57,7 @@ class SitesForm extends React.Component{
             this.props.dispatch(dispatchedUserInfo(userInfo));
             this.forceUpdate();
             throw err;
-        });
+        });*/
     }
 
     getCategory = (e)=>{
@@ -71,7 +74,7 @@ class SitesForm extends React.Component{
             selectInfo[categoryTitleAlt] = null;
             selectInfo[categoryTitleAltKey] = null;
             /*Theres no need to reset selectedOptions*/
-            //selectInfo.selectedOptions = [];
+            selectInfo.selectedOptions = [];
             resolve(selectInfo);
         });
     }
@@ -110,10 +113,9 @@ class SitesForm extends React.Component{
     addEquipment = ()=>{
         let selectInfo = {...this.props.secondarySelect},
         userInfo = {...this.props.user},
-        userId = userInfo.profileInfo.id,
-        equipment = {...userInfo.profileInfo.equipment},
-        equipmentCategory = selectInfo.searchEquipmentSelectedCategoriesKey,
-        url = baseURL + userUpdateEndPoint;
+        sitesInfo = {...this.props.sitesInfo},
+        equipment = sitesInfo.createSite.defaultEquipmentObject,
+        equipmentCategory = selectInfo.searchEquipmentSelectedCategoriesKey;
         //equipmentName = selectInfo.searchEquipmentSelectedSubCategoriesKey;
         if(equipment[equipmentCategory]){
             //update equipment object according to selected options
@@ -128,12 +130,13 @@ class SitesForm extends React.Component{
             selectInfo.selectedOptions = [];
             userInfo.addEquipment.submitButton.isActive = false;
             this.props.dispatch(dispatchedSecondarySelectInfo(selectInfo));
-            this.props.dispatch(dispatchedUserInfo(userInfo));
-            axios.post(url, {userId, sectTitle: "equipment", updateData: equipment}).then(res=>{
+            this.props.dispatch(dispatchedSitesInfo(sitesInfo));
+            this.forceUpdate();
+            /*axios.post(url, {userId, sectTitle: "equipment", updateData: equipment}).then(res=>{
                 if(res){
                     userInfo.addEquipment.submitButton.isActive = true;
                     this.props.dispatch(dispatchedUserInfo(userInfo));
-                    this.forceUpdate();
+                    
                 }   
             }).
             catch(err=>{
@@ -141,7 +144,7 @@ class SitesForm extends React.Component{
                 this.props.dispatch(dispatchedUserInfo(userInfo));
                 this.forceUpdate();
                 throw err;
-            });
+            });*/
         }  
     }
 
@@ -282,7 +285,8 @@ class SitesForm extends React.Component{
             errors,
             genInfo,
             submitButton,
-            sitesInfo
+            sitesInfo,
+            equipment
         } = this.props,
         { 
             siteName,
@@ -341,7 +345,7 @@ class SitesForm extends React.Component{
                                 getCategoryAlt = { this.getCategoryAlt }
                                 addEquipment = { this.addEquipment }
                                 isActive = { addEquipmentButton }
-                                equipment = { this.props.equipment }
+                                equipment = { equipment }
                                 nextView = { this.nextView }
                             />
                         : level === 3?

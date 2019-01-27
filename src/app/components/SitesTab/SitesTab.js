@@ -98,8 +98,7 @@ class SitesTab extends React.Component {
     upload=()=>{
         let siteData = {...this.props.siteData},
         userInfo = {...this.props.user},
-        origEquipment = {...this.props.equipment},
-        selectedEquip = {...this.props.user.submitSite.selectedEquip},
+        equipment = {...this.props.sitesInfo.createSite.defaultEquipmentObject},
         postInfoUrl = baseURL + sitesEndPoint,
         siteOwner = JSON.parse(sessionStorage.getItem('profileInfo')).emailAddress,
         siteName = siteData.siteName, 
@@ -112,18 +111,7 @@ class SitesTab extends React.Component {
         offerValidity = siteData.offerValidity,
         contractPeriod = siteData.contractPeriod;
 
-        Object.keys(origEquipment).map(key=>{
-            let currCat = origEquipment[key];
-            Object.keys(currCat).map(key1=>{
-                Object.keys(selectedEquip).map(key2=>{
-                    if(key1 === key2){
-                        origEquipment[key][key2] = true;
-                    }
-                })
-            })
-        });
-        
-        console.log(origEquipment);
+        console.log(equipment)
 
         let postObject = {
             siteOwner,
@@ -136,7 +124,7 @@ class SitesTab extends React.Component {
             siteContact,
             offerValidity,
             contractPeriod,
-            equipment: origEquipment
+            equipment
         };
 
         console.log(postObject)
