@@ -167,25 +167,32 @@ class HeaderMain extends Component {
             loginSession = sessionStorage.getItem('loginSession'),
             userType = loginSession?JSON.parse(sessionStorage.getItem('loginSession')).userType:undefined,
             userEmail = loginSession?JSON.parse(sessionStorage.getItem('loginSession')).emailAddress:undefined,
-            url = baseURL + sitesEndPoint + "?emailAddress=" + userEmail;
-            if(userType){
-                if(userType === "owner_occupier"){
-                    axios.get(url).then((response)=>{
-                        //console.log(response.data);
-                        let sites = sitesInfo.sites = genInfo.sites = {...response.data};
-                        genInfo.sideBar.profilePage.listCount['sites'] = (response.data).length;
-                        /**Set the more dropdown menu class to hidden for every row*/
-                        Object.keys(sites).map((key)=>{
-                            sitesInfo.sites[key].moreMenuClassName = "hidden";
-                        })
-                        this.props.dispatch(dispatchedSitesInfo(sitesInfo));
-                        //this.props.dispatch(dispatchedGenInfo(genInfo));
-                        resolve("fetched");
-                    }).catch(err=>{
-                        console.log(err);
-                    });
+            url = baseURL + sitesEndPoint + "?emailAddress=" + userEmail,
+            genSitesURL = baseURL + sitesEndPoint;
+
+            axios.get(genSitesURL).then(res=>{
+                console.log(res.data)
+                if(userType){
+                    if(userType === "owner_occupier"){
+                        axios.get(url).then((response)=>{
+                            //console.log(response.data);
+                            let sites = sitesInfo.sites = genInfo.sites = {...response.data};
+                            genInfo.sideBar.profilePage.listCount['sites'] = (response.data).length;
+                            /**Set the more dropdown menu class to hidden for every row*/
+                            Object.keys(sites).map((key)=>{
+                                sitesInfo.sites[key].moreMenuClassName = "hidden";
+                            })
+                            this.props.dispatch(dispatchedSitesInfo(sitesInfo));
+                            //this.props.dispatch(dispatchedGenInfo(genInfo));
+                            resolve("fetched");
+                        }).catch(err=>{
+                            console.log(err);
+                        });
+                    }
                 }
-            }
+            }).catch(err=>{
+                console.log(err)
+            });
         });    
     }
 

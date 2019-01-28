@@ -1,5 +1,6 @@
 const defaultState = {
     info: {
+      genSites: {},
       sites:{},
       activeSite: {},
       forRemoval: {

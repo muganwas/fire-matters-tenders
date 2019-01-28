@@ -256,21 +256,62 @@ class ListedPostedSites extends Component {
 
     createListing=e=>{
         e.persist();
-        let id = e.target.id,
+        let siteId = e.target.id,
         sitesInfo = { ...this.props.sitesInfo},
         sites = sitesInfo.sites,
         URL = baseURL + siteUpdateEndPoint,
+        createListingURL = baseURL + listingsEndPoint,
+        sKey,
         currListed;
+
         Object.keys(sites).map(key=>{
             let currId = sites[key].id;
-            if(currId === id){
-                currListed = sites[key].listed;
+            if(currId === siteId){
+                sKey = key;
+                currListed = sites[key];
             }
         });
 
-        let listed = !currListed;
+        let equipment = currListed.equipment,
+        offerValidity = currListed.offerValidity,
+        listed = currListed.listed,
+        contractPeriod = currListed.contractPeriod,
+        listingObject = { siteId, equipment, offerValidity, contractPeriod };
 
-        if(id){ 
+        if(listed){
+            listed = false;
+            sitesInfo.sites[sKey].listed = listed;
+            sitesInfo.createListing[siteId + 'isActive'] = false;
+            this.props.dispatch(dispatchedSitesInfo(sitesInfo));
+            axios.post(URL, {sectTitle: "listed", siteId, updateData: listed }).then(res=>{
+                console.log(res.data);
+                sitesInfo.createListing[siteId + 'isActive'] = true;
+                this.props.dispatch(dispatchedSitesInfo(sitesInfo));
+                this.forceUpdate();
+            }).catch(err=>{
+                console.log(err)
+            })
+        }else{
+            listed = true;
+            sitesInfo.sites[sKey].listed = listed;
+            sitesInfo.createListing[siteId + 'isActive'] = false;
+            this.props.dispatch(dispatchedSitesInfo(sitesInfo));
+            axios.post(createListingURL, listingObject).then(res=>{
+                console.log(res.data)
+                axios.post(URL, {sectTitle: "listed", siteId, updateData: listed }).then(res=>{
+                    console.log(res.data);
+                    sitesInfo.createListing[siteId + 'isActive'] = true;
+                    this.props.dispatch(dispatchedSitesInfo(sitesInfo));
+                    this.forceUpdate();
+                });
+            }).catch(err=>{
+                console.log(err)
+            });       
+        }
+
+        //let listed = !currListed;
+
+        /*if(id){ 
             sitesInfo.createListing[id + 'isActive'] = false;
             this.props.dispatch(dispatchedSitesInfo(sitesInfo));
             axios.post(URL, {sectTitle: "listed", siteId: id, updateData: listed }).then(res=>{
@@ -279,7 +320,7 @@ class ListedPostedSites extends Component {
                 this.props.dispatch(dispatchedSitesInfo(sitesInfo));
                 this.forceUpdate();
             });
-        }
+        }*/
     };
 
     renderListingForm = ()=>{

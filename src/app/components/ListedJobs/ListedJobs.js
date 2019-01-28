@@ -22,6 +22,7 @@ listingsEndPoint = process.env.LISTING_END_POINT;
         profileInfo: store.user.info.profileInfo,
         search: store.search,
         genInfo: store.genInfo.info,
+        sitesInfo: store.sites.info,
         listingsInfo: store.listingsInfo.info,
         listingsData: store.user.info.submitTender,
         messagesInfo: store.messages.info
@@ -308,6 +309,7 @@ class ListedJobs extends Component {
     displayListings = (key)=>{
         let listings = {...this.props.genInfo.generalListings},
         listingsInfo = {...this.props.listingsInfo},
+        sites = {...this.props.sitesInfo.sites},
         showJobDetails = listingsInfo.listedJobDetails.show,
         errors = listingsInfo.tenderForm.errors,
         tenderAttributes = this.props.user.submitTender,
@@ -316,15 +318,26 @@ class ListedJobs extends Component {
         showTenderForm = listingsInfo.tenderForm.show,
         profileInfo = sessionStorage.getItem('profileInfo'),
         userType = profileInfo?JSON.parse(sessionStorage.getItem('profileInfo')).userType: null,
+        currSite,
         options;
         if(userType && userType !== "owner_occupier"){
             options = { more: "View More...", sendMessage: "Post Comment"};
         }else{
             options = { more: "View More..."};
         }
+
+        Object.keys(sites).map(key1=>{
+            let siteId = sites[key1].id;
+            let lsiteId = listings[key].siteId;
+            if(siteId === lsiteId){
+                currSite = sites[key1];
+            }
+        });
+
+        console.log(currSite)
         return(
             <div className="list-row" key={key} id={ listings[key].id }>
-                {   
+                {/*{   
                     showJobDetails?
                     <div styles = {submit_styles.trans} className="listedJobsDetails-container">
                         <span
@@ -381,7 +394,7 @@ class ListedJobs extends Component {
                         options={ options }
                      />
                 </div>
-                <div className="bottom-border"></div>
+                <div className="bottom-border"></div>*/}
             </div>
         )
     }
@@ -395,8 +408,8 @@ class ListedJobs extends Component {
         feedback = messageAttributes.feedback,
         filter = (this.props.listingsInfo).filter.categoryTitle,
         keyWords = (this.props.listingsInfo).filter.keyWords || " ",
-        feedbackClass = messageAttributes.feedbackClass,
-        filtered = {};
+        feedbackClass = messageAttributes.feedbackClass;
+        /*filtered = {};
         if(listings){
             Object.keys(listings).map(key=>{
                 keyWords = (keyWords).toLowerCase();
@@ -411,7 +424,7 @@ class ListedJobs extends Component {
                     filtered[key] = listings[key];
                 }
             });
-        }
+        }*/
         return(
             <div className="list left hanad">
                 

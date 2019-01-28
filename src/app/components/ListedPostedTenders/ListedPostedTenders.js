@@ -33,6 +33,7 @@ messagesEndPoint = process.env.MESSAGES_END_POINT;
         genInfo: store.genInfo,
         profileInfo: store.user.info.profileInfo,
         listingsInfo: store.listingsInfo.info,
+        sitesInfo: store.sites.info,
         listingsData: store.user.info.submitTender,
         tendersInfo: store.tenders.info,
         messageData: store.user.info.submitMessage,
@@ -466,6 +467,7 @@ class ListedPostedTenders extends Component {
 
     displayListings = (key)=>{
         let listings = {...this.props.genInfo.info.listings},
+        sites = {...this.props.sitesInfo.sites},
         listingsInfo = {...this.props.listingsInfo},
         postedTenders = listingsInfo.postedTenders.tenders,
         showTenderForm = listingsInfo.tenderForm.show,
@@ -476,7 +478,18 @@ class ListedPostedTenders extends Component {
         options = listedPostedTendersOptions,
         listingId = listings[key].id,
         showPostedTendersOverlay = listingsInfo.postedTenders.overLay.show,
-        feedbackClass = tenderAttributes.feedbackClass;
+        feedbackClass = tenderAttributes.feedbackClass,
+        currSite;
+
+        Object.keys(sites).map(key1=>{
+            let siteId = sites[key1].id;
+            let lsiteId = listings[key].siteId;
+            if(siteId === lsiteId){
+                currSite = sites[key1];
+            }
+        });
+
+        console.log(currSite)
 
         if(userType !== "owner_occupier"){
             options = { ...options, sendMessage: "Post Comment"};
@@ -484,7 +497,7 @@ class ListedPostedTenders extends Component {
             
         return(
             <div className="list-row" key={key}>
-                {
+                {/*{
                     showTenderForm
                     ?<TenderForm
                         feedback = { feedback }
@@ -537,7 +550,7 @@ class ListedPostedTenders extends Component {
                         options={ options }
                      />
                 </div>
-                <div className="bottom-border"></div>
+                <div className="bottom-border"></div>*/}
             </div>
         )
     }
