@@ -171,7 +171,10 @@ class HeaderMain extends Component {
             genSitesURL = baseURL + sitesEndPoint;
 
             axios.get(genSitesURL).then(res=>{
-                console.log(res.data)
+                if(res.data.length > 0){
+                    sitesInfo.genSites = {...res.data};
+                    this.props.dispatch(dispatchedSitesInfo(sitesInfo));
+                }
                 if(userType){
                     if(userType === "owner_occupier"){
                         axios.get(url).then((response)=>{

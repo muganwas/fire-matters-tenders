@@ -309,6 +309,34 @@ export const equipmentCategoriesFull = {
     }
 }
 
+export const equipmentKeyNames = {
+    firePanel: "Fire Panel",
+    specialHazardSystem: "Special Hazard System",
+    emergencyWarningSystem: "Emergency Warning System",
+    intercomSystem: "Intercom System",
+    pump: "Pump",
+    sprinklerSystem: "Sprinkler System",
+    hydrantSystem: "Hydrant System",
+    combinedSprinkler: "Combined Sprinkler",
+    waterStorageTank: "Water Storage Tank",
+    vehicleSuppressionSystem: "Vehicle Suppression System",
+    gaseousFireExtinguishingSystem:"Gaseous Fire Extinguishing System",
+    evacTraining: "Evacuation Training",
+    fireSafetyAudit: "Fire Safety Audit",
+    fireSafetyAdvisor: "Fire Safety Advisor",
+    warden: "Warden/Deputy",
+    generalOccupancyTraining: "General Occupancy Training",
+    firstResponseTraining: "First Response Training",
+    evacuationExercise: "Evacuation Exercise",
+    hoseReel: "Hose Reel",
+    extinguisher: "Extinguisher",
+    fireBlanket: "Fire Blanket",
+    deliveryLayFlatHose: "Delivery Lay Flat Hose",
+    fireDoors: "Fire Doors",
+    servicePenetrations: "Service Penetrations",
+    emergencyLight: "Emergency/Exit Light"
+}
+
 export const detectionAndWarningSystem = {
     firePanel: "Fire Panel",
     specialHazardSystem: "Special Hazard System",

@@ -6,6 +6,7 @@ import axios from 'axios';
 import { dispatchedGenInfo, dispatchedUserInfo, dispatchedListingsInfo, dispatchedMessagesInfo } from 'extras/dispatchers';
 import ListedJobDetails from './ListedJobDetails';
 import './listedJobs.css';
+import {  equipmentKeyNames } from 'extras/config'
 import { PropTypes } from 'prop-types';
 import { styles, submit_styles } from './styles';
 
@@ -309,7 +310,7 @@ class ListedJobs extends Component {
     displayListings = (key)=>{
         let listings = {...this.props.genInfo.generalListings},
         listingsInfo = {...this.props.listingsInfo},
-        sites = {...this.props.sitesInfo.sites},
+        sites = {...this.props.sitesInfo.genSites},
         showJobDetails = listingsInfo.listedJobDetails.show,
         errors = listingsInfo.tenderForm.errors,
         tenderAttributes = this.props.user.submitTender,
@@ -319,6 +320,12 @@ class ListedJobs extends Component {
         profileInfo = sessionStorage.getItem('profileInfo'),
         userType = profileInfo?JSON.parse(sessionStorage.getItem('profileInfo')).userType: null,
         currSite,
+        state,
+        contractPeriod,
+        offerValidity,
+        equipment = {},
+        renderEquip,
+        city,
         options;
         if(userType && userType !== "owner_occupier"){
             options = { more: "View More...", sendMessage: "Post Comment"};
@@ -334,10 +341,35 @@ class ListedJobs extends Component {
             }
         });
 
-        console.log(currSite)
+        if(currSite){
+            let equipmentObj = currSite.equipment;
+            Object.keys(equipmentObj).map(key=>{
+                Object.keys(equipmentObj[key]).map(key1=>{
+                    if(equipmentObj[key][key1] && key1 !== "equipCount")
+                        equipment[key1] = equipmentObj[key].equipCount[key1];
+                    
+                })
+            });
+
+            city = currSite.siteCity,
+            contractPeriod = currSite.contractPeriod,
+            state = currSite.siteState;
+            offerValidity = currSite.offerValidity;
+        }
+
+        renderEquip = (key)=>{
+
+            return(
+                <div key={key} className="listed-equip">
+                    { key }, { equipment[key]}
+                </div>
+            )
+        }
+
+        //console.log(currSite)
         return(
             <div className="list-row" key={key} id={ listings[key].id }>
-                {/*{   
+                {   
                     showJobDetails?
                     <div styles = {submit_styles.trans} className="listedJobsDetails-container">
                         <span
@@ -347,7 +379,7 @@ class ListedJobs extends Component {
                         >
                             &#x2716;
                         </span>
-                        <ListedJobDetails />
+                        <ListedJobDetails currSite={currSite} equipment={equipment} />
                     </div>
                     :null
                 }
@@ -365,9 +397,9 @@ class ListedJobs extends Component {
                         save={ this.save } 
                     />:null
                 }
-                <div className="twenty">{ listings[key].city }, { listings[key].state }</div>
-                <div className="thirty">{ listings[key].serviceRequired }, { listings[key].equipment }</div>
-                <div className="twenty">{ listings[key].startDate}</div>
+                <div className="twenty">{ city }, { state }</div>
+                <div className="thirty">{ contractPeriod }</div>
+                <div className="twenty">{ offerValidity }</div>
                 <div className="twenty">
                 { 
                     userType !== "owner_occupier" 
@@ -394,7 +426,7 @@ class ListedJobs extends Component {
                         options={ options }
                      />
                 </div>
-                <div className="bottom-border"></div>*/}
+                <div className="bottom-border"></div>
             </div>
         )
     }
@@ -445,16 +477,16 @@ class ListedJobs extends Component {
                 }
                 <div className="list-row header">
                     <span className="twenty">Location</span>
-                    <span className="thirty">Description</span>
-                    <span className="twenty">Closing Date</span>
+                    <span className="thirty">Contract Period(Years)</span>
+                    <span className="twenty">Offer Validity(Days)</span>
                     <span className="twenty"></span>
                     <span className="ten"></span>
                     <div className="bottom-border"></div>
                 </div>
                 { 
-                    filter
+                    /*filter
                     ?Object.keys(filtered).map(this.displayListings)
-                    :listings
+                    :*/listings
                     ?Object.keys(listings).map(this.displayListings)
                     :<div className="loader"><Loader /></div> 
                 }

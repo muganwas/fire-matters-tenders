@@ -4,33 +4,44 @@ import PropTypes from 'prop-types';
 import './listedJobs.css';
 
 const ListedJobDetails = props=>{
-    let { listingsInfo, genInfo, messagesInfo } = props,
+    let { listingsInfo, currSite, genInfo, messagesInfo, equipment } = props,
     messages = messagesInfo.messages,
     id = listingsInfo.listedJobDetails.currListingId,
     listings = genInfo.generalListings,
     currListing = listings[id];
+
+    const renderEquip = (key)=>{
+        return(
+            <div key={key} className="listed-equip">
+                { key } <span className="right">{ equipment[key] }</span>
+            </div>
+        )
+    }
     return(
         <div className="sub-container">
             <div className="half left">
-                <div className="heading"><h3>Required Service: { currListing.serviceRequired } </h3><div className="bottom-border"></div></div>
+                <div className="heading"><h3>Listed Site Name: { currSite.siteName } </h3><div className="bottom-border"></div></div>
                 <br />
                 <div className="information">
                     <div className="el">
-                        <h3>Equipment Type</h3>
-                        <span className ="listingEl">{ currListing.equipmentType }</span>
+                        <h3>Listing Id</h3>
+                        <span className ="listingEl">{ currListing.id }</span>
                     </div>
                     <div className="el">
-                        <h3>Equipment Name</h3>
-                        <span className ="listingEl">{ currListing.equipment }</span>
+                        <span className="left"><h3>Equipment</h3></span><span className="right qty"><h3>Quantity</h3></span>
+                        <div className="clear"></div>
+                        <span className ="listingEl">{ Object.keys(equipment).map(renderEquip) }</span>
+                    </div>
+                    
+                    <div className="el">
+                        <h3>Contract Period(Years)</h3>
+                        <span className ="listingEl">{ currListing.contractPeriod }</span>
                     </div>
                     <div className="el">
-                        <h3>Equipment Quantity</h3>
-                        <span className ="listingEl">{ currListing.quantity }</span>
+                        <h3>Offer Validity</h3>
+                        <span className ="listingEl">{ currListing.offerValidity }</span>
                     </div>
-                    <div className="el">
-                        <h3>Contract Length</h3>
-                        <span className ="listingEl">{ currListing.contractType }</span>
-                    </div>                      
+                                        
                 </div>
             </div>
             <div className="half left">
