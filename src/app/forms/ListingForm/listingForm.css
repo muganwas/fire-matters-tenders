@@ -1,9 +1,9 @@
 .listing-form-container{
     position: absolute;
     text-align: center;
-    top: -10px;
+    top: 0;
     left:-20px;
-    bottom:-30%;
+    bottom: -250px;
     right: -20px;
     padding: 20px;
     background: rgba(0, 0, 0, 0.4);

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import './tenderForm.css';
-import { Textfield, FmButton } from 'components';
+import { Textfield, FmButton, PhoneNumber } from 'components';
 
 const TenderForm = props=>{
     const { 
@@ -16,11 +16,13 @@ const TenderForm = props=>{
         onBlur, 
         errors
     } = props,
-    { 
-        tenderCompanyName, 
-        tenderRate, 
-        tenderStartDate, 
-        tenderEndDate, 
+    {
+        tenderContactName,
+        tenderContactPosition,
+        tenderContactPhone,
+        tenderContactFax,
+        tenderContactEmail,
+        tenderRates, 
         tenderCoverLetter, 
         submitButton 
     } = attributes,
@@ -38,62 +40,77 @@ const TenderForm = props=>{
                     <div className="el" style={ styles.el }><span className={ feedbackClass }>{ feedback }</span></div>
                         <div className="el" style={ styles.el }>
                             <Textfield 
-                                id="tenders-tenderCompanyName"
-                                label="Company Name"
-                                value={ tenderCompanyName } 
+                                id="tenders-tenderContactName"
+                                label="Contact's Name"
+                                value={ tenderContactName } 
                                 type="text" 
-                                placeholder="eg. Company.Inc" 
+                                placeholder="Contact's Name" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
                                 onBlur = { onBlur }
                                 onChange = { save } 
                             />
-                            { errors.tenderCompanyName?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
+                            { errors.tenderContactName?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
                         </div>
 
                         <div className="el" style={ styles.el }>
                             <Textfield 
-                                id="tenders-tenderRate"
-                                label="Service Charge Rate"
-                                value={ tenderRate } 
-                                type="number" 
-                                placeholder="Service charge" 
+                                id="tenders-tenderContactPosition"
+                                label="Company Contact's Position"
+                                value={ tenderContactPosition } 
+                                type="text" 
+                                placeholder="Contacts Position" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
                                 onBlur = { onBlur }
                                 onChange = { save } 
                             />
-                            { errors.tenderRate?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
+                            { errors.tenderContactPosition?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
+                        </div>
+
+                        <div className="el" style={ styles.el }>
+                            <PhoneNumber 
+                                id="tenders-tenderContactPhone"
+                                label="Contact Phone Number"
+                                value={ tenderContactPhone }
+                                placeholder = "0x xxxx xxxx"
+                                mask= {['(', [0], /\d/,')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+                                root="inner-textfield" 
+                                fieldClass="textfield"
+                                onBlur = { onBlur }
+                                save = { save } 
+                            />
+                            { errors.tenderContactPhone?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
+                        </div>
+
+                        <div className="el" style={ styles.el }>
+                            <PhoneNumber 
+                                id="tenders-tenderContactFax"
+                                label="Contact's Fax Number"
+                                value={ tenderContactFax }
+                                placeholder = "0x xxxx xxxx"
+                                mask= {['(', [0], /\d/,')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+                                root="inner-textfield" 
+                                fieldClass="textfield"
+                                onBlur = { onBlur }
+                                save = { save } 
+                            />
+                            { errors.tenderContactFax?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
                         </div>
 
                         <div className="el" style={ styles.el }>
                             <Textfield 
-                                id="tenders-tenderStartDate"
-                                label="Expected Start Date"
-                                value={ tenderStartDate } 
-                                type="date" 
-                                placeholder="mm/dd/yyyy" 
+                                id="tenders-tenderContactEmail"
+                                label="Company Contact's Email Address"
+                                value={ tenderContactEmail } 
+                                type="email" 
+                                placeholder="Contact's email" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
                                 onBlur = { onBlur }
                                 onChange = { save } 
                             />
-                            { errors.tenderStartDate?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
-                        </div>
-
-                        <div className="el" style={ styles.el }>
-                            <Textfield 
-                                id="tenders-tenderEndDate"
-                                label="Expected End Date"
-                                value={ tenderEndDate } 
-                                type="date" 
-                                placeholder="mm/dd/yyyy" 
-                                root="inner-textfield" 
-                                fieldClass="textfield"
-                                onBlur = { onBlur }
-                                onChange = { save } 
-                            />
-                            { errors.tenderEndDate?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
+                            { errors.tenderContactEmail?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
                         </div>
 
                         <div className="el" style={ styles.el }>

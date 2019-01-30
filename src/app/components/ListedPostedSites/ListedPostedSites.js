@@ -4,6 +4,7 @@ import  { Loader, MoreHoriz, FmButton } from 'components';
 import axios from 'axios';
 import { 
     dispatchedListingsInfo,
+    dispatchedGenInfo,
     dispatchedUserInfo,
     dispatchedSitesInfo
 } from 'extras/dispatchers';
@@ -11,11 +12,12 @@ import ListedPostedSiteDetails from './ListedPostedSiteDetails';
 import './listedPostedSites.css';
 import { PropTypes } from 'prop-types';
 import { listedPostedSitesOptions } from 'extras/config';
-import { styles, submit_styles, alt_styles, alt_styles_neg } from './styles';
+import { styles, alt_styles, alt_styles_neg } from './styles';
 
 const baseURL = process.env.BACK_END_URL,
 siteRemovalEndPoint = process.env.SITE_REMOVAL_END_POINT,
 siteUpdateEndPoint = process.env.SITE_UPDATE_END_POINT,
+deleteListingEndPoint = process.env.DELETE_LISTING_END_POINT,
 listingsEndPoint = process.env.LISTING_END_POINT,
 tenderEndPoint = process.env.TENDERS_END_POINT;
 
@@ -178,6 +180,58 @@ class ListedPostedSites extends Component {
         }); 
     }
 
+    fetchListings = ()=>{
+        return new Promise(resolve=>{
+            let genInfo = {...this.props.genInfo.info },
+            loginSession = sessionStorage.getItem('loginSession'),
+            userType = loginSession?JSON.parse(sessionStorage.getItem('loginSession')).userType:undefined,
+            userEmail = loginSession?JSON.parse(sessionStorage.getItem('loginSession')).emailAddress:undefined;
+            if(userType){
+                if(userType !== "owner_occupier"){
+                    axios.get(baseURL + listingsEndPoint).then((response)=>{
+                        //console.log(response.data);
+                        let listings = genInfo.listings = {...response.data};
+                        /**Set the more dropdown menu class to hidden for every row*/
+                        Object.keys(listings).map((key)=>{
+                            genInfo.listings[key].moreMenuClassName = "hidden";
+                        })
+                        this.props.dispatch(dispatchedGenInfo(genInfo));
+                        resolve("fetched");
+                    }).catch(err=>{
+                        console.log(err);
+                    });
+                }else{
+                    axios.get(baseURL + listingsEndPoint + "?userEmail=" + userEmail).then((response)=>{
+                        //console.log(response.data);
+                        let listings = genInfo.listings = {...response.data};
+                        genInfo.sideBar.profilePage.listCount['tenders'] = (response.data).length;
+                        /**Set the more dropdown menu class to hidden for every row*/
+                        Object.keys(listings).map((key)=>{
+                            genInfo.listings[key].moreMenuClassName = "hidden";
+                        })
+                        this.props.dispatch(dispatchedGenInfo(genInfo));
+                        resolve("fetched");
+                    }).catch(err=>{
+                        console.log(err);
+                    });            
+                }
+            }else{
+                axios.get(baseURL + listingsEndPoint).then((response)=>{
+                    //console.log(response.data);
+                    let listings = genInfo.generalListings = {...response.data};
+                    /**Set the more dropdown menu class to hidden for every row*/
+                    Object.keys(listings).map((key)=>{
+                        genInfo.generalListings[key].moreMenuClassName = "hidden";
+                    })
+                    this.props.dispatch(dispatchedGenInfo(genInfo));
+                    resolve("fetched");
+                }).catch(err=>{
+                    console.log(err);
+                });
+            }
+        });
+    }
+
     postListingData = ()=>{
         let listingsData = {...this.props.listingsData},
         userInfo = {...this.props.user},
@@ -258,10 +312,13 @@ class ListedPostedSites extends Component {
         e.persist();
         let siteId = e.target.id,
         sitesInfo = { ...this.props.sitesInfo},
+        listings = {...this.props.genInfo.info.generalListings},
         sites = sitesInfo.sites,
+        deleteURL = baseURL + deleteListingEndPoint,
         URL = baseURL + siteUpdateEndPoint,
         createListingURL = baseURL + listingsEndPoint,
         sKey,
+        currListingId,
         currListed;
 
         Object.keys(sites).map(key=>{
@@ -272,22 +329,34 @@ class ListedPostedSites extends Component {
             }
         });
 
+        Object.keys(listings).map(key=>{
+            if(listings[key].siteId === siteId){
+                currListingId = listings[key].id;
+            }
+        })
+
         let equipment = currListed.equipment,
         offerValidity = currListed.offerValidity,
         listed = currListed.listed,
+        listingOwner = currListed.siteOwner,
         contractPeriod = currListed.contractPeriod,
-        listingObject = { siteId, equipment, offerValidity, contractPeriod };
+        listingObject = { siteId, listingOwner, equipment, offerValidity, contractPeriod };
 
         if(listed){
             listed = false;
             sitesInfo.sites[sKey].listed = listed;
             sitesInfo.createListing[siteId + 'isActive'] = false;
             this.props.dispatch(dispatchedSitesInfo(sitesInfo));
+            console.log(currListingId)
             axios.post(URL, {sectTitle: "listed", siteId, updateData: listed }).then(res=>{
                 console.log(res.data);
-                sitesInfo.createListing[siteId + 'isActive'] = true;
-                this.props.dispatch(dispatchedSitesInfo(sitesInfo));
-                this.forceUpdate();
+                axios.post(deleteURL, { listingId: currListingId }).then(res=>{
+                    console.log(res.data)
+                    sitesInfo.createListing[siteId + 'isActive'] = true;
+                    this.props.dispatch(dispatchedSitesInfo(sitesInfo));
+                    this.fetchListings();
+                    this.forceUpdate();
+                });
             }).catch(err=>{
                 console.log(err)
             })
@@ -302,6 +371,7 @@ class ListedPostedSites extends Component {
                     console.log(res.data);
                     sitesInfo.createListing[siteId + 'isActive'] = true;
                     this.props.dispatch(dispatchedSitesInfo(sitesInfo));
+                    this.fetchListings();
                     this.forceUpdate();
                 });
             }).catch(err=>{

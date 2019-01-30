@@ -29,7 +29,12 @@ const defaultState = {
       submitTender: {
         tenderListingId: null,
         tenderCompanyName: null,
-        tenderRate: null,
+        tenderContactName: null,
+        tenderContactPosition: null,
+        tenderContactPhone: null,
+        tenderContactFax: null,
+        tenderContactEmail: null,
+        tenderRates: null,
         tenderStartDate: null,
         tenderEndDate: null,
         tenderCoverLetter: null,

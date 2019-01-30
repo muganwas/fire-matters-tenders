@@ -32,7 +32,10 @@
 .inner-textfield{
     font-weight: thin;
 }
-#profile-phoneNumber, 
+#profile-phoneNumber,
+.textfield,
+#tenders-tenderContactFax,
+#tenders-tenderContactPhone,
 #profile-companyRepMobileNumber, 
 #profile-companyMobileNumber, 
 #profile-companyPhoneNumber,  
@@ -44,7 +47,9 @@
     background-color: #F1F1F2;
     padding: 6px;
 }
-#profile-phoneNumber::placeholder, 
+#profile-phoneNumber::placeholder,
+#tenders-tenderContactFax::placeholder,
+#tenders-tenderContactPhone::placeholder,
 #profile-companyRepMobileNumber::placeholder, 
 #profile-companyMobileNumber::placeholder,
 #profile-companyPhoneNumber::placeholder,

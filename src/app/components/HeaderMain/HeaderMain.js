@@ -323,7 +323,7 @@ class HeaderMain extends Component {
             }else{
                 axios.get(baseURL + listingsEndPoint).then((response)=>{
                     //console.log(response.data);
-                    let listings = genInfo.listings = {...response.data};
+                    let listings = genInfo.generalListings = {...response.data};
                     /**Set the more dropdown menu class to hidden for every row*/
                     Object.keys(listings).map((key)=>{
                         genInfo.listings[key].moreMenuClassName = "hidden";

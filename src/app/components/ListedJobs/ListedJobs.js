@@ -102,10 +102,13 @@ class ListedJobs extends Component {
     upload=()=>{
         let listingsData = {...this.props.listingsData},
         userInfo = {...this.props.user},
-        companyName = listingsData.tenderCompanyName,
-        rate = listingsData.tenderRate,
-        startDate = listingsData.tenderStartDate,
-        endDate = listingsData.tenderEndDate,
+        companyName = JSON.parse(sessionStorage.getItem('profileInfo')).companyName,
+        contactName = listingsData.tenderContactName,
+        contactPosition = listingsData.tenderContactPosition,
+        contactPhone = listingsData.tenderContactPhone,
+        contactFax = listingsData.tenderContactFax,
+        contactEmail = listingsData.enderContactEmail,
+        rates = listingsData.tenderRates, 
         coverLetter = listingsData.tenderCoverLetter,
         tendererId = JSON.parse(sessionStorage.getItem('loginSession')).userId,
         listingId = listingsData.tenderListingId,
@@ -113,12 +116,15 @@ class ListedJobs extends Component {
 
         let postObject = {
             listingId,
+            contactName,
+            contactPosition,
+            contactPhone,
+            contactFax,
+            contactEmail,
             tendererId,
             companyName, 
-            rate, 
-            coverLetter, 
-            startDate, 
-            endDate
+            rates, 
+            coverLetter
         };
 
         this.checkForListingErrors().then(res=>{
@@ -286,6 +292,8 @@ class ListedJobs extends Component {
         if(loginSession){
             id = !id?name:id;
             let listingsInfo = {...this.props.listingsInfo};
+            //listingsData = {...this.props.listingsData};
+            //listingsData.tenderListingId = e.target.id;
             listingsInfo.tenderForm.show = !listingsInfo.tenderForm.show;
             this.postListingId(id).then(res=>{
                 if(res === "id posted")
