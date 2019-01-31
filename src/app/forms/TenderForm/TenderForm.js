@@ -9,7 +9,9 @@ const TenderForm = props=>{
         feedback,
         feedbackClass,
         styles, 
-        close, 
+        close,
+        equipment,
+        renderEquip,
         attributes, 
         upload, 
         save, 
@@ -36,8 +38,9 @@ const TenderForm = props=>{
                     <span className="right" onClick={ close } id="close">&#x2716;</span>
                 </div>
                 <div className="listing-form">
+                <div className="half left">
                     <div className="information" style={ styles.information }>
-                    <div className="el" style={ styles.el }><span className={ feedbackClass }>{ feedback }</span></div>
+                        <div className="el" style={ styles.el }><span className={ feedbackClass }>{ feedback }</span></div>
                         <div className="el" style={ styles.el }>
                             <Textfield 
                                 id="tenders-tenderContactName"
@@ -128,8 +131,15 @@ const TenderForm = props=>{
                             />
                             { errors.tenderEndDate?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
                         </div>
-                        
-                        <div className="el" style={ styles.el }>
+                        </div>
+                    </div>
+                    <div className="half left">
+                        <div className = "tender-equipment">
+                            <h3>Equipment on site</h3>
+                            <span className ="listingEl">{ Object.keys(equipment).map(renderEquip) }</span>
+                        </div>
+                    </div>
+                    <div className="el" style={ styles.el }>
                             <FmButton
                                 isActive={ isActive } 
                                 loaderFill = "#fff" 
@@ -138,10 +148,10 @@ const TenderForm = props=>{
                                 text="Submit Tender"
                                 onClick = { upload } 
                             />
-                        </div>
                     </div>
                 </div>
             </div>
+            <div className="clear"></div>
         </div>
     )
 };

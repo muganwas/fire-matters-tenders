@@ -332,7 +332,6 @@ class ListedJobs extends Component {
         contractPeriod,
         offerValidity,
         equipment = {},
-        renderEquip,
         city,
         options;
         if(userType && userType !== "owner_occupier"){
@@ -365,11 +364,10 @@ class ListedJobs extends Component {
             offerValidity = currSite.offerValidity;
         }
 
-        renderEquip = (key)=>{
-
+        const renderEquip = (key)=>{
             return(
                 <div key={key} className="listed-equip">
-                    { key }, { equipment[key]}
+                    { key }
                 </div>
             )
         }
@@ -397,6 +395,8 @@ class ListedJobs extends Component {
                         feedback = { feedback }
                         feedbackClass = { feedbackClass }
                         errors = { errors }
+                        equipment = { equipment }
+                        renderEquip = { renderEquip }
                         styles = { submit_styles }
                         attributes = { tenderAttributes } 
                         close={ this.renderTenderForm } 
