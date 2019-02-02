@@ -411,6 +411,8 @@ class ListedPostedTenders extends Component {
         selectedTenderInfo = {...this.props.tendersInfo.selectedPostedTender},
         showTender = selectedTenderInfo.show,
         options = tenderOptions;
+
+        console.log(listings)
             
         return(
             <div className="list-row" key={key}>
@@ -429,9 +431,9 @@ class ListedPostedTenders extends Component {
                     : null 
                 }
                 <div className="twenty">{ listings[key].companyName }</div>
-                <div className="thirty">{ listings[key].coverLetter }</div>
-                <div className="twenty">{ listings[key].startDate }</div>
-                <div className="twenty">{ listings[key].rate }</div>
+                <div className="twenty">{ listings[key].contactName }</div>
+                <div className="thirty">{ listings[key].contactEmail }</div>
+                <div className="ten">{ listings[key].contactPhone }</div>
                 <div className="ten">
                     {<MoreHoriz 
                         className={ listings[key].moreMenuClassName } 
@@ -598,9 +600,9 @@ class ListedPostedTenders extends Component {
                     : tendersCount > 0 && userType === "service_provider"
                     ?<div className="list-row header">
                         <span className="twenty">Company Name</span>
-                        <span className="thirty">Cover Letter</span>
-                        <span className="twenty">starting Date</span>
-                        <span className="twenty">Rate</span>
+                        <span className="twenty">Contact name</span>
+                        <span className="thirty">Contact Email</span>
+                        <span className="twenty">Contact Phone</span>
                         <span className="ten"></span>
                         <div className="bottom-border"></div>
                     </div>

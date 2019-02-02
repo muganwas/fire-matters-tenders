@@ -39,18 +39,18 @@ const TenderForm = props=>{
                 </div>
                 <div className="listing-form">
                 <div className="half left">
-                    <div className="information" style={ styles.information }>
+                    <div className="information">
                         <div className="el" style={ styles.el }><span className={ feedbackClass }>{ feedback }</span></div>
                         <div className="el" style={ styles.el }>
                             <Textfield 
                                 id="tenders-tenderContactName"
-                                label="Contact's Name"
+                                label="Company Contact's Name"
                                 value={ tenderContactName } 
                                 type="text" 
-                                placeholder="Contact's Name" 
+                                placeholder="Company Contact's Name" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
-                                onBlur = { onBlur }
+                                upload = { onBlur }
                                 onChange = { save } 
                             />
                             { errors.tenderContactName?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
@@ -65,7 +65,7 @@ const TenderForm = props=>{
                                 placeholder="Contacts Position" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
-                                onBlur = { onBlur }
+                                upload = { onBlur }
                                 onChange = { save } 
                             />
                             { errors.tenderContactPosition?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
@@ -74,13 +74,13 @@ const TenderForm = props=>{
                         <div className="el" style={ styles.el }>
                             <PhoneNumber 
                                 id="tenders-tenderContactPhone"
-                                label="Contact Phone Number"
+                                label="Company Contact's Phone Number"
                                 value={ tenderContactPhone }
                                 placeholder = "0x xxxx xxxx"
                                 mask= {['(', [0], /\d/,')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
                                 root="inner-textfield" 
                                 fieldClass="textfield"
-                                onBlur = { onBlur }
+                                upload = { onBlur }
                                 save = { save } 
                             />
                             { errors.tenderContactPhone?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
@@ -89,13 +89,13 @@ const TenderForm = props=>{
                         <div className="el" style={ styles.el }>
                             <PhoneNumber 
                                 id="tenders-tenderContactFax"
-                                label="Contact's Fax Number"
+                                label="Company Contact's Fax Number"
                                 value={ tenderContactFax }
                                 placeholder = "0x xxxx xxxx"
                                 mask= {['(', [0], /\d/,')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
                                 root="inner-textfield" 
                                 fieldClass="textfield"
-                                onBlur = { onBlur }
+                                upload = { onBlur }
                                 save = { save } 
                             />
                             { errors.tenderContactFax?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
@@ -110,7 +110,7 @@ const TenderForm = props=>{
                                 placeholder="Contact's email" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
-                                onBlur = { onBlur }
+                                upload = { onBlur }
                                 onChange = { save } 
                             />
                             { errors.tenderContactEmail?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
@@ -126,16 +126,17 @@ const TenderForm = props=>{
                                 placeholder="Brief cover letter" 
                                 root="inner-textfield" 
                                 fieldClass="textfield"
-                                onBlur = { onBlur }
+                                upload = { onBlur }
                                 onChange = { save } 
                             />
-                            { errors.tenderEndDate?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
+                            { errors.tenderCoverLetter?<span style={ styles.inputErr } className="error-feedback">{ mandatoryInput }</span>:null }
                         </div>
                         </div>
                     </div>
                     <div className="half left">
                         <div className = "tender-equipment">
-                            <h3>Equipment on site</h3>
+                            <span className ="left"><h4>Equipment on site</h4></span><span className="right"><h4>Service charge</h4></span>
+                            <div className="clear"></div>
                             <span className ="listingEl">{ Object.keys(equipment).map(renderEquip) }</span>
                         </div>
                     </div>

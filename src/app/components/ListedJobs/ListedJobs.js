@@ -66,7 +66,7 @@ class ListedJobs extends Component {
         }); 
     }
 
-    fetchMessages(){
+    fetchMessages = ()=>{
         let URL = baseURL + messagesEndPoint,
         messagesInfo = {...this.props.messagesInfo};
         return new Promise(resolve=>{
@@ -80,13 +80,13 @@ class ListedJobs extends Component {
         });
     }
 
-    checkForListingErrors(){
+    checkForListingErrors = ()=>{
         let errored = [];
         return new Promise(resolve=>{
             let listingsData = {...this.props.listingsData},
             listingsInfo = {...this.props.listingsInfo};
             Object.keys(listingsData).map(key=>{
-                if(!listingsData[key] && key !== "feedback" && key !== "feedbackClass" && key !== "submitButton"){
+                if(!listingsData[key] && key !== "feedback" && key !== "feedbackClass" && key !== "submitButton" && key !== "tenderRates"){
                     listingsInfo.tenderForm.errors[key] = true;
                     errored.push(listingsInfo.tenderForm.errors[key]);
                 }else if(listingsData[key] && key !== "feedback" && key !== "feedbackClass" && key !== "submitButton"){
@@ -107,7 +107,7 @@ class ListedJobs extends Component {
         contactPosition = listingsData.tenderContactPosition,
         contactPhone = listingsData.tenderContactPhone,
         contactFax = listingsData.tenderContactFax,
-        contactEmail = listingsData.enderContactEmail,
+        contactEmail = listingsData.tenderContactEmail,
         rates = listingsData.tenderRates, 
         coverLetter = listingsData.tenderCoverLetter,
         tendererId = JSON.parse(sessionStorage.getItem('loginSession')).userId,
@@ -141,6 +141,7 @@ class ListedJobs extends Component {
                         this.props.dispatch(dispatchedUserInfo(userInfo));
                         this.forceUpdate();
                     }else{
+                        console.log(res.data)
                         userInfo.submitTender.submitButton.isActive = true;
                         userInfo.submitTender.feedback = "There was an error, try again later.";
                         userInfo.submitTender.feedbackClass="error-feedback";
@@ -315,8 +316,18 @@ class ListedJobs extends Component {
         this.props.dispatch(dispatchedListingsInfo(listingsInfo));
     }
 
+    saveEquipRate = (e)=>{
+        let id = e.target.id,
+        value = e.target.value,
+        userInfo = {...this.props.user},
+        tenderRates = userInfo.submitTender.tenderRates;
+        tenderRates[id] = value;
+        this.props.dispatch(dispatchedUserInfo(userInfo))
+    }
+
     displayListings = (key)=>{
         let listings = {...this.props.genInfo.generalListings},
+        listingsData = {...this.props.listingsData},
         listingsInfo = {...this.props.listingsInfo},
         sites = {...this.props.sitesInfo.genSites},
         showJobDetails = listingsInfo.listedJobDetails.show,
@@ -325,6 +336,7 @@ class ListedJobs extends Component {
         feedback = tenderAttributes.feedback,
         feedbackClass = tenderAttributes.feedbackClass,
         showTenderForm = listingsInfo.tenderForm.show,
+        equipmentRates = listingsData.tenderRates,
         profileInfo = sessionStorage.getItem('profileInfo'),
         userType = profileInfo?JSON.parse(sessionStorage.getItem('profileInfo')).userType: null,
         currSite,
@@ -350,6 +362,7 @@ class ListedJobs extends Component {
 
         if(currSite){
             let equipmentObj = currSite.equipment;
+
             Object.keys(equipmentObj).map(key=>{
                 Object.keys(equipmentObj[key]).map(key1=>{
                     if(equipmentObj[key][key1] && key1 !== "equipCount")
@@ -367,7 +380,17 @@ class ListedJobs extends Component {
         const renderEquip = (key)=>{
             return(
                 <div key={key} className="listed-equip">
-                    { key }
+                    { equipmentKeyNames[key] } 
+                    <span className="countDigit right">
+                        <input
+                            id = { key }
+                            className = "equipQ"
+                            type="number"
+                            placeholder="Rate"
+                            onChange={ this.saveEquipRate }
+                        />
+                    </span>
+                    <div className="clear"></div>
                 </div>
             )
         }
@@ -400,7 +423,7 @@ class ListedJobs extends Component {
                         styles = { submit_styles }
                         attributes = { tenderAttributes } 
                         close={ this.renderTenderForm } 
-                        onBlur={ this.dummy } 
+                        onBlur={ this.checkForListingErrors } 
                         upload={ this.upload } 
                         save={ this.save } 
                     />:null

@@ -37,7 +37,7 @@
 }
 .listed-equip{
     display: block;
-    margin:1px;
     padding: 5px 10px 5px 5px;
+    margin: 1px 0;
     background: #dddddd;
 }
