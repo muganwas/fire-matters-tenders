@@ -40,6 +40,7 @@ class PostedTendersOverlay extends Component {
         listings =  {...this.props.genInfo.info.generalListings},
         tenderId = tendersInfo.tenders[id].id,
         listingId = tendersInfo.tenders[id].listingId;
+
         Object.keys(listings).map(key=>{
             if(listings[key].id === listingId){
                 currListingKey = key;
@@ -47,6 +48,7 @@ class PostedTendersOverlay extends Component {
                 listings[key].acceptedTender = tenderId;
             }
         })
+        
         tendersInfo.tenders[id].accepted = true;
         tendersInfo.tenders[id].acceptTenderButton.isActive = false;
         let updateData = tendersInfo.tenders[id];

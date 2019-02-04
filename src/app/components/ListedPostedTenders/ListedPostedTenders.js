@@ -5,7 +5,7 @@ import  {
     FmButton, 
     MoreHoriz 
 } from 'components';
-import PostedTendersOverlay from './PostedTendersOverlay';
+//import PostedTendersOverlay from './PostedTendersOverlay';
 import axios from 'axios';
 import { 
     dispatchedGenInfo, 
@@ -411,8 +411,6 @@ class ListedPostedTenders extends Component {
         selectedTenderInfo = {...this.props.tendersInfo.selectedPostedTender},
         showTender = selectedTenderInfo.show,
         options = tenderOptions;
-
-        console.log(listings)
             
         return(
             <div className="list-row" key={key}>
@@ -428,23 +426,28 @@ class ListedPostedTenders extends Component {
                             </span>
                             <ListedPostedTenderDetails />
                         </div>
-                    : null 
+                    : null
                 }
                 <div className="twenty">{ listings[key].companyName }</div>
                 <div className="twenty">{ listings[key].contactName }</div>
                 <div className="thirty">{ listings[key].contactEmail }</div>
-                <div className="ten">{ listings[key].contactPhone }</div>
+                <div className="twenty">{ listings[key].contactPhone }</div>
                 <div className="ten">
-                    {<MoreHoriz 
-                        className={ listings[key].moreMenuClassName } 
-                        id={ key }
-                        toggle = { this.toggleMoreMenu }
-                        onClickAlt = { this.togglePostedTendersDisplay }
-                        autoid = { listings[key].id }
-                        listName = "tenders"
-                        element={ listings[key] }
-                        options={ options }
-                     />}
+                    <div className="right">
+                        {
+                            <MoreHoriz 
+                                className={ listings[key].moreMenuClassName } 
+                                id={ key }
+                                toggle = { this.toggleMoreMenu }
+                                onClickAlt = { this.togglePostedTendersDisplay }
+                                autoid = { listings[key].id }
+                                listName = "tenders"
+                                element={ listings[key] }
+                                options={ options }
+                            />
+                        }
+                     </div>
+                     <div className="clear"></div>
                 </div>
                 <div className="bottom-border"></div>
             </div>

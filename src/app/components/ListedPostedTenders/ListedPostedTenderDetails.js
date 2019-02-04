@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Textfield } from 'components';
 import { dispatchedTendersInfo } from 'extras/dispatchers';
+import {  equipmentKeyNames } from 'extras/config'
 import axios from 'axios';
 
 const baseURL = process.env.BACK_END_URL,
@@ -58,21 +59,66 @@ class ListedPostedTenderDetails extends React.Component {
         }); 
     }
 
+    saveEquipRate = (e)=>{
+        let id = e.target.id,
+        value = e.target.value,
+        tendersInfo = {...this.props.tendersInfo},
+        tenderRates = tendersInfo.selectedPostedTender.tenderInfo.rates;
+        tenderRates[id] = value;
+        this.props.dispatch(dispatchedTendersInfo(tendersInfo));
+    }
+
+    uploadRates = ()=>{
+        let currTender = {...this.props.currTender },
+        tenderId = currTender.id,
+        updateData = currTender.rates,
+        updateInfoUrl = baseURL + tenderUpdateEndPoint,
+        updateObject = {tenderId, sectTitle: "rates" , updateData};
+        axios.post(updateInfoUrl, updateObject).
+        then(res=>{
+            console.log(res);
+        }).
+        catch(err=>{
+            reject(err);
+        });
+
+    }
+
     render(){
         let { currTender } = this.props,
-        { companyName, rate, startDate, endDate, coverLetter } = currTender;
+        { companyName, contactName, contactPosition, contactPhone, contactFax, contactEmail, rates, coverLetter } = currTender;
+
+        const renderEquip = (key)=>{
+            return(
+                <div key={key} className="listed-equip">
+                    { equipmentKeyNames[key] } 
+                    <span className="countDigit right">
+                        <input
+                            id = { key }
+                            className = "equipQ"
+                            type="number"
+                            placeholder="Rate"
+                            defaultValue = { rates[key] }
+                            onChange={ this.saveEquipRate }
+                            onBlur ={ this.uploadRates }
+                        />
+                    </span>
+                    <div className="clear"></div>
+                </div>
+            )
+        }
 
         return(
             <div className="sub-container">
-                <div className="hanad left">
+                <div className="half left">
                     <div className="heading">Company Name: { companyName }<div className="bottom-border"></div></div>
                     <br />
                     <div className="information">
                         <div className="el">
                             <Textfield 
-                                id="selectedTender-rate" 
-                                value={ rate }
-                                label="Proposed Rate"
+                                id="selectedTender-companyName" 
+                                value={ companyName }
+                                label="Company Name"
                                 type="text" 
                                 placeholder="Input proposed rate" 
                                 root="inner-textfield" 
@@ -83,11 +129,11 @@ class ListedPostedTenderDetails extends React.Component {
                         </div>
                         <div className="el">
                             <Textfield
-                                id="selectedTender-startDate"
-                                label = "Start Date"
-                                value={ startDate } 
-                                type = "date"
-                                placeholder="MM/DD/YYYY"
+                                id="selectedTender-contactName"
+                                label = "Contact Name"
+                                value={ contactName } 
+                                type = "text"
+                                placeholder="Company Contacts's Name"
                                 root="inner-textfield" 
                                 fieldClass="textfield"
                                 upload={ this.upload }
@@ -96,11 +142,48 @@ class ListedPostedTenderDetails extends React.Component {
                         </div>
                         <div className="el">
                             <Textfield
-                                id="selectedTender-endDate"
-                                label = "End Date"
-                                value={ endDate } 
-                                type = "date"
-                                placeholder="MM/DD/YYYY"
+                                id="selectedTender-contactPosition"
+                                label = "Contact Position"
+                                value={ contactPosition } 
+                                type = "text"
+                                placeholder="Company Contact's Name"
+                                root="inner-textfield" 
+                                fieldClass="textfield"
+                                upload={ this.upload }
+                                save={ this.save } 
+                            />
+                        </div>
+                        <div className="el">
+                            <Textfield
+                                id="selectedTender-contactEmail"
+                                label = "Contact Email"
+                                value={ contactEmail } 
+                                type = "text"
+                                placeholder="Company Contact's Email"
+                                root="inner-textfield" 
+                                fieldClass="textfield"
+                                upload={ this.upload }
+                                save={ this.save } 
+                            />
+                        </div>
+                        <div className="el">
+                            <Textfield
+                                id="selectedTender-contactPhone"
+                                label = "Contact Phone"
+                                value={ contactPhone } 
+                                placeholder="Company Contact's Phone"
+                                root="inner-textfield" 
+                                fieldClass="textfield"
+                                upload={ this.upload }
+                                save={ this.save } 
+                            />
+                        </div>
+                        <div className="el">
+                            <Textfield
+                                id="selectedTender-contactFax"
+                                label = "Contact Fax"
+                                value={ contactFax } 
+                                placeholder="Company Contact's Fax"
                                 root="inner-textfield" 
                                 fieldClass="textfield"
                                 upload={ this.upload }
@@ -122,6 +205,11 @@ class ListedPostedTenderDetails extends React.Component {
                             />
                         </div>                       
                     </div>
+                </div>
+                <div   id="equip-update-half" className="half right">
+                    <span className ="left"><h4>Equipment</h4></span><span className="right"><h4>Service charge</h4></span>
+                    <div className="clear"></div>
+                    { Object.keys(rates).map(renderEquip) }
                 </div>
                 <div className="clear"></div>
             </div>
