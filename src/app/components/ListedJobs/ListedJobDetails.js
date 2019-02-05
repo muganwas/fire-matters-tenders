@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import {  equipmentKeyNames } from 'extras/config'
 import './listedJobs.css';
 
 const ListedJobDetails = props=>{
@@ -13,7 +14,7 @@ const ListedJobDetails = props=>{
     const renderEquip = (key)=>{
         return(
             <div key={key} className="listed-equip">
-                { key } <span className="right">{ equipment[key] }</span>
+                { equipmentKeyNames[key] } <span className="right">{ equipment[key] }</span>
             </div>
         )
     }
