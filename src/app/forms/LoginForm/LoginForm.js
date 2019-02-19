@@ -250,6 +250,12 @@ class LoginForm extends React.Component {
         this.props.dispatch(dispatchedUserInfo(userInfo));
         this.props.dispatch(dispatchedGenInfo(info));
     }
+
+    checkKey = (e)=>{
+        let key = e.keyCode;
+        if(key === 13)
+            this.login();
+    }
     
     render(){
         let genInfo = this.props.genInfo,
@@ -263,15 +269,15 @@ class LoginForm extends React.Component {
             <div className="form login">
                 { postSubmitMessage?<span className={ messageClass }> <Info className="icon" /> { postSubmitMessage } </span>: null }
                 <div className="inputRow">
-                    <TextSpace onBlur={ this.errorCheck } value={ userInfo.username } id="username" type="email" adornment="person" placeholder="JohnDoe@email.com" fieldClass={ genInfo.usernameClass || genInfo.textfieldClass } />
+                    <TextSpace onKeyDown={ this.checkKey } onBlur={ this.errorCheck } value={ userInfo.username } id="username" type="email" adornment="person" placeholder="JohnDoe@email.com" fieldClass={ genInfo.usernameClass || genInfo.textfieldClass } />
                     { usernameError?<span className="error-feedback">{ usernameError }</span>:null }
                 </div>
                 <div className="inputRow">
-                    <TextSpace onBlur={ this.errorCheck } value={ userInfo.loginPass } id = "loginPass" type="password" adornment="lock" placeholder="Password" fieldClass={ genInfo.loginPassClass || genInfo.textfieldClass } />
+                    <TextSpace onKeyDown={ this.checkKey } onBlur={ this.errorCheck } value={ userInfo.loginPass } id = "loginPass" type="password" adornment="lock" placeholder="Password" fieldClass={ genInfo.loginPassClass || genInfo.textfieldClass } />
                     { loginPasswordError?<span className="error-feedback">{ loginPasswordError }</span>:null }
                 </div>
                 <div className="inputRow">
-                    <FmButton isActive={ isActive } loaderFill = "#fff" variant="contained" onClick={ this.login } styles = { styles } text="Login" />              
+                    <FmButton isActive={ isActive } loaderFill = "#fff" variant="contained" onClick={ this.login } styles = { styles } text="Login" />        
                 </div>
                 <div className="inputRow">
                     <span>Forgot Password?</span>  <Link to={`/login`} >Reset Password</Link>

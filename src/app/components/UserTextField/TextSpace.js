@@ -78,6 +78,7 @@ class TextSpace extends React.Component {
             <TextField
                 id={this.props.id}
                 className={ this.props.fieldClass }
+                onKeyDown = { this.props.onKeyDown }
                 InputProps={{
                     disableUnderline: true,
                     classes: {
