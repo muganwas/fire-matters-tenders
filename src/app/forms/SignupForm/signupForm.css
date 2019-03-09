@@ -181,20 +181,45 @@ a {
     background-color: #F79A50;
     color: #fff;
 }
-@media only screen and (max-width: 1350px){
-    .middle-line{
-        width: 90%;
+@media only screen and (max-width: 550px){
+    .form.signup{
+        width: 280px;
+        padding: 40px 50px;
+    }
+    .login-button{
+        width: 200px;
+        padding: 4px;
     }
 }
 
-@media only screen and (max-width: 1080px){
-    .middle-line{
-        width: 90%;
+@media only screen and (max-width: 527px){
+    .form.signup{
+        width: 250px;
+        padding: 40px 30px;
+        margin: 80px auto;
+    }
+
+    .signup .textfield{
+        box-sizing: border-box;
+        position: relative;
+        margin: auto;
+        width: 200px;
+        border: thin solid #afafaf;
+        border-radius: 3px;
+        padding: 3px;
     }
 }
 
-@media only screen and (max-width: 950px){
-    .middle-line{
-        width: 90%;
+@media only screen and (max-width: 450px){
+    .form.signup{
+        width: 250px;
+        padding: 40px 30px;
+        margin: 80px auto;
+    }
+}
+
+@media only screen and (max-width: 395px){
+    .form.signup{
+        margin: 100px auto;
     }
 }

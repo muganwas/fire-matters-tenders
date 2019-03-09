@@ -1,3 +1,23 @@
+.contactForm .textfield{
+    display: inline-block;
+    width: 50%;
+    box-sizing: border-box;
+    position: relative;
+    margin: auto;
+    border: thin solid #afafaf;
+    border-radius: 3px;
+    padding: 3px;
+}
+.contactForm .textArea{
+    display: inline-block;
+    width: 50%;
+    box-sizing: border-box;
+    position: relative;
+    margin: auto;
+    border: thin solid #afafaf;
+    border-radius: 3px;
+    padding: 3px;
+}
 .contactForm .inputRow{
     box-sizing: border-box;
     position: relative;
@@ -12,6 +32,9 @@
     font-weight: 100;
     padding: 10px;
 }
+#contact-form {
+    margin: 0 10%;
+}
 #contact-form .heading{
     font-size: 20px;
     font-weight: thin;
@@ -20,4 +43,33 @@
 }
 .contactForm .athird{
     width: 32.2%;
+}
+@media only screen and (max-width: 768px){
+    .contactForm .textfield{
+        display: inline-block;
+        width: 100%;
+        box-sizing: border-box;
+        position: relative;
+        margin: auto;
+        border: thin solid #afafaf;
+        border-radius: 3px;
+        padding: 3px;
+    }
+    .contactForm .textArea{
+        display: inline-block;
+        width: 100%;
+        box-sizing: border-box;
+        position: relative;
+        margin: auto;
+        border: thin solid #afafaf;
+        border-radius: 3px;
+        padding: 3px;
+    }
+    
+}
+@media only screen and (max-width: 527px){
+    .contactForm .textfield{
+        width: 100%;
+    }
+
 }

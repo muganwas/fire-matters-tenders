@@ -78,6 +78,12 @@
         display: none;
     }
 }
+@media only screen and (max-width: 768px){
+  .App-header {
+    margin: 0 8%;
+    padding: 0 20px;
+  }
+}
 @media only screen and (max-width: 680px){
   .Main-Menu{
     display: none;
@@ -112,18 +118,15 @@
     font-size: 26px;
     cursor: pointer;
   }
-  div.search{
-    box-sizing: border-box;
-    display: block;
-    float:none;
-  }
-  .search input{
-    box-sizing: border-box;
-    min-width: 80%;
-  }
+div.search{
+  box-sizing: border-box;
+  display: block;
+  float:none;
 }
-@media only screen and (max-width: 625px){
-
+.search input{
+  box-sizing: border-box;
+  min-width: 80%;
+}
 }
 @media only screen and (max-width: 590px){
   .search input{
@@ -132,6 +135,6 @@
     background: #bbbbbb;
     color: #000;
     height: 25px;
-    width: 150px;
+    width: 80%;
   }
 }

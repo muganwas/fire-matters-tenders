@@ -1,12 +1,11 @@
-.call-to-action{
+  .call-to-action{
     box-sizing: border-box;
+    margin: 0;
     background-image: url('~images/call_to_action.jpg');
-    background-repeat: no-repeat;
     background-size: cover;
-    width: 102%;
-    margin-left: -9px;
+    width: 100%;
+    padding: 5% 100px;
     height: 400px;
-    overflow: hidden;
   }
   .call-to-action #title-text{
     display: block;
@@ -14,15 +13,14 @@
     font-weight: bold;
     font-size: 35px;
     width: 40%;
-    margin: 50px 90px;
   }
   .call-to-action #get-started{
     display: block;
     color: #000000;
     font-weight: bold;
     font-size: 35px;
-    width: 50%;
-    margin: 50px 90px;
+    padding: 20px 0;
+    width: 70%;
   }
   #get-started input{
     background: #fff;
@@ -55,6 +53,17 @@
     .call-to-action #title-text{
       font-size: 30px;
     }
+  }
+  @media only screen and (max-width: 768px){
+    .call-to-action{
+      padding: 10% 10%;
+    }
+    .call-to-action #title-text{
+      width: 80%;
+    }
+    .call-to-action #get-started{
+      width: 100%;
+    }    
   }
   @media only screen and (max-width: 680px){
     #get-started input{
@@ -91,4 +100,12 @@
       width: 100%;
       font-size: 14px;
     }
+  }
+  @media only screen and (max-width: 360px){
+    .call-to-action #title-text{
+      width: 80%;
+    }
+    .call-to-action #get-started{
+      width: 100%;
+    } 
   }

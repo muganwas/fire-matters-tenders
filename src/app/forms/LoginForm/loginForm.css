@@ -22,6 +22,7 @@
     background: white;
 }
 .form.login{
+    position: relative;
     width: 380px;
     text-align: center;
     margin: 40px auto;
@@ -49,3 +50,48 @@
     color: #000000;
     background: none;
 }
+
+@media only screen and (max-width: 550px){
+    .form.login{
+        width: 280px;
+        padding: 40px 50px;
+    }
+    .login-button{
+        width: 200px;
+        padding: 4px;
+    }
+}
+
+@media only screen and (max-width: 527px){
+    .form.login{
+        width: 250px;
+        padding: 40px 30px;
+        margin: 80px auto;
+    }
+    .login .textfield{
+        box-sizing: border-box;
+        position: relative;
+        margin: auto;
+        width: 200px;
+        border: thin solid #afafaf;
+        border-radius: 3px;
+        padding: 3px;
+    }
+}
+
+@media only screen and (max-width: 450px){
+    .form.login{
+        width: 250px;
+        padding: 40px 30px;
+        margin: 80px auto;
+    }
+}
+
+@media only screen and (max-width: 372px){
+    .form.login{
+        margin: 100px auto;
+    }
+}
+
+
+

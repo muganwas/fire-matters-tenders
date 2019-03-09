@@ -5,23 +5,6 @@ import { dispatchedUserInfo } from 'extras/dispatchers';
 import { Info } from '@material-ui/icons';
 import PropTypes from 'prop-types';
 
-const styles = {
-    button: {
-      margin: 2,
-      padding: '3px 10px',
-      fontSize: 14,
-      width: "300px",
-      backgroundColor: "#ED2431",
-      color: "#fff",
-      fontWeight: "bold",
-      '&:hover': {
-        background: '#ED2431',
-        boxShadow: '1px 2px 4px #BC2902',
-        transition: 'all 0.2s ease-in'
-      }
-    }
-};
-
 export const PreSignup = props=>{
     const { nextView } = props;
     return(
@@ -54,9 +37,10 @@ export const BasicInformation = props=>{
         isActive,
         postSubmitMessage, 
         messageClass,
+        buttonStyle,
         mobileNumberError } = props;
     return(
-        <div className = "basic-information">
+        <div className = "basic-information signup">
             { postSubmitMessage?<span className={ messageClass }> <Info className="icon" /> { postSubmitMessage } </span>: null }
             {/*<div className="inputRow">
                 <TextSpace onBlur={ setError } id="fullName" value={ userInfo.fullName } adornment="person" type="text" placeholder="Full Name" fieldClass={ genInfo.fullNameClass || genInfo.textfieldClass } />
@@ -89,7 +73,7 @@ export const BasicInformation = props=>{
                 { tmcError?<span className="error-feedback">{ tmcError }</span>:null }
             </div>
             <div className="inputRow">
-                <FmButton isActive={ isActive } variant="contained" onClick={ signup } styles = { styles } text="Sign Up" /> 
+                <FmButton isActive={ isActive } variant="contained" onClick={ signup } styles = { buttonStyle } text="Sign Up" /> 
             </div>
         </div>
     ) 

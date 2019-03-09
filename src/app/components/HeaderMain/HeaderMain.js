@@ -11,7 +11,8 @@ import {
     dispatchedListingsInfo,
     dispatchedSubContractorsInfo,
     dispatchedContractsInfo,
-    dispatchedUserInfo
+    dispatchedUserInfo,
+    dispatchedProfileInfo
 } from 'extras/dispatchers';
 import { SearchInput } from 'components';
 import { Lock } from '@material-ui/icons';
@@ -77,13 +78,22 @@ class HeaderMain extends Component {
     }
     
     updateDimensions = ()=>{
-        let winWidth = window.innerWidth;
-        let info = {...this.props.genInfo};
+        let winWidth = window.innerWidth,
+        info = {...this.props.genInfo};
         if(winWidth >= 680){
             info['menu'] = "Main-Menu";
         }else{
             info['menu'] = "Mobile-Menu";
         }
+        let profileInfo = {...this.props.realProfileInfo};
+        profileInfo.visualProps.windowWidth = winWidth;
+        if(winWidth >= 1150){
+            
+            profileInfo.visualProps.columnClass = "half left"
+        }else{
+            profileInfo.visualProps.columnClass = "hanad left";
+        }
+        this.props.dispatch(dispatchedProfileInfo(profileInfo));
         this.props.dispatch(dispatchedGenInfo(info));
     }
 
@@ -162,15 +172,15 @@ class HeaderMain extends Component {
 
     fetchSites = ()=>{
         return new Promise(resolve=>{
-            let sitesInfo = {...this.props.sitesInfo },
-            genInfo = { ...this.props.genInfo },
-            loginSession = sessionStorage.getItem('loginSession'),
+            let loginSession = sessionStorage.getItem('loginSession'),
             userType = loginSession?JSON.parse(sessionStorage.getItem('loginSession')).userType:undefined,
             userEmail = loginSession?JSON.parse(sessionStorage.getItem('loginSession')).emailAddress:undefined,
             url = baseURL + sitesEndPoint + "?emailAddress=" + userEmail,
             genSitesURL = baseURL + sitesEndPoint;
 
             axios.get(genSitesURL).then(res=>{
+                let sitesInfo = {...this.props.sitesInfo },
+                genInfo = { ...this.props.genInfo };
                 if(res.data.length > 0){
                     sitesInfo.genSites = {...res.data};
                     this.props.dispatch(dispatchedSitesInfo(sitesInfo));
@@ -201,7 +211,6 @@ class HeaderMain extends Component {
 
     fetchTenders = ()=>{
         let postInfoUrl = baseURL + tenderEndPoint,
-        genInfo = {...this.props.genInfo },
         contractCount = [],
         loginSession = sessionStorage.getItem('loginSession'),
         userType = loginSession?JSON.parse(sessionStorage.getItem('loginSession')).userType:undefined,
@@ -209,9 +218,10 @@ class HeaderMain extends Component {
         postedTenders = [];
         if(userType){
             if(userType === "owner_occupier"){
-                let listings = genInfo.listings;
                 axios.get(postInfoUrl).then(res=>{
                     let tendersArr = res.data,
+                    genInfo = {...this.props.genInfo },
+                    listings = genInfo.listings,
                     tendersLen = tendersArr.length;
                     for(let count = 0;count <tendersLen; count++){
                         let currObj = tendersArr[count],
@@ -239,10 +249,10 @@ class HeaderMain extends Component {
                 this.forceUpdate();
             }else{
                 let tendererId = JSON.parse(sessionStorage.getItem('profileInfo')).id,
-                genInfo = {...this.props.genInfo},
-                tendersInfo = {...this.props.tendersInfo},
                 getInfoUrl = baseURL + tenderEndPoint + "?tendererId=" + tendererId;
                 axios.get(getInfoUrl).then(res=>{
+                    let genInfo = {...this.props.genInfo},
+                    tendersInfo = {...this.props.tendersInfo};
                     if(res){
                         tendersInfo.tenders = res.data;
                         Object.keys(tendersInfo.tenders).map((key)=>{
@@ -259,7 +269,8 @@ class HeaderMain extends Component {
                 }); 
             }
         }else{
-            let listings = genInfo.generalListings;
+            let genInfo = {...this.props.genInfo },
+            listings = genInfo.generalListings;
             axios.get(postInfoUrl).then(res=>{
                 let tendersArr = res.data,
                 tendersLen = tendersArr.length;
@@ -287,13 +298,13 @@ class HeaderMain extends Component {
 
     fetchListings = ()=>{
         return new Promise(resolve=>{
-            let genInfo = {...this.props.genInfo },
-            loginSession = sessionStorage.getItem('loginSession'),
+            let loginSession = sessionStorage.getItem('loginSession'),
             userType = loginSession?JSON.parse(sessionStorage.getItem('loginSession')).userType:undefined,
             userEmail = loginSession?JSON.parse(sessionStorage.getItem('loginSession')).emailAddress:undefined;
             if(userType){
                 if(userType !== "owner_occupier"){
                     axios.get(baseURL + listingsEndPoint).then((response)=>{
+                        let genInfo = {...this.props.genInfo };
                         //console.log(response.data);
                         let listings = genInfo.listings = {...response.data};
                         /**Set the more dropdown menu class to hidden for every row*/
@@ -307,6 +318,7 @@ class HeaderMain extends Component {
                     });
                 }else{
                     axios.get(baseURL + listingsEndPoint + "?userEmail=" + userEmail).then((response)=>{
+                        let genInfo = {...this.props.genInfo };
                         //console.log(response.data);
                         let listings = genInfo.listings = {...response.data};
                         genInfo.sideBar.profilePage.listCount['tenders'] = (response.data).length;
@@ -323,6 +335,7 @@ class HeaderMain extends Component {
             }else{
                 axios.get(baseURL + listingsEndPoint).then((response)=>{
                     //console.log(response.data);
+                    let genInfo = {...this.props.genInfo };
                     let listings = genInfo.generalListings = {...response.data};
                     /**Set the more dropdown menu class to hidden for every row*/
                     Object.keys(listings).map((key)=>{
@@ -338,10 +351,10 @@ class HeaderMain extends Component {
     }
 
     fetchGenListings = ()=>{
-        return new Promise(resolve=>{
-            let genInfo = {...this.props.genInfo };
+        return new Promise(resolve=>{ 
             axios.get(baseURL + listingsEndPoint).then((response)=>{
                 //console.log(response.data);
+                let genInfo = {...this.props.genInfo };
                 let listings = genInfo.generalListings = {...response.data};
                 /**Set the more dropdown menu class to hidden for every row*/
                 Object.keys(listings).map((key)=>{
@@ -415,6 +428,11 @@ class HeaderMain extends Component {
     }
 
     render(){
+        let winWidth = window.innerWidth,
+        loginDirection = "right";
+        if(winWidth <= 680){
+            loginDirection = "left";
+        }
         let home = this.props.navigation.home,
         profileInfo = sessionStorage.getItem('profileInfo'),
         userType = profileInfo?JSON.parse(sessionStorage.getItem('profileInfo')).userType: null;
@@ -438,7 +456,7 @@ class HeaderMain extends Component {
                     }
                     <NavLink activeClassName="active" id="about" onClick={ this.toggleMenu } to={`/about`}>About</NavLink>
                     <NavLink activeClassName="active" id="contact" onClick={ this.toggleMenu } to={`/contact`}>Contact</NavLink>
-                    <div className="login-social right">
+                    <div className= { 'login-social ' + loginDirection }>
                         { /*this.socialIcons*/ }
                         { sessionStorage.getItem('loginSession')?this.loggeInOptions:this.NotLoggedInOptions }
                     </div>                   
@@ -466,6 +484,7 @@ export default connect(store=>{
     return {
         searchInfo: store.search.info,
         user: store.user,
+        realProfileInfo: store.profile.info,
         profileInfo: store.user.info.profileInfo,
         tendersInfo: store.tenders.info,
         navigation: store.genInfo.info.alternatingNavigation,
@@ -478,6 +497,7 @@ export default connect(store=>{
         messagesInfo: store.messages.info,
         messageData: store.user.info.submitMessage,
         subContractorData: store.user.info.addSubContractor,
+        serviceProvidersInfo: store.serviceProviders.info,
         subContractorsInfo: store.subContractors.info
     }
 })(withRouter(HeaderMain));

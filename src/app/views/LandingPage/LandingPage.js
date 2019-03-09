@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import  { CallToAction, LandingInfo, Footer, HeaderMain } from 'components';
+import './landingPage.css';
 
 @connect(store=>{
     return{

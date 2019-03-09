@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import './listFilter.css';
 import { PropTypes } from 'prop-types';
 import { TickBox } from 'components';
+import { dispatchedServiceProvidersInfo } from 'extras/dispatchers';
 
 @connect((store)=>{
     return {
@@ -14,12 +15,34 @@ import { TickBox } from 'components';
 })
 class ListFilter extends Component {
     constructor(props){
-        super(props)
+        super(props);
+    }
+
+    componentWillMount(){
+        window.addEventListener("resize", this.updateDimensions);
+        this.updateDimensions();
+    }
+
+    updateDimensions = ()=>{
+        let winWidth = window.innerWidth;
+        let info = {...this.props.serviceProvidersInfo};
+        if(winWidth <= 550){
+            info.filter.filtersContainerClass = "list-filter left hanad";
+        }else if(winWidth <= 768){
+            info.filter.filtersContainerClass = "list-filter left half";
+        }
+        else{
+            info.filter.filtersContainerClass = "list-filter right quarter";
+        }
+        this.props.dispatch(dispatchedServiceProvidersInfo(info));
     }
 
     render(){
+        let { serviceProvidersInfo } = this.props,
+        { filter } = serviceProvidersInfo,
+        { filtersContainerClass } = filter;
         return(
-            <div className="list-filter right quarter">
+            <div className={ filtersContainerClass }>
                 <div className="header">{ this.props.title }</div>
                 <span className="row">
                     <TickBox id = "Maintenance" dispatcher = { this.props.tickDispatcher } placement = { this.props.listPlacement } />

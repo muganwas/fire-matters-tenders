@@ -1,8 +1,13 @@
 const defaultState = {
     info: {
         signupInfo:{},
-        filter: {},
-        serviceProviders: {}
+        filter: {
+          filtersContainerClass: "list-filter right quarter"
+        },
+        serviceProviders: {
+          serviceProvidersContainerClass: "list left seventy5"
+        },
+        miscAttributes:{}
      },
     fetching: false,
     fetched: false,

@@ -82,7 +82,7 @@ class TextSpace extends React.Component {
                 InputProps={{
                     disableUnderline: true,
                     classes: {
-                        root: this.props.fieldClass,
+                        root: this.props.root,
                     },
                     startAdornment: (<InputAdornment className="gray" position="start">{this.adornment()}</InputAdornment>)
                 }}

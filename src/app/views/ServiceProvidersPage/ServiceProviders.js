@@ -23,6 +23,27 @@ class ServiceProviders extends React.Component {
         this.props = {...nextProps};
     }
 
+    componentWillMount(){
+        window.addEventListener("resize", this.setWidth);
+        this.setWidth();
+    }
+
+    setWidth = ()=>{
+        let serviceProviderInfo = {...this.props.serviceProvidersInfo},
+        inputWidth,
+        width = window.innerWidth;
+        console.log(width)
+        serviceProviderInfo.miscAttributes['width'] = width;
+        if(width <= 527){
+            serviceProviderInfo.miscAttributes['selectWidth'] = 120;
+            serviceProviderInfo.miscAttributes['dropDownWidth'] = 150;
+        }else{
+            serviceProviderInfo.miscAttributes['selectWidth'] = 200;
+            serviceProviderInfo.miscAttributes['dropDownWidth'] = 230;
+        }
+        this.props.dispatch(dispatchedServiceProvidersInfo(serviceProviderInfo));
+    }
+
     refinedSearch = (e)=>{
         e.persist();
         let info = {...this.props.serviceProvidersInfo},
@@ -32,6 +53,10 @@ class ServiceProviders extends React.Component {
     }
 
     render(){
+        let serviceProviderInfo = { ...this.props.serviceProvidersInfo },
+        selectWidth = serviceProviderInfo.miscAttributes.selectWidth,
+        dropDownWidth = serviceProviderInfo.miscAttributes.dropDownWidth;
+
         return(
             <div className="main">
                 <div className="top">
@@ -40,8 +65,8 @@ class ServiceProviders extends React.Component {
                 <div className="mid listings">
                     <SecondarySearch 
                         init="All States" 
-                        selectWidth="200px" 
-                        dropDownWidth="230px"
+                        selectWidth={ selectWidth + "px" } 
+                        dropDownWidth={ dropDownWidth + "px"}
                         info = { this.props.serviceProvidersInfo }
                         dispatcher = { dispatchedServiceProvidersInfo }
                         categoryTitle="searchCategoryServiceProviders" 

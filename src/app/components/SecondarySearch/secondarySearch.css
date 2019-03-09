@@ -31,3 +31,20 @@
     border-right: thin solid #fff;
     cursor: pointer;
 }
+@media only screen and (max-width: 688px){
+    .search-field{
+        width: 120px;
+        margin: 0 4px;
+        display: inline-block;
+    }
+    .search-main{
+        width: 100%;
+    }
+}
+@media only screen and (max-width: 340px){
+    .search-field{
+        width: 60px;
+        margin: 0 4px;
+        display: inline-block;
+    }
+}

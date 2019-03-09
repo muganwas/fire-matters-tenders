@@ -14,7 +14,7 @@ userUpdateEndPoint = process.env.USER_UPDATE_END_POINT;
 
 class PersonnelTab extends React.Component{
     constructor(props){
-        super(props)
+        super(props);
     }
 
     toggleCategory = (e)=>{
@@ -78,8 +78,9 @@ class PersonnelTab extends React.Component{
     }
 
     render(){
-        let { userInfo, user, profile, activeProfile } = this.props;
-        let userlen = Object.keys(userInfo).length;
+        let { userInfo, user, profile, activeProfile, profileInfo } = this.props,
+        columnClass = profileInfo.visualProps.columnClass,
+        userlen = Object.keys(userInfo).length;
         userInfo = userlen > 0?userInfo:JSON.parse(sessionStorage.getItem('profileInfo'));
         let userType = userInfo.userType,
         disabled = activeProfile.editing.personnel.disabled,
@@ -149,7 +150,7 @@ class PersonnelTab extends React.Component{
                         save
                     </i>
                 </div>
-                <div className="half left">
+                <div className={ columnClass }>
                     <div className="heading">Basic Information <div className="bottom-border"></div></div>
                     <div className="information">
                         {/*<div className="el">
@@ -250,7 +251,7 @@ class PersonnelTab extends React.Component{
                         </div>*/}
                     </div>
                 </div>
-                <div className="half left">
+                <div className={ columnClass }>
                     <div className="heading">Contact Information <div className="bottom-border"></div></div>
                         <div className="information">
                             <div className="el">
@@ -384,6 +385,7 @@ export default connect(store=>{
         user: store.user.info,
         userInfo: store.user.info.profileInfo,
         profile: store.user.info.profileInfo.profile,
+        profileInfo: store.profile.info,
         activeProfile: store.profile.info,
         currentHorizontalTab: store.genInfo.info.sideBar.currenthorizontalTab,
     }

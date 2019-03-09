@@ -9,6 +9,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import { PreSignup, BasicInformation, AddressInformation } from './SignupViews';
 import './signupForm.css';
+import { styles, altStyles } from './styles';
 
 
 const auth = firebase.auth(),
@@ -26,6 +27,7 @@ usersEndPoint = process.env.USERS_END_POINT;
 class SignupForm extends React.Component {
     constructor(props) {
         super(props);
+        this.state = { sWidth: null }
     }
 
     componentWillMount(){
@@ -45,6 +47,14 @@ class SignupForm extends React.Component {
             info.termsAndConditions = info.signupInfo.termsAndConditions = storedUser.termsAndConditions;
             this.props.dispatch(dispatchedUserInfo(info));
         }  
+    }
+
+    componentDidMount(){
+        window.addEventListener("resize", ()=>{
+            this.setState({
+                sWidth: window.innerWidth
+            });
+        } );
     }
 
     componentWillReceiveProps(nextProps){
@@ -455,7 +465,13 @@ class SignupForm extends React.Component {
         first = genInfo.signUpProgressBar.oneClass,
         second = genInfo.signUpProgressBar.twoClass,
         third = genInfo.signUpProgressBar.threeClass,
+        buttonStyle = styles,
         isActive = userInfo.signUpInfo.submitButton.isActive;
+
+        let vw = this.state.sWidth;
+        if(vw < 527){
+            buttonStyle = altStyles;
+        }
         
         return(
             <div>
@@ -484,6 +500,7 @@ class SignupForm extends React.Component {
                             messageClass={messageClass}
                             postSubmitMessage={postSubmitMessage}
                             isActive = { isActive }
+                            buttonStyle = { buttonStyle }
                         />:undefined }
                 </div>
             </div> 

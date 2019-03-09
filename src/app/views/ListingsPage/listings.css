@@ -4,6 +4,17 @@
     margin: 20px 78px;
     display: block;
 }
-@media only screen and (max-width: 1100px){
+@media only screen and (max-width: 768px){
+    .mid.listings{
+        margin: 20px 10%;
+        font-size: 11pt!important;
+    }
+
+}
+
+@media only screen and (max-width: 460px){
+    .mid.listings{
+        margin: 15px 5%;
+    }
 
 }

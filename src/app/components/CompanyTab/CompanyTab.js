@@ -133,7 +133,8 @@ class CompanyTab extends React.Component{
 
 
     render(){
-        let { userInfo, user } = this.props;
+        let { userInfo, user, profileInfo } = this.props,
+        columnClass = profileInfo?profileInfo.visualProps.columnClass: undefined;
         userInfo = userInfo?userInfo:JSON.parse(sessionStorage.getItem('profileInfo'));
         let companyInformation = userInfo || {},
         emailAddress = companyInformation.companyEmailAddress,
@@ -208,7 +209,7 @@ class CompanyTab extends React.Component{
                         save
                     </i>
                 </div>
-                <div className="half left">
+                <div className={ columnClass }>
                     <div className="heading">Company Information(Optional) <div className="bottom-border"></div></div>
                     <div className="information">
                         <div className="el">
@@ -368,7 +369,7 @@ class CompanyTab extends React.Component{
                         
                     </div>
                 </div>
-                <div className="half left">
+                <div className={ columnClass }>
                     <div className="heading">Company Contact Person(Optional) <div className="bottom-border"></div></div>
                         <div className="information">
                             <div className="el">
@@ -429,7 +430,7 @@ class CompanyTab extends React.Component{
                             </div>
                         </div>
                     </div>
-                    <div className="half left">
+                    <div className={ columnClass }>
                     <div className="information">
                         <div className="heading">Company users<div className="bottom-border"></div></div>
                             <div className="el">
@@ -488,6 +489,7 @@ export default connect(store=>{
     return {
         user: store.user.info,
         userInfo: store.user.info.profileInfo,
+        profileInfo: store.profile.info,
         activeProfile: store.profile.info,
         currentHorizontalTab: store.genInfo.info.sideBar.currenthorizontalTab,
     }

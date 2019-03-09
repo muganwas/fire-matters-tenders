@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import  { Loader, FmButton } from 'components';
 import axios from 'axios';
-import { dispatchedGenInfo, dispatchedTendersInfo, dispatchedProfileInfo } from 'extras/dispatchers';
+import { 
+    dispatchedGenInfo, 
+    dispatchedTendersInfo, 
+    dispatchedProfileInfo,
+    dispatchedServiceProvidersInfo 
+} from 'extras/dispatchers';
 import './listedServiceProviders.css';
 import { PropTypes } from 'prop-types';
 import { InviteToTenderForm } from 'forms';
@@ -35,11 +40,24 @@ class ListedServiceProviders extends Component {
     componentWillMount(){
         if(!this.props.genInfo.info.serviceProviders)
             this.fetchServiceProviders();
+        window.addEventListener("resize", this.updateDimensions);
+        this.updateDimensions();
+    }
+
+    updateDimensions = ()=>{
+        let winWidth = window.innerWidth;
+        let info = {...this.props.serviceProvidersInfo};
+        if(winWidth <= 768){
+            info.serviceProviders.serviceProvidersContainerClass = "list left hanad";
+        }else{
+            info.serviceProviders.serviceProvidersContainerClass = "list left seventy5";
+        }
+        this.props.dispatch(dispatchedServiceProvidersInfo(info));
     }
 
     fetchServiceProviders = ()=>{
-        let genInfo = {...this.props.genInfo.info };
         axios.get(baseUrl + usersEndPoint).then((response)=>{
+            let genInfo = {...this.props.genInfo.info };
             let serviceProviders = genInfo.serviceProviders = {...response.data};
             Object.keys(serviceProviders).map((key)=>{
                 genInfo.serviceProviders[key].moreMenuClassName = "hidden";
@@ -178,7 +196,6 @@ class ListedServiceProviders extends Component {
             keyWords = (keyWords).toLowerCase();
             let filteredLen = Object.keys(filtered).length;
             filtered = filteredLen > 0?filtered:serviceProviders;
-            console.log(serviceProviders)
             Object.keys(filtered).map(key=>{
                 if(serviceProviders[key].companyName && serviceProviders[key].fullName){
                     let companyName = (serviceProviders[key].companyName).toLowerCase(),
@@ -223,8 +240,12 @@ class ListedServiceProviders extends Component {
             filteredNextNext = secondaryFilterLen >0?filteredNextNext:filteredNext;
         }
 
+        let { serviceProvidersInfo } = this.props,
+        serviceProvidersSect = serviceProvidersInfo.serviceProviders,
+        { serviceProvidersContainerClass } = serviceProvidersSect;
+
         return(
-            <div className="list left seventy5">
+            <div className={ serviceProvidersContainerClass }>
                 <div className="list-row header">
                     <span className="twenty">Company Name</span>
                     <span className="thirty">Area of Operation</span>

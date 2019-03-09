@@ -1,6 +1,10 @@
 const defaultState = {
     info: {
       activeProfile:{},
+      visualProps: {
+        columnClass: "half left",
+        windowWidth: undefined
+      },
       editing:{
         personnel: { 
           disabled: true,

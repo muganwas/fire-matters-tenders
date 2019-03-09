@@ -33,7 +33,7 @@ class Contact extends React.Component {
                     {/**since the yellodash is absolutely positioned space needs to be created */}
                     <span className="absolute-150"/>
                 </div>
-                <div className="mid contact side-margin-90">
+                <div className="mid">
                     {/*<div className="map left">
                         <FiremattersMap lat={ -27.4449377 } lng={ 153.169647 } width={ window.innerWidth > 600?"60%":"100%" } height= { window.innerWidth > 600?400:300 } zoom={ 14 } />
                     </div>

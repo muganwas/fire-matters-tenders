@@ -1,3 +1,12 @@
 .searchIcon{
     cursor: pointer;
+    
 }
+@media only screen and (max-width: 590px){
+    .searchIcon{
+        float: right;
+    }
+    .search input{
+        width: 80%!important;
+    }
+  }

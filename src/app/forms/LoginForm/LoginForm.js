@@ -14,6 +14,7 @@ import 'firebase/auth';
 import 'firebase/database';
 import 'firebase/storage';
 import { emailregex } from 'extras/helperFunctions';
+import { styles, altStyles} from './styles';
 
 const auth = firebase.auth(),
 storageRef = firebase.storage().ref(),
@@ -22,22 +23,6 @@ baseUrl = process.env.BACK_END_URL,
 usersEndPoint = process.env.USERS_END_POINT,
 userUpdateEndPoint = process.env.USER_UPDATE_END_POINT;
 
-const styles = {
-    button: {
-      margin: 2,
-      padding: '3px 10px',
-      fontSize: 14,
-      width: "300px",
-      backgroundColor: "#ED2431",
-      color: "#fff",
-      fontWeight: "bold",
-      '&:hover': {
-        background: '#ED2431',
-        boxShadow: '1px 2px 4px #BC2902',
-        transition: 'all 0.2s ease-in'
-      }
-    }
-};
 
 @connect((store)=>{
     return {
@@ -52,6 +37,7 @@ const styles = {
 class LoginForm extends React.Component {
     constructor(props) {
         super(props);
+        this.state = { sWidth: null }
     }
 
     componentWillMount(){
@@ -61,6 +47,14 @@ class LoginForm extends React.Component {
         buttonsInfo.login.active = true;
         this.props.dispatch(dispatchedUserInfo(userInfo));
         this.props.dispatch(dispatchedButtonInfo(buttonsInfo));
+    }
+
+    componentDidMount(){
+        window.addEventListener("resize", ()=>{
+            this.setState({
+                sWidth: window.innerWidth
+            });
+        } );
     }
 
     componentWillReceiveProps(nextProps){
@@ -264,7 +258,12 @@ class LoginForm extends React.Component {
         loginPasswordError = genInfo.errors.loginPasswordError,
         postSubmitMessage = this.props.loginInfo.feedback,
         messageClass = this.props.loginInfo.messageClass,
+        buttonStyle = styles,
         isActive = this.props.buttonsInfo.login.active;
+        let vw = this.state.sWidth;
+        if(vw < 527){
+            buttonStyle = altStyles;
+        }
         return(
             <div className="form login">
                 { postSubmitMessage?<span className={ messageClass }> <Info className="icon" /> { postSubmitMessage } </span>: null }
@@ -277,7 +276,7 @@ class LoginForm extends React.Component {
                     { loginPasswordError?<span className="error-feedback">{ loginPasswordError }</span>:null }
                 </div>
                 <div className="inputRow">
-                    <FmButton isActive={ isActive } loaderFill = "#fff" variant="contained" onClick={ this.login } styles = { styles } text="Login" />        
+                    <FmButton isActive={ isActive } loaderFill = "#fff" variant="contained" onClick={ this.login } styles = { buttonStyle } text="Login" />        
                 </div>
                 <div className="inputRow">
                     <span>Forgot Password?</span>  <Link to={`/login`} >Reset Password</Link>
