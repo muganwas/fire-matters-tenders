@@ -1,5 +1,5 @@
 .tenders{
-    padding: 0!important;
+    position: relative;
 }
 .alt-search{
     position: relative;
@@ -34,6 +34,7 @@
     vertical-align: top;
 }
 .title-bar #title{
+    font-weight: bold;
     vertical-align: bottom;
     width: 20%
 }
@@ -48,4 +49,57 @@
     width: 300px;
     background-color: #f3fcef;
     color: rgb(34, 140, 55);
+}
+.button-wrapper{
+    float: right;
+}
+@media only screen and (max-width: 981px){
+    .title-bar #title{
+        float: none;
+        display: block;
+    }
+    .title-bar #search{
+        margin: 10px 0 0 0;
+        width: 100%;
+    }
+    .alt-search {
+        max-width: 59%;
+        margin: 0 5px;
+        float: none;
+        position: relative;
+        display: inline-block;
+    }
+    .alt-search input{
+        width: 80%;
+    }
+    .button-wrapper{
+        display: inline-block;
+        margin:0 0 5px 0;
+        float: none;
+        max-width: 37%;
+    }
+}
+@media only screen and (max-width: 550px){
+    .alt-search input{
+        width: 80%;
+    }
+}
+@media only screen and (max-width: 521px){
+    .alt-search{
+        display: block;
+       
+        max-width: 100%;
+        width: 100%;
+    }
+    .button-wrapper{
+        display: block;
+        max-width: 100%;
+        width: 100%;
+    }
+
+}
+@media only screen and (max-width: 381px){
+    .alt-search input{
+        width: 70%;
+    }
 }

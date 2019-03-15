@@ -1,9 +1,8 @@
 export const styles = {
     button: {
-        float: "right",
         margin: 0,
         padding: "3px 10px",
-        margin: "0 5px",
+        margin: "0",
         fontSize: 10,
         backgroundColor: "#ED2431",
         color: "#fff",
@@ -24,10 +23,9 @@ export const styles = {
 },
 submit_styles = {
     button: {
-        float: "right",
         margin: 0,
         padding: "3px 10px",
-        margin: "0 5px",
+        margin: "0",
         width: 330,
         fontSize: 14,
         backgroundColor: "#ED2431",

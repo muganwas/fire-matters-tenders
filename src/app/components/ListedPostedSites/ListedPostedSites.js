@@ -432,7 +432,7 @@ class ListedPostedSites extends Component {
 
                 <div className="twenty">{ sites[key].siteName }</div>
                 <div className="twenty">{ sites[key].siteCity }, { sites[key].siteState } </div>
-                <div className="thirty">{ sites[key].offerValidity }</div>
+                <div className="twenty">{ sites[key].offerValidity }</div>
                 <div className="twenty">
                     <FmButton 
                         variant="contained" 

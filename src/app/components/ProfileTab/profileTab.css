@@ -66,6 +66,7 @@
 }
 .information{
     text-align: left;
+    margin: 5px 0;
 }
 .information .select{
     border: thin solid #ED2431;
@@ -77,4 +78,22 @@
     color: rgb(135, 135, 135);
     display: block;
     padding: 0 6px;
+}
+@media only screen and (max-width: 681px){
+    .information .textfield{
+        width: 100%;
+    }
+    .information .select{
+        width: 95%;
+    }
+}
+@media only screen and (max-width: 450px){
+    .information .select{
+        width: 90%;
+    }
+}
+@media only screen and (max-width: 321px){
+    .information .select{
+        width: 85%;
+    }
 }

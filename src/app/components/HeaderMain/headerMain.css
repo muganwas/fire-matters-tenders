@@ -1,14 +1,14 @@
 .App-header {
-    box-sizing: border-box;
-    margin: 0 60px;
-    min-height: 150px;
-    padding: 0 20px;
+  box-sizing: border-box;
+  margin: 0 60px;
+  min-height: 180px;
+  padding: 30px 20px;
 }
 .App-header-loggedin{
     box-sizing: border-box;
     margin: 0 60px;
-    min-height: 155px;
-    padding: 0 20px;
+    min-height: 180px;
+    padding: 30px 20px;
 }
 .App-header .social-icons, .App-header-loggedin .social-icons{
     position: absolute;
@@ -29,6 +29,7 @@
     padding: 15px 90px 15px 90px;
     background: #e1e1e1;
     margin-top: 30px;
+    z-index: 100;
   }
 .Main-Menu a {
     text-decoration: none;

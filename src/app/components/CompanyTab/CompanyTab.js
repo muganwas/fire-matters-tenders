@@ -150,7 +150,8 @@ class CompanyTab extends React.Component{
         area = companyInformation.companyArea,
         suburb = companyInformation.companySuburb,
         street = companyInformation.companyStreet,
-        physicalAddress = companyInformation.companyPhysicalAddress,
+        dropDownWidth = "330px",
+        winWidth = profileInfo?profileInfo.visualProps.windowWidth:null,
         postCode = companyInformation.companyPostCode,
         acn_abn = companyInformation.company_acn_abn,
         companyName = companyInformation.companyName,
@@ -198,6 +199,10 @@ class CompanyTab extends React.Component{
         
         const createClass = edit === "enabled"?" enabled":" disabled",
         disableClass = edit !== "enabled"?" enabled":" disabled";
+
+        if(winWidth < 515){
+            dropDownWidth = "50%";
+        }
 
         return(
             <div className="main-content">
@@ -274,7 +279,7 @@ class CompanyTab extends React.Component{
                                     id="profile-companyState" 
                                     className="select" 
                                     init={ state } 
-                                    width="330px" 
+                                    width={ dropDownWidth } 
                                     options={ statesAustralia } 
                                     selected={ state || "Qld" } 
                                     onChange={ save }

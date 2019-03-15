@@ -221,7 +221,7 @@ class HeaderMain extends Component {
                 axios.get(postInfoUrl).then(res=>{
                     let tendersArr = res.data,
                     genInfo = {...this.props.genInfo },
-                    listings = genInfo.listings,
+                    listings = genInfo.listings || {},
                     tendersLen = tendersArr.length;
                     for(let count = 0;count <tendersLen; count++){
                         let currObj = tendersArr[count],
@@ -430,9 +430,11 @@ class HeaderMain extends Component {
     render(){
         let winWidth = window.innerWidth,
         loginDirection = "right";
+
         if(winWidth <= 680){
             loginDirection = "left";
         }
+        
         let home = this.props.navigation.home,
         profileInfo = sessionStorage.getItem('profileInfo'),
         userType = profileInfo?JSON.parse(sessionStorage.getItem('profileInfo')).userType: null;

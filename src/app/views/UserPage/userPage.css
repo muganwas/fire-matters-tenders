@@ -1,7 +1,8 @@
-.mid.user-page{
+.user-page.mid{
     margin: 0 120px 0 350px;
     box-sizing: border-box;
     display: block;
+    min-width:155px;
 }
 .content{
     display: block;
@@ -31,4 +32,24 @@
     font-weight: 100;
     font-size: 18px;
     border-bottom: none;
+}
+@media only screen and (max-width: 800px){
+    .user-page.mid{
+        margin: 0 120px 0 180px;
+        box-sizing: border-box;
+        display: block;
+    }
+}
+@media only screen and (max-width: 681px){
+    .top{
+        border-bottom: thin solid #d1d1d1;
+    }
+    .user-page.mid{
+        margin: 0 70px 0 120px;
+    }
+}
+@media only screen and (max-width: 331px){
+    .user-page.mid{
+        margin: 0 50px 0 100px;
+    }
 }

@@ -28,6 +28,7 @@ subContractorsEndPoint = process.env.SUB_CONTRACTORS_END_POINT;
         search: store.search,
         genInfo: store.genInfo.info,
         profileInfo: store.user.info.profileInfo,
+        realProfileInfo: store.profile.info,
         siteData: store.user.info.submitSite,
         listingsInfo: store.listingsInfo.info,
         sitesInfo: store.sites.info,
@@ -315,13 +316,19 @@ class SideBar extends React.Component {
     menuItems = (key)=>{
         let sideBarOptions = this.props.genInfo.defaultProps.sideBarOptions,
         contractCount = 0,
+        realProfileInfo = { ...this.props.realProfileInfo },
+        winWidth = realProfileInfo.visualProps.windowWidth,
         tenders = this.props.tendersInfo.tenders || [],
         selected = this.props.genInfo.sideBar.currentTab,
         tendersCount = this.props.genInfo.sideBar.profilePage.listCount.tenders || 0,
         sitesCount = this.props.genInfo.sideBar.profilePage.listCount.sites || 0,
         messagesCount = (parseInt(this.props.genInfo.sideBar.profilePage.listCount.sentMessages) + parseInt(this.props.genInfo.sideBar.profilePage.listCount.recievedMessages)) || 0,
-        subContractorCount = this.props.genInfo.sideBar.profilePage.listCount.subContractors || 0;
-
+        subContractorCount = this.props.genInfo.sideBar.profilePage.listCount.subContractors || 0,
+        sideBarTextClass = "item left";
+        //hide text due to lack of space
+        if(winWidth <= 800){
+            sideBarTextClass = "hidden";
+        }
         Object.keys(tenders).map(key=>{
             if(tenders[key].accepted){
                 //console.log("yeah")
@@ -333,7 +340,7 @@ class SideBar extends React.Component {
             <span name="menuItems" className = { key===selected?"selected":""} id={ key } onClick={ this.select } key={ key }>
                 <div name={ key} onClick={ this.clickParent }>
                     <i name={ key } onClick={ this.clickParent } className="material-icons left">{ menuIconTitles[key]}</i>
-                    <div name={ key } onClick={ this.clickParent } className="item left">{ sideBarOptions[key] }</div>
+                    <div name={ key } onClick={ this.clickParent } className={ sideBarTextClass }>{ sideBarOptions[key] }</div>
                     <div 
                         name={ key }
                         onClick={ this.clickParent }

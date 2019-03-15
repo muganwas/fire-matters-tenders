@@ -97,6 +97,8 @@ class PersonnelTab extends React.Component{
         categoriesOfService = profile.categoriesOfService || {},
         city = userInfo.city,
         isActive = user.addServiceCategory.submitButton.isActive,
+        dropDownWidth = "330px",
+        winWidth = profileInfo.visualProps.windowWidth,
         emailAddress = userInfo.emailAddress;
 
         const upload=(sectTitle, updateData)=>{
@@ -139,6 +141,10 @@ class PersonnelTab extends React.Component{
 
         const createClass = edit === "enabled"?" enabled":" disabled",
         disableClass = edit !== "enabled"?" enabled":" disabled";
+
+        if(winWidth < 515){
+            dropDownWidth = "50%";
+        }
 
         return(
             <div className="main-content">
@@ -261,7 +267,7 @@ class PersonnelTab extends React.Component{
                                     id="profile-state" 
                                     className="select" 
                                     init={ state } 
-                                    width="330px" 
+                                    width={ dropDownWidth } 
                                     options={ statesAustralia } 
                                     selected={ state } 
                                     onChange={ save } 

@@ -298,10 +298,14 @@ class SitesTab extends React.Component {
                 :null}
                 <div className="title-bar">
                     <span id="title">Sites</span>
-                    {userType === "owner_occupier"?<span id="search">
-                        <FmButton variant="contained" onClick={ this.renderSitesForm } styles={ styles } text="Register New Site" />
+                    {   
+                        userType === "owner_occupier"?<span id="search">
+                        <span className="button-wrapper">
+                            <FmButton variant="contained" onClick={ this.renderSitesForm } styles={ styles } text="Register New Site" />
+                        </span>
                         <SearchInput className="alt-search" placeholder="search for your sites" search={ this.searchListings } />
-                    </span>:null}
+                        </span>:null    
+                    }
                 </div>
                 <ListedPostedSites />
             </div>
