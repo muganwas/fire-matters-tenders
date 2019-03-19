@@ -12,7 +12,7 @@ import ListedPostedSiteDetails from './ListedPostedSiteDetails';
 import './listedPostedSites.css';
 import { PropTypes } from 'prop-types';
 import { listedPostedSitesOptions } from 'extras/config';
-import { styles, alt_styles, alt_styles_neg } from './styles';
+import { styles, smallStyle, alt_styles, alt_styles_neg } from './styles';
 
 const baseURL = process.env.BACK_END_URL,
 siteRemovalEndPoint = process.env.SITE_REMOVAL_END_POINT,
@@ -26,6 +26,7 @@ tenderEndPoint = process.env.TENDERS_END_POINT;
         user: store.user,
         search: store.search,
         genInfo: store.genInfo,
+        realProfileInfo: store.profile.info,
         profileInfo: store.user.info.profileInfo,
         listingsInfo: store.listingsInfo.info,
         listingsData: store.user.info.submitTender,
@@ -404,14 +405,27 @@ class ListedPostedSites extends Component {
     }
 
     displaySites = (key)=>{
-        let sitesInfo = {...this.props.sitesInfo},
+        let sitesInfo = { ...this.props.sitesInfo },
+        realProfileInfo = { ...this.props.realProfileInfo },
         sites = {...sitesInfo.sites},
         isActive = sitesInfo.createListing[sites[key].id + 'isActive'] === undefined?true:
         sitesInfo.createListing[sites[key].id + 'isActive']?true:false,
         showDetailsView = sitesInfo.detailsView.show,
         listed = sites[key].listed,
+        visualProps = realProfileInfo.visualProps,
+        winWidth = visualProps?visualProps.windowWidth:undefined,
+        buttonStyle = styles,
+        containerClass = "",
+        custom = false,
         createListingButtonText = listed?"Unbulish Listing":"Publish Listing",
         options = listedPostedSitesOptions;
+
+        if(winWidth <= 450){
+            buttonStyle = smallStyle;
+            custom = true;
+            containerClass = "containerClass";
+
+        }
 
         return(
             <div className="list-row" key={key}>
@@ -430,29 +444,35 @@ class ListedPostedSites extends Component {
                     :null
                 }
 
-                <div className="twenty">{ sites[key].siteName }</div>
-                <div className="twenty">{ sites[key].siteCity }, { sites[key].siteState } </div>
-                <div className="twenty">{ sites[key].offerValidity }</div>
-                <div className="twenty">
-                    <FmButton 
-                        variant="contained" 
-                        id={sites[key].id}
-                        isActive = { isActive }
-                        onClick={ this.createListing } 
-                        styles={ styles }
-                        text={ createListingButtonText } 
-                    />
+                <div className="twenty"><div className="cell">{ sites[key].siteName }</div></div>
+                <div className="twenty"><div className="cell">{ sites[key].siteCity }, { sites[key].siteState } </div></div>
+                <div className="ten"><div className="cell">{ sites[key].offerValidity }</div></div>
+                <div className="thirty">
+                    <div className="cell">
+                        <FmButton 
+                            variant="contained"
+                            custom = { custom }
+                            id={sites[key].id}
+                            isActive = { isActive }
+                            onClick={ this.createListing } 
+                            styles={ buttonStyle }
+                            text={ createListingButtonText } 
+                        />
+                    </div>
                 </div>
                 <div className="ten">
-                    <MoreHoriz 
-                        className={ sites[key].moreMenuClassName } 
-                        id={ key }
-                        onDelete = { this.renderConfirmationDialogue }
-                        onClickAlt = { this.renderSiteDetails }
-                        listName = "sites" 
-                        element={ sites[key] }
-                        options={ options }
-                     />
+                    <div className="cell">
+                        <MoreHoriz
+                            containerClass = { containerClass }
+                            className={ sites[key].moreMenuClassName } 
+                            id={ key }
+                            onDelete = { this.renderConfirmationDialogue }
+                            onClickAlt = { this.renderSiteDetails }
+                            listName = "sites" 
+                            element={ sites[key] }
+                            options={ options }
+                        />
+                     </div>
                 </div>
                 <div className="bottom-border"></div>
             </div>

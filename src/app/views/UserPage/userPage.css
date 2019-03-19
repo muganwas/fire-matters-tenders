@@ -48,8 +48,13 @@
         margin: 0 70px 0 120px;
     }
 }
-@media only screen and (max-width: 331px){
+@media only screen and (max-width: 372px){
     .user-page.mid{
         margin: 0 50px 0 100px;
+    }
+}
+@media only screen and (max-width: 331px){
+    .user-page.mid{
+        margin: 0 50px 0 75px;
     }
 }

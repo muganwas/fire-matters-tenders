@@ -19,6 +19,7 @@ import { Lock } from '@material-ui/icons';
 import axios from 'axios';
 import './headerMain.css';
 import { PropTypes } from 'prop-types';
+import logo from 'images/logo.jpg';
 
 const baseURL = process.env.BACK_END_URL,
 listingsEndPoint = process.env.LISTING_END_POINT,
@@ -440,7 +441,7 @@ class HeaderMain extends Component {
         userType = profileInfo?JSON.parse(sessionStorage.getItem('profileInfo')).userType: null;
         return(
             <div className={ this.props.navigation.headerClass }>
-                <Image className="App-logo" src={require('images/logo.jpg')} />
+                <Image className="App-logo" src={ logo } />
                 <SearchInput 
                     className="search" 
                     placeholder="search" 

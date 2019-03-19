@@ -1,5 +1,9 @@
 .list-row{
+    box-sizing: border-box;
     font-size: 13px;
+    padding: 5px 0 0;
+    display: table;
+    width: 100%;
 }
 .listedJobsDetails-container{
     position: fixed;
@@ -40,4 +44,9 @@
     padding: 5px 10px 5px 5px;
     margin: 1px 0;
     background: #dddddd;
+}
+@media only screen and (max-width: 500px){
+    .list-row{
+        font-size: 11px!important;
+    }
 }

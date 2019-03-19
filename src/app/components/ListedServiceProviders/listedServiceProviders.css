@@ -12,10 +12,6 @@
     background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 550, from(rgb(164, 164, 164)), to(#F1F1F2));
     z-index: 1;
 }
-.list-row{
-    padding: 5px 0 0;
-    display: block;
-}
 .list{
     box-sizing: border-box;
     background-color: #F1F1F2;
@@ -25,26 +21,30 @@
 }
 .list .ten{
     display: inline-block;
+    box-sizing: border-box;
     width: 10%;
-    overflow: hidden;
 }
 .list .twenty{
     display: inline-block;
+    box-sizing: border-box;
     width: 20%;
     overflow: hidden;
 }
 .list .thirty{
     display: inline-block;
+    box-sizing: border-box;
     width: 30%;
     overflow: hidden;
 }
 .list .fourty{
     display: inline-block;
+    box-sizing: border-box;
     width: 40%;
     overflow: hidden;
 }
 .list .fifty{
     display: inline-block;
+    box-sizing: border-box;
     width: 50%;
     overflow: hidden;
 }

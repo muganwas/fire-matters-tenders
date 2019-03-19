@@ -1,14 +1,36 @@
 export const styles = {
     button: {
-      margin: 2,
-      padding: '3px 10px',
-      fontSize: 10,
-      backgroundColor: "#F79A50",
-      '&:hover': {
-        background: '#F79A50',
-        boxShadow: '1px 2px 4px #BC2902',
-        transition: 'all 0.2s ease-in'
-      }
+        float: "right",
+        margin: 2,
+        padding: '3px 10px',
+        fontSize: 10,
+        backgroundColor: "#F79A50",
+        '&:hover': {
+            background: '#F79A50',
+            boxShadow: '1px 2px 4px #BC2902',
+            transition: 'all 0.2s ease-in'
+        }
+    },
+    
+},
+smallStyle = {
+    button: {
+        display: "block",
+        float: "right",
+        textAlign: "center",
+        margin: 5,
+        fontSize: 9,
+        fontWeight: "400",
+        height: 30,
+        boxShadow: '1px 2px 4px #caccce',
+        padding: '7px 3px',
+        borderRadius: "5px",
+        backgroundColor: "#F79A50",
+        '&:hover': {
+            background: '#F79A50',
+            boxShadow: '1px 2px 4px #BC2902',
+            transition: 'all 0.2s ease-in'
+        }
     },
 },
 alt_styles = {
@@ -20,9 +42,9 @@ alt_styles = {
         display: "inline-block",
         backgroundColor: "#F79A50",
         '&:hover': {
-          background: '#F79A50',
-          boxShadow: '1px 2px 4px #BC2902',
-          transition: 'all 0.2s ease-in'
+            background: '#F79A50',
+            boxShadow: '1px 2px 4px #BC2902',
+            transition: 'all 0.2s ease-in'
         }
     },
 },

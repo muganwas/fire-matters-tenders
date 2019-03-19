@@ -3,6 +3,9 @@
     margin: 0 5px;
     border-radius: 2px;
 }
+.conainerClass {
+    min-width: 100%;
+}
 .equipCount.title{
     border: none;
 }
@@ -38,6 +41,12 @@
 }
 .countDigit{
     padding: 0 5px;
+}
+.cell{
+    width: 100%;
+    margin: 0 1px;
+    display: table-cell;
+    vertical-align: middle;
 }
 .dialog{
     display:block;

@@ -75,9 +75,9 @@
   padding: 0;
 }
 @media only screen and (max-width: 836px){
-    .App-header .social-icons{
-        display: none;
-    }
+  .App-header .social-icons{
+      display: none;
+  }
 }
 @media only screen and (max-width: 768px){
   .App-header {
