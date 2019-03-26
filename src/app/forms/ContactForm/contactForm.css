@@ -10,7 +10,7 @@
 }
 .contactForm .textArea{
     display: inline-block;
-    width: 50%;
+    width: 100%;
     box-sizing: border-box;
     position: relative;
     margin: auto;

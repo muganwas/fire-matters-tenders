@@ -45,6 +45,7 @@ const RenderEquipment = props => {
         userInfo: store.user.info.profileInfo,
         equipment: store.user.info.profileInfo.equipment,
         licenses: store.user.info.profileInfo.licenses,
+        profileInfo: store.profile.info,
         secondarySelect: store.secondarySelect.info,
         currentHorizontalTab: store.genInfo.info.sideBar.currenthorizontalTab,
     }
@@ -179,7 +180,9 @@ class EquipmentTab extends React.Component{
     }
 
     render(){
-        let { equipment }= this.props,
+        let { equipment, profileInfo }= this.props,
+        columnClass = profileInfo.visualProps.columnClass,
+        winWidth = profileInfo.visualProps.windowWidth,
         selectedArr = this.props.secondarySelect.selectedOptions,
         detectionCount = [],
         mechanicalCount = [],
@@ -243,9 +246,13 @@ class EquipmentTab extends React.Component{
         let userInfo = this.props.user,
         isActive = userInfo.addEquipment.submitButton.isActive;
 
+        if(winWidth > 1100){
+            columnClass="seventy5"
+        }
+
         return(
             <div className="main-content">
-                <div className="half left">
+                <div className={ columnClass }>
                     <div className="heading">Equipment Licenses Available<div className="bottom-border"></div></div>
                     <div className="information equipment">
                         <div className="categories">
@@ -341,11 +348,11 @@ class EquipmentTab extends React.Component{
                                     <SecondarySelect 
                                         categories = { equipmentCategories }
                                         categoriesFull = { equipmentCategoriesFull }
-                                        selectWidth = "240px"
-                                        selectWidthAlt = "240px"
+                                        selectWidth = { winWidth > 700?"46%":"95%" }
+                                        selectWidthAlt = { winWidth > 700?"46%":"95%" }
                                         double = { true }
-                                        dropDownWidth = "255px"
-                                        dropDownWidthAlt = "255px"
+                                        dropDownWidth = "97%"
+                                        dropDownWidthAlt = "97%"
                                         categoryTitle = "searchEquipmentSelectedCategories"
                                         categoryTitleAlt = "searchEquipmentSelectedSubCategories"
                                         onChange = { this.getCategory }

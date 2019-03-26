@@ -30,12 +30,25 @@
     background-color: #F1F1F2;
     color: #2f2f2f;
     font-weight: 100;
-    font-size: 18px;
     border-bottom: none;
+}
+@media only screen and (max-width: 876px){
+    .user-page.mid{
+        margin: 0 120px 0 320px;
+        box-sizing: border-box;
+        display: block;
+    }
+}
+@media only screen and (max-width: 842px){
+    .user-page.mid{
+        margin: 0 100px 0 300px;
+        box-sizing: border-box;
+        display: block;
+    }
 }
 @media only screen and (max-width: 800px){
     .user-page.mid{
-        margin: 0 120px 0 180px;
+        margin: 0 120px 0 150px;
         box-sizing: border-box;
         display: block;
     }
@@ -48,13 +61,40 @@
         margin: 0 70px 0 120px;
     }
 }
-@media only screen and (max-width: 372px){
+@media only screen and (max-width: 605px){
+    .content .tabs span{
+        margin: 0 3px 0 0;
+        padding: 5px 10px 3px;
+        border-radius: 5px 5px 0 0;
+        font-size: 14px;
+    }
+}
+@media only screen and (max-width: 540px){
+    .content .tabs span{
+        margin: 0 3px 0 0;
+        padding: 5px 5px 3px;
+        border-radius: 3px 3px 0 0;
+        font-size: 12px;
+    }
+}
+@media only screen and (max-width: 468px){
+    .content .tabs span{
+        margin: 0 2px 0 0;
+        padding: 3px 3px 2px;
+        border-radius: 3px 3px 0 0;
+        font-size: 10px;
+    }
+    .content .tabs span.active{
+        font-weight: bold;
+    }
+}
+@media only screen and (max-width: 398px){
     .user-page.mid{
         margin: 0 50px 0 100px;
     }
 }
-@media only screen and (max-width: 331px){
+@media only screen and (max-width: 358px){
     .user-page.mid{
-        margin: 0 50px 0 75px;
+        margin: 0 50px 0 70px;
     }
 }

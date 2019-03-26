@@ -28,7 +28,7 @@ submit_styles = {
         margin: 0,
         padding: "3px 10px",
         margin: "0 5px",
-        width: 330,
+        width: "100%",
         fontSize: 14,
         backgroundColor: "#ED2431",
         color: "#fff",

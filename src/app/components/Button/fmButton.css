@@ -6,3 +6,6 @@
     height: 30px;
     padding: 0;
 }
+#btn.button-wrapper{
+    display: block;
+}

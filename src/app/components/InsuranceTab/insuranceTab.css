@@ -18,7 +18,7 @@
     width: auto;
 }
 .insurance{
-    display: inline-block;
+    display: block;
     padding: 10px 10px;
     border-radius: 3px;
     margin: 5px;
@@ -38,4 +38,26 @@
     font-size: 13px;
     margin-top: 5px;
     font-weight: bold;
+}
+@media only screen and (max-width: 520px){
+    .empty{
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .complete{
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .incomplete{
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .insurance{
+        width: 100%;
+        box-sizing: border-box;
+        font-size: 13px;
+    }
+    .completion{
+        font-size: 10px;
+    }
 }

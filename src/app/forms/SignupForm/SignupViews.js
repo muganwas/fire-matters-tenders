@@ -72,7 +72,7 @@ export const BasicInformation = props=>{
                 <TickBox dispatcher = { dispatchedUserInfo } value={ userInfo.termsAndConditions} placement={ userInfo } id="termsAndConditions" /><span>I accept the <Link to={`/`}>Terms and Conditions</Link></span>
                 { tmcError?<span className="error-feedback">{ tmcError }</span>:null }
             </div>
-            <div className="inputRow">
+            <div className="inputRow button">
                 <FmButton isActive={ isActive } variant="contained" onClick={ signup } styles = { buttonStyle } text="Sign Up" /> 
             </div>
         </div>

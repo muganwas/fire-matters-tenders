@@ -21,6 +21,7 @@ userUpdateEndPoint = process.env.USER_UPDATE_END_POINT;
         user: store.user.info,
         userInfo: store.user.info.profileInfo,
         licenses: store.user.info.profileInfo.licenses,
+        profileInfo: store.profile.info,
         currentHorizontalTab: store.genInfo.info.sideBar.currenthorizontalTab,
     }
 })
@@ -265,12 +266,13 @@ class LicenseTab extends React.Component{
     }
 
     render(){
-        let { licenses }= this.props,
+        let { licenses, profileInfo }= this.props,
+        columnClass = profileInfo.visualProps.columnClass,
         other = licenses?licenses.other:{};
 
         return(
             <div className="main-content">
-                <div className="half left">
+                <div className={ columnClass }>
                     <div className="heading">License Details<div className="bottom-border"></div></div>
                     <div className="information">
                         {Object.keys(licenses).map(this.renderLicenses)}

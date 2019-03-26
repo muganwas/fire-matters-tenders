@@ -21,6 +21,7 @@ userUpdateEndPoint = process.env.USER_UPDATE_END_POINT;
         user: store.user.info,
         userInfo: store.user.info.profileInfo,
         insurance: store.user.info.profileInfo.insurance,
+        profileInfo: store.profile.info,
         currentHorizontalTab: store.genInfo.info.sideBar.currenthorizontalTab,
     }
 })
@@ -183,7 +184,9 @@ class InsuranceTab extends React.Component{
     }
 
     renderInsurance = (key)=>{
-        let { insurance, userInfo }= this.props,
+        let { insurance, userInfo, profileInfo }= this.props,
+        winWidth = profileInfo.visualProps.windowWidth,
+        extraText = true,
         className = insurance[key].className,
         uploadingCert = userInfo.insurance[key].uploadingCert,
         policyNumber = insurance[key].policyNumber,
@@ -214,13 +217,17 @@ class InsuranceTab extends React.Component{
             }
         }else{
             colorCode = "invalid"
-        }  
+        } 
+        //lit tweak
+        if(winWidth <=460){
+            extraText= false;
+        }
         if(key !== "other"){
             return(
                 <div key={ key } className={ " insurance"}>
                     <div className = { completion }>
                         <ChckBox handleChange={ this.toggleDisplay } dispatcher = { dispatchedUserInfo } value={ value } id={ key } />
-                        <span>{name} <span className="completion">{value?percentage + " completed":null}</span></span>
+                        <span>{name} <span className="completion">{value? extraText?percentage + " completed":percentage:null}</span></span>
                     </div>
                     <div className={ className }>
                         <Textfield 
@@ -267,7 +274,8 @@ class InsuranceTab extends React.Component{
     }
 
     render(){
-        let { insurance }= this.props,
+        let { insurance, profileInfo }= this.props,
+        columnClass = profileInfo.visualProps.columnClass,
         other = insurance?insurance.other:{},
         percentage = other.checked && other.policyNumber && other.expiryDate && other.certURL? "100%": other.checked && other.policyNumber || other.certURL? "75%": "25%",
         completion = other.checked && other.policyNumber && other.expiryDate && other.certURL?
@@ -296,13 +304,13 @@ class InsuranceTab extends React.Component{
 
         return(
             <div className="main-content">
-                <div className="half left">
+                <div className={ columnClass }>
                     <div className="heading">Insurance Policies<div className="bottom-border"></div></div>
                     <div className="el">
                         {Object.keys(insurance).map(this.renderInsurance)}
                     </div>
                 </div>
-                <div className="half left">
+                <div className={ columnClass }>
                     <div className="heading">Specify Other insurance Policy if any<div className="bottom-border"></div></div>
                         <div className="el">
                             <div className="information">

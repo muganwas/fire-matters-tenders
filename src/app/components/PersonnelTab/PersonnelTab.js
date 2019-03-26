@@ -335,7 +335,7 @@ class PersonnelTab extends React.Component{
                         </div>
                     </div>
                     {userType === "service_provider"?
-                    <div className="half left">
+                    <div className={ columnClass }>
                         <div className="heading">Service Categories<div className="bottom-border"></div></div>
                         <div className="information">
                             <div className="el">

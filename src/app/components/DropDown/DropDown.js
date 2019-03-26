@@ -18,6 +18,7 @@ import { dispatchedGenInfo, dispatchedUserInfo, dispatchedSubContractorsInfo } f
 class DropDown extends React.Component {
     constructor(props){
         super(props)
+        this.state={ddw:"330px"}
     }
 
     componentWillMount(){
@@ -28,10 +29,23 @@ class DropDown extends React.Component {
         this.props.dispatch(dispatchedGenInfo(genInfo));
     }
 
-    componentWillReceiveProps(nextProps){
-        this.props = {...nextProps};
+    componentDidMount(){
+        this.setDDWidth();
     }
 
+    componentWillReceiveProps(nextProps){
+        this.props = {...nextProps};
+        this.setDDWidth();
+    }
+
+    setDDWidth = ()=>{
+        let el = document.getElementById("drop-down-container"),
+        elWidth = el.offsetWidth;
+        this.setState({
+            ddw: elWidth
+        });
+    }
+    
     afterSelect = (e)=>{
         e.persist();
         this.props.onChange(e).then(res=>{
@@ -114,13 +128,16 @@ class DropDown extends React.Component {
         let id = this.props.id,
         options = this.props.options,
         selected = this.props.selected,
+        { ddw } = this.state,
         newClassLabel = id + "dropDownClass";
         return(
             <div>
                 { this.props.label?<span className="label">{ this.props.label }</span>: null }
-                <div style={{width:this.props.selectWidth}} className={ this.props.className }>
-                    <span id={ this.props.id } onClick = { this.toggleDisplayDropDown } className="options-selected">{ options[selected] || this.props.init }</span>
-                    <div style={{width:this.props.width}} className={ this.props.genInfo.dropDown[newClassLabel] }>
+                <div id="drop-down-container" style={{width:this.props.selectWidth}} className={ this.props.className }>
+                    <span id={ this.props.id } onClick = { this.toggleDisplayDropDown } className="options-selected">
+                        { options[selected] || this.props.init }
+                    </span>
+                    <div style={{width:ddw}} className={ this.props.genInfo.dropDown[newClassLabel] }>
                         { Object.keys(options).map(this.mapOptions) }
                     </div>
                 </div>

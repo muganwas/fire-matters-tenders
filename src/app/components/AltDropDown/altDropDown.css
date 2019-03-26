@@ -1,3 +1,6 @@
 .txt-left{
     text-align: left!important;
 }
+.drpdwn-container{
+    box-sizing: border-box;
+}

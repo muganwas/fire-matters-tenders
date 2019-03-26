@@ -69,6 +69,24 @@
     background: #fff;
     border: thin solid #F79A50;
 }
+@media only screen and (max-width: 876px){
+    .side-bar{
+        box-sizing: border-box;
+        display: block;
+        position: absolute;
+        padding: 50px 0 50px;
+        top: 155px;
+        bottom: -100px;
+        left: 70px;
+        z-index: 0;
+        text-align: center;
+    }
+}
+@media only screen and (max-width: 842px){
+    .side-bar{
+        left: 50px;
+    }
+}
 @media only screen and (max-width: 800px){
     .side-bar{
         box-sizing: border-box;
@@ -78,7 +96,6 @@
         width: 100px;
         top: 155px;
         bottom: -100px;
-        left: 90px;
         z-index: 0;
         text-align: center;
     }
@@ -89,12 +106,12 @@
         left: 30px;
     }
 }
-@media only screen and (max-width: 372px){
+@media only screen and (max-width: 398px){
     .side-bar{
         width:80px
     }  
 }
-@media only screen and (max-width: 331px){
+@media only screen and (max-width: 358px){
     .side-bar{
         left: 5px;
     }    

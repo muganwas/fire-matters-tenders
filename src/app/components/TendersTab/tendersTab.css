@@ -52,6 +52,7 @@
 }
 .button-wrapper{
     float: right;
+    box-sizing: border-box;
 }
 @media only screen and (max-width: 981px){
     .title-bar #title{
@@ -73,10 +74,7 @@
         width: 80%;
     }
     .button-wrapper{
-        display: inline-block;
         margin:0 0 5px 0;
-        float: none;
-        max-width: 37%;
     }
 }
 @media only screen and (max-width: 550px){
@@ -96,12 +94,9 @@
         max-width: 100%;
         width: 100%;
     }
-    .button-wrapper{
+    .addEquip{
         display: block;
-        max-width: 100%;
-        width: 100%;
     }
-
 }
 @media only screen and (max-width: 381px){
     .alt-search input{

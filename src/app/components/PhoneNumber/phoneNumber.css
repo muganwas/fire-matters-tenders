@@ -25,3 +25,8 @@
 #phoneNumber::placeholder, #mobileNumber::placeholder{
     color: #bababa;
 }
+@media only screen and (max-width: 500px){
+    .textfield{
+        width: 100%;
+    }
+}

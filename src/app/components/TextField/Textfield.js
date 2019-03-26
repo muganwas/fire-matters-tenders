@@ -93,7 +93,7 @@ class Textfield extends React.Component {
             )
         }else{
             return(
-                <div>
+                <div style={{display: "block"}}>
                     { this.props.label?<span className="label">{ this.props.label }</span>: null }
                     <div className={this.props.fieldClass}>
                         <TextField

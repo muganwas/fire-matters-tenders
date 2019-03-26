@@ -275,7 +275,7 @@ class LoginForm extends React.Component {
                     <TextSpace onKeyDown={ this.checkKey } onBlur={ this.errorCheck } value={ userInfo.loginPass } id = "loginPass" type="password" adornment="lock" placeholder="Password" fieldClass={ genInfo.loginPassClass || genInfo.textfieldClass } />
                     { loginPasswordError?<span className="error-feedback">{ loginPasswordError }</span>:null }
                 </div>
-                <div className="inputRow">
+                <div className="inputRow button">
                     <FmButton isActive={ isActive } loaderFill = "#fff" variant="contained" onClick={ this.login } styles = { buttonStyle } text="Login" />        
                 </div>
                 <div className="inputRow">

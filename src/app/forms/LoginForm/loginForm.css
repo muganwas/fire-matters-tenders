@@ -1,15 +1,6 @@
 .left{
     float: left;
 }
-.textfield{
-    box-sizing: border-box;
-    position: relative;
-    margin: auto;
-    width: 300px;
-    border: thin solid #afafaf;
-    border-radius: 3px;
-    padding: 3px;
-}
 .login-button{
     box-sizing: border-box;
     display: inline-block;
@@ -29,6 +20,9 @@
     padding: 40px 80px;
     border: thin solid #F79A50;
     border-radius: 5px;
+}
+.inputRow .button-wrapper, .inputRow .textfield{
+    width: 100%;
 }
 .inputRow{
     position: relative;

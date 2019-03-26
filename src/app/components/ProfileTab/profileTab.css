@@ -59,9 +59,12 @@
 #profile-mobileNumber::placeholder{
     color: #bababa;
 }
-
+.hanad .textfield, .hanad .left .select{
+    box-sizing: border-box;
+    width: 100%;
+}
 .el{
-    display: block;
+    display: block!important;
     padding: 0 0 10px 0;
 }
 .information{
@@ -69,9 +72,10 @@
     margin: 5px 0;
 }
 .information .select{
+    box-sizing: border-box;
     border: thin solid #ED2431;
     border-radius: 5px;
-    width: 310px;
+    width: 100%;
 }
 .information .label{
     font-size: 13px;
@@ -84,16 +88,6 @@
         width: 100%;
     }
     .information .select{
-        width: 95%;
-    }
-}
-@media only screen and (max-width: 450px){
-    .information .select{
-        width: 90%;
-    }
-}
-@media only screen and (max-width: 321px){
-    .information .select{
-        width: 85%;
+        width: 100%;
     }
 }

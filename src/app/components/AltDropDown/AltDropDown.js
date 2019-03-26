@@ -119,15 +119,17 @@ class AltDropDown extends React.Component {
 
     render(){
         let id = this.props.id,
+        ddWidth = this.props.selectWidth,
         options = this.props.options,
         selected = this.props.selected,
         newClassLabel = id + "dropDownClass";
+
         return(
-            <div className="txt-left">
+            <div className="drpdwn-container txt-left">
                 { this.props.label?<span className="label">{ this.props.label }</span>: null }
                 <div style={{width:this.props.selectWidth}} className={ this.props.className }>
                     <span id={ this.props.id } onClick = { this.toggleDisplayDropDown } className="options-selected">{ options[selected] || this.props.init }</span>
-                    <div style={{width:this.props.width}} className={ this.props.genInfo.dropDown[newClassLabel] }>
+                    <div style={{width:ddWidth}} className={ this.props.genInfo.dropDown[newClassLabel] }>
                         { Object.keys(options).map(this.mapOptions) }
                     </div>
                 </div>

@@ -17,6 +17,7 @@ subContractorsEndPoint = process.env.SUB_CONTRACTORS_END_POINT;
         user: store.user,
         search: store.search,
         genInfo: store.genInfo,
+        realProfileInfo: store.profile.info,
         profileInfo: store.user.info.profileInfo,
         tendersInfo: store.tenders.info,
         subContractorData: store.user.info.addSubContractor,
@@ -34,7 +35,7 @@ class SubContractorTab extends React.Component {
 
     checkForErrors=()=>{
         let errored = [];
-        return new Promise((resolve, reject)=>{
+        return new Promise(resolve=>{
             let subContractorData = {...this.props.subContractorData},
             subContractorsInfo = {...this.props.subContractorsInfo};
             Object.keys(subContractorData).map(key=>{
@@ -205,6 +206,7 @@ class SubContractorTab extends React.Component {
         userType = JSON.parse(sessionStorage.getItem('profileInfo')).userType,
         feedback = subContractorAttributes.feedback,
         feedbackClass = subContractorAttributes.feedbackClass,
+        winWidth = this.props.realProfileInfo.visualProps.windowWidth,
         showDetailsView = subContractorsInfo.detailsView.show;
         return(
             <div className="tenders main-content">
@@ -225,6 +227,7 @@ class SubContractorTab extends React.Component {
                 {   
                     showSubContractorForm
                     ?<SubContractorForm
+                        winWidth = { winWidth }
                         feedback = { feedback }
                         feedbackClass = { feedbackClass }
                         errors = { errors }

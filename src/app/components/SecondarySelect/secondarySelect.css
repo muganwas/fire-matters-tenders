@@ -3,11 +3,11 @@
 }
 .secondary-select.search-main{
     display: block;
-    width: 510px;
+    width: 100%;
     border:thin solid #979797;
     border-radius: 5px;
     background: none;
-    margin: 0 0 20px 0;
+    margin: 5px 0 20px 0;
 }
 .secondary-selectAlt.search-main{
     display: block;

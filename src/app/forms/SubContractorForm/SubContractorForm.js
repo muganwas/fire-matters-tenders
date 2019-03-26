@@ -25,7 +25,8 @@ class SubContractorForm extends React.Component {
             upload, 
             save,
             onBlur,  
-            errors
+            errors,
+            winWidth
         } = this.props,
         { 
             contractorFullName,
@@ -42,7 +43,11 @@ class SubContractorForm extends React.Component {
         } = attributes,
         mandatoryInput = "This field is mandatory.",
         isActive = submitButton.isActive;
-
+        let dropDownWidth = "330px";
+        
+        if(winWidth < 515){
+            dropDownWidth = "50%";
+        }
         return(
             <div className="listing-form-container">
                 <div className="listing-form-subcontainer">
@@ -52,7 +57,7 @@ class SubContractorForm extends React.Component {
                     </div>
                     <div className="listing-form">
                         <div className="information" style={ styles.information }>
-                            <div className="el" style={ styles.el }><span className={ feedbackClass }>{ feedback }</span></div>
+                            <div className="el hanad" style={ styles.el }><span className={ feedbackClass }>{ feedback }</span></div>
                             <div className="el" style={ styles.el }>
                                 <Textfield 
                                     id="subcontractor-contractorFullName"
@@ -128,7 +133,7 @@ class SubContractorForm extends React.Component {
                                     id="subcontractor-contractorState" 
                                     className="select" 
                                     init={ contractorState || "Select State" } 
-                                    width="330px" 
+                                    width={ dropDownWidth } 
                                     options={ statesAustralia } 
                                     selected={ contractorState }
                                     onBlur={ onBlur } 
@@ -197,11 +202,14 @@ class SubContractorForm extends React.Component {
                                     isActive={ isActive } 
                                     loaderFill = "#fff" 
                                     variant="contained" 
-                                    styles = { styles } 
+                                    styles={ styles }
+                                    buttonWrapperWidth = {"99%"}
                                     text="Add Sub-Contractor"
                                     onClick = { upload } 
                                 />
+                                <div className="clear"></div>
                             </div>
+                            <br/>
                         </div>
                     </div>
                 </div>

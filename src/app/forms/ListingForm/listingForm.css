@@ -1,12 +1,12 @@
 .listing-form-container{
     position: absolute;
     text-align: center;
-    top: -50px;
-    left:-20px;
+    top: -200px;
+    left:-450px;
     bottom: -300px;
-    right: -20px;
+    right: -200px;
     padding: 20px;
-    background: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.4);
     z-index: 10000;
 }
 .listing-form-container .header{
@@ -46,4 +46,58 @@
 }
 .select{
     text-align: left;
+}
+@media only screen and (max-width: 800px){
+    .listing-form-container{
+        top: -200px;
+        left:-250px;
+        bottom: -300px;
+        right: -200px;
+        padding: 20px;
+    }
+}
+@media only screen and (max-width: 768px){
+    .listing-form-container{
+        top: -200px;
+        left:-270px;
+        bottom: -300px;
+        right: -200px;
+        padding: 20px;
+    }
+}
+@media only screen and (max-width: 680px){
+    .listing-form-container{
+        top: -220px;
+        left:-300px;
+        bottom: -300px;
+        right: -200px;
+        padding: 20px;
+    }
+}
+@media only screen and (max-width: 500px){
+    .listing-form-container{
+        top: -220px;
+        left:-260px;
+        bottom: -300px;
+        right: -160px;
+        padding: 20px;
+    }
+}
+@media only screen and (max-width: 400px){
+    .listing-form-container{
+        top: -220px;
+        left:-240px;
+        bottom: -300px;
+        right: -130px;
+        padding: 20px;
+    }
+}
+@media only screen and (max-width: 360px){
+    .listing-form-container{
+        top: -220px;
+        left:-205px;
+        bottom: -300px;
+        right: -130px;
+        padding: 20px;
+    }
 }
